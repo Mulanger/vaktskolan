@@ -1403,7 +1403,7 @@ function renderHomeCourseCard(overview) {
     overview.courseId === "vu2"
       ? "Fördjupning som bygger vidare på VU1 med praktiska situationer, arbetsmiljö och avancerad juridik."
       : "Första delen av väktarutbildningen med grunderna i juridik, arbetsmiljö och yrkesetik.";
-  const actionLabel = overview.locked ? "Slutför VU1 först" : overview.started ? "Fortsätt kurs" : "Öppna kurs";
+  const actionLabel = overview.locked ? "Slutför VU1 först" : "Öppna kurs";
   const actionAttribute = overview.courseId === "vu2" ? "data-open-vu2" : "data-open-course";
 
   return `
@@ -1439,6 +1439,7 @@ function renderHomeCourseCard(overview) {
 function renderHome() {
   const homeData = getHomeData();
   const continueOverview = homeData.continueCourse;
+  const vu2Overview = homeData.courses.find((overview) => overview.courseId === "vu2");
   const continueModule = continueOverview?.continueModule;
   const continueTitle = continueModule
     ? `${continueOverview.course.shortLabel} · Modul ${moduleNumber(continueModule)}: ${moduleDisplayTitle(continueModule)}`
@@ -1446,89 +1447,139 @@ function renderHome() {
   const continueMeta = homeContinueMeta(continueOverview);
   const continuePosition = continueOverview?.continuePosition || { moduleIndex: 0, lessonIndex: 0, pageIndex: 0 };
   const firstName = state.user.firstName || "Sven";
+  const displayName = state.user.displayName || firstName;
+  const initials = userInitials(displayName, "");
   const welcomeTitle = homeData.hasAnyProgress ? `Välkommen tillbaka, ${firstName}` : `Välkommen, ${firstName}`;
   const welcomeCopy = homeData.hasAnyProgress
     ? "Här är en överblick över dina framsteg och nästa steg i väktarutbildningen."
     : "Här startar din väktarutbildning. Börja med VU1 och lås upp VU2 när första delen är klar.";
+  const vu2NavAttributes = vu2Overview?.locked ? 'disabled aria-disabled="true" title="Slutför VU1 för att låsa upp VU2"' : "data-open-vu2";
 
   els.homePanel.innerHTML = `
     <section class="home-dashboard" aria-labelledby="homeDashboardTitle">
-      <div class="home-dashboard-head">
-        <div>
+      <header class="home-shell-nav" aria-label="Hemnavigation">
+        <div class="home-shell-brand">
+          <span class="home-shell-mark">VS</span>
+          <strong>Vaktskolan <span>· Lärplattform</span></strong>
+        </div>
+        <nav class="home-shell-tabs" aria-label="Huvudmeny">
+          <button class="home-shell-tab is-active" type="button" data-open-home>Hem</button>
+          <button class="home-shell-tab" type="button" data-open-course>VU1</button>
+          <button class="home-shell-tab ${vu2Overview?.locked ? "is-disabled" : ""}" type="button" ${vu2NavAttributes}>VU2</button>
+          <button class="home-shell-tab" type="button" data-show-quiz>Quiz Portal</button>
+          <button class="home-shell-tab" type="button" data-open-final-exam-portal>Slutprov</button>
+        </nav>
+        <div class="home-shell-user">
+          <span>${escapeHtml(initials)}</span>
+          <div>
+            <strong>${escapeHtml(displayName)}</strong>
+            <small>Elev</small>
+          </div>
+        </div>
+      </header>
+
+      <div class="home-dashboard-body">
+        <div class="home-mobile-head">
+          <div class="home-shell-brand">
+            <span class="home-shell-mark">VS</span>
+            <strong>Vaktskolan</strong>
+          </div>
+          <span class="home-mobile-avatar">${escapeHtml(initials)}</span>
+        </div>
+
+        <div class="home-dashboard-head">
           <span>Hem</span>
           <h1 id="homeDashboardTitle">${escapeHtml(welcomeTitle)}</h1>
           <p>${escapeHtml(welcomeCopy)}</p>
         </div>
-      </div>
 
-      <section class="home-stat-grid" aria-label="Snabb översikt">
-        <div class="home-stat">
-          <span class="home-stat-icon"><i data-lucide="chart-pie"></i></span>
-          <div>
-            <p>Total utbildning</p>
+        <section class="home-stat-grid" aria-label="Snabb översikt">
+          <div class="home-stat">
+            <p>
+              <span class="home-stat-dot is-blue" aria-hidden="true"></span>
+              <span class="home-stat-label-full">Total utbildning</span>
+              <span class="home-stat-label-short">Utbildning</span>
+            </p>
             <strong>${homeData.totals.percent}%</strong>
           </div>
-        </div>
-        <div class="home-stat">
-          <span class="home-stat-icon is-success"><i data-lucide="check-check"></i></span>
-          <div>
-            <p>Avklarade moduler</p>
+          <div class="home-stat">
+            <p>
+              <span class="home-stat-dot is-green" aria-hidden="true"></span>
+              <span class="home-stat-label-full">Avklarade moduler</span>
+              <span class="home-stat-label-short">Moduler</span>
+            </p>
             <strong>${homeData.totals.completedModules}<small>/ ${homeData.totals.modules}</small></strong>
           </div>
-        </div>
-        <div class="home-stat">
-          <span class="home-stat-icon is-quiz"><i data-lucide="brain"></i></span>
-          <div>
-            <p>Quiz-snitt</p>
+          <div class="home-stat">
+            <p>
+              <span class="home-stat-dot is-purple" aria-hidden="true"></span>
+              <span>Quiz-snitt</span>
+            </p>
             <strong>${homeData.totals.quizPercent === null ? "–" : `${homeData.totals.quizPercent}%`}</strong>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="home-continue" aria-labelledby="homeContinueTitle">
-        <div class="home-continue-copy">
-          <span>Fortsätt där du slutade</span>
-          <h2 id="homeContinueTitle">${escapeHtml(continueTitle)}</h2>
-          <p>${escapeHtml(continueMeta)}</p>
-        </div>
-        <button class="home-primary-action" type="button"
-          data-home-continue-course="${continueOverview?.courseId || "vu1"}"
-          data-home-continue-module="${continuePosition.moduleIndex}"
-          data-home-continue-lesson="${continuePosition.lessonIndex}"
-          data-home-continue-page="${continuePosition.pageIndex}">
-          <span>Fortsätt</span>
-          <i data-lucide="arrow-right"></i>
-        </button>
-        <div class="home-continue-track" aria-hidden="true">
-          <span style="width: ${continueOverview?.moduleProgress || 0}%"></span>
-        </div>
-      </section>
-
-      <section class="home-courses" aria-labelledby="homeCoursesTitle">
-        <div class="home-section-head">
-          <h2 id="homeCoursesTitle">Dina kurser</h2>
-          <p>Öppna en kurs eller fortsätt från nästa tillgängliga sida.</p>
-        </div>
-        <div class="home-course-grid">
-          ${homeData.courses.map((overview) => renderHomeCourseCard(overview)).join("")}
-        </div>
-      </section>
-
-      <section class="home-quick-links" aria-label="Snabbvägar">
-        <div class="home-quick-copy">
-          <span class="home-quick-icon"><i data-lucide="target"></i></span>
-          <div>
-            <h2>Träna inför provet</h2>
-            <p>Använd Quiz Portal för att repetera frågor, scenarier och flashcards.</p>
+        <section class="home-continue" aria-labelledby="homeContinueTitle">
+          <div class="home-continue-copy">
+            <span>Fortsätt där du slutade</span>
+            <h2 id="homeContinueTitle">${escapeHtml(continueTitle)}</h2>
+            <p>${escapeHtml(continueMeta)}</p>
           </div>
-        </div>
-        <div class="home-quick-actions">
-          <button class="home-secondary-action" type="button" data-show-quiz>
-            <span>Gå till Quiz Portal</span>
+          <button class="home-primary-action" type="button"
+            data-home-continue-course="${continueOverview?.courseId || "vu1"}"
+            data-home-continue-module="${continuePosition.moduleIndex}"
+            data-home-continue-lesson="${continuePosition.lessonIndex}"
+            data-home-continue-page="${continuePosition.pageIndex}">
+            <span>Fortsätt</span>
             <i data-lucide="arrow-right"></i>
           </button>
-        </div>
-      </section>
+        </section>
+
+        <section class="home-courses" aria-labelledby="homeCoursesTitle">
+          <div class="home-section-head">
+            <h2 id="homeCoursesTitle">Dina kurser</h2>
+            <p>Öppna en kurs eller fortsätt från nästa tillgängliga sida.</p>
+          </div>
+          <div class="home-course-grid">
+            ${homeData.courses.map((overview) => renderHomeCourseCard(overview)).join("")}
+          </div>
+        </section>
+
+        <button class="home-quick-links" type="button" data-show-quiz aria-label="Gå till Quiz Portal">
+          <span class="home-quick-icon"><i data-lucide="target"></i></span>
+          <span class="home-quick-copy">
+            <strong>Träna inför provet</strong>
+            <small>Använd Quiz Portal för att repetera frågor, scenarier och flashcards.</small>
+          </span>
+          <span class="home-secondary-action">
+            <span>Gå till Quiz Portal</span>
+            <i data-lucide="arrow-right"></i>
+          </span>
+        </button>
+      </div>
+
+      <nav class="home-mobile-tabbar" aria-label="Mobil huvudmeny">
+        <button class="home-mobile-tab is-active" type="button" data-open-home>
+          <i data-lucide="home"></i>
+          <span>Hem</span>
+        </button>
+        <button class="home-mobile-tab" type="button" data-open-course>
+          <i data-lucide="book-open"></i>
+          <span>VU1</span>
+        </button>
+        <button class="home-mobile-tab ${vu2Overview?.locked ? "is-disabled" : ""}" type="button" ${vu2NavAttributes}>
+          <i data-lucide="shield-check"></i>
+          <span>VU2</span>
+        </button>
+        <button class="home-mobile-tab" type="button" data-show-quiz>
+          <i data-lucide="target"></i>
+          <span>Quiz</span>
+        </button>
+        <button class="home-mobile-tab" type="button" data-open-final-exam-portal>
+          <i data-lucide="clipboard-check"></i>
+          <span>Slutprov</span>
+        </button>
+      </nav>
     </section>
   `;
 }

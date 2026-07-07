@@ -1,6 +1,6 @@
 # Agent Handoff - Vaktskolan
 
-Senast uppdaterad: 2026-07-05.
+Senast uppdaterad: 2026-07-07.
 
 Det här dokumentet beskriver appen i `D:\vaktskolan`: hur dashboarden och landing page fungerar, hur utbildningsmaterialet är uppbyggt, vilka lokala beslut som redan är tagna, och var framtida ändringar bör göras.
 
@@ -214,6 +214,8 @@ Hemvyn renderas dynamiskt av `renderHome()` i `app.js`. Den bygger:
 
 Hemvyn använder `getHomeData()`, `getCourseHomeOverview()`, `withCourseContext()` och befintliga progresshelpers. `Fortsätt`-knappen använder `data-home-continue-course/module/lesson/page` och aktiverar rätt kurs innan `goTo()` körs. Kurskortens knappar använder befintliga `data-open-course` och `data-open-vu2`. Quiz-snabbvägen använder befintliga `data-show-quiz`.
 
+Hemvyn är uppdaterad efter designalternativ `1b` från `D:\Modern siddesign uppdatering.zip`: desktop hem döljer den gamla vänstersidomenyn och använder en skarp toppmeny, medan mobil hem använder kompakt topp med profilinitialer och en fast bottenmeny. Den globala desktop-topbaren med gamla meta/quiz-knappar ska fortsatt vara dold.
+
 Första gången eleven kommer till Hem, innan någon progress/quiz finns, ska rubriken vara `Välkommen, Sven`. När progress finns ska rubriken vara `Välkommen tillbaka, Sven`.
 
 VU2-kortet i `Dina kurser` styrs av den centrala kurslåsningsflaggan `ENFORCE_COURSE_LOCKS`. Under implementation är flaggan `false`, så VU2 är öppet för snabb testnavigation. När flaggan sätts till `true` ska VU2 låsas överallt tills VU1:s innehållsmoduler är klara.
@@ -221,9 +223,10 @@ VU2-kortet i `Dina kurser` styrs av den centrala kurslåsningsflaggan `ENFORCE_C
 Aktuella cachebusting-parametrar i `index.html`:
 
 ```html
-<link rel="stylesheet" href="styles.css?v=20260705-flow-audit">
+<link rel="stylesheet" href="styles.css?v=20260707-home-1b">
+<script src="authProvider.js?v=20260706-light-auth"></script>
 <script src="supabaseApi.js?v=20260705-supabase"></script>
-<script src="app.js?v=20260705-flow-audit"></script>
+<script src="app.js?v=20260707-home-1b"></script>
 ```
 
 När CSS eller JS ändras bör versionssträngarna uppdateras så webbläsaren inte visar gammal kod.
