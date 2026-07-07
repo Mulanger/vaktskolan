@@ -303,6 +303,8 @@ Dashboarden laddar `authProvider.js` före `app.js`. `init()` kör `requireAuthe
 
 När användaren är inloggad uppdateras profilblocket i vänsterspalten med användarens namn och en user-menu från auth-leverantören.
 
+Status 2026-07-07: Dashboarden startar med `body.app-booting` och en neutral `#appBootScreen`. Den statiska HTML-shellens standardlektion är dold tills auth-check, kursmaterial och sparad plats har laddats och rätt vy har renderats. `revealPlatform()` i `app.js` tar bort boot-läget efter första render eller vid laddfel. Cache-bust: `styles.css?v=20260707-boot-gate` och `app.js?v=20260707-boot-gate`.
+
 Clerk-komponenterna laddas med svensk localization via `@clerk/localizations` och `svSE` i `authProvider.js`. Det gör inloggning, signup, user-menu och monterade Clerk-kontokomponenter svenska i appen. Clerk-hostade Account Portal-sidor kan fortfarande visa engelska texter om de öppnas utanför den monterade appvyn.
 
 Status 2026-07-07: `auth.js` har robustare mount-logik för Clerk-formuläret. Sign in/sign up monteras i en separat `data-auth-clerk-root`, mounten kontrolleras efter render, och sidan försöker montera om formuläret om containern blir tom vid hash-/historiknavigering eller fokusbyte. `login.html` cache-bustar detta med `auth.js?v=20260707-mobile-auth` och `auth.css?v=20260707-mobile-auth`. Mobilvyn använder en egen toppbar, maskot, dynamisk mobilrubrik och kompakt Clerk-layout; skapa-konto-copy ska vara `Skapa ett konto.` med `konto.` blått och undertiteln `Innan du börjar behöver du skapa ett konto.`

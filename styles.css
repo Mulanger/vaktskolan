@@ -46,6 +46,85 @@ button {
   display: none !important;
 }
 
+body.app-booting {
+  overflow: hidden;
+}
+
+body.app-booting .shell {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.app-boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  place-items: center;
+  padding: 24px;
+  background: var(--bg);
+}
+
+body.app-booting .app-boot-screen {
+  display: grid;
+}
+
+.app-boot-card {
+  width: min(100%, 320px);
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 30px 26px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.app-boot-mark {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 15px;
+  background: var(--primary);
+  color: white;
+  font-size: 16px;
+  font-weight: 850;
+  box-shadow: 0 14px 24px rgba(37, 99, 235, 0.2);
+}
+
+.app-boot-loader {
+  width: 32px;
+  height: 32px;
+  margin-top: 4px;
+  border: 3px solid #dbeafe;
+  border-top-color: var(--primary);
+  border-radius: 999px;
+  animation: bootSpin 900ms linear infinite;
+}
+
+.app-boot-card strong {
+  color: var(--text);
+  font-size: 16px;
+}
+
+.app-boot-card p {
+  max-width: 230px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+@keyframes bootSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .shell {
   display: grid;
   grid-template-columns: 272px minmax(0, 1fr) 336px;

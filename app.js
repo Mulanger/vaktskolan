@@ -583,6 +583,12 @@ function renderAuthError(error) {
   console.warn("Auth kunde inte kontrolleras. Dashboarden laddas utan auth-gate.");
 }
 
+function revealPlatform() {
+  document.body.classList.remove("app-booting");
+  const bootScreen = document.querySelector("#appBootScreen");
+  if (bootScreen) bootScreen.hidden = true;
+}
+
 async function requireAuthenticatedUser() {
   const auth = window.vaktskolanAuthProvider;
   if (!auth?.ready) return true;
@@ -3488,6 +3494,7 @@ async function init() {
 
   if (!state.modules.length) {
     els.article.innerHTML = "<p>Kursmaterialet kunde inte läsas in.</p>";
+    revealPlatform();
     return;
   }
 
@@ -3514,9 +3521,12 @@ async function init() {
   } else {
     showHome();
   }
+
+  revealPlatform();
 }
 
 init().catch((error) => {
   console.error(error);
   els.article.innerHTML = "<p>Ett fel uppstod när kursen laddades.</p>";
+  revealPlatform();
 });

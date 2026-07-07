@@ -12,9 +12,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="styles.css?v=20260705-portal-redesign">
+  <link rel="stylesheet" href="styles.css?v=20260707-boot-gate">
 </head>
-<body>
+<body class="app-booting">
   <div class="shell">
     <aside class="sidebar primary-sidebar" id="courseSidebar" aria-label="Kursnavigering">
       <div class="brand-block">
@@ -300,6 +300,15 @@
     </aside>
   </div>
 
+  <div class="app-boot-screen" id="appBootScreen" role="status" aria-live="polite">
+    <div class="app-boot-card">
+      <span class="app-boot-mark">VS</span>
+      <span class="app-boot-loader" aria-hidden="true"></span>
+      <strong>Laddar lärplattformen</strong>
+      <p>Vi hämtar din profil och senaste kursposition.</p>
+    </div>
+  </div>
+
   <div class="quiz-reset-modal" id="quizResetModal" role="dialog" aria-modal="true" aria-labelledby="quizResetTitle" hidden>
     <div class="quiz-reset-dialog">
       <div class="quiz-reset-icon">
@@ -320,6 +329,6 @@
 
   <script src="authProvider.js?v=20260706-light-auth"></script>
   <script src="supabaseApi.js?v=20260705-supabase"></script>
-  <script src="app.js?v=20260705-portal-redesign"></script>
+  <script src="app.js?v=20260707-boot-gate"></script>
 </body>
 </html>
