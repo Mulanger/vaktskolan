@@ -4,8 +4,12 @@ import { extname, join, normalize, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
+const initialEnvKeys = new Set(Object.keys(process.env));
+
+loadEnvFiles();
+
 const port = Number(process.env.PORT || 5173);
-const host = process.env.HOST || "127.0.0.1";
+const host = process.env.HOST || "0.0.0.0";
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -20,10 +24,12 @@ const mimeTypes = {
   ".webp": "image/webp",
 };
 
-loadEnvFile();
+function loadEnvFiles() {
+  loadEnvFile(join(root, ".env"), false);
+  loadEnvFile(join(root, ".env.local"), true);
+}
 
-function loadEnvFile() {
-  const envPath = join(root, ".env");
+function loadEnvFile(envPath, overrideLoadedValues) {
   if (!existsSync(envPath)) return;
 
   const lines = readFileSync(envPath, "utf8").split(/\r?\n/);
@@ -36,7 +42,8 @@ function loadEnvFile() {
 
     const key = trimmed.slice(0, separatorIndex).trim();
     let value = trimmed.slice(separatorIndex + 1).trim();
-    if (!key || Object.prototype.hasOwnProperty.call(process.env, key)) continue;
+    if (!key || initialEnvKeys.has(key)) continue;
+    if (!overrideLoadedValues && Object.prototype.hasOwnProperty.call(process.env, key)) continue;
 
     if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
       value = value.slice(1, -1);

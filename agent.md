@@ -30,6 +30,8 @@ D:\vaktskolan
 ├── login.html                  # Portaldesignad login/signup-sida
 ├── auth.css                    # Auth-sidans stilar
 ├── auth.js                     # Auth-sidans mount och redirectlogik
+├── package.json                # Minimal Node-konfiguration för hosting, npm start och npm build
+├── package-lock.json           # Låsfil för npm install utan externa dependencies
 ├── docs
 │   └── supabase-quiz-schema.md # Kort schema- och verifieringsnotis för Quiz Portal
 ├── scripts
@@ -54,11 +56,12 @@ D:\vaktskolan
 └── agent.md                    # Denna handoff
 ```
 
-Det finns ingen `package.json` och inget bundler-flöde.
+Projektet har nu en minimal `package.json` för Node-hosting, men fortfarande inget bundler-flöde och inga npm-dependencies.
 
 Supabase-kopplingen består av:
 
 - `.env`: lokal miljöfil med Supabase URL, publishable key, server-only secret key och JWKS URL.
+- `.env.local`: stöds också av `server.mjs`, främst för hostingplattformar som skriver env-värden dit.
 - `.env.example`: mall utan riktiga nycklar.
 - `.gitignore`: ser till att lokala `.env`-filer inte följer med till GitHub.
 - `server.mjs`: root-server för dashboarden, statiska filer och Supabase config/health-endpoints.
@@ -81,6 +84,12 @@ Rekommenderad körning är nu root-servern, eftersom den också läser `.env` oc
 ```powershell
 cd D:\vaktskolan
 node server.mjs
+```
+
+Alternativt, samma server via npm-scriptet som används av hostingplattformar:
+
+```powershell
+npm start
 ```
 
 Dashboard URL:
@@ -255,7 +264,7 @@ Viktigt: inga tabeller, RLS-policies eller authflöden är skapade i Supabase ä
 
 ## Clerk Authentication
 
-Clerk är implementerat via vanilla JavaScript, inte via `clerk init`, eftersom projektet saknar `package.json`, bundler och Next/React/Vite-runtime. Aktiv HTML laddar den neutrala wrappern `authProvider.js`; `clerkAuth.js` finns kvar som äldre wrapperfil men är inte länkad från aktiv HTML.
+Clerk är implementerat via vanilla JavaScript, inte via `clerk init`, eftersom projektet saknar bundler och Next/React/Vite-runtime. Aktiv HTML laddar den neutrala wrappern `authProvider.js`; `clerkAuth.js` finns kvar som äldre wrapperfil men är inte länkad från aktiv HTML.
 
 Root-servern exponerar:
 
