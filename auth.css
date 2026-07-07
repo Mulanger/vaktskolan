@@ -355,6 +355,7 @@ a {
 }
 
 .auth-switch {
+  width: min(100%, 454px);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4px;
@@ -392,7 +393,10 @@ a {
 .auth-mount {
   width: 100%;
   min-height: 360px;
-  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px 18px 28px;
   border: 1px solid var(--auth-border);
   border-radius: 20px;
   background: white;
@@ -402,13 +406,17 @@ a {
 .auth-clerk-root {
   width: 100%;
   min-height: 280px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .auth-mount .cl-rootBox,
 .auth-mount .cl-cardBox,
 .auth-mount .cl-card {
-  width: 100%;
-  max-width: none;
+  width: min(100%, 400px) !important;
+  max-width: 400px !important;
+  margin-inline: auto !important;
 }
 
 .auth-mount .cl-card,
