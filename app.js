@@ -371,6 +371,8 @@ const els = {
   courseHubMeta: $("#courseHubMeta"),
   courseHubPercent: $("#courseHubPercent"),
   courseHubRing: $("#courseHubRing"),
+  vu1HubMobileAvatar: $("#vu1HubMobileAvatar"),
+  vu1HubMobileProgress: $("#vu1HubMobileProgress"),
   hubContinueTitle: $("#hubContinueTitle"),
   hubContinueMeta: $("#hubContinueMeta"),
   hubContinueButton: $("#hubContinueButton"),
@@ -1457,18 +1459,35 @@ function renderHome() {
 
   els.homePanel.innerHTML = `
     <section class="home-dashboard" aria-labelledby="homeDashboardTitle">
-      <header class="home-shell-nav" aria-label="Hemnavigation">
-        <div class="home-shell-brand">
-          <span class="home-shell-mark">VS</span>
-          <strong>Vaktskolan <span>· Lärplattform</span></strong>
+      <aside class="home-shell-sidebar" aria-label="Hemnavigation">
+        <div class="home-shell-sidebar-main">
+          <div class="home-shell-brand">
+            <span class="home-shell-mark">VS</span>
+            <strong>Vaktskolan <span>· Lärplattform</span></strong>
+          </div>
+          <nav class="home-shell-tabs" aria-label="Huvudmeny">
+            <button class="home-shell-tab is-active" type="button" data-open-home>
+              <i data-lucide="home"></i>
+              <span>Hem</span>
+            </button>
+            <button class="home-shell-tab" type="button" data-open-course>
+              <i data-lucide="book-open"></i>
+              <span>VU1</span>
+            </button>
+            <button class="home-shell-tab ${vu2Overview?.locked ? "is-disabled" : ""}" type="button" ${vu2NavAttributes}>
+              <i data-lucide="shield-check"></i>
+              <span>VU2</span>
+            </button>
+            <button class="home-shell-tab" type="button" data-show-quiz>
+              <i data-lucide="target"></i>
+              <span>Quiz Portal</span>
+            </button>
+            <button class="home-shell-tab" type="button" data-open-final-exam-portal>
+              <i data-lucide="clipboard-check"></i>
+              <span>Slutprov</span>
+            </button>
+          </nav>
         </div>
-        <nav class="home-shell-tabs" aria-label="Huvudmeny">
-          <button class="home-shell-tab is-active" type="button" data-open-home>Hem</button>
-          <button class="home-shell-tab" type="button" data-open-course>VU1</button>
-          <button class="home-shell-tab ${vu2Overview?.locked ? "is-disabled" : ""}" type="button" ${vu2NavAttributes}>VU2</button>
-          <button class="home-shell-tab" type="button" data-show-quiz>Quiz Portal</button>
-          <button class="home-shell-tab" type="button" data-open-final-exam-portal>Slutprov</button>
-        </nav>
         <div class="home-shell-user">
           <span>${escapeHtml(initials)}</span>
           <div>
@@ -1476,7 +1495,7 @@ function renderHome() {
             <small>Elev</small>
           </div>
         </div>
-      </header>
+      </aside>
 
       <div class="home-dashboard-body">
         <div class="home-mobile-head">
@@ -1914,6 +1933,7 @@ function setBodyLayoutMode(mode = "") {
   document.body.classList.toggle("home-mode", mode === "home");
   document.body.classList.toggle("quiz-overview-mode", mode === "quiz-overview");
   document.body.classList.toggle("module-milestone-mode", mode === "module-milestone");
+  document.body.classList.toggle("vu1-hub-mode", mode === "vu1-hub");
 }
 
 function showHome() {
@@ -2049,6 +2069,48 @@ function showModuleMilestone(moduleIndex, lessonIndex = 0, pageIndex = 0) {
   els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+function renderVu1HubMobileProgress() {
+  const module = getCurrentModule();
+  if (!module || isFinalExamModule(module)) {
+    return "";
+  }
+
+  const progress = getModuleProgress(module, state.moduleIndex);
+  const lessons = module.lessons
+    .map((lesson, lessonIndex) => {
+      const pageSummary = lesson.pages
+        .map((page) => page.title.replace(/^Sida\s+\d+:\s*/, ""))
+        .filter(Boolean)
+        .join(" · ");
+      const isActive = lessonIndex === state.lessonIndex;
+
+      return `
+        <div class="vu1-mobile-progress-step ${isActive ? "is-active" : ""}">
+          <span class="vu1-mobile-progress-dot"></span>
+          <div>
+            <strong>${escapeHtml(lesson.title)}</strong>
+            ${pageSummary ? `<p>${escapeHtml(pageSummary)}</p>` : ""}
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+
+  return `
+    <div class="vu1-mobile-progress-head">
+      <span>Din progress · Modul ${moduleNumber(module)}</span>
+      <strong>${progress}%</strong>
+    </div>
+    <div class="vu1-mobile-progress-track"><span style="width: ${progress}%"></span></div>
+    <p>${escapeHtml(sentenceCase(module.objective || "Kursmaterial med lektionssidor, sammanfattning och quiz."))}</p>
+    <div class="vu1-mobile-progress-subhead">
+      <span>Aktuell modul</span>
+      <small>${escapeHtml(moduleMetaSummary(module))}</small>
+    </div>
+    <div class="vu1-mobile-progress-list">${lessons}</div>
+  `;
+}
+
 function renderCourseHub() {
   const course = getCourseConfig();
   const courseProgress = getCourseProgress();
@@ -2061,10 +2123,16 @@ function renderCourseHub() {
   const moduleProgress = continueModule ? getModuleProgress(continueModule, continuePosition.moduleIndex) : 0;
   const quizSummary = getQuizSummary();
 
-  els.courseHubTitle.textContent = course.fullTitle;
+  els.courseHubTitle.textContent = course.id === "vu1" ? "VU1 – Grundutbildning del 1" : course.fullTitle;
   els.courseHubMeta.textContent = `${moduleStats.total} moduler${hasFinalExam ? " · slutprov" : ""} · lektionssidor och quiz`;
   els.courseHubPercent.textContent = `${courseProgress.percent}%`;
   els.courseHubRing.style.setProperty("--ring-progress", `${courseProgress.percent * 3.6}deg`);
+  if (els.vu1HubMobileAvatar) {
+    els.vu1HubMobileAvatar.textContent = userInitials(state.user.displayName || state.user.firstName || "Sven", "");
+  }
+  if (els.vu1HubMobileProgress) {
+    els.vu1HubMobileProgress.innerHTML = course.id === "vu1" ? renderVu1HubMobileProgress() : "";
+  }
   els.hubContinueTitle.textContent = continueModule
     ? `Modul ${moduleNumber(continueModule)} · ${moduleDisplayTitle(continueModule)}`
     : course.shortLabel;
@@ -2146,7 +2214,7 @@ function showCourseHub() {
   els.finalExamPanel.hidden = true;
   els.metaPills.hidden = true;
   els.quizButton.hidden = false;
-  setBodyLayoutMode();
+  setBodyLayoutMode("vu1-hub");
   els.lessonTitle.textContent = getCourseConfig().shortLabel;
   els.breadcrumbs.innerHTML = "";
   setQuizButtonLabel("Starta quiz");
