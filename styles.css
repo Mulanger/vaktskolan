@@ -4974,32 +4974,32 @@ body.modal-open {
   display: none;
 }
 
-body.vu1-hub-mode .shell {
+body.course-hub-modern-mode .shell {
   grid-template-columns: 280px minmax(0, 1fr) 320px;
   background: #f8fafc;
 }
 
-body.vu1-hub-mode .topbar {
+body.course-hub-modern-mode .topbar {
   display: none;
 }
 
-body.vu1-hub-mode .content-inner {
+body.course-hub-modern-mode .content-inner {
   width: 100%;
   padding: 36px 36px 48px;
 }
 
-body.vu1-hub-mode .primary-sidebar {
+body.course-hub-modern-mode .primary-sidebar {
   background: #ffffff;
   border-right-color: #e7ecf2;
 }
 
-body.vu1-hub-mode .brand-block {
+body.course-hub-modern-mode .brand-block {
   gap: 10px;
   padding: 20px 22px 18px;
   border-bottom: 0;
 }
 
-body.vu1-hub-mode .brand-mark {
+body.course-hub-modern-mode .brand-mark {
   width: 34px;
   height: 34px;
   border-radius: 8px;
@@ -5007,24 +5007,24 @@ body.vu1-hub-mode .brand-mark {
   box-shadow: none;
 }
 
-body.vu1-hub-mode .brand-block h1 {
+body.course-hub-modern-mode .brand-block h1 {
   font-size: 15px;
   font-weight: 750;
 }
 
-body.vu1-hub-mode .brand-block p {
+body.course-hub-modern-mode .brand-block p {
   margin-top: 1px;
   color: #94a3b8;
   font-size: 9.5px;
   letter-spacing: 0.13em;
 }
 
-body.vu1-hub-mode .main-nav {
+body.course-hub-modern-mode .main-nav {
   gap: 3px;
   padding: 0 16px 14px;
 }
 
-body.vu1-hub-mode .nav-item {
+body.course-hub-modern-mode .nav-item {
   min-height: 37px;
   gap: 11px;
   border-radius: 8px;
@@ -5034,36 +5034,36 @@ body.vu1-hub-mode .nav-item {
   font-weight: 550;
 }
 
-body.vu1-hub-mode .nav-item svg {
+body.course-hub-modern-mode .nav-item svg {
   width: 17px;
   height: 17px;
 }
 
-body.vu1-hub-mode .module-list-wrap {
+body.course-hub-modern-mode .module-list-wrap {
   padding: 8px 16px 18px;
 }
 
-body.vu1-hub-mode .section-label-row {
+body.course-hub-modern-mode .section-label-row {
   align-items: baseline;
 }
 
-body.vu1-hub-mode .section-label-row h2 {
+body.course-hub-modern-mode .section-label-row h2 {
   color: #8a97ab;
   font-size: 10.5px;
   letter-spacing: 0.11em;
 }
 
-body.vu1-hub-mode .section-label-row span {
+body.course-hub-modern-mode .section-label-row span {
   color: #94a3b8;
   font-size: 10.5px;
   font-weight: 500;
 }
 
-body.vu1-hub-mode .module-list {
+body.course-hub-modern-mode .module-list {
   gap: 8px;
 }
 
-body.vu1-hub-mode .module-card {
+body.course-hub-modern-mode .module-card {
   min-height: auto;
   border-color: #e7ecf2;
   border-radius: 10px;
@@ -5072,30 +5072,30 @@ body.vu1-hub-mode .module-card {
   box-shadow: none;
 }
 
-body.vu1-hub-mode .module-card.is-active {
+body.course-hub-modern-mode .module-card.is-active {
   border-color: #bfd7fe;
   background: #f5f9ff;
   box-shadow: none;
 }
 
-body.vu1-hub-mode .module-card.is-active::before {
+body.course-hub-modern-mode .module-card.is-active::before {
   display: none;
 }
 
-body.vu1-hub-mode .module-card h3 {
+body.course-hub-modern-mode .module-card h3 {
   margin-top: 9px;
   font-size: 13px;
   font-weight: 650;
   line-height: 1.35;
 }
 
-body.vu1-hub-mode .module-card p {
+body.course-hub-modern-mode .module-card p {
   margin-top: 4px;
   color: #94a3b8;
   font-size: 11px;
 }
 
-body.vu1-hub-mode .module-number {
+body.course-hub-modern-mode .module-number {
   width: 22px;
   height: 22px;
   background: #f1f5f9;
@@ -5103,12 +5103,12 @@ body.vu1-hub-mode .module-number {
   font-size: 11px;
 }
 
-body.vu1-hub-mode .module-card.is-active .module-number {
+body.course-hub-modern-mode .module-card.is-active .module-number {
   background: var(--primary);
   color: #ffffff;
 }
 
-body.vu1-hub-mode .module-progress-ring {
+body.course-hub-modern-mode .module-progress-ring {
   width: auto;
   min-width: 30px;
   height: 22px;
@@ -5120,32 +5120,32 @@ body.vu1-hub-mode .module-progress-ring {
   font-size: 10.5px;
 }
 
-body.vu1-hub-mode .module-card.is-active .module-progress-ring {
+body.course-hub-modern-mode .module-card.is-active .module-progress-ring {
   border-color: #bfd7fe;
   color: #1d4ed8;
 }
 
-body.vu1-hub-mode .profile-block {
+body.course-hub-modern-mode .profile-block {
   margin: 16px;
   border-top: 1px solid #eef2f7;
   padding: 14px 6px 2px;
 }
 
-body.vu1-hub-mode .course-hub {
+body.course-hub-modern-mode .course-hub {
   gap: 16px;
 }
 
-body.vu1-hub-mode .hub-header {
+body.course-hub-modern-mode .hub-header {
   align-items: flex-start;
 }
 
-body.vu1-hub-mode .hub-header p {
+body.course-hub-modern-mode .hub-header p {
   color: #16a34a;
   font-size: 11px;
   letter-spacing: 0.14em;
 }
 
-body.vu1-hub-mode .hub-header h2 {
+body.course-hub-modern-mode .hub-header h2 {
   margin: 8px 0 6px;
   font-family: "Schibsted Grotesk", Inter, system-ui, sans-serif;
   font-size: 29px;
@@ -5154,13 +5154,13 @@ body.vu1-hub-mode .hub-header h2 {
   line-height: 1.15;
 }
 
-body.vu1-hub-mode .hub-header span {
+body.course-hub-modern-mode .hub-header span {
   margin-top: 0;
   color: #64748b;
   font-size: 14px;
 }
 
-body.vu1-hub-mode .hub-ring {
+body.course-hub-modern-mode .hub-ring {
   width: 52px;
   height: 52px;
   border: 3px solid #eef2f7;
@@ -5169,19 +5169,19 @@ body.vu1-hub-mode .hub-ring {
     conic-gradient(var(--primary) var(--ring-progress, 0deg), transparent 0deg);
 }
 
-body.vu1-hub-mode .hub-ring strong {
+body.course-hub-modern-mode .hub-ring strong {
   color: #64748b;
   font-size: 12.5px;
 }
 
-body.vu1-hub-mode .hub-continue {
+body.course-hub-modern-mode .hub-continue {
   border-color: #e7ecf2;
   border-radius: 12px;
   padding: 22px 24px 18px;
   box-shadow: none;
 }
 
-body.vu1-hub-mode .hub-continue p {
+body.course-hub-modern-mode .hub-continue p {
   display: inline-flex;
   margin-bottom: 0;
   border-radius: 6px;
@@ -5194,7 +5194,7 @@ body.vu1-hub-mode .hub-continue p {
   text-transform: uppercase;
 }
 
-body.vu1-hub-mode .hub-continue h3 {
+body.course-hub-modern-mode .hub-continue h3 {
   margin-top: 10px;
   margin-bottom: 4px;
   font-family: "Schibsted Grotesk", Inter, system-ui, sans-serif;
@@ -5202,25 +5202,25 @@ body.vu1-hub-mode .hub-continue h3 {
   font-weight: 750;
 }
 
-body.vu1-hub-mode .hub-continue > div > span {
+body.course-hub-modern-mode .hub-continue > div > span {
   color: #64748b;
   font-size: 13px;
 }
 
-body.vu1-hub-mode .hub-continue-track {
+body.course-hub-modern-mode .hub-continue-track {
   height: 4px;
   margin-top: 6px;
   background: #eef2f7;
 }
 
-body.vu1-hub-mode .hub-continue .primary-action {
+body.course-hub-modern-mode .hub-continue .primary-action {
   min-height: 42px;
   border-radius: 8px;
   padding: 11px 20px;
   font-size: 13.5px;
 }
 
-body.vu1-hub-mode .hub-stats {
+body.course-hub-modern-mode .hub-stats {
   gap: 0;
   overflow: hidden;
   border: 1px solid #e7ecf2;
@@ -5228,18 +5228,18 @@ body.vu1-hub-mode .hub-stats {
   background: #ffffff;
 }
 
-body.vu1-hub-mode .hub-stats div {
+body.course-hub-modern-mode .hub-stats div {
   border: 0;
   border-radius: 0;
   background: #ffffff;
   padding: 18px 24px;
 }
 
-body.vu1-hub-mode .hub-stats div + div {
+body.course-hub-modern-mode .hub-stats div + div {
   border-left: 1px solid #eef2f7;
 }
 
-body.vu1-hub-mode .hub-stats span {
+body.course-hub-modern-mode .hub-stats span {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -5251,7 +5251,7 @@ body.vu1-hub-mode .hub-stats span {
   text-transform: uppercase;
 }
 
-body.vu1-hub-mode .hub-stats span::before {
+body.course-hub-modern-mode .hub-stats span::before {
   content: "";
   width: 8px;
   height: 8px;
@@ -5260,42 +5260,42 @@ body.vu1-hub-mode .hub-stats span::before {
   background: var(--primary);
 }
 
-body.vu1-hub-mode .hub-stats div:nth-child(2) span::before {
+body.course-hub-modern-mode .hub-stats div:nth-child(2) span::before {
   background: #16a34a;
 }
 
-body.vu1-hub-mode .hub-stats div:nth-child(3) span::before {
+body.course-hub-modern-mode .hub-stats div:nth-child(3) span::before {
   background: #7c3aed;
 }
 
-body.vu1-hub-mode .hub-stats strong {
+body.course-hub-modern-mode .hub-stats strong {
   font-family: "Schibsted Grotesk", Inter, system-ui, sans-serif;
   font-size: 24px;
   font-weight: 750;
 }
 
-body.vu1-hub-mode .hub-module-panel {
+body.course-hub-modern-mode .hub-module-panel {
   border-color: #e7ecf2;
   border-radius: 12px;
 }
 
-body.vu1-hub-mode .hub-module-head {
+body.course-hub-modern-mode .hub-module-head {
   padding: 18px 24px 14px;
   border-bottom-color: #eef2f7;
 }
 
-body.vu1-hub-mode .hub-module-head h3 {
+body.course-hub-modern-mode .hub-module-head h3 {
   font-family: "Schibsted Grotesk", Inter, system-ui, sans-serif;
   font-size: 16.5px;
   font-weight: 750;
 }
 
-body.vu1-hub-mode .hub-module-head span {
+body.course-hub-modern-mode .hub-module-head span {
   color: #94a3b8;
   font-size: 12.5px;
 }
 
-body.vu1-hub-mode .hub-module-row {
+body.course-hub-modern-mode .hub-module-row {
   grid-template-columns: 30px minmax(0, 1fr) auto;
   gap: 16px;
   min-height: 54px;
@@ -5303,27 +5303,27 @@ body.vu1-hub-mode .hub-module-row {
   padding: 14px 24px;
 }
 
-body.vu1-hub-mode .hub-module-row.is-current {
+body.course-hub-modern-mode .hub-module-row.is-current {
   background: #f8fbff;
 }
 
-body.vu1-hub-mode .hub-module-index {
+body.course-hub-modern-mode .hub-module-index {
   width: 30px;
   height: 30px;
   font-size: 12.5px;
 }
 
-body.vu1-hub-mode .hub-module-copy strong {
+body.course-hub-modern-mode .hub-module-copy strong {
   font-size: 14px;
   font-weight: 650;
 }
 
-body.vu1-hub-mode .hub-module-copy small {
+body.course-hub-modern-mode .hub-module-copy small {
   color: #94a3b8;
   font-size: 12px;
 }
 
-body.vu1-hub-mode .hub-module-status {
+body.course-hub-modern-mode .hub-module-status {
   border: 1px solid #e2e8f0;
   border-radius: 999px;
   color: #64748b;
@@ -5332,162 +5332,162 @@ body.vu1-hub-mode .hub-module-status {
   font-weight: 650;
 }
 
-body.vu1-hub-mode .context-sidebar {
+body.course-hub-modern-mode .context-sidebar {
   background: #ffffff;
   border-left-color: #e7ecf2;
 }
 
-body.vu1-hub-mode .progress-block {
+body.course-hub-modern-mode .progress-block {
   padding: 32px 26px 22px;
   border-bottom: 0;
 }
 
-body.vu1-hub-mode .progress-head p {
+body.course-hub-modern-mode .progress-head p {
   color: #8a97ab;
   font-size: 10.5px;
   letter-spacing: 0.12em;
 }
 
-body.vu1-hub-mode .progress-head h3 {
+body.course-hub-modern-mode .progress-head h3 {
   font-family: "Schibsted Grotesk", Inter, system-ui, sans-serif;
   font-size: 19px;
   font-weight: 750;
 }
 
-body.vu1-hub-mode .progress-head strong {
+body.course-hub-modern-mode .progress-head strong {
   color: #16a34a;
   font-family: "Schibsted Grotesk", Inter, system-ui, sans-serif;
   font-size: 22px;
   font-weight: 750;
 }
 
-body.vu1-hub-mode .progress-track {
+body.course-hub-modern-mode .progress-track {
   height: 5px;
   margin-bottom: 16px;
   background: #eef2f7;
 }
 
-body.vu1-hub-mode .progress-track div {
+body.course-hub-modern-mode .progress-track div {
   background: #16a34a;
 }
 
-body.vu1-hub-mode .progress-block > p {
+body.course-hub-modern-mode .progress-block > p {
   color: #64748b;
   font-size: 12.5px;
   line-height: 1.65;
 }
 
-body.vu1-hub-mode .timeline-block {
+body.course-hub-modern-mode .timeline-block {
   padding: 0 26px 32px;
 }
 
-body.vu1-hub-mode .timeline-block .section-label-row {
+body.course-hub-modern-mode .timeline-block .section-label-row {
   margin: 0 0 16px;
   border-top: 1px solid #eef2f7;
   padding-top: 22px;
 }
 
-body.vu1-hub-mode .timeline::before {
+body.course-hub-modern-mode .timeline::before {
   left: 6px;
   width: 1px;
   background: #e7ecf2;
 }
 
-body.vu1-hub-mode .lesson-step {
+body.course-hub-modern-mode .lesson-step {
   grid-template-columns: 13px minmax(0, 1fr);
   gap: 13px;
   padding: 0 0 20px;
 }
 
-body.vu1-hub-mode .step-dot {
+body.course-hub-modern-mode .step-dot {
   width: 12px;
   height: 12px;
   border-width: 2px;
   margin-top: 3px;
 }
 
-body.vu1-hub-mode .lesson-step.is-active .step-dot {
+body.course-hub-modern-mode .lesson-step.is-active .step-dot {
   border-width: 3px;
   box-shadow: none;
 }
 
-body.vu1-hub-mode .lesson-step.is-active .step-dot::after {
+body.course-hub-modern-mode .lesson-step.is-active .step-dot::after {
   display: none;
 }
 
-body.vu1-hub-mode .lesson-step h3 {
+body.course-hub-modern-mode .lesson-step h3 {
   margin: 0 0 8px;
   color: #334155;
   font-size: 13px;
   font-weight: 650;
 }
 
-body.vu1-hub-mode .lesson-step.is-active h3 {
+body.course-hub-modern-mode .lesson-step.is-active h3 {
   color: #1d4ed8;
   font-weight: 750;
 }
 
-body.vu1-hub-mode .step-pages {
+body.course-hub-modern-mode .step-pages {
   gap: 6px;
   border-left: 0;
   padding-left: 0;
 }
 
-body.vu1-hub-mode .step-page {
+body.course-hub-modern-mode .step-page {
   gap: 7px;
   color: #8a97ab;
   font-size: 12px;
 }
 
-body.vu1-hub-mode .step-page.is-active {
+body.course-hub-modern-mode .step-page.is-active {
   color: #0f172a;
   font-weight: 650;
 }
 
-body.vu1-hub-mode .step-page.is-active::before {
+body.course-hub-modern-mode .step-page.is-active::before {
   background: var(--primary);
 }
 
 @media (max-width: 940px) {
-  body.vu1-hub-mode .shell {
+  body.course-hub-modern-mode .shell {
     display: block;
     height: 100vh;
     min-height: 100vh;
     overflow: hidden;
   }
 
-  body.vu1-hub-mode .primary-sidebar,
-  body.vu1-hub-mode .context-sidebar,
-  body.vu1-hub-mode .topbar {
+  body.course-hub-modern-mode .primary-sidebar,
+  body.course-hub-modern-mode .context-sidebar,
+  body.course-hub-modern-mode .topbar {
     display: none !important;
   }
 
-  body.vu1-hub-mode .workspace,
-  body.vu1-hub-mode .content-scroll {
+  body.course-hub-modern-mode .workspace,
+  body.course-hub-modern-mode .content-scroll {
     height: 100vh;
   }
 
-  body.vu1-hub-mode .content-inner {
+  body.course-hub-modern-mode .content-inner {
     width: 100%;
     padding: 70px 18px 120px;
   }
 
-  body.vu1-hub-mode .vu1-hub-mobile-head {
+  body.course-hub-modern-mode .vu1-hub-mobile-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
   }
 
-  body.vu1-hub-mode .vu1-hub-mobile-brand {
+  body.course-hub-modern-mode .vu1-hub-mobile-brand {
     display: inline-flex;
     align-items: center;
     gap: 9px;
     min-width: 0;
   }
 
-  body.vu1-hub-mode .vu1-hub-mobile-brand span,
-  body.vu1-hub-mode .vu1-hub-mobile-avatar {
+  body.course-hub-modern-mode .vu1-hub-mobile-brand span,
+  body.course-hub-modern-mode .vu1-hub-mobile-avatar {
     display: grid;
     place-items: center;
     width: 30px;
@@ -5500,160 +5500,160 @@ body.vu1-hub-mode .step-page.is-active::before {
     font-weight: 850;
   }
 
-  body.vu1-hub-mode .vu1-hub-mobile-brand strong {
+  body.course-hub-modern-mode .vu1-hub-mobile-brand strong {
     color: #0f172a;
     font-size: 14px;
     font-weight: 750;
   }
 
-  body.vu1-hub-mode .vu1-hub-mobile-avatar {
+  body.course-hub-modern-mode .vu1-hub-mobile-avatar {
     border-radius: 999px;
     background: #dbeafe;
     color: #1d4ed8;
     font-size: 10.5px;
   }
 
-  body.vu1-hub-mode .course-hub {
+  body.course-hub-modern-mode .course-hub {
     gap: 14px;
   }
 
-  body.vu1-hub-mode .hub-header {
+  body.course-hub-modern-mode .hub-header {
     margin-top: 22px;
   }
 
-  body.vu1-hub-mode .hub-header p {
+  body.course-hub-modern-mode .hub-header p {
     font-size: 10px;
   }
 
-  body.vu1-hub-mode .hub-header h2 {
+  body.course-hub-modern-mode .hub-header h2 {
     margin: 7px 0 4px;
     font-size: 22px;
     line-height: 1.15;
   }
 
-  body.vu1-hub-mode .hub-header span {
+  body.course-hub-modern-mode .hub-header span {
     font-size: 12px;
   }
 
-  body.vu1-hub-mode .hub-ring {
+  body.course-hub-modern-mode .hub-ring {
     width: 44px;
     height: 44px;
     flex-basis: 44px;
   }
 
-  body.vu1-hub-mode .hub-ring strong {
+  body.course-hub-modern-mode .hub-ring strong {
     font-size: 11px;
   }
 
-  body.vu1-hub-mode .hub-continue {
+  body.course-hub-modern-mode .hub-continue {
     grid-template-columns: 1fr;
     gap: 12px;
     padding: 16px;
   }
 
-  body.vu1-hub-mode .hub-continue > div {
+  body.course-hub-modern-mode .hub-continue > div {
     order: 1;
   }
 
-  body.vu1-hub-mode .hub-continue-track {
+  body.course-hub-modern-mode .hub-continue-track {
     order: 2;
     margin-top: 0;
   }
 
-  body.vu1-hub-mode .hub-continue .primary-action {
+  body.course-hub-modern-mode .hub-continue .primary-action {
     order: 3;
     width: 100%;
     min-height: 44px;
   }
 
-  body.vu1-hub-mode .hub-continue p {
+  body.course-hub-modern-mode .hub-continue p {
     font-size: 9.5px;
     padding: 3px 8px;
   }
 
-  body.vu1-hub-mode .hub-continue h3 {
+  body.course-hub-modern-mode .hub-continue h3 {
     font-size: 15px;
     line-height: 1.35;
   }
 
-  body.vu1-hub-mode .hub-continue > div > span {
+  body.course-hub-modern-mode .hub-continue > div > span {
     font-size: 11.5px;
     line-height: 1.5;
   }
 
-  body.vu1-hub-mode .hub-stats {
+  body.course-hub-modern-mode .hub-stats {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  body.vu1-hub-mode .hub-stats div {
+  body.course-hub-modern-mode .hub-stats div {
     padding: 12px;
   }
 
-  body.vu1-hub-mode .hub-stats span {
+  body.course-hub-modern-mode .hub-stats span {
     gap: 5px;
     margin-bottom: 5px;
     font-size: 8.5px;
     letter-spacing: 0.04em;
   }
 
-  body.vu1-hub-mode .hub-stats span::before {
+  body.course-hub-modern-mode .hub-stats span::before {
     width: 6px;
     height: 6px;
   }
 
-  body.vu1-hub-mode .hub-stats strong {
+  body.course-hub-modern-mode .hub-stats strong {
     font-size: 16px;
   }
 
-  body.vu1-hub-mode .hub-module-head {
+  body.course-hub-modern-mode .hub-module-head {
     align-items: baseline;
     flex-direction: row;
     padding: 14px 16px 11px;
   }
 
-  body.vu1-hub-mode .hub-module-head h3 {
+  body.course-hub-modern-mode .hub-module-head h3 {
     font-size: 14.5px;
   }
 
-  body.vu1-hub-mode .hub-module-head span {
+  body.course-hub-modern-mode .hub-module-head span {
     font-size: 10.5px;
   }
 
-  body.vu1-hub-mode .hub-module-row {
+  body.course-hub-modern-mode .hub-module-row {
     grid-template-columns: 26px minmax(0, 1fr) auto;
     gap: 12px;
     min-height: 55px;
     padding: 12px 16px;
   }
 
-  body.vu1-hub-mode .hub-module-row::after {
+  body.course-hub-modern-mode .hub-module-row::after {
     content: "›";
     color: #94a3b8;
     font-size: 22px;
     line-height: 1;
   }
 
-  body.vu1-hub-mode .hub-module-index {
+  body.course-hub-modern-mode .hub-module-index {
     width: 26px;
     height: 26px;
     font-size: 11px;
   }
 
-  body.vu1-hub-mode .hub-module-copy strong {
+  body.course-hub-modern-mode .hub-module-copy strong {
     font-size: 12.5px;
     line-height: 1.35;
     white-space: normal;
   }
 
-  body.vu1-hub-mode .hub-module-copy small {
+  body.course-hub-modern-mode .hub-module-copy small {
     font-size: 10.5px;
   }
 
-  body.vu1-hub-mode .hub-module-status {
+  body.course-hub-modern-mode .hub-module-status {
     display: none;
   }
 
-  body.vu1-hub-mode .vu1-hub-mobile-progress {
+  body.course-hub-modern-mode .vu1-hub-mobile-progress {
     display: block;
     border: 1px solid #e7ecf2;
     border-radius: 12px;
@@ -5661,16 +5661,16 @@ body.vu1-hub-mode .step-page.is-active::before {
     padding: 16px;
   }
 
-  body.vu1-hub-mode .vu1-mobile-progress-head,
-  body.vu1-hub-mode .vu1-mobile-progress-subhead {
+  body.course-hub-modern-mode .vu1-mobile-progress-head,
+  body.course-hub-modern-mode .vu1-mobile-progress-subhead {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     gap: 12px;
   }
 
-  body.vu1-hub-mode .vu1-mobile-progress-head span,
-  body.vu1-hub-mode .vu1-mobile-progress-subhead span {
+  body.course-hub-modern-mode .vu1-mobile-progress-head span,
+  body.course-hub-modern-mode .vu1-mobile-progress-subhead span {
     color: #8a97ab;
     font-size: 10px;
     font-weight: 800;
@@ -5678,14 +5678,14 @@ body.vu1-hub-mode .step-page.is-active::before {
     text-transform: uppercase;
   }
 
-  body.vu1-hub-mode .vu1-mobile-progress-head strong {
+  body.course-hub-modern-mode .vu1-mobile-progress-head strong {
     color: #16a34a;
     font-family: "Schibsted Grotesk", Inter, system-ui, sans-serif;
     font-size: 17px;
     font-weight: 750;
   }
 
-  body.vu1-hub-mode .vu1-mobile-progress-track {
+  body.course-hub-modern-mode .vu1-mobile-progress-track {
     overflow: hidden;
     height: 4px;
     margin-top: 10px;
@@ -5693,36 +5693,36 @@ body.vu1-hub-mode .step-page.is-active::before {
     background: #eef2f7;
   }
 
-  body.vu1-hub-mode .vu1-mobile-progress-track span {
+  body.course-hub-modern-mode .vu1-mobile-progress-track span {
     display: block;
     height: 100%;
     border-radius: inherit;
     background: #16a34a;
   }
 
-  body.vu1-hub-mode .vu1-hub-mobile-progress > p {
+  body.course-hub-modern-mode .vu1-hub-mobile-progress > p {
     margin: 12px 0 0;
     color: #64748b;
     font-size: 11.5px;
     line-height: 1.6;
   }
 
-  body.vu1-hub-mode .vu1-mobile-progress-subhead {
+  body.course-hub-modern-mode .vu1-mobile-progress-subhead {
     margin: 16px 0 12px;
     border-top: 1px solid #eef2f7;
     padding-top: 14px;
   }
 
-  body.vu1-hub-mode .vu1-mobile-progress-subhead small {
+  body.course-hub-modern-mode .vu1-mobile-progress-subhead small {
     color: #94a3b8;
     font-size: 10px;
   }
 
-  body.vu1-hub-mode .vu1-mobile-progress-list {
+  body.course-hub-modern-mode .vu1-mobile-progress-list {
     display: grid;
   }
 
-  body.vu1-hub-mode .vu1-mobile-progress-step {
+  body.course-hub-modern-mode .vu1-mobile-progress-step {
     position: relative;
     display: grid;
     grid-template-columns: 11px minmax(0, 1fr);
@@ -5730,7 +5730,7 @@ body.vu1-hub-mode .step-page.is-active::before {
     padding-bottom: 14px;
   }
 
-  body.vu1-hub-mode .vu1-mobile-progress-step:not(:last-child)::before {
+  body.course-hub-modern-mode .vu1-mobile-progress-step:not(:last-child)::before {
     content: "";
     position: absolute;
     top: 14px;
@@ -5740,7 +5740,7 @@ body.vu1-hub-mode .step-page.is-active::before {
     background: #e7ecf2;
   }
 
-  body.vu1-hub-mode .vu1-mobile-progress-dot {
+  body.course-hub-modern-mode .vu1-mobile-progress-dot {
     width: 11px;
     height: 11px;
     margin-top: 3px;
@@ -5750,30 +5750,30 @@ body.vu1-hub-mode .step-page.is-active::before {
     z-index: 1;
   }
 
-  body.vu1-hub-mode .vu1-mobile-progress-step.is-active .vu1-mobile-progress-dot {
+  body.course-hub-modern-mode .vu1-mobile-progress-step.is-active .vu1-mobile-progress-dot {
     border-width: 3px;
     border-color: var(--primary);
   }
 
-  body.vu1-hub-mode .vu1-mobile-progress-step strong {
+  body.course-hub-modern-mode .vu1-mobile-progress-step strong {
     color: #334155;
     font-size: 12px;
     font-weight: 650;
   }
 
-  body.vu1-hub-mode .vu1-mobile-progress-step.is-active strong {
+  body.course-hub-modern-mode .vu1-mobile-progress-step.is-active strong {
     color: #1d4ed8;
     font-weight: 750;
   }
 
-  body.vu1-hub-mode .vu1-mobile-progress-step p {
+  body.course-hub-modern-mode .vu1-mobile-progress-step p {
     margin: 5px 0 0;
     color: #8a97ab;
     font-size: 11px;
     line-height: 1.55;
   }
 
-  body.vu1-hub-mode .vu1-hub-mobile-tabbar {
+  body.course-hub-modern-mode .vu1-hub-mobile-tabbar {
     position: fixed;
     right: 0;
     bottom: 0;
@@ -5788,7 +5788,7 @@ body.vu1-hub-mode .step-page.is-active::before {
     backdrop-filter: blur(12px);
   }
 
-  body.vu1-hub-mode .vu1-hub-mobile-tab {
+  body.course-hub-modern-mode .vu1-hub-mobile-tab {
     display: inline-flex;
     align-items: center;
     flex-direction: column;
@@ -5803,13 +5803,13 @@ body.vu1-hub-mode .step-page.is-active::before {
     font-weight: 700;
   }
 
-  body.vu1-hub-mode .vu1-hub-mobile-tab svg {
+  body.course-hub-modern-mode .vu1-hub-mobile-tab svg {
     width: 20px;
     height: 20px;
     stroke-width: 2.1;
   }
 
-  body.vu1-hub-mode .vu1-hub-mobile-tab.is-active {
+  body.course-hub-modern-mode .vu1-hub-mobile-tab.is-active {
     color: #1d4ed8;
     font-weight: 850;
   }

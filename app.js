@@ -1899,6 +1899,7 @@ function renderBreadcrumbs() {
 
 function renderActiveNav() {
   document.querySelectorAll(".main-nav .nav-item").forEach((item) => item.classList.remove("is-active"));
+  document.querySelectorAll(".vu1-hub-mobile-tabbar .vu1-hub-mobile-tab").forEach((item) => item.classList.remove("is-active"));
 
   const selector =
     state.mode === "home"
@@ -1915,6 +1916,7 @@ function renderActiveNav() {
               ? "[data-open-vu2]"
               : "[data-open-course]";
   document.querySelector(`.main-nav ${selector}`)?.classList.add("is-active");
+  document.querySelector(`.vu1-hub-mobile-tabbar ${selector}`)?.classList.add("is-active");
 }
 
 function renderModuleContext() {
@@ -1930,10 +1932,13 @@ function renderModuleContext() {
 }
 
 function setBodyLayoutMode(mode = "") {
+  const isModernCourseHub = mode === "course-hub-modern";
   document.body.classList.toggle("home-mode", mode === "home");
   document.body.classList.toggle("quiz-overview-mode", mode === "quiz-overview");
   document.body.classList.toggle("module-milestone-mode", mode === "module-milestone");
-  document.body.classList.toggle("vu1-hub-mode", mode === "vu1-hub");
+  document.body.classList.toggle("course-hub-modern-mode", isModernCourseHub);
+  document.body.classList.toggle("vu1-hub-mode", isModernCourseHub && state.courseId === "vu1");
+  document.body.classList.toggle("vu2-hub-mode", isModernCourseHub && state.courseId === "vu2");
 }
 
 function showHome() {
@@ -2069,7 +2074,7 @@ function showModuleMilestone(moduleIndex, lessonIndex = 0, pageIndex = 0) {
   els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function renderVu1HubMobileProgress() {
+function renderCourseHubMobileProgress() {
   const module = getCurrentModule();
   if (!module || isFinalExamModule(module)) {
     return "";
@@ -2123,7 +2128,8 @@ function renderCourseHub() {
   const moduleProgress = continueModule ? getModuleProgress(continueModule, continuePosition.moduleIndex) : 0;
   const quizSummary = getQuizSummary();
 
-  els.courseHubTitle.textContent = course.id === "vu1" ? "VU1 – Grundutbildning del 1" : course.fullTitle;
+  const courseTitle = course.fullTitle.replace(" - ", " \u2013 ");
+  els.courseHubTitle.textContent = courseTitle;
   els.courseHubMeta.textContent = `${moduleStats.total} moduler${hasFinalExam ? " · slutprov" : ""} · lektionssidor och quiz`;
   els.courseHubPercent.textContent = `${courseProgress.percent}%`;
   els.courseHubRing.style.setProperty("--ring-progress", `${courseProgress.percent * 3.6}deg`);
@@ -2131,7 +2137,7 @@ function renderCourseHub() {
     els.vu1HubMobileAvatar.textContent = userInitials(state.user.displayName || state.user.firstName || "Sven", "");
   }
   if (els.vu1HubMobileProgress) {
-    els.vu1HubMobileProgress.innerHTML = course.id === "vu1" ? renderVu1HubMobileProgress() : "";
+    els.vu1HubMobileProgress.innerHTML = renderCourseHubMobileProgress();
   }
   els.hubContinueTitle.textContent = continueModule
     ? `Modul ${moduleNumber(continueModule)} · ${moduleDisplayTitle(continueModule)}`
@@ -2214,7 +2220,7 @@ function showCourseHub() {
   els.finalExamPanel.hidden = true;
   els.metaPills.hidden = true;
   els.quizButton.hidden = false;
-  setBodyLayoutMode("vu1-hub");
+  setBodyLayoutMode("course-hub-modern");
   els.lessonTitle.textContent = getCourseConfig().shortLabel;
   els.breadcrumbs.innerHTML = "";
   setQuizButtonLabel("Starta quiz");
@@ -2249,7 +2255,7 @@ function showVu2() {
   els.finalExamPanel.hidden = true;
   els.metaPills.hidden = true;
   els.quizButton.hidden = false;
-  setBodyLayoutMode();
+  setBodyLayoutMode("course-hub-modern");
   els.lessonTitle.textContent = getCourseConfig().shortLabel;
   els.breadcrumbs.innerHTML = "";
   setQuizButtonLabel("Starta quiz");
