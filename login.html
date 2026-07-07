@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="auth.css?v=20260707-fit-auth-viewport">
+  <link rel="stylesheet" href="auth.css?v=20260707-mobile-auth">
 </head>
 <body>
   <div class="auth-shell">
@@ -59,6 +59,27 @@
       <section class="auth-panel" aria-labelledby="authTitle">
         <div class="auth-card">
           <div>
+            <div class="auth-mobile-intro">
+              <div class="auth-mobile-topbar">
+                <span class="auth-mobile-kicker">
+                  <span class="auth-mobile-kicker-dot" aria-hidden="true"></span>
+                  Elevportal
+                </span>
+                <a class="auth-mobile-back" href="/">
+                  <span aria-hidden="true">←</span>
+                  <span>Startsidan</span>
+                </a>
+              </div>
+
+              <div class="auth-mobile-hero">
+                <div class="auth-mobile-avatar" aria-hidden="true">
+                  <img src="/assets/auth-guard-laptop.png" alt="" decoding="async">
+                </div>
+                <h1 id="authMobileTitle">Fortsätt där <span>du slutade.</span></h1>
+                <p id="authMobileSubtitle">Logga in för att nå VU1, VU2, övningsquiz och slutprov.</p>
+              </div>
+            </div>
+
             <div class="auth-card-top">
               <span class="auth-status-pill">
                 <span class="auth-status-dot is-loading" id="authStatusDot"></span>
@@ -95,7 +116,7 @@
   </div>
 
   <script src="authProvider.js?v=20260706-light-auth"></script>
-  <script src="auth.js?v=20260707-robust-clerk-mount"></script>
+  <script src="auth.js?v=20260707-mobile-auth"></script>
   <script>
     if (window.lucide) window.lucide.createIcons();
   </script>

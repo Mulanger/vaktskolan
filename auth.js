@@ -18,6 +18,8 @@
     title: document.querySelector("#authTitle"),
     subtitle: document.querySelector("#authSubtitle"),
     authMount: document.querySelector("#authMount"),
+    mobileTitle: document.querySelector("#authMobileTitle"),
+    mobileSubtitle: document.querySelector("#authMobileSubtitle"),
     switchSignIn: document.querySelector("[data-auth-mode='sign-in']"),
     switchSignUp: document.querySelector("[data-auth-mode='sign-up']"),
     statusDot: document.querySelector("#authStatusDot"),
@@ -49,10 +51,19 @@
 
   function setModeCopy() {
     const isSignUp = activeMode === "sign-up";
+    document.body.dataset.authMode = activeMode;
+
     els.title.textContent = isSignUp ? "Skapa ett konto" : "Välkommen tillbaka";
     els.subtitle.textContent = isSignUp
-      ? "Börja träna och spara dina framsteg i plattformen."
+      ? "Innan du börjar behöver du skapa ett konto."
       : "Logga in för att fortsätta din väktarutbildning.";
+
+    if (els.mobileTitle && els.mobileSubtitle) {
+      els.mobileTitle.innerHTML = isSignUp ? "Skapa ett <span>konto.</span>" : "Fortsätt där <span>du slutade.</span>";
+      els.mobileSubtitle.textContent = isSignUp
+        ? "Innan du börjar behöver du skapa ett konto."
+        : "Logga in för att nå VU1, VU2, övningsquiz och slutprov.";
+    }
 
     els.switchSignIn.href = authUrl("sign-in");
     els.switchSignUp.href = authUrl("sign-up");
