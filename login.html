@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Logga in - Vaktskolan</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233455d3'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial' font-size='22' font-weight='700' fill='white'%3EVS%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="auth.css?v=20260706-auth-polish">
+</head>
+<body>
+  <div class="auth-shell">
+    <main class="auth-main">
+      <section class="auth-visual" aria-labelledby="authVisualTitle">
+        <div>
+          <span class="auth-kicker">
+            <i data-lucide="lock-keyhole"></i>
+            Elevportal
+          </span>
+
+          <h1 id="authVisualTitle">
+            Fortsätt där<br><span>du slutade.</span>
+          </h1>
+          <p>Logga in för att nå dina utbildningsmoment: VU1, VU2, övningsquiz och slutprov i samma fokuserade arbetsyta.</p>
+
+          <div class="auth-figure-stage">
+            <span class="auth-figure-hue" aria-hidden="true"></span>
+            <img
+              class="auth-figure-image"
+              src="/assets/auth-guard-laptop.png"
+              alt="Illustrerad väktare med laptop"
+              decoding="async"
+            >
+          </div>
+        </div>
+
+        <div class="auth-proof" aria-label="Plattformsöversikt">
+          <div>
+            <strong>VU1</strong>
+            <span>Grundutbildning del 1</span>
+          </div>
+          <div>
+            <strong>VU2</strong>
+            <span>Fördjupning och repetition</span>
+          </div>
+          <div>
+            <strong>QUIZ</strong>
+            <span>Övning inför provet</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="auth-panel" aria-labelledby="authTitle">
+        <div class="auth-card">
+          <div>
+            <div class="auth-card-top">
+              <span class="auth-status-pill">
+                <span class="auth-status-dot is-loading" id="authStatusDot"></span>
+                <span id="authStatusText">Säker anslutning</span>
+              </span>
+              <a class="auth-panel-back" href="/landing/index.html">
+                <i data-lucide="arrow-left"></i>
+                <span>Tillbaka till startsidan</span>
+              </a>
+            </div>
+
+            <div class="auth-heading">
+              <h2 id="authTitle">Välkommen tillbaka</h2>
+              <p id="authSubtitle">Logga in för att fortsätta din väktarutbildning.</p>
+            </div>
+
+            <nav class="auth-switch" aria-label="Välj inloggningsläge">
+              <a href="/login.html?mode=sign-in" data-auth-mode="sign-in">Logga in</a>
+              <a href="/login.html?mode=sign-up" data-auth-mode="sign-up">Skapa konto</a>
+            </nav>
+
+            <div class="auth-mount" id="authMount" aria-live="polite"></div>
+          </div>
+
+          <div class="auth-meta">
+            <span class="auth-meta-icon" aria-hidden="true">
+              <i data-lucide="shield-check"></i>
+            </span>
+            <span>Din session skyddas med modern autentisering. Efter inloggning skickas du vidare till din personliga kursöversikt.</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="authProvider.js?v=20260706-light-auth"></script>
+  <script src="auth.js?v=20260706-auth-polish"></script>
+  <script>
+    if (window.lucide) window.lucide.createIcons();
+  </script>
+</body>
+</html>

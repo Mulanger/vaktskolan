@@ -1,0 +1,401 @@
+:root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --text: #050505;
+  --muted: #8f8f94;
+  --soft: #767676;
+  --line: #eeeeee;
+  --accent: #0b66d8;
+  --accent-dark: #0957b8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.landing-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 48px;
+  padding: 12px 18px 10px;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(14px);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.brand-mark {
+  display: block;
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 3px #ffffff;
+  background: var(--accent);
+}
+
+.header-note {
+  margin: 0;
+  color: #050505;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.hero {
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  padding: 84px 24px 152px;
+}
+
+.hero-inner {
+  width: min(100%, 920px);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.hero-title {
+  margin: 0;
+  font-size: clamp(68px, 9.8vw, 108px);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.hero-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.hero-line > span {
+  display: block;
+  transform: translateY(112%);
+  animation: heroLineIn 880ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform;
+}
+
+.hero-line:nth-child(1) > span {
+  animation-delay: 90ms;
+}
+
+.hero-line:nth-child(2) > span {
+  animation-delay: 210ms;
+}
+
+.hero-line:nth-child(3) > span {
+  animation-delay: 330ms;
+}
+
+.hero-line-dark {
+  color: var(--text);
+}
+
+.hero-line-muted {
+  color: var(--muted);
+}
+
+.hero-copy {
+  width: min(100%, 430px);
+  margin: 28px auto 0;
+  color: var(--soft);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.45;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: heroFadeIn 620ms ease forwards;
+  animation-delay: 680ms;
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 26px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: heroFadeIn 620ms ease forwards;
+  animation-delay: 820ms;
+}
+
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 174px;
+  min-height: 40px;
+  border-radius: 999px;
+  padding: 0 22px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button:hover .button-arrow {
+  transform: translateX(3px);
+}
+
+.button-primary {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.button-primary:hover {
+  border-color: var(--accent-dark);
+  background: var(--accent-dark);
+}
+
+.button-secondary {
+  border: 1px solid #d8d8d8;
+  background: #ffffff;
+  color: #050505;
+}
+
+.button-secondary:hover {
+  border-color: #bdbdbd;
+  background: #fbfbfb;
+}
+
+.button-arrow {
+  display: inline-block;
+  line-height: 1;
+  transition: transform 180ms ease;
+}
+
+.logo-strip {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 9;
+  height: 78px;
+  background: rgba(255, 255, 255, 0.96);
+  overflow: hidden;
+}
+
+.logo-strip::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--line);
+}
+
+.logo-strip-label {
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  z-index: 1;
+  transform: translateX(-50%);
+  display: block;
+  background: rgba(255, 255, 255, 0.96);
+  color: #9a9a9a;
+  padding: 0 18px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+.logo-strip-inner {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(34px, 5vw, 72px);
+  width: min(100%, 980px);
+  padding: 0 54px;
+}
+
+.logo-mark {
+  display: block;
+  width: auto;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.logo-polisen {
+  height: 30px;
+}
+
+.logo-arbetsmiljoverket {
+  height: 40px;
+}
+
+.logo-imy {
+  height: 24px;
+}
+
+.logo-regeringskansliet {
+  height: 36px;
+}
+
+.logo-lansstyrelserna {
+  height: 32px;
+}
+
+@keyframes heroLineIn {
+  from {
+    transform: translateY(112%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 720px) {
+  .landing-header {
+    padding-inline: 14px;
+  }
+
+  .header-note {
+    display: none;
+  }
+
+  .hero {
+    align-items: center;
+    padding: 82px 18px 142px;
+  }
+
+  .hero-title {
+    font-size: clamp(48px, 15.8vw, 76px);
+  }
+
+  .hero-copy {
+    width: min(100%, 340px);
+    margin-top: 24px;
+  }
+
+  .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: min(100%, 280px);
+    margin-inline: auto;
+  }
+
+  .button {
+    width: 100%;
+  }
+
+  .logo-strip {
+    height: 86px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .logo-strip::before {
+    top: 15px;
+  }
+
+  .logo-strip-label {
+    top: 8px;
+    padding: 0 14px;
+    font-size: 10px;
+  }
+
+  .logo-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .logo-strip-inner {
+    left: 0;
+    bottom: 12px;
+    transform: none;
+    justify-content: flex-start;
+    width: max-content;
+    min-width: 100%;
+    gap: 34px;
+    padding: 0 24px;
+  }
+
+  .logo-polisen {
+    height: 28px;
+  }
+
+  .logo-arbetsmiljoverket {
+    height: 36px;
+  }
+
+  .logo-imy {
+    height: 22px;
+  }
+
+  .logo-regeringskansliet {
+    height: 32px;
+  }
+
+  .logo-lansstyrelserna {
+    height: 30px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}

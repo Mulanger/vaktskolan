@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaktskolan - Modern E-learning</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233455d3'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial' font-size='22' font-weight='700' fill='white'%3EVS%3C/text%3E%3C/svg%3E">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6', // Teal as a modern accent
+                            600: '#0d9488',
+                            900: '#134e4a',
+                        },
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6', // Core blue
+                            600: '#2563eb',
+                            900: '#1e3a8a',
+                        },
+                        surface: {
+                            DEFAULT: '#ffffff',
+                            muted: '#f8fafc',
+                            border: '#e2e8f0'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* Smooth transitions */
+        .nav-item {
+            transition: all 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-surface-muted text-slate-800 font-sans antialiased h-screen flex overflow-hidden selection:bg-primary-100 selection:text-primary-900">
+
+    <!-- Left Sidebar - Main Navigation -->
+    <aside class="w-64 bg-surface border-r border-surface-border flex flex-col h-full flex-shrink-0 z-20">
+        <!-- Logo -->
+        <div class="p-6 border-b border-surface-border">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-primary-600 flex items-center justify-center text-white font-bold text-lg shadow-sm">
+                    VS
+                </div>
+                <div>
+                    <h1 class="font-bold text-slate-900 tracking-tight">Vaktskolan</h1>
+                    <p class="text-[10px] text-slate-500 font-medium uppercase tracking-wider mt-0.5">Lärplattform</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scrollable Nav -->
+        <div class="flex-1 overflow-y-auto py-6 px-4 space-y-8">
+            
+            <!-- Main Nav -->
+            <nav class="space-y-1">
+                <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary-50 text-primary-600 font-medium">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                    VU1
+                </a>
+                <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                    <i data-lucide="shield-check" class="w-5 h-5 text-slate-400"></i>
+                    VU2
+                </a>
+                <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                    <i data-lucide="file-question" class="w-5 h-5 text-slate-400"></i>
+                    Quiz VU1
+                </a>
+                <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                    <i data-lucide="file-question" class="w-5 h-5 text-slate-400"></i>
+                    Quiz VU2
+                </a>
+                <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                    <i data-lucide="target" class="w-5 h-5 text-slate-400"></i>
+                    Scenarioquiz
+                </a>
+            </nav>
+
+            <!-- Current Course Focus -->
+            <div>
+                <div class="flex items-center justify-between px-3 mb-3">
+                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Moduler VU1</h2>
+                    <span class="text-xs text-slate-500 font-medium">4 aktiva</span>
+                </div>
+                <div class="space-y-2">
+                    <!-- Active Module -->
+                    <div class="group relative bg-surface border border-primary-200 rounded-xl p-3 shadow-sm transition-shadow hover:shadow-md cursor-pointer">
+                        <div class="absolute -left-[1px] top-4 bottom-4 w-1 bg-primary-500 rounded-r-md"></div>
+                        <div class="flex justify-between items-start mb-1">
+                            <span class="text-xs font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-md">1</span>
+                            <span class="text-xs font-bold text-brand-600">62%</span>
+                        </div>
+                        <h3 class="text-sm font-semibold text-slate-900 mb-1 leading-tight group-hover:text-primary-600 transition-colors">Regler för bevakningsverksamheten</h3>
+                        <p class="text-[11px] text-slate-500">8 tim · 15-20 min + quiz</p>
+                    </div>
+
+                    <!-- Inactive Modules -->
+                    <div class="group bg-transparent border border-transparent hover:border-surface-border hover:bg-surface rounded-xl p-3 transition-all cursor-pointer">
+                        <div class="flex justify-between items-start mb-1">
+                            <span class="text-xs font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md">2</span>
+                            <span class="text-xs font-semibold text-slate-400">24%</span>
+                        </div>
+                        <h3 class="text-sm font-medium text-slate-700 mb-1 leading-tight group-hover:text-slate-900">Bevakningsjuridik</h3>
+                    </div>
+                    
+                    <div class="group bg-transparent border border-transparent hover:border-surface-border hover:bg-surface rounded-xl p-3 transition-all cursor-pointer">
+                        <div class="flex justify-between items-start mb-1">
+                            <span class="text-xs font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md">3</span>
+                            <span class="text-xs font-semibold text-slate-400">0%</span>
+                        </div>
+                        <h3 class="text-sm font-medium text-slate-700 mb-1 leading-tight group-hover:text-slate-900">Arbetsmiljö</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- User Profile minimal -->
+        <div class="p-4 border-t border-surface-border bg-slate-50">
+            <div class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
+                <img src="https://i.pravatar.cc/150?img=11" alt="User" class="w-8 h-8 rounded-full border border-slate-200">
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-slate-900 truncate">Sven Svensson</p>
+                    <p class="text-xs text-slate-500 truncate">Elev</p>
+                </div>
+                <i data-lucide="settings" class="w-4 h-4 text-slate-400"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+        
+        <!-- Top Header -->
+        <header class="h-20 flex items-center justify-between px-8 bg-surface/80 backdrop-blur-sm border-b border-surface-border z-10 sticky top-0">
+            <div>
+                <nav class="flex items-center text-sm font-medium text-slate-500 mb-1">
+                    <span class="hover:text-slate-900 cursor-pointer transition-colors">VU1</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 mx-1 opacity-50"></i>
+                    <span class="hover:text-slate-900 cursor-pointer transition-colors">Modul 1</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 mx-1 opacity-50"></i>
+                    <span class="text-slate-900">Avsnitt 1.1</span>
+                </nav>
+                <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Bevakningsföretagets ansvar</h1>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-4 text-sm text-slate-500 mr-4">
+                    <div class="flex items-center gap-1.5"><i data-lucide="clock" class="w-4 h-4"></i> 15-20 min</div>
+                    <div class="flex items-center gap-1.5"><i data-lucide="book" class="w-4 h-4"></i> Sida 1 av 3</div>
+                </div>
+                <button class="p-2.5 rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors bg-white shadow-sm border border-slate-200">
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                </button>
+                <button class="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-5 py-2.5 rounded-full font-medium transition-colors shadow-sm shadow-primary-600/20">
+                    <i data-lucide="play-circle" class="w-5 h-5"></i>
+                    Starta quiz
+                </button>
+            </div>
+        </header>
+
+        <!-- Content Scrollable Area -->
+        <div class="flex-1 overflow-y-auto p-8 lg:px-12 xl:px-24 pb-32">
+            <div class="max-w-4xl mx-auto space-y-8">
+
+                <!-- Course Hero Banner - Minimalist -->
+                <div class="bg-gradient-to-br from-brand-50 to-primary-50 rounded-2xl p-8 border border-brand-100/50 relative overflow-hidden">
+                    <!-- Decorative background element -->
+                    <div class="absolute right-0 top-0 w-64 h-full opacity-10 pointer-events-none">
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                            <path fill="#0d9488" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,81.3,-46.3C90.8,-33.5,96.8,-18,97.3,-2.3C97.8,13.4,92.8,29.3,83.5,42.5C74.2,55.7,60.6,66.2,46.1,73.6C31.6,81,15.8,85.3,0.3,84.7C-15.2,84.2,-30.4,78.8,-43.8,70.6C-57.2,62.4,-68.8,51.4,-77.3,38.2C-85.8,25,-91.2,9.6,-90.6,-5.5C-90,-20.6,-83.4,-35.4,-73.4,-47.4C-63.4,-59.4,-50,-68.6,-36.1,-75.7C-22.2,-82.8,-7.8,-87.8,6.8,-96.2C21.4,-104.6,42.8,-116.4,44.7,-76.4Z" transform="translate(100 100)" />
+                        </svg>
+                    </div>
+
+                    <div class="relative z-10 flex gap-8 items-center">
+                        <div class="flex-1">
+                            <span class="text-xs font-bold tracking-widest text-brand-600 uppercase mb-3 block">Väktarutbildning 1</span>
+                            <h2 class="text-3xl font-bold text-slate-900 mb-4 leading-tight">Regler, ansvar och yrkesroll</h2>
+                            <p class="text-slate-600 text-lg leading-relaxed max-w-xl">
+                                Följ kursen sida för sida, repetera nyckelrutor och avsluta varje modul med quiz för att säkerställa dina kunskaper.
+                            </p>
+                        </div>
+                        
+                        <!-- Abstract illustration replacing the complex diagram -->
+                        <div class="hidden md:flex w-48 h-32 bg-white/60 backdrop-blur-md rounded-xl border border-white/80 shadow-sm items-center justify-center p-6 relative">
+                            <div class="w-full h-full relative">
+                                <div class="absolute top-1/2 left-0 w-full h-1 bg-slate-200 -translate-y-1/2 rounded-full"></div>
+                                <div class="absolute top-1/2 left-1/4 w-3 h-3 bg-brand-500 rounded-full -translate-y-1/2 shadow-[0_0_0_4px_rgba(20,184,166,0.2)]"></div>
+                                <div class="absolute top-1/2 left-3/4 w-3 h-3 bg-primary-500 rounded-full -translate-y-1/2 shadow-[0_0_0_4px_rgba(59,130,246,0.2)]"></div>
+                                <i data-lucide="building-2" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 text-slate-400 bg-white p-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Text Content -->
+                <div class="bg-surface rounded-2xl shadow-sm border border-surface-border p-10">
+                    
+                    <!-- Page Navigation Tabs -->
+                    <div class="flex gap-2 mb-10 border-b border-surface-border pb-4">
+                        <button class="px-4 py-2 text-sm font-semibold rounded-full bg-slate-900 text-white">Sida 1</button>
+                        <button class="px-4 py-2 text-sm font-medium rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors">Sida 2</button>
+                        <button class="px-4 py-2 text-sm font-medium rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors">Sida 3</button>
+                    </div>
+
+                    <article class="prose prose-slate prose-lg max-w-none">
+                        <h2 class="text-3xl font-bold text-slate-900 mb-8">Vad är ett bevakningsföretag?</h2>
+                        
+                        <p class="text-slate-700 leading-relaxed text-lg mb-6">
+                            Bevakning handlar om människors trygghet, egendom och integritet. Därför är branschen hårt reglerad i lag. Grunden är lagen om bevakningsföretag och Polismyndighetens föreskrifter.
+                        </p>
+                        
+                        <p class="text-slate-700 leading-relaxed text-lg mb-6">
+                            Ett bevakningsföretag är den som <strong class="text-slate-900 font-semibold bg-primary-50 px-1 rounded">yrkesmässigt</strong> åtar sig att <strong class="text-slate-900 font-semibold bg-primary-50 px-1 rounded">för annans räkning</strong> bevaka fastigheter, anläggningar, viss verksamhet eller offentliga tillställningar.
+                        </p>
+                        
+                        <p class="text-slate-700 leading-relaxed text-lg mb-10">
+                            Nyckelorden är yrkesmässigt och för annans räkning. Ett företag som vaktar sin egen egendom med egen personal räknas inte som bevakningsföretag.
+                        </p>
+
+                        <!-- Highlight Box -->
+                        <div class="bg-brand-50 border-l-4 border-brand-500 rounded-r-xl p-6 flex gap-4 my-8">
+                            <div class="bg-white p-2 rounded-lg shadow-sm h-fit">
+                                <i data-lucide="lightbulb" class="w-6 h-6 text-brand-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-base font-bold text-slate-900 mb-1">Kom ihåg</h4>
+                                <p class="text-slate-700 m-0">Yrkesmässig bevakning för annans räkning kräver alltid auktorisation.</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Bottom Pagination -->
+                    <div class="flex items-center justify-between mt-12 pt-6 border-t border-surface-border">
+                        <button class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-slate-600 font-medium hover:bg-slate-100 transition-colors">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i> Föregående
+                        </button>
+                        <button class="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors shadow-sm">
+                            Nästa sida <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Right Sidebar - Context & Progress -->
+    <aside class="w-80 bg-surface border-l border-surface-border flex flex-col h-full flex-shrink-0 z-20 overflow-y-auto">
+        
+        <!-- Overall Progress -->
+        <div class="p-6 border-b border-surface-border">
+            <div class="flex justify-between items-end mb-3">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Din Progress</p>
+                    <h3 class="text-lg font-bold text-slate-900">Modul 1</h3>
+                </div>
+                <span class="text-2xl font-bold text-brand-600">62%</span>
+            </div>
+            
+            <!-- Progress bar -->
+            <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden mb-4">
+                <div class="h-full bg-brand-500 rounded-full w-[62%] relative">
+                    <div class="absolute inset-0 bg-white/20 w-full animate-pulse"></div>
+                </div>
+            </div>
+            
+            <p class="text-xs text-slate-500 leading-relaxed">
+                Yrkesmässig bevakning kräver auktorisation, godkänd personal och tydliga gränser för roll, utrustning och tystnadsplikt.
+            </p>
+        </div>
+
+        <!-- Chapter Navigation -->
+        <div class="p-6 flex-1">
+            <div class="flex items-center justify-between mb-4">
+                <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Aktuell Modul</h4>
+                <span class="text-xs text-slate-400 font-medium">8 tim</span>
+            </div>
+
+            <!-- Timeline style navigation -->
+            <div class="relative before:absolute before:inset-0 before:ml-2.5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
+                
+                <div class="relative flex items-start gap-4 mb-6 group cursor-pointer">
+                    <div class="flex items-center justify-center w-6 h-6 rounded-full border-2 border-primary-500 bg-white shadow-sm ring-4 ring-white z-10 shrink-0">
+                        <div class="w-2 h-2 rounded-full bg-primary-500"></div>
+                    </div>
+                    <div>
+                        <h5 class="text-sm font-bold text-primary-600 mb-1 leading-tight group-hover:text-primary-700 transition-colors">1.1 - Vad är ett bevakningsföretag?</h5>
+                        
+                        <!-- Sub-items -->
+                        <div class="mt-3 space-y-3 pl-2 border-l border-slate-100 ml-1">
+                            <div class="flex items-center gap-3 text-sm">
+                                <div class="w-1.5 h-1.5 rounded-full bg-brand-500"></div>
+                                <span class="text-slate-500 line-through">1.1 - Företagets skyldigheter</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm">
+                                <div class="w-1.5 h-1.5 rounded-full bg-slate-300"></div>
+                                <span class="text-slate-900 font-medium">1.1 - Ditt ansvar som anställd</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative flex items-center gap-4 mb-6 group cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
+                    <div class="flex items-center justify-center w-6 h-6 rounded-full border-2 border-slate-200 bg-white z-10 shrink-0 group-hover:border-slate-300 transition-colors"></div>
+                    <h5 class="text-sm font-medium text-slate-600 leading-tight group-hover:text-slate-900">1.2 - Statens tillstånd</h5>
+                </div>
+                
+                <div class="relative flex items-center gap-4 mb-6 group cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
+                    <div class="flex items-center justify-center w-6 h-6 rounded-full border-2 border-slate-200 bg-white z-10 shrink-0 group-hover:border-slate-300 transition-colors"></div>
+                    <h5 class="text-sm font-medium text-slate-600 leading-tight group-hover:text-slate-900">1.2 - Vad prövas?</h5>
+                </div>
+
+                <div class="relative flex items-center gap-4 mb-6 group cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
+                    <div class="flex items-center justify-center w-6 h-6 rounded-full border-2 border-slate-200 bg-white z-10 shrink-0 group-hover:border-slate-300 transition-colors"></div>
+                    <h5 class="text-sm font-medium text-slate-600 leading-tight group-hover:text-slate-900">1.2 - Tillsyn och återkallelse</h5>
+                </div>
+                
+                 <div class="relative flex items-center gap-4 mb-6 group cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
+                    <div class="flex items-center justify-center w-6 h-6 rounded-full border-2 border-slate-200 bg-white z-10 shrink-0 group-hover:border-slate-300 transition-colors"></div>
+                    <h5 class="text-sm font-medium text-slate-600 leading-tight group-hover:text-slate-900">1.3 - Godkännandeprövningen</h5>
+                </div>
+                 <div class="relative flex items-center gap-4 mb-6 group cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
+                    <div class="flex items-center justify-center w-6 h-6 rounded-full border-2 border-slate-200 bg-white z-10 shrink-0 group-hover:border-slate-300 transition-colors"></div>
+                    <h5 class="text-sm font-medium text-slate-600 leading-tight group-hover:text-slate-900">1.3 - Utbildningstrappan</h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sticky Quiz CTA at bottom right -->
+        <div class="p-6 bg-slate-50 border-t border-surface-border sticky bottom-0">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Quiz</p>
+            <h4 class="text-base font-bold text-slate-900 mb-1">Testa Modul 1</h4>
+            <p class="text-xs text-slate-500 mb-4 leading-relaxed">8 frågor i A-D format med förklaring efter varje svar.</p>
+            <button class="w-full flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-3 rounded-xl font-medium transition-colors shadow-sm">
+                Öppna quiz
+                <i data-lucide="external-link" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+    </aside>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Vaktskolan - Lärplattform</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233455d3'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial' font-size='22' font-weight='700' fill='white'%3EVS%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css?v=20260705-portal-redesign">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar primary-sidebar" id="courseSidebar" aria-label="Kursnavigering">
+      <div class="brand-block">
+        <button class="icon-button mobile-only" id="closeNavButton" aria-label="Stäng meny">
+          <i data-lucide="x"></i>
+        </button>
+        <div class="brand-mark">VS</div>
+        <div>
+          <h1>Vaktskolan</h1>
+          <p>Lärplattform</p>
+        </div>
+      </div>
+
+      <nav class="main-nav" aria-label="Huvudmeny">
+        <button class="nav-item is-active" type="button" data-open-home><i data-lucide="home"></i><span>Hem</span></button>
+        <button class="nav-item" type="button" data-open-course><i data-lucide="book-open"></i><span>VU1</span></button>
+        <button class="nav-item" type="button" data-open-vu2><i data-lucide="shield-check"></i><span>VU2</span></button>
+        <button class="nav-item" type="button" data-show-quiz><i data-lucide="target"></i><span>Quiz Portal</span></button>
+        <button class="nav-item" type="button" data-open-final-exam-portal><i data-lucide="clipboard-check"></i><span>Slutprov</span></button>
+      </nav>
+
+      <section class="module-list-wrap" id="moduleListWrap">
+        <div class="section-label-row">
+          <h2 id="moduleListTitle">Moduler VU1</h2>
+          <span id="moduleCount">0 aktiva</span>
+        </div>
+        <div class="module-list" id="moduleList"></div>
+      </section>
+
+      <div class="profile-block">
+        <div class="avatar" id="profileAvatar">SS</div>
+        <div>
+          <p id="profileName">Sven Svensson</p>
+          <span id="profileRole">Elev</span>
+        </div>
+        <div class="auth-user-button" id="authUserButton" hidden></div>
+        <i data-lucide="settings" id="profileSettingsIcon"></i>
+      </div>
+    </aside>
+
+    <div class="overlay" id="navOverlay"></div>
+
+    <main class="workspace">
+      <header class="topbar">
+        <button class="icon-button tablet-only" id="openNavButton" aria-label="Öppna meny">
+          <i data-lucide="menu"></i>
+        </button>
+        <div class="topbar-title">
+          <nav class="breadcrumbs" id="breadcrumbs" aria-label="Brödsmulor"></nav>
+          <h2 id="lessonTitle">Laddar kurs...</h2>
+        </div>
+        <div class="topbar-actions">
+          <div class="meta-pills">
+            <span><i data-lucide="clock"></i><span id="timeEstimate">--</span></span>
+            <span><i data-lucide="book"></i><span id="pageCount">--</span></span>
+          </div>
+          <button class="primary-action" id="quizButton" type="button">
+            <i data-lucide="play-circle"></i>
+            <span>Starta quiz</span>
+          </button>
+          <button class="icon-button tablet-only" id="openContextButton" aria-label="Öppna modulöversikt">
+            <i data-lucide="panel-right-open"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="content-scroll" id="contentScroll">
+        <div class="content-inner">
+          <section class="home-panel" id="homePanel" aria-label="Hem"></section>
+
+          <section class="course-hub" id="courseHub" aria-labelledby="courseHubTitle" hidden>
+            <div class="hub-header">
+              <div>
+                <p>Väktarutbildning</p>
+                <h2 id="courseHubTitle">VU1 - Grundutbildning del 1</h2>
+                <span id="courseHubMeta">12 moduler · lektionssidor och quiz</span>
+              </div>
+              <div class="hub-ring" id="courseHubRing" aria-label="Total progress">
+                <strong id="courseHubPercent">0%</strong>
+              </div>
+            </div>
+
+            <section class="hub-continue" aria-label="Fortsätt där du slutade">
+              <div>
+                <p>Fortsätt där du slutade</p>
+                <h3 id="hubContinueTitle">Modul 1 · Regler för bevakningsverksamheten</h3>
+                <span id="hubContinueMeta">Sida 1 av 3</span>
+              </div>
+              <button class="primary-action" id="hubContinueButton" type="button">
+                <span>Fortsätt</span>
+                <i data-lucide="arrow-right"></i>
+              </button>
+              <div class="hub-continue-track"><span id="hubContinueBar"></span></div>
+            </section>
+
+            <section class="hub-stats" aria-label="Översikt">
+              <div>
+                <span>Moduler klara</span>
+                <strong id="hubCompletedModules">0 av 12</strong>
+              </div>
+              <div>
+                <span>Ämnen klara</span>
+                <strong id="hubCompletedPages">0%</strong>
+              </div>
+              <div>
+                <span>Quizresultat</span>
+                <strong id="hubQuizScore">Ej startat</strong>
+              </div>
+            </section>
+
+            <section class="hub-module-panel">
+              <div class="hub-module-head">
+                <h3>Moduler</h3>
+                <span id="hubModuleCount">0 av 12 klara</span>
+              </div>
+              <div class="hub-module-list" id="hubModuleList"></div>
+            </section>
+          </section>
+
+          <section class="quiz-overview-panel" id="quizOverviewPanel" aria-labelledby="quizOverviewTitle" hidden>
+            <div class="quiz-portal" id="quizPortal"></div>
+          </section>
+
+          <section class="module-context-bar" aria-labelledby="moduleHeroTitle">
+            <div class="module-context-main">
+              <span class="module-context-meta" id="moduleHeroMeta">Väktarutbildning 1 · Modul 1</span>
+              <h2 id="moduleHeroTitle">Regler för bevakningsverksamheten</h2>
+            </div>
+            <button class="module-info-button" id="moduleInfoButton" type="button" aria-controls="moduleInfoPanel" aria-expanded="false">
+              <i data-lucide="info"></i>
+              <span>Info</span>
+            </button>
+            <p class="module-context-details" id="moduleInfoPanel" hidden>
+              <span id="moduleHeroText">Följ kursen sida för sida, repetera nyckelrutor och avsluta varje modul med quiz.</span>
+            </p>
+          </section>
+
+          <section class="module-milestone-panel" id="moduleMilestonePanel" aria-labelledby="moduleMilestoneTitle" hidden>
+            <div class="module-milestone-copy">
+              <span class="module-milestone-kicker">
+                <span class="module-milestone-kicker-icon" id="moduleMilestoneKickerIcon"><i data-lucide="circle-play"></i></span>
+                <span id="moduleMilestoneKicker">Modulstart</span>
+              </span>
+              <h1 id="moduleMilestoneTitle">Regler för bevakningsverksamheten</h1>
+              <p id="moduleMilestoneObjective">Du går nu vidare till nästa modul.</p>
+            </div>
+            <section class="module-milestone-outline" aria-labelledby="moduleMilestoneOutlineTitle">
+              <h2 id="moduleMilestoneOutlineTitle">
+                <i data-lucide="list"></i>
+                <span>Innehåll i denna modul</span>
+              </h2>
+              <ul id="moduleMilestoneOutline"></ul>
+            </section>
+            <div class="module-milestone-details" aria-label="Modulinformation">
+              <div>
+                <span class="module-milestone-detail-label">
+                  <i data-lucide="clock-3"></i>
+                  <span>Tid</span>
+                </span>
+                <strong id="moduleMilestoneTime">--</strong>
+              </div>
+              <div>
+                <span class="module-milestone-detail-label">
+                  <i data-lucide="book-open-text"></i>
+                  <span>Ämnen</span>
+                </span>
+                <strong id="moduleMilestonePages">--</strong>
+              </div>
+              <div>
+                <span class="module-milestone-detail-label">
+                  <i data-lucide="circle-help"></i>
+                  <span>Quiz</span>
+                </span>
+                <strong id="moduleMilestoneQuiz">--</strong>
+              </div>
+            </div>
+            <button class="module-milestone-start" id="moduleMilestoneStartButton" type="button">
+              <span>Starta modul</span>
+              <i data-lucide="arrow-right"></i>
+            </button>
+          </section>
+
+          <section class="reader-panel" id="readerPanel">
+            <div class="page-tabs" id="pageTabs"></div>
+            <article class="lesson-article" id="article"></article>
+            <div class="reader-footer">
+              <button class="ghost-action" id="prevButton" type="button">
+                <i data-lucide="arrow-left"></i>
+                <span>Föregående</span>
+              </button>
+              <button class="dark-action" id="nextButton" type="button">
+                <span>Nästa sida</span>
+                <i data-lucide="arrow-right"></i>
+              </button>
+            </div>
+          </section>
+
+          <section class="reader-panel quiz-panel" id="quizPanel" hidden>
+            <div class="quiz-head">
+              <div>
+                <span>Quiz</span>
+                <h3 id="quizTitle">Testa modul</h3>
+              </div>
+              <div class="quiz-actions">
+                <strong id="quizScore">0/0</strong>
+                <button class="compact-action" id="backToLessonButton" type="button">
+                  <i data-lucide="book-open"></i>
+                  <span>Läs modul</span>
+                </button>
+                <button class="compact-action" id="resetQuizButton" type="button">
+                  <i data-lucide="rotate-ccw"></i>
+                  <span>Nollställ</span>
+                </button>
+              </div>
+            </div>
+            <div id="quizQuestions" class="quiz-questions"></div>
+            <div id="quizFooter" class="quiz-footer"></div>
+          </section>
+
+          <section class="reader-panel final-exam-panel" id="finalExamPanel" hidden>
+            <div class="final-exam-head">
+              <div>
+                <span>Slutprov VU1</span>
+                <h3 id="finalExamTitle">Fråga 1 av 30</h3>
+                <p id="finalExamSubtitle">Besvara frågan och gå vidare när du är klar.</p>
+              </div>
+              <strong id="finalExamAnswered">0/30 svarade</strong>
+            </div>
+            <div class="final-exam-track" aria-hidden="true">
+              <span id="finalExamProgress"></span>
+            </div>
+            <div class="final-exam-steps" id="finalExamSteps" aria-label="Frågenavigation"></div>
+            <div class="final-exam-question" id="finalExamQuestion"></div>
+            <div class="reader-footer final-exam-footer">
+              <div class="final-exam-nav">
+                <button class="ghost-action" id="finalExamPrevButton" type="button">
+                  <i data-lucide="chevron-left"></i>
+                  <span>Föregående</span>
+                </button>
+                <button class="dark-action" id="finalExamNextButton" type="button">
+                  <span>Nästa</span>
+                  <i data-lucide="chevron-right"></i>
+                </button>
+                <button class="dark-action" id="finalExamSubmitButton" type="button">
+                  <span>Lämna in</span>
+                  <i data-lucide="check"></i>
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <aside class="sidebar context-sidebar" id="contextSidebar" aria-label="Modulöversikt">
+      <div class="context-mobile-head">
+        <h2>Modulöversikt</h2>
+        <button class="icon-button" id="closeContextButton" aria-label="Stäng modulöversikt">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <section class="progress-block">
+        <div class="progress-head">
+          <div>
+            <p>Din progress</p>
+            <h3 id="progressModule">Modul</h3>
+          </div>
+          <strong id="progressPercent">0%</strong>
+        </div>
+        <div class="progress-track"><div id="progressBar"></div></div>
+        <p id="progressSummary">Laddar modul...</p>
+      </section>
+
+      <section class="timeline-block">
+        <div class="section-label-row">
+          <h2>Aktuell modul</h2>
+          <span id="moduleHours">--</span>
+        </div>
+        <div class="timeline" id="lessonTimeline"></div>
+      </section>
+
+    </aside>
+  </div>
+
+  <div class="quiz-reset-modal" id="quizResetModal" role="dialog" aria-modal="true" aria-labelledby="quizResetTitle" hidden>
+    <div class="quiz-reset-dialog">
+      <div class="quiz-reset-icon">
+        <i data-lucide="triangle-alert"></i>
+      </div>
+      <div>
+        <h2 id="quizResetTitle">Nollställ quizhistorik?</h2>
+        <p>Detta tar bort all quizhistorik, tidigare svar och scenarioresultat. Åtgärden kan inte ångras.</p>
+      </div>
+      <div class="quiz-reset-actions">
+        <button class="quiz-modal-secondary" type="button" data-cancel-quiz-reset>Avbryt</button>
+        <button class="quiz-modal-danger" type="button" data-confirm-quiz-reset>Nollställ historik</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="authProvider.js?v=20260706-light-auth"></script>
+  <script src="supabaseApi.js?v=20260705-supabase"></script>
+  <script src="app.js?v=20260705-portal-redesign"></script>
+</body>
+</html>
