@@ -101,7 +101,19 @@ http://127.0.0.1:5173
 Login/signup URL:
 
 ```text
-http://127.0.0.1:5173/login.html?mode=sign-in&redirect_url=/index.html
+http://127.0.0.1:5173/login.html?mode=sign-in&redirect_url=/platform
+```
+
+Publik startsida/landing:
+
+```text
+http://127.0.0.1:5173/
+```
+
+Dashboard/lärplattform efter inloggning:
+
+```text
+http://127.0.0.1:5173/platform
 ```
 
 Om port `5173` är upptagen:
@@ -279,14 +291,14 @@ window.vaktskolanAuthProvider.getError()
 window.vaktskolanAuthProvider.isConfigured()
 ```
 
-Auth-sidan finns som `login.html`. Root-servern routar även `/login`, `/sign-in` och `/sign-up` till `login.html`. `auth.js` använder query-parametern `mode=sign-in|sign-up` och monterar sign in eller sign up. Efter lyckad auth går användaren till `redirect_url`, normalt `/index.html` vid statisk körning.
+Auth-sidan finns som `login.html`. Root-servern routar även `/login`, `/sign-in` och `/sign-up` till `login.html`. `auth.js` använder query-parametern `mode=sign-in|sign-up` och monterar sign in eller sign up. Efter lyckad auth går användaren till `redirect_url`, normalt `/platform` i produktion.
 
 Viktigt UX-beslut: auth-sidan ska inte visa `Clerk`, `CLERK_PUBLISHABLE_KEY`, miljövariabler eller leverantörskonfiguration för kunder. Om auth inte är tillgänglig ska UI:t visa neutral copy, exempelvis `Inloggningen är inte tillgänglig just nu`.
 
 Dashboarden laddar `authProvider.js` före `app.js`. `init()` kör `requireAuthenticatedUser()` innan kursmaterialet hämtas. Om Clerk inte är konfigurerat (`ok: false`) fortsätter lokal utveckling som tidigare. Om Clerk är konfigurerat och användaren är utloggad redirectas användaren till:
 
 ```text
-/login.html?mode=sign-in&redirect_url=/index.html
+/login.html?mode=sign-in&redirect_url=/platform
 ```
 
 När användaren är inloggad uppdateras profilblocket i vänsterspalten med användarens namn och en user-menu från auth-leverantören.
@@ -740,11 +752,12 @@ Viktigt: `landing/styles.css` och `landing/script.js` finns men är inte länkad
 
 Navigation från landing till dashboard:
 
-- Headerknappen `Logga in` i `landing/index.html` går till `/login.html?mode=sign-in&redirect_url=/index.html`.
+- Root-URL `/` visar landing page, inte dashboarden. Detta undviker att dashboarden flashar innan auth-redirect.
+- Headerknappen `Logga in` i `landing/index.html` går till `/login.html?mode=sign-in&redirect_url=/platform`.
 - Root-servern `server.mjs` mappar `/login`, `/sign-in` och `/sign-up` till `login.html`.
 - Efter lyckad auth går användaren vidare till dashboarden.
 - Root-servern `server.mjs` mappar `/platform` till dashboardens `index.html`.
-- När hela projektet körs via root-servern kan landing öppnas på `/landing/`; root-servern mappar också `/landing` och `/landing/` till `landing/index.html`.
+- När hela projektet körs via root-servern kan landing även öppnas på `/landing/`; root-servern mappar också `/landing` och `/landing/` till `landing/index.html`.
 
 ## Init-Flöde
 
@@ -831,7 +844,7 @@ node --check server.mjs
 
 För Supabase-kopplingen, starta `node server.mjs` och kontrollera `http://127.0.0.1:5173/api/supabase/health`.
 
-För Clerk-kopplingen, starta `node server.mjs` och kontrollera `http://127.0.0.1:5173/api/clerk/config`. `ok: true` kräver att `CLERK_PUBLISHABLE_KEY` finns i `.env`. Öppna sedan `/login.html?mode=sign-in&redirect_url=/index.html`.
+För Clerk-kopplingen, starta `node server.mjs` och kontrollera `http://127.0.0.1:5173/api/clerk/config`. `ok: true` kräver att `CLERK_PUBLISHABLE_KEY` finns i `.env`. Öppna sedan `/login.html?mode=sign-in&redirect_url=/platform`.
 
 Efter att Quiz Portal-migrationen körts i Supabase SQL Editor:
 
@@ -877,7 +890,7 @@ Manuell kontroll i browser:
 - Efter inlämnat slutprov syns `Klar`, inte `Föregående/Nästa/Lämna in`.
 - `Klar` återvänder till rätt hubb, VU1 eller VU2.
 - Quiz Portal visar `QuizPortalen`, demo-modulkort, demoquiz och flashcards utan den gamla slutprovskortlayouten.
-- Landing `Logga in` öppnar `/login.html?mode=sign-in&redirect_url=/index.html`.
+- Landing `Logga in` öppnar `/login.html?mode=sign-in&redirect_url=/platform`.
 - Auth-sidan visar sign in när `mode=sign-in` och sign up när `mode=sign-up`, utan kundsynlig leverantörstext.
 - Med `CLERK_PUBLISHABLE_KEY` satt redirectas utloggade användare från dashboarden till `login.html`.
 - Efter inloggning visar vänsterprofilen användarens namn och user-menu.
@@ -969,13 +982,13 @@ Det här har nyligen ändrats och bör inte råka rullas tillbaka:
 - Quiz Portal-databasschema är förberett i `supabase/migrations/20260705133000_create_quiz_collections.sql` med collections för VU1 quiz, VU2 quiz, Flashcards, Vanlig quiz, Scenario quiz och Slutprovet.
 - Scenariofrågebanken `D:\vaktarskolan_scenariobank_300.json` är validerad och mappad till `scenario_quiz` via `supabase/seeds/20260705143000_seed_scenario_quiz_300.sql` och `scripts/import-scenario-quiz.mjs`.
 - Supabase-molndatabasen är uppdaterad med Quiz Portal-tabeller och 300 scenariofrågor i `scenario_quiz`.
-- Landing-sidans `Logga in` går nu till `login.html?mode=sign-in&redirect_url=/index.html`, vilket fungerar även vid statisk Python-körning.
+- Landing-sidans `Logga in` går nu till `login.html?mode=sign-in&redirect_url=/platform` när projektet körs via root-servern.
 - Hemfliken är byggd från `D:\hem_dashboard.html`-referensen med data-driven progress, fortsättlogik, kurskort och snabbvägar.
 - Hemfliken visar nu första-besök-rubrik. VU2-låsning styrs centralt av `ENFORCE_COURSE_LOCKS`, som är `false` under implementation.
 - Modulstart-/milstolpesidan är breddad på desktop via `body.module-milestone-mode`, bredare `module-milestone-panel` och tvåkolumnslista för modulens innehåll.
 - Slutprov i vänstermenyn har en egen portal med VU1/VU2-status, kursrätt start/fortsätt/visa-resultat och inga beroenden till gamla `finalExam*`-kort-ID:n.
 - `localStorage`-läsning validerar nu array/object-form för visited, answers, finalExams och sparad location. Korrupt sparad plats faller tillbaka till Hem.
-- Clerk-auth är tillagd via vanilla JS-wrappern `authProvider.js`: `login.html` monterar sign in/sign up, landingens `Logga in` går till `login.html?mode=sign-in&redirect_url=/index.html`, och dashboarden redirectar utloggade användare när `CLERK_PUBLISHABLE_KEY` är konfigurerad. Auth-sidan använder portaldesignen från `D:\v_ktarskolan_portal_redesign.html` utan kundsynlig Clerk-/miljövariabelcopy.
+- Clerk-auth är tillagd via vanilla JS-wrappern `authProvider.js`: `login.html` monterar sign in/sign up, landingens `Logga in` går till `login.html?mode=sign-in&redirect_url=/platform`, och dashboarden redirectar utloggade användare när `CLERK_PUBLISHABLE_KEY` är konfigurerad. Auth-sidan använder portaldesignen från `D:\v_ktarskolan_portal_redesign.html` utan kundsynlig Clerk-/miljövariabelcopy.
 - Clerk-auth laddar svensk localization (`svSE`) i `authProvider.js`, och `index.html`/`login.html` cache-bustar den versionen med `authProvider.js?v=20260705-sv-localization`.
 - Landing-sidans mobilhero följer den bifogade agentdesignens responsiva struktur: statisk mobilheader, max 480px canvas, fullbreddsrubrik, brödtext och väktarillustration i tvåkolumnsgrid, 78px CTA-kort och en kompakt hero-quizoverlay. `Prova gratis quiz` ersätter CTA-korten med ett litet 3-frågors quiz utan horisontell overflow, och `Tillbaka till valen` återställer knapparna.
 - Hero-quizet får inte ligga bakom en vertikal overflow-mask. `main` på landningssidan ska inte ha `overflow-hidden`; quizlogiken använder `keepHeroQuizInView()` efter svar/nästa för att hålla feedback och `Nästa fråga` synliga.

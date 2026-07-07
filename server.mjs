@@ -92,8 +92,8 @@ function handleClerkConfig(response) {
     jwksUrl: config.jwksUrl,
     signInUrl: "/login.html?mode=sign-in",
     signUpUrl: "/login.html?mode=sign-up",
-    afterSignInUrl: "/index.html",
-    afterSignUpUrl: "/index.html",
+    afterSignInUrl: "/platform",
+    afterSignUpUrl: "/platform",
   });
 }
 
@@ -163,6 +163,7 @@ async function handleSupabaseHealth(response) {
 
 function resolveRequest(url) {
   const pathname = decodeURIComponent(new URL(url, `http://${host}:${port}`).pathname);
+  if (pathname === "/") return join(root, "landing", "index.html");
   if (pathname === "/platform") return join(root, "index.html");
   if (pathname === "/login" || pathname === "/sign-in" || pathname === "/sign-up") return join(root, "login.html");
   if (pathname === "/landing" || pathname === "/landing/") return join(root, "landing", "index.html");
@@ -170,7 +171,7 @@ function resolveRequest(url) {
   const pathSegments = pathname.split("/").filter(Boolean);
   if (pathSegments.some((segment) => segment.startsWith("."))) return null;
 
-  const requested = pathname === "/" ? "/index.html" : pathname;
+  const requested = pathname;
   const resolved = normalize(join(root, requested));
   const relativePath = relative(root, resolved);
 
@@ -211,5 +212,5 @@ createServer(async (request, response) => {
   });
   createReadStream(file).pipe(response);
 }).listen(port, host, () => {
-  console.log(`Vaktskolan dashboard running at http://${host}:${port}`);
+  console.log(`Vaktskolan running at http://${host}:${port}`);
 });

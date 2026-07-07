@@ -19,7 +19,7 @@ const mimeTypes = {
 
 function resolveRequest(url) {
   const pathname = decodeURIComponent(new URL(url, `http://localhost:${port}`).pathname);
-  const requested = pathname === "/" ? "/index.html" : pathname;
+  const requested = pathname === "/" ? "/index.html" : pathname.replace(/^\/landing(?=\/)/, "");
   const resolved = normalize(join(root, requested));
 
   if (!resolved.startsWith(root)) return null;

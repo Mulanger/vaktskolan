@@ -1,5 +1,5 @@
 (function () {
-  const DEFAULT_REDIRECT = "/index.html";
+  const DEFAULT_REDIRECT = "/platform";
   const params = new URLSearchParams(window.location.search);
   let activeMode = getModeFromParams();
   const redirectUrl = normalizeRedirect(params.get("redirect_url") || DEFAULT_REDIRECT);
