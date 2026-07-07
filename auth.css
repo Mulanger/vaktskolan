@@ -399,6 +399,11 @@ a {
   box-shadow: 0 22px 48px -28px rgba(15, 23, 42, 0.28);
 }
 
+.auth-clerk-root {
+  width: 100%;
+  min-height: 280px;
+}
+
 .auth-mount .cl-rootBox,
 .auth-mount .cl-cardBox,
 .auth-mount .cl-card {
