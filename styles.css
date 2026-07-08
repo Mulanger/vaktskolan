@@ -9379,6 +9379,18 @@ body.final-exam-result-mode .final-exam-question {
 }
 
 @media (max-width: 940px) {
+  body.final-portal-mode .final-portal {
+    animation: none;
+    transform: none;
+  }
+
+  body.final-portal-mode .final-portal-mobile-tabbar {
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
+  }
+
   body.final-exam-focus-mode .shell,
   body.final-exam-result-mode .shell {
     display: block;
