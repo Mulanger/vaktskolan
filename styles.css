@@ -3164,6 +3164,33 @@ body.module-milestone-mode .content-inner {
 
 }
 
+body.final-portal-mode .final-portal-head {
+  display: grid;
+  justify-items: start;
+  text-align: left;
+}
+
+body.final-portal-mode .final-portal-head > div {
+  width: min(100%, 720px);
+  margin: 0;
+}
+
+body.final-portal-mode .final-portal-head span {
+  color: #16a34a;
+  letter-spacing: 0.12em;
+}
+
+body.final-portal-mode .final-portal-head h1 {
+  font-size: 31px;
+  letter-spacing: 0;
+}
+
+body.final-portal-mode .final-portal-head p {
+  max-width: 640px;
+  margin-top: 6px;
+  font-size: 14px;
+}
+
 .empty-state-panel {
   display: grid;
   align-content: center;
