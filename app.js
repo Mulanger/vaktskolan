@@ -1642,15 +1642,17 @@ function getFinalExamResult() {
     if (isCorrect) current.correct += 1;
     breakdownMap.set(key, current);
 
-    if (!isCorrect) {
-      wrongQuestions.push({
-        index: index + 1,
-        source: key,
-        question: question.question,
-        selected: selected || "Ej svarat",
-        correct: question.correct,
-      });
-    }
+    const reviewItem = {
+      index: index + 1,
+      source: key,
+      question: question.question,
+      selected: selected || "Ej svarat",
+      correct: question.correct,
+      explanation: question.explanation,
+      isCorrect,
+    };
+
+    if (!isCorrect) wrongQuestions.push(reviewItem);
   });
 
   const percent = questions.length ? Math.round((correct / questions.length) * 100) : 0;
@@ -1661,6 +1663,18 @@ function getFinalExamResult() {
     percent,
     passed: percent >= FINAL_EXAM_PASS_PERCENT,
     wrongQuestions,
+    reviewQuestions: questions.map((question, index) => {
+      const selected = answers[question.id];
+      return {
+        index: index + 1,
+        source: question.source || "Blandade frågor",
+        question: question.question,
+        selected: selected || "Ej svarat",
+        correct: question.correct,
+        explanation: question.explanation,
+        isCorrect: selected === question.correct,
+      };
+    }),
     breakdown: [...breakdownMap.values()],
   };
 }
@@ -1766,7 +1780,82 @@ function getFinalExamPortalOverview(courseId) {
   });
 }
 
+function renderFinalPortalMobileHead() {
+  const initials = userInitials(state.user.displayName || state.user.firstName || "Sven", "");
+  return `
+    <div class="final-portal-mobile-head">
+      <div class="final-portal-mobile-brand">
+        <span>VS</span>
+        <strong>Vaktskolan</strong>
+      </div>
+      <span class="final-portal-mobile-avatar">${escapeHtml(initials)}</span>
+    </div>
+  `;
+}
+
+function renderFinalPortalMobileTabbar() {
+  return `
+    <nav class="final-portal-mobile-tabbar" aria-label="Mobil huvudmeny">
+      <button class="final-portal-mobile-tab" type="button" data-open-home>
+        <i data-lucide="home"></i>
+        <span>Hem</span>
+      </button>
+      <button class="final-portal-mobile-tab" type="button" data-open-course>
+        <i data-lucide="book-open"></i>
+        <span>VU1</span>
+      </button>
+      <button class="final-portal-mobile-tab" type="button" data-open-vu2>
+        <i data-lucide="shield"></i>
+        <span>VU2</span>
+      </button>
+      <button class="final-portal-mobile-tab" type="button" data-show-quiz>
+        <i data-lucide="target"></i>
+        <span>Quiz</span>
+      </button>
+      <button class="final-portal-mobile-tab is-active" type="button" data-open-final-exam-portal>
+        <i data-lucide="clipboard-check"></i>
+        <span>Slutprov</span>
+      </button>
+    </nav>
+  `;
+}
+
+function finalPortalCourseDescription(courseId) {
+  return courseId === "vu2"
+    ? "Fördjupande slutprov för VU2 med situationer, arbetsmiljö och avancerad juridik."
+    : "Slutprov för VU1 med regler, juridik, arbetsmiljö och yrkesetik från grundutbildningen.";
+}
+
+function renderFinalExamSidebar() {
+  const overviews = Object.keys(COURSE_CONFIG).map((courseId) => getFinalExamPortalOverview(courseId));
+  els.moduleListWrap.hidden = false;
+  els.moduleListTitle.textContent = "Tillgängliga prov";
+  els.moduleCount.textContent = "VU1 + VU2";
+  els.moduleList.innerHTML = overviews
+    .map((overview) => {
+      const isActive = state.courseId === overview.courseId;
+      return `
+        <button class="final-sidebar-card ${isActive ? "is-active" : ""} final-sidebar-card-${overview.tone}"
+          type="button"
+          data-final-portal-course="${overview.courseId}"
+          data-final-portal-action="${overview.action}"
+          ${overview.disabled ? 'disabled aria-disabled="true"' : ""}>
+          <span class="final-sidebar-index">${escapeHtml(overview.course.shortLabel.replace("VU", ""))}</span>
+          <span class="final-sidebar-copy">
+            <strong>${escapeHtml(overview.course.finalExamLabel)}</strong>
+            <small>${escapeHtml(overview.detail)}</small>
+          </span>
+          <span class="final-sidebar-status">${escapeHtml(overview.status)}</span>
+        </button>
+      `;
+    })
+    .join("");
+}
+
 function renderFinalExamPortalCard(overview) {
+  const cardDescription = finalPortalCourseDescription(overview.courseId);
+  const actionIcon = overview.disabled ? "lock" : overview.action === "resume" ? "play-circle" : "arrow-right";
+
   return `
     <article class="final-portal-card final-portal-card-${overview.tone}">
       <div class="final-portal-card-head">
@@ -1776,7 +1865,7 @@ function renderFinalExamPortalCard(overview) {
       <div class="final-portal-card-copy">
         <span>${escapeHtml(overview.course.shortLabel)}</span>
         <h2>${escapeHtml(overview.course.finalExamLabel)}</h2>
-        <p>${escapeHtml(overview.detail)}</p>
+        <p>${escapeHtml(cardDescription)}</p>
       </div>
       <div class="final-portal-stats" aria-label="${escapeHtml(overview.course.shortLabel)} slutprovsstatus">
         <div>
@@ -1792,12 +1881,13 @@ function renderFinalExamPortalCard(overview) {
           <strong>${overview.poolCount}</strong>
         </div>
       </div>
+      <p class="final-portal-detail">${escapeHtml(overview.detail)}</p>
       <button class="final-portal-action" type="button"
         data-final-portal-course="${overview.courseId}"
         data-final-portal-action="${overview.action}"
         ${overview.disabled ? 'disabled aria-disabled="true"' : ""}>
         <span>${escapeHtml(overview.actionLabel)}</span>
-        <i data-lucide="${overview.disabled ? "lock" : "arrow-right"}"></i>
+        <i data-lucide="${actionIcon}"></i>
       </button>
     </article>
   `;
@@ -1808,16 +1898,37 @@ function renderFinalExamPortal() {
 
   return `
     <section class="final-portal" aria-labelledby="finalPortalTitle">
+      ${renderFinalPortalMobileHead()}
       <div class="final-portal-head">
         <div>
-          <span>Slutprov</span>
-          <h1 id="finalPortalTitle">Välj slutprov</h1>
-          <p>Starta, fortsätt eller visa resultat för VU1 och VU2. Varje prov består av ${FINAL_EXAM_SIZE} slumpade frågor och nytt prov spärras i 24 timmar efter inlämning.</p>
+          <span>Väktarutbildning</span>
+          <h1 id="finalPortalTitle">Slutprov</h1>
+          <p>Provläge med en fråga i taget och resultat först när provet lämnas in.</p>
         </div>
       </div>
+      <section class="final-portal-hero" aria-label="Information om slutprov">
+        <div class="final-portal-hero-copy">
+          <span>Dags för slutprovet</span>
+          <h2>Testa helheten innan du går vidare.</h2>
+          <p>Välj VU1 eller VU2, svara i fokusläge och lämna in först när alla frågor är besvarade. Efter inlämning låses ett nytt prov i 24 timmar.</p>
+        </div>
+        <div class="final-portal-rules" aria-label="Regler">
+          <div><i data-lucide="list-checks"></i><span>${FINAL_EXAM_SIZE} frågor per prov</span></div>
+          <div><i data-lucide="badge-check"></i><span>Godkänt vid ${FINAL_EXAM_PASS_PERCENT}%</span></div>
+          <div><i data-lucide="clock-3"></i><span>24h spärr vid nytt försök</span></div>
+        </div>
+      </section>
+
+      <section class="final-portal-exam-list" aria-label="Välj prov">
+        <div class="final-portal-list-head">
+          <h2>Välj prov</h2>
+          <span>VU1 och VU2</span>
+        </div>
       <div class="final-portal-grid">
         ${overviews.map((overview) => renderFinalExamPortalCard(overview)).join("")}
       </div>
+      </section>
+      ${renderFinalPortalMobileTabbar()}
     </section>
   `;
 }
@@ -1902,6 +2013,7 @@ function renderActiveNav() {
   document.querySelectorAll(".main-nav .nav-item").forEach((item) => item.classList.remove("is-active"));
   document.querySelectorAll(".vu1-hub-mobile-tabbar .vu1-hub-mobile-tab").forEach((item) => item.classList.remove("is-active"));
   document.querySelectorAll(".quiz-portal-mobile-tabbar .quiz-portal-mobile-tab").forEach((item) => item.classList.remove("is-active"));
+  document.querySelectorAll(".final-portal-mobile-tabbar .final-portal-mobile-tab").forEach((item) => item.classList.remove("is-active"));
 
   const selector =
     state.mode === "home"
@@ -1920,6 +2032,7 @@ function renderActiveNav() {
   document.querySelector(`.main-nav ${selector}`)?.classList.add("is-active");
   document.querySelector(`.vu1-hub-mobile-tabbar ${selector}`)?.classList.add("is-active");
   document.querySelector(`.quiz-portal-mobile-tabbar ${selector}`)?.classList.add("is-active");
+  document.querySelector(`.final-portal-mobile-tabbar ${selector}`)?.classList.add("is-active");
 }
 
 function renderModuleContext() {
@@ -1938,6 +2051,8 @@ function setBodyLayoutMode(mode = "") {
   const isModernCourseHub = mode === "course-hub-modern";
   document.body.classList.toggle("home-mode", mode === "home");
   document.body.classList.toggle("quiz-overview-mode", mode === "quiz-overview");
+  document.body.classList.toggle("final-portal-mode", mode === "final-portal");
+  document.body.classList.toggle("final-exam-focus-mode", mode === "final-exam-focus");
   document.body.classList.toggle("module-milestone-mode", mode === "module-milestone");
   document.body.classList.toggle("course-hub-modern-mode", isModernCourseHub);
   document.body.classList.toggle("vu1-hub-mode", isModernCourseHub && state.courseId === "vu1");
@@ -1987,11 +2102,11 @@ function showFinalExamPortal() {
   els.finalExamPanel.hidden = true;
   els.metaPills.hidden = true;
   els.quizButton.hidden = true;
-  setBodyLayoutMode("home");
+  setBodyLayoutMode("final-portal");
   els.lessonTitle.textContent = "Slutprov";
   els.breadcrumbs.innerHTML = "";
 
-  hideModuleList();
+  renderFinalExamSidebar();
   renderActiveNav();
   refreshIcons();
   els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
@@ -2795,25 +2910,41 @@ function renderFinalExamInlineCta() {
 
 function renderFinalExamSummary(result) {
   const lock = getFinalExamLockInfo();
-  const repeatItems = result.wrongQuestions.slice(0, 6);
-  const repeatList = repeatItems.length
-    ? repeatItems
-        .map((item) => `
-          <li>
-            <strong>Fråga ${item.index} · ${escapeHtml(item.source)}</strong>
-            <span>${escapeHtml(item.question)}</span>
-            <small>Ditt svar: ${escapeHtml(item.selected)} · Rätt svar: ${escapeHtml(item.correct)}</small>
-          </li>
-        `)
-        .join("")
-    : `<li><strong>Inga fel att repetera</strong><span>Alla svar var rätt i detta prov.</span></li>`;
+  const ringColor = result.passed ? "#16a34a" : "#f97316";
+  const feedbackTitle = result.passed ? "Godkänt resultat" : "Repetera innan nästa försök";
+  const feedbackText = result.passed
+    ? "Du har nått godkäntgränsen. Gå igenom frågorna nedan för att se helheten."
+    : "Resultatet nådde inte godkäntgränsen. Använd genomgången nedan för att hitta områden att repetera.";
+  const reviewItems = Array.isArray(result.reviewQuestions) && result.reviewQuestions.length
+    ? result.reviewQuestions
+    : result.wrongQuestions;
+  const lockLabel = lock.locked ? `Nytt prov om ${formatRemainingTime(lock.remaining)}` : "Nytt prov tillgängligt";
 
   return `
     <section class="final-result-summary ${result.passed ? "is-passed" : "is-failed"}">
-      <div class="final-result-hero">
-        <span>${result.passed ? "Godkänd" : "Behöver repeteras"}</span>
-        <h4>${result.percent}%</h4>
-        <p>${result.correct} av ${result.total} rätt. Godkändgränsen är ${FINAL_EXAM_PASS_PERCENT}%.</p>
+      <div class="final-result-overview">
+        <div class="final-result-ring" style="--result-deg: ${result.percent * 3.6}deg; --result-color: ${ringColor};">
+          <span>${result.correct}<small>/ ${result.total}</small></span>
+        </div>
+        <div class="final-result-copy">
+          <span class="final-result-kicker">${result.passed ? "Godkänd" : "Ej godkänd"} · ${result.percent}%</span>
+          <h4>${feedbackTitle}</h4>
+          <p>${feedbackText}</p>
+          <div class="final-result-actions">
+            <button class="final-result-portal-button" type="button" data-open-final-exam-portal>
+              <span>Till provportalen</span>
+              <i data-lucide="arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="final-result-lock">
+        <i data-lucide="${lock.locked ? "lock" : "unlock"}"></i>
+        <div>
+          <strong>${lockLabel}</strong>
+          <span>Efter inlämning spärras ett nytt slutprov i 24 timmar.</span>
+        </div>
       </div>
 
       <div class="final-result-stats">
@@ -2830,13 +2961,13 @@ function renderFinalExamSummary(result) {
           <strong>${result.answered}/${result.total}</strong>
         </div>
         <div>
-          <span>Nästa försök</span>
-          <strong>${lock.locked ? formatRemainingTime(lock.remaining) : "Tillgängligt"}</strong>
+          <span>Godkäntgräns</span>
+          <strong>${FINAL_EXAM_PASS_PERCENT}%</strong>
         </div>
       </div>
 
       <div class="final-result-breakdown">
-        <h5>Resultat per område</h5>
+        <h5>Resultat per modul</h5>
         <div>
           ${result.breakdown
             .map((item) => {
@@ -2853,16 +2984,22 @@ function renderFinalExamSummary(result) {
         </div>
       </div>
 
-      <div class="final-result-repeat">
-        <h5>Att repetera</h5>
-        <ul>${repeatList}</ul>
-      </div>
-
-      <div class="final-result-actions">
-        <button class="dark-action" type="button" data-final-result-done aria-label="Klar, gå tillbaka till ${getCourseConfig().shortLabel}">
-          <span>Klar</span>
-          <i data-lucide="check"></i>
-        </button>
+      <div class="final-result-review">
+        <h5>Genomgång — fråga för fråga</h5>
+        <div class="final-result-review-list">
+          ${reviewItems
+            .map((item) => `
+              <article class="final-review-row ${item.isCorrect ? "is-correct" : "is-wrong"}">
+                <span class="final-review-mark">${item.isCorrect ? "✓" : "!"}</span>
+                <div>
+                  <strong>Fråga ${item.index} · ${escapeHtml(item.source)}</strong>
+                  <p>${escapeHtml(item.question)}</p>
+                  <small>Ditt svar: ${escapeHtml(item.selected)} · Rätt svar: ${escapeHtml(item.correct)}</small>
+                </div>
+              </article>
+            `)
+            .join("")}
+        </div>
       </div>
     </section>
   `;
@@ -2913,9 +3050,9 @@ function showFinalExam() {
   els.readerPanel.hidden = true;
   els.quizPanel.hidden = true;
   els.finalExamPanel.hidden = false;
-  els.metaPills.hidden = false;
+  els.metaPills.hidden = true;
   els.quizButton.hidden = true;
-  setBodyLayoutMode("quiz-overview");
+  setBodyLayoutMode("final-exam-focus");
   const course = getCourseConfig();
   els.lessonTitle.textContent = course.finalExamLabel;
   if (els.finalExamHeadLabel) els.finalExamHeadLabel.textContent = course.finalExamLabel;
@@ -2998,7 +3135,8 @@ function renderFinalExam() {
           return `
             <button class="${classes}" type="button" data-final-answer="${option.letter}" ${submitted ? "disabled" : ""}>
               <span class="answer-letter">${option.letter}</span>
-              <span>${inlineMarkdown(option.text)}</span>
+              <span class="answer-copy">${inlineMarkdown(option.text)}</span>
+              <span class="answer-check"><i data-lucide="check"></i></span>
             </button>
           `;
         })
