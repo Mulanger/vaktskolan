@@ -11,6 +11,7 @@ const STORAGE_VERSION = "vu2-course-split-2026-07-04";
 const UNLOCK_MODULE_NAVIGATION = true;
 const ENFORCE_COURSE_LOCKS = false;
 const FINAL_EXAM_SIZE = 30;
+const FINAL_EXAM_DURATION_MS = 15 * 60 * 1000;
 const FINAL_EXAM_LOCK_MS = 24 * 60 * 60 * 1000;
 const FINAL_EXAM_PASS_PERCENT = 80;
 const RESTORABLE_MODES = new Set([
@@ -102,11 +103,16 @@ function sanitizeFinalExamSession(session) {
   if (!questionIds.length) return null;
 
   const completedAt = Number(session.completedAt || 0);
+  const createdAt = Number(session.createdAt || Date.now());
+  const endsAt = Number(session.endsAt || 0);
+  const reviewMode = session.reviewMode === true || session.view === "review";
   return {
     id: typeof session.id === "string" ? session.id : `restored-final-${Date.now()}`,
-    createdAt: Number(session.createdAt || Date.now()),
+    createdAt,
     completedAt: completedAt > 0 ? completedAt : null,
     currentIndex: toSafeIndex(session.currentIndex),
+    endsAt: endsAt > 0 ? endsAt : completedAt > 0 ? null : createdAt + FINAL_EXAM_DURATION_MS,
+    reviewMode: completedAt > 0 ? false : reviewMode,
     questionIds,
     answers: isPlainObject(session.answers) ? session.answers : {},
   };
@@ -154,6 +160,7 @@ const state = {
     flashcardFlipped: false,
   },
   toastTimer: null,
+  finalExamTimer: null,
 };
 
 const quizScenarios = [
@@ -414,7 +421,8 @@ const els = {
   finalExamPrevButton: $("#finalExamPrevButton"),
   finalExamNextButton: $("#finalExamNextButton"),
   finalExamSubmitButton: $("#finalExamSubmitButton"),
-  finalExamHeadLabel: $(".final-exam-head span"),
+  finalExamNavCount: $("#finalExamNavCount"),
+  finalExamHeadLabel: $(".final-exam-head-label"),
   quizTitle: $("#quizTitle"),
   quizScore: $("#quizScore"),
   quizQuestions: $("#quizQuestions"),
@@ -1620,6 +1628,12 @@ function getFinalExamScore() {
   return { correct, total: questions.length, percent: questions.length ? Math.round((correct / questions.length) * 100) : 0 };
 }
 
+function getFinalExamOptionText(question, letter) {
+  if (!letter) return "Ej besvarad";
+  const option = question.options.find((item) => item.letter === letter);
+  return option ? `${letter}. ${option.text}` : letter;
+}
+
 function getFinalExamResult() {
   const answers = isPlainObject(state.finalExam?.answers) ? state.finalExam.answers : {};
   const questions = getFinalExamQuestions();
@@ -1646,8 +1660,8 @@ function getFinalExamResult() {
       index: index + 1,
       source: key,
       question: question.question,
-      selected: selected || "Ej svarat",
-      correct: question.correct,
+      selected: getFinalExamOptionText(question, selected),
+      correct: getFinalExamOptionText(question, question.correct),
       explanation: question.explanation,
       isCorrect,
     };
@@ -1669,8 +1683,8 @@ function getFinalExamResult() {
         index: index + 1,
         source: question.source || "Blandade frågor",
         question: question.question,
-        selected: selected || "Ej svarat",
-        correct: question.correct,
+        selected: getFinalExamOptionText(question, selected),
+        correct: getFinalExamOptionText(question, question.correct),
         explanation: question.explanation,
         isCorrect: selected === question.correct,
       };
@@ -1682,6 +1696,8 @@ function getFinalExamResult() {
 function getFinalExamLockInfo() {
   const completedAt = Number(state.finalExam?.completedAt || 0);
   if (!completedAt) return { locked: false, remaining: 0 };
+  const score = getFinalExamScore();
+  if (score.total && score.percent >= FINAL_EXAM_PASS_PERCENT) return { locked: false, remaining: 0 };
 
   const remaining = FINAL_EXAM_LOCK_MS - (Date.now() - completedAt);
   return { locked: remaining > 0, remaining: Math.max(0, remaining) };
@@ -1695,6 +1711,58 @@ function formatRemainingTime(milliseconds) {
   if (hours <= 0) return `${minutes} min`;
   if (minutes === 0) return `${hours} tim`;
   return `${hours} tim ${minutes} min`;
+}
+
+function formatClockTime(milliseconds, options = {}) {
+  const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const pad = (value) => String(value).padStart(2, "0");
+
+  if (options.forceHours || hours > 0) return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+  return `${pad(minutes)}:${pad(seconds)}`;
+}
+
+function getFinalExamRequiredCorrect(total = FINAL_EXAM_SIZE) {
+  return Math.ceil((total * FINAL_EXAM_PASS_PERCENT) / 100);
+}
+
+function getFinalExamTimerRemaining() {
+  const endsAt = Number(state.finalExam?.endsAt || 0);
+  if (!endsAt || state.finalExam?.completedAt) return 0;
+  return Math.max(0, endsAt - Date.now());
+}
+
+function stopFinalExamTimer() {
+  if (state.finalExamTimer) {
+    window.clearInterval(state.finalExamTimer);
+    state.finalExamTimer = null;
+  }
+}
+
+function startFinalExamTimer() {
+  stopFinalExamTimer();
+  if (!state.finalExam || state.finalExam.completedAt || !state.finalExam.endsAt) return;
+
+  state.finalExamTimer = window.setInterval(() => {
+    if (state.mode !== "final-exam" || !state.finalExam || state.finalExam.completedAt) {
+      stopFinalExamTimer();
+      return;
+    }
+
+    const remaining = getFinalExamTimerRemaining();
+    const timerNode = document.querySelector("[data-final-exam-timer]");
+    if (timerNode) {
+      timerNode.textContent = formatClockTime(remaining);
+      timerNode.classList.toggle("is-low", remaining > 0 && remaining < 2 * 60 * 1000);
+    }
+
+    if (remaining <= 0) {
+      stopFinalExamTimer();
+      submitFinalExam({ reason: "timeout" });
+    }
+  }, 1000);
 }
 
 function getFinalExamPortalOverview(courseId) {
@@ -1903,19 +1971,18 @@ function renderFinalExamPortal() {
         <div>
           <span>Väktarutbildning</span>
           <h1 id="finalPortalTitle">Slutprov</h1>
-          <p>Provläge med en fråga i taget och resultat först när provet lämnas in.</p>
+          <p>Provläge · en fråga i taget · inget facit förrän du lämnat in.</p>
         </div>
       </div>
       <section class="final-portal-hero" aria-label="Information om slutprov">
         <div class="final-portal-hero-copy">
-          <span>Dags för slutprovet</span>
-          <h2>Testa helheten innan du går vidare.</h2>
-          <p>Välj VU1 eller VU2, svara i fokusläge och lämna in först när alla frågor är besvarade. Efter inlämning låses ett nytt prov i 24 timmar.</p>
+          <h2>Dags för slutprovet</h2>
+          <p>Slutprovet är ditt skarpa kunskapstest. Till skillnad från Quiz Portalen får du inget facit under provets gång — du svarar på alla frågor, lämnar in, och ser sedan ditt resultat. Läs varje fråga noga.</p>
         </div>
         <div class="final-portal-rules" aria-label="Regler">
-          <div><i data-lucide="list-checks"></i><span>${FINAL_EXAM_SIZE} frågor per prov</span></div>
-          <div><i data-lucide="badge-check"></i><span>Godkänt vid ${FINAL_EXAM_PASS_PERCENT}%</span></div>
-          <div><i data-lucide="clock-3"></i><span>24h spärr vid nytt försök</span></div>
+          <div><i data-lucide="clock-3"></i><span>${Math.round(FINAL_EXAM_DURATION_MS / 60000)} min tidsgräns</span></div>
+          <div><i data-lucide="badge-check"></i><span>Godkänt vid ${getFinalExamRequiredCorrect(FINAL_EXAM_SIZE)}/${FINAL_EXAM_SIZE}</span></div>
+          <div><i data-lucide="lock"></i><span>24h spärr vid underkänt</span></div>
         </div>
       </section>
 
@@ -1978,6 +2045,8 @@ function startFinalExam() {
     createdAt: Date.now(),
     completedAt: null,
     currentIndex: 0,
+    endsAt: Date.now() + FINAL_EXAM_DURATION_MS,
+    reviewMode: false,
     questionIds: selectedQuestions.map((question) => question.id),
     answers: {},
   };
@@ -2049,10 +2118,12 @@ function renderModuleContext() {
 
 function setBodyLayoutMode(mode = "") {
   const isModernCourseHub = mode === "course-hub-modern";
+  if (mode !== "final-exam-focus") stopFinalExamTimer();
   document.body.classList.toggle("home-mode", mode === "home");
   document.body.classList.toggle("quiz-overview-mode", mode === "quiz-overview");
   document.body.classList.toggle("final-portal-mode", mode === "final-portal");
   document.body.classList.toggle("final-exam-focus-mode", mode === "final-exam-focus");
+  document.body.classList.toggle("final-exam-result-mode", mode === "final-exam-result");
   document.body.classList.toggle("module-milestone-mode", mode === "module-milestone");
   document.body.classList.toggle("course-hub-modern-mode", isModernCourseHub);
   document.body.classList.toggle("vu1-hub-mode", isModernCourseHub && state.courseId === "vu1");
@@ -2910,60 +2981,45 @@ function renderFinalExamInlineCta() {
 
 function renderFinalExamSummary(result) {
   const lock = getFinalExamLockInfo();
-  const ringColor = result.passed ? "#16a34a" : "#f97316";
-  const feedbackTitle = result.passed ? "Godkänt resultat" : "Repetera innan nästa försök";
+  const ringColor = result.passed ? "#16a34a" : "#dc2626";
+  const requiredCorrect = getFinalExamRequiredCorrect(result.total);
+  const feedbackTitle = result.passed
+    ? result.percent === 100
+      ? "Perfekt — godkänt prov!"
+      : "Godkänt prov!"
+    : "Underkänt prov";
   const feedbackText = result.passed
-    ? "Du har nått godkäntgränsen. Gå igenom frågorna nedan för att se helheten."
-    : "Resultatet nådde inte godkäntgränsen. Använd genomgången nedan för att hitta områden att repetera.";
-  const reviewItems = Array.isArray(result.reviewQuestions) && result.reviewQuestions.length
-    ? result.reviewQuestions
-    : result.wrongQuestions;
-  const lockLabel = lock.locked ? `Nytt prov om ${formatRemainingTime(lock.remaining)}` : "Nytt prov tillgängligt";
+    ? `Du fick ${result.correct} av ${result.total} rätt och klarade slutprovet. Bra jobbat!`
+    : `Du fick ${result.correct} av ${result.total} rätt. Det krävs ${requiredCorrect} rätt för godkänt — gå igenom genomgången nedan och försök igen efter spärren.`;
+  const reviewItems = Array.isArray(result.reviewQuestions) ? result.reviewQuestions : [];
+  const lockVisible = !result.passed && lock.locked;
 
   return `
+    ${renderFinalPortalMobileHead()}
     <section class="final-result-summary ${result.passed ? "is-passed" : "is-failed"}">
       <div class="final-result-overview">
         <div class="final-result-ring" style="--result-deg: ${result.percent * 3.6}deg; --result-color: ${ringColor};">
-          <span>${result.correct}<small>/ ${result.total}</small></span>
+          <span><strong>${result.correct}</strong><small>av ${result.total}</small></span>
         </div>
         <div class="final-result-copy">
-          <span class="final-result-kicker">${result.passed ? "Godkänd" : "Ej godkänd"} · ${result.percent}%</span>
+          <span class="final-result-kicker">${result.passed ? "Godkänd" : "Underkänd"}</span>
           <h4>${feedbackTitle}</h4>
           <p>${feedbackText}</p>
           <div class="final-result-actions">
             <button class="final-result-portal-button" type="button" data-open-final-exam-portal>
               <span>Till provportalen</span>
-              <i data-lucide="arrow-right"></i>
             </button>
           </div>
         </div>
       </div>
 
-      <div class="final-result-lock">
-        <i data-lucide="${lock.locked ? "lock" : "unlock"}"></i>
+      <div class="final-result-lock" ${lockVisible ? "" : "hidden"}>
+        <i data-lucide="lock"></i>
         <div>
-          <strong>${lockLabel}</strong>
-          <span>Efter inlämning spärras ett nytt slutprov i 24 timmar.</span>
+          <strong>Nytt försök är spärrat i 24 timmar</strong>
+          <span>Använd tiden till att repetera i Quiz Portalen och Flashcards.</span>
         </div>
-      </div>
-
-      <div class="final-result-stats">
-        <div>
-          <span>Rätt</span>
-          <strong>${result.correct}</strong>
-        </div>
-        <div>
-          <span>Fel</span>
-          <strong>${result.total - result.correct}</strong>
-        </div>
-        <div>
-          <span>Besvarade</span>
-          <strong>${result.answered}/${result.total}</strong>
-        </div>
-        <div>
-          <span>Godkäntgräns</span>
-          <strong>${FINAL_EXAM_PASS_PERCENT}%</strong>
-        </div>
+        <time>${formatClockTime(lock.remaining, { forceHours: true })}<small>till nästa försök</small></time>
       </div>
 
       <div class="final-result-breakdown">
@@ -2972,11 +3028,14 @@ function renderFinalExamSummary(result) {
           ${result.breakdown
             .map((item) => {
               const percent = item.total ? Math.round((item.correct / item.total) * 100) : 0;
+              const barColor = percent >= 70 ? "#16a34a" : percent >= 40 ? "#f59e0b" : "#dc2626";
               return `
                 <div class="breakdown-row">
-                  <span>${escapeHtml(item.label)}</span>
-                  <strong>${item.correct}/${item.total}</strong>
-                  <i style="width: ${percent}%"></i>
+                  <div>
+                    <span>${escapeHtml(item.label)}</span>
+                    <strong style="color: ${barColor};">${item.correct} / ${item.total}</strong>
+                  </div>
+                  <i><b style="width: ${percent}%; background: ${barColor};"></b></i>
                 </div>
               `;
             })
@@ -2990,16 +3049,72 @@ function renderFinalExamSummary(result) {
           ${reviewItems
             .map((item) => `
               <article class="final-review-row ${item.isCorrect ? "is-correct" : "is-wrong"}">
-                <span class="final-review-mark">${item.isCorrect ? "✓" : "!"}</span>
+                <span class="final-review-mark">${item.isCorrect ? "✓" : "✕"}</span>
                 <div>
-                  <strong>Fråga ${item.index} · ${escapeHtml(item.source)}</strong>
-                  <p>${escapeHtml(item.question)}</p>
-                  <small>Ditt svar: ${escapeHtml(item.selected)} · Rätt svar: ${escapeHtml(item.correct)}</small>
+                  <span class="final-review-source">${escapeHtml(item.source)}</span>
+                  <strong>${item.index}. ${escapeHtml(item.question)}</strong>
+                  <p class="${item.isCorrect ? "is-correct" : "is-wrong"}">Ditt svar: ${escapeHtml(item.selected)}</p>
+                  ${item.isCorrect ? "" : `<p class="is-correct">Rätt svar: ${escapeHtml(item.correct)}</p>`}
+                  <small>${escapeHtml(item.explanation || "")}</small>
                 </div>
               </article>
             `)
             .join("")}
         </div>
+      </div>
+    </section>
+    ${renderFinalPortalMobileTabbar()}
+  `;
+}
+
+function renderFinalExamReview(questions, answers, answeredCount) {
+  const unansweredCount = Math.max(0, questions.length - answeredCount);
+  const warningText = unansweredCount === 1
+    ? "1 fråga är obesvarad och räknas som fel."
+    : `${unansweredCount} frågor är obesvarade och räknas som fel.`;
+
+  return `
+    <section class="final-exam-review-screen" aria-label="Granska dina svar">
+      <div class="final-exam-review-head">
+        <h4>Granska dina svar</h4>
+        <p>Klicka på en fråga för att gå tillbaka och ändra ditt svar innan du lämnar in.</p>
+      </div>
+
+      <div class="final-exam-review-card">
+        <div class="final-exam-review-legend" aria-hidden="true">
+          <span><i class="is-answered"></i>Besvarad</span>
+          <span><i></i>Obesvarad</span>
+        </div>
+        <div class="final-exam-review-grid">
+          ${questions
+            .map((question, index) => {
+              const isAnswered = Boolean(answers[question.id]);
+              return `
+                <button class="${isAnswered ? "is-answered" : ""}" type="button" data-final-question-index="${index}">
+                  ${index + 1}
+                </button>
+              `;
+            })
+            .join("")}
+        </div>
+      </div>
+
+      <div class="final-exam-review-submit">
+        <div>
+          <strong>${answeredCount} av ${questions.length} besvarade</strong>
+          <span ${unansweredCount ? "" : "hidden"}><i data-lucide="triangle-alert"></i>${warningText}</span>
+        </div>
+      </div>
+
+      <div class="final-exam-review-actions">
+        <button class="ghost-action" type="button" data-final-review-back>
+          <i data-lucide="chevron-left"></i>
+          <span>Tillbaka till provet</span>
+        </button>
+        <button class="dark-action" type="button" data-final-submit>
+          <i data-lucide="clipboard-check"></i>
+          <span>Lämna in prov</span>
+        </button>
       </div>
     </section>
   `;
@@ -3052,7 +3167,8 @@ function showFinalExam() {
   els.finalExamPanel.hidden = false;
   els.metaPills.hidden = true;
   els.quizButton.hidden = true;
-  setBodyLayoutMode("final-exam-focus");
+  const isSubmitted = Boolean(state.finalExam?.completedAt);
+  setBodyLayoutMode(isSubmitted ? "final-exam-result" : "final-exam-focus");
   const course = getCourseConfig();
   els.lessonTitle.textContent = course.finalExamLabel;
   if (els.finalExamHeadLabel) els.finalExamHeadLabel.textContent = course.finalExamLabel;
@@ -3060,7 +3176,11 @@ function showFinalExam() {
   els.timeEstimate.textContent = "Slutprov";
 
   renderFinalExam();
-  hideModuleList();
+  if (isSubmitted) {
+    renderFinalExamSidebar();
+  } else {
+    hideModuleList();
+  }
   renderActiveNav();
   refreshIcons();
   els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
@@ -3083,85 +3203,91 @@ function renderFinalExam() {
   const submitted = Boolean(state.finalExam.completedAt);
   const result = submitted ? getFinalExamResult() : null;
   const isLastQuestion = questionIndex === questions.length - 1;
+  const reviewMode = Boolean(state.finalExam.reviewMode);
+  const course = getCourseConfig();
+  const timerRemaining = getFinalExamTimerRemaining();
 
   els.finalExamTitle.textContent = submitted
-    ? "Sammanfattning"
-    : `Fråga ${questionIndex + 1} av ${questions.length}`;
+    ? "Resultat"
+    : course.finalExamLabel;
   els.finalExamSubtitle.textContent = submitted
-    ? `${result.passed ? "Godkänt resultat" : "Resultatet nådde inte godkändgränsen"} · ${result.correct}/${result.total} rätt`
-    : question.source;
-  els.finalExamAnswered.textContent = submitted ? `${result.percent}%` : `${answeredCount}/${questions.length} svarade`;
+    ? `${result.correct}/${result.total} rätt`
+    : "Slutprov · fokusläge";
+  els.finalExamAnswered.textContent = submitted ? `${result.percent}%` : formatClockTime(timerRemaining);
+  els.finalExamAnswered.classList.toggle("is-low", !submitted && timerRemaining > 0 && timerRemaining < 2 * 60 * 1000);
   els.pageCount.textContent = submitted ? `${result.correct}/${result.total} rätt` : `${answeredCount}/${questions.length} svarade`;
-  els.finalExamProgress.style.width = `${submitted ? 100 : Math.round((answeredCount / questions.length) * 100)}%`;
-  els.finalExamSteps.hidden = submitted;
+  els.finalExamProgress.style.width = `${submitted || reviewMode ? 100 : Math.round(((questionIndex + 1) / questions.length) * 100)}%`;
+  els.finalExamSteps.hidden = true;
+  if (els.finalExamNavCount) els.finalExamNavCount.textContent = `${answeredCount} av ${questions.length} besvarade`;
 
   if (submitted) {
     els.finalExamQuestion.innerHTML = renderFinalExamSummary(result);
+    els.finalExamProgress.style.width = "100%";
     els.finalExamFooter.hidden = true;
     els.finalExamPrevButton.hidden = true;
     els.finalExamNextButton.hidden = true;
     els.finalExamSubmitButton.hidden = true;
+    if (els.finalExamNavCount) els.finalExamNavCount.hidden = true;
+    stopFinalExamTimer();
     saveFinalExam();
     return;
   }
 
-  els.finalExamSteps.innerHTML = questions
-    .map((item, index) => {
-      const isAnswered = Boolean(answers[item.id]);
-      const isCurrent = index === questionIndex;
-      return `
-        <button class="final-step ${isCurrent ? "is-current" : ""} ${isAnswered ? "is-answered" : ""}"
-          type="button" data-final-question-index="${index}" aria-label="Fråga ${index + 1}${isAnswered ? ", besvarad" : ""}">
-          ${index + 1}
-        </button>
-      `;
-    })
-    .join("");
+  startFinalExamTimer();
+
+  if (reviewMode) {
+    els.finalExamFooter.hidden = true;
+    els.finalExamPrevButton.hidden = true;
+    els.finalExamNextButton.hidden = true;
+    els.finalExamSubmitButton.hidden = true;
+    if (els.finalExamNavCount) els.finalExamNavCount.hidden = true;
+    els.finalExamQuestion.innerHTML = renderFinalExamReview(questions, answers, answeredCount);
+    saveFinalExam();
+    return;
+  }
 
   els.finalExamFooter.hidden = false;
+  if (els.finalExamNavCount) els.finalExamNavCount.hidden = false;
   els.finalExamQuestion.innerHTML = `
-    <h4>${inlineMarkdown(question.question)}</h4>
-    <div class="answer-list">
-      ${question.options
-        .map((option) => {
-          const isCorrect = submitted && option.letter === question.correct;
-          const isWrong = submitted && selected === option.letter && option.letter !== question.correct;
-          const classes = [
-            "answer-option",
-            selected === option.letter ? "is-selected" : "",
-            isCorrect ? "is-correct" : "",
-            isWrong ? "is-wrong" : "",
-          ].join(" ");
-          return `
-            <button class="${classes}" type="button" data-final-answer="${option.letter}" ${submitted ? "disabled" : ""}>
-              <span class="answer-letter">${option.letter}</span>
-              <span class="answer-copy">${inlineMarkdown(option.text)}</span>
-              <span class="answer-check"><i data-lucide="check"></i></span>
-            </button>
-          `;
-        })
-        .join("")}
+    <div class="final-exam-question-shell">
+      <div class="final-exam-question-meta">
+        <span>${escapeHtml(question.source || "Blandade frågor")}</span>
+        <strong>Fråga ${questionIndex + 1} av ${questions.length}</strong>
+      </div>
+      <article class="final-exam-card">
+        <h4>${inlineMarkdown(question.question)}</h4>
+        <div class="answer-list">
+          ${question.options
+            .map((option) => {
+              const classes = ["answer-option", selected === option.letter ? "is-selected" : ""].join(" ");
+              return `
+                <button class="${classes}" type="button" data-final-answer="${option.letter}">
+                  <span class="answer-letter">${option.letter}</span>
+                  <span class="answer-copy">${inlineMarkdown(option.text)}</span>
+                  <span class="answer-check"><i data-lucide="check"></i></span>
+                </button>
+              `;
+            })
+            .join("")}
+        </div>
+      </article>
     </div>
-    ${
-      submitted
-        ? `<p class="answer-explanation"><strong>Rätt svar: ${question.correct}.</strong> ${inlineMarkdown(question.explanation)}</p>`
-        : ""
-    }
   `;
 
   els.finalExamPrevButton.disabled = questionIndex === 0;
   els.finalExamPrevButton.hidden = false;
-  els.finalExamNextButton.hidden = isLastQuestion;
-  els.finalExamNextButton.disabled = isLastQuestion;
-  els.finalExamNextButton.querySelector("span").textContent = "Nästa";
-  els.finalExamSubmitButton.hidden = !isLastQuestion;
-  els.finalExamSubmitButton.disabled = false;
+  els.finalExamNextButton.hidden = false;
+  els.finalExamNextButton.disabled = false;
+  els.finalExamNextButton.querySelector("span").textContent = isLastQuestion ? "Granska & lämna in" : "Nästa fråga";
+  els.finalExamSubmitButton.hidden = true;
+  els.finalExamSubmitButton.disabled = true;
   saveFinalExam();
 }
 
 function goFinalExamRelative(direction) {
   if (!state.finalExam) return;
   const questions = getFinalExamQuestions();
+  state.finalExam.reviewMode = false;
   state.finalExam.currentIndex = Math.max(
     0,
     Math.min(Number(state.finalExam.currentIndex || 0) + direction, questions.length - 1)
@@ -3175,6 +3301,7 @@ function goFinalExamRelative(direction) {
 function goFinalExamQuestion(index) {
   if (!state.finalExam) return;
   const questions = getFinalExamQuestions();
+  state.finalExam.reviewMode = false;
   state.finalExam.currentIndex = Math.max(0, Math.min(index, questions.length - 1));
   saveFinalExam();
   renderFinalExam();
@@ -3182,27 +3309,36 @@ function goFinalExamQuestion(index) {
   els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function submitFinalExam() {
+function showFinalExamReview() {
   if (!state.finalExam || state.finalExam.completedAt) return;
-
-  const questions = getFinalExamQuestions();
-  const answeredCount = getFinalExamAnsweredCount();
-  if (answeredCount < questions.length) {
-    const firstMissingIndex = questions.findIndex((question) => !state.finalExam.answers?.[question.id]);
-    state.finalExam.currentIndex = Math.max(0, firstMissingIndex);
-    saveFinalExam();
-    renderFinalExam();
-    refreshIcons();
-    showToast(`${questions.length - answeredCount} frågor saknar svar. Jag visar första obesvarade frågan.`);
-    return;
-  }
-
-  state.finalExam.completedAt = Date.now();
+  state.finalExam.reviewMode = true;
   saveFinalExam();
   renderFinalExam();
-  renderQuizOverview();
   refreshIcons();
-  showToast("Slutprovet är inlämnat. Ett nytt prov kan startas om 24 timmar.");
+  els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function goFinalExamNext() {
+  if (!state.finalExam) return;
+  const questions = getFinalExamQuestions();
+  const currentIndex = Number(state.finalExam.currentIndex || 0);
+  if (currentIndex >= questions.length - 1) {
+    showFinalExamReview();
+    return;
+  }
+  goFinalExamRelative(1);
+}
+
+function submitFinalExam(options = {}) {
+  if (!state.finalExam || state.finalExam.completedAt) return;
+
+  state.finalExam.reviewMode = false;
+  state.finalExam.completedAt = Date.now();
+  saveFinalExam();
+  stopFinalExamTimer();
+  showFinalExam();
+  refreshIcons();
+  showToast(options.reason === "timeout" ? "Tiden är slut. Slutprovet är inlämnat." : "Slutprovet är inlämnat.");
 }
 
 function renderQuiz() {
@@ -3816,6 +3952,21 @@ function bindEvents() {
       return;
     }
 
+    const finalReviewBackButton = event.target.closest("[data-final-review-back]");
+    if (finalReviewBackButton) {
+      if (state.finalExam) state.finalExam.reviewMode = false;
+      saveFinalExam();
+      renderFinalExam();
+      refreshIcons();
+      return;
+    }
+
+    const finalSubmitButton = event.target.closest("[data-final-submit]");
+    if (finalSubmitButton) {
+      submitFinalExam();
+      return;
+    }
+
     const finalAnswerButton = event.target.closest("[data-final-answer]");
     if (finalAnswerButton && state.finalExam && !state.finalExam.completedAt) {
       const questions = getFinalExamQuestions();
@@ -3848,7 +3999,7 @@ function bindEvents() {
   els.quizButton.addEventListener("click", showQuiz);
   els.backToLessonButton.addEventListener("click", returnToLesson);
   els.finalExamPrevButton.addEventListener("click", () => goFinalExamRelative(-1));
-  els.finalExamNextButton.addEventListener("click", () => goFinalExamRelative(1));
+  els.finalExamNextButton.addEventListener("click", goFinalExamNext);
   els.finalExamSubmitButton.addEventListener("click", submitFinalExam);
   els.resetQuizButton.addEventListener("click", () => {
     delete state.answers[answerKey()];
@@ -3877,7 +4028,7 @@ function bindEvents() {
     }
 
     if (!isTyping && state.mode === "final-exam" && event.key === "ArrowRight") {
-      goFinalExamRelative(1);
+      goFinalExamNext();
     }
 
     if (!isTyping && state.mode === "final-exam" && event.key === "ArrowLeft") {

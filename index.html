@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="styles.css?v=20260708-mobile-top-spacing">
+  <link rel="stylesheet" href="styles.css?v=20260708-final-exam-1a-complete">
 </head>
 <body class="app-booting">
   <div class="shell">
@@ -269,13 +269,15 @@
 
           <section class="reader-panel final-exam-panel" id="finalExamPanel" hidden>
             <div class="final-exam-head">
-              <div>
-                <span>Slutprov VU1</span>
-                <h3 id="finalExamTitle">Fråga 1 av 30</h3>
-                <p id="finalExamSubtitle">Besvara frågan och gå vidare när du är klar.</p>
+              <div class="final-exam-brand">
+                <span class="final-exam-brand-mark">VS</span>
+                <div>
+                  <h3 id="finalExamTitle">Slutprov VU1</h3>
+                  <p id="finalExamSubtitle">Slutprov · fokusläge</p>
+                </div>
               </div>
               <div class="final-exam-head-actions">
-                <strong id="finalExamAnswered">0/30 svarade</strong>
+                <strong id="finalExamAnswered" data-final-exam-timer>15:00</strong>
                 <button class="final-exam-exit" type="button" data-open-final-exam-portal>
                   <i data-lucide="x"></i>
                   <span>Avsluta</span>
@@ -293,6 +295,7 @@
                   <i data-lucide="chevron-left"></i>
                   <span>Föregående</span>
                 </button>
+                <span class="final-exam-nav-count" id="finalExamNavCount">0 av 30 besvarade</span>
                 <button class="dark-action" id="finalExamNextButton" type="button">
                   <span>Nästa</span>
                   <i data-lucide="chevron-right"></i>
@@ -368,6 +371,6 @@
 
   <script src="authProvider.js?v=20260706-light-auth"></script>
   <script src="supabaseApi.js?v=20260705-supabase"></script>
-  <script src="app.js?v=20260708-final-exam-1a"></script>
+  <script src="app.js?v=20260708-final-exam-1a-complete"></script>
 </body>
 </html>
