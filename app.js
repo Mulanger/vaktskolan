@@ -146,6 +146,7 @@ const state = {
     view: "home",
     currentIndex: 0,
     selectedOption: null,
+    answers: [],
     isAnswered: false,
     score: 0,
     showResults: false,
@@ -1900,6 +1901,7 @@ function renderBreadcrumbs() {
 function renderActiveNav() {
   document.querySelectorAll(".main-nav .nav-item").forEach((item) => item.classList.remove("is-active"));
   document.querySelectorAll(".vu1-hub-mobile-tabbar .vu1-hub-mobile-tab").forEach((item) => item.classList.remove("is-active"));
+  document.querySelectorAll(".quiz-portal-mobile-tabbar .quiz-portal-mobile-tab").forEach((item) => item.classList.remove("is-active"));
 
   const selector =
     state.mode === "home"
@@ -1917,6 +1919,7 @@ function renderActiveNav() {
               : "[data-open-course]";
   document.querySelector(`.main-nav ${selector}`)?.classList.add("is-active");
   document.querySelector(`.vu1-hub-mobile-tabbar ${selector}`)?.classList.add("is-active");
+  document.querySelector(`.quiz-portal-mobile-tabbar ${selector}`)?.classList.add("is-active");
 }
 
 function renderModuleContext() {
@@ -2422,6 +2425,7 @@ function resetQuizPortalSession(view = state.quizPortal.view) {
   state.quizPortal.view = view;
   state.quizPortal.currentIndex = 0;
   state.quizPortal.selectedOption = null;
+  state.quizPortal.answers = [];
   state.quizPortal.isAnswered = false;
   state.quizPortal.score = 0;
   state.quizPortal.showResults = false;
@@ -2433,15 +2437,98 @@ function getQuizPortalQuiz(view = state.quizPortal.view) {
   return quizPortalDemoQuizzes[view] || null;
 }
 
+function quizPortalModuleMeta(module) {
+  if (module.view === "flashcards") {
+    return `${quizPortalDemoFlashcards.length} kort · vänd & lär`;
+  }
+
+  const questionCount = getQuizPortalQuiz(module.view)?.questions.length || 0;
+  return `${questionCount} frågor · flerval`;
+}
+
+function quizOptionLetter(index) {
+  return String.fromCharCode(65 + index);
+}
+
+function renderQuizPortalMobileHead() {
+  const initials = userInitials(state.user.displayName || state.user.firstName || "Sven", "");
+  return `
+    <div class="quiz-portal-mobile-head">
+      <div class="quiz-portal-mobile-brand">
+        <span>VS</span>
+        <strong>Vaktskolan</strong>
+      </div>
+      <span class="quiz-portal-mobile-avatar">${escapeHtml(initials)}</span>
+    </div>
+  `;
+}
+
+function renderQuizPortalMobileTabbar() {
+  return `
+    <nav class="quiz-portal-mobile-tabbar" aria-label="Mobil huvudmeny">
+      <button class="quiz-portal-mobile-tab" type="button" data-open-home>
+        <i data-lucide="home"></i>
+        <span>Hem</span>
+      </button>
+      <button class="quiz-portal-mobile-tab" type="button" data-open-course>
+        <i data-lucide="book-open"></i>
+        <span>VU1</span>
+      </button>
+      <button class="quiz-portal-mobile-tab" type="button" data-open-vu2>
+        <i data-lucide="shield"></i>
+        <span>VU2</span>
+      </button>
+      <button class="quiz-portal-mobile-tab is-active" type="button" data-show-quiz>
+        <i data-lucide="target"></i>
+        <span>Quiz</span>
+      </button>
+      <button class="quiz-portal-mobile-tab" type="button" data-open-final-exam-portal>
+        <i data-lucide="clipboard-check"></i>
+        <span>Slutprov</span>
+      </button>
+    </nav>
+  `;
+}
+
+function renderQuizPortalSidebar() {
+  els.moduleListWrap.hidden = false;
+  els.moduleListTitle.textContent = "Quizmoduler";
+  els.moduleCount.textContent = "4 quiz + kort";
+  els.moduleList.innerHTML = quizPortalModules
+    .map((module) => {
+      const isActive = state.quizPortal.view === module.view;
+      return `
+        <button class="quiz-sidebar-card ${isActive ? "is-active" : ""}" type="button" data-quiz-portal-view="${module.view}">
+          <span class="quiz-sidebar-icon"><i data-lucide="${module.icon}"></i></span>
+          <span class="quiz-sidebar-copy">
+            <strong>${escapeHtml(module.title)}</strong>
+            <small>${escapeHtml(quizPortalModuleMeta(module))}</small>
+          </span>
+        </button>
+      `;
+    })
+    .join("");
+}
+
 function renderQuizPortalHome() {
   return `
+    <div class="quiz-portal-page-head">
+      <span>Väktarutbildning</span>
+      <h1>Quiz Portal</h1>
+      <p>Träningsläge · resultat sparas inte · repetera så ofta du vill</p>
+    </div>
+
     <section class="quiz-portal-hero" aria-labelledby="quizOverviewTitle">
       <div class="quiz-portal-hero-copy">
-        <h1 id="quizOverviewTitle">Välkommen till <span>QuizPortalen</span></h1>
-        <p>Denna plattform är skapad för dig som redan genomgått din väktarutbildning och vill hålla kunskaperna skarpa. Här kan du testa dig själv, repetera viktiga juridiska begrepp och öva på komplexa scenarier från verkligheten.</p>
+        <h2 id="quizOverviewTitle">Välkommen till <span>QuizPortalen</span></h2>
+        <p>
+          <span class="quiz-portal-copy-desktop">Denna plattform är skapad för dig som redan genomgått din väktarutbildning och vill hålla kunskaperna skarpa. Här kan du testa dig själv, repetera viktiga juridiska begrepp och öva på komplexa scenarier från verkligheten.</span>
+          <span class="quiz-portal-copy-mobile">Testa dig själv, repetera viktiga juridiska begrepp och öva på scenarier från verkligheten.</span>
+        </p>
         <div class="quiz-portal-alert" role="note">
           <i data-lucide="triangle-alert"></i>
-          <span>Välj en av modulerna nedan för att börja träna. Dina framsteg sparas ej ännu, så fokusera på att lära dig!</span>
+          <span class="quiz-portal-copy-desktop">Välj en av modulerna nedan för att börja träna. Dina framsteg sparas ej ännu, så fokusera på att lära dig!</span>
+          <span class="quiz-portal-copy-mobile">Välj en modul nedan för att börja träna. Dina framsteg sparas ej ännu!</span>
         </div>
       </div>
     </section>
@@ -2457,7 +2544,10 @@ function renderQuizPortalHome() {
                 <span class="quiz-portal-card-demo">Demo</span>
                 <strong>${escapeHtml(module.title)}</strong>
                 <span class="quiz-portal-card-copy">${escapeHtml(module.description)}</span>
-                <span class="quiz-portal-card-action">Starta <i data-lucide="arrow-right"></i></span>
+                <span class="quiz-portal-card-foot">
+                  <small>${escapeHtml(quizPortalModuleMeta(module))}</small>
+                  <span class="quiz-portal-card-action">Starta <i data-lucide="arrow-right"></i></span>
+                </span>
               </button>
             `
           )
@@ -2469,23 +2559,57 @@ function renderQuizPortalHome() {
 
 function renderQuizPortalResults(quiz) {
   const percentage = Math.round((state.quizPortal.score / quiz.questions.length) * 100);
-  const resultIcon = percentage >= 80 ? "check-circle" : "brain-circuit";
+  const passed = percentage >= 80;
+  const feedbackTitle = passed ? "Starkt resultat" : "Repetera och försök igen";
+  const feedbackText = passed
+    ? "Du har bra koll på området, men gå gärna igenom frågorna nedan för att befästa detaljerna."
+    : "Titta igenom genomgången nedan och repetera quizet när du är redo.";
+  const ringColor = passed ? "#16a34a" : "#2563eb";
+  const reviewItems = quiz.questions
+    .map((question, index) => {
+      const answerIndex = state.quizPortal.answers[index];
+      const isCorrect = answerIndex === question.answer;
+      const userAnswer = Number.isInteger(answerIndex) ? question.options[answerIndex] : "Inget svar";
+      const correctAnswer = question.options[question.answer];
+      return `
+        <article class="quiz-portal-review-item">
+          <span class="quiz-portal-review-mark ${isCorrect ? "is-correct" : "is-wrong"}">${isCorrect ? "✓" : "!"}</span>
+          <div>
+            <h3>${escapeHtml(question.question)}</h3>
+            <p class="${isCorrect ? "is-correct" : "is-wrong"}">Ditt svar: ${escapeHtml(userAnswer)}</p>
+            ${isCorrect ? "" : `<p class="is-correct">Rätt svar: ${escapeHtml(correctAnswer)}</p>`}
+            <small>${escapeHtml(question.explanation)}</small>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
   return `
     <section class="quiz-portal-result" aria-labelledby="quizPortalResultTitle">
-      <div class="quiz-portal-result-icon"><i data-lucide="${resultIcon}"></i></div>
-      <span class="quiz-portal-demo-label">Demo quiz</span>
-      <h2 id="quizPortalResultTitle">Resultat: ${escapeHtml(quiz.title)}</h2>
-      <p>Du fick <strong>${state.quizPortal.score}</strong> av <strong>${quiz.questions.length}</strong> rätt (${percentage}%).</p>
-      <div class="quiz-portal-result-actions">
-        <button class="quiz-portal-button quiz-portal-button-primary" type="button" data-demo-quiz-reset>
-          <i data-lucide="refresh-cw"></i>
-          <span>Spela igen</span>
-        </button>
-        <button class="quiz-portal-button quiz-portal-button-secondary" type="button" data-quiz-portal-home>
-          <i data-lucide="home"></i>
-          <span>Tillbaka till Hem</span>
-        </button>
+      <div class="quiz-portal-result-summary">
+        <div class="quiz-portal-result-ring" style="--result-deg: ${percentage * 3.6}deg; --result-color: ${ringColor};">
+          <span>${percentage}%</span>
+        </div>
+        <div>
+          <span class="quiz-portal-result-kicker">Resultat · ${escapeHtml(quiz.title)}</span>
+          <h2 id="quizPortalResultTitle">${feedbackTitle}</h2>
+          <p>Du fick ${state.quizPortal.score} av ${quiz.questions.length} rätt. ${feedbackText}</p>
+          <div class="quiz-portal-result-actions">
+            <button class="quiz-portal-button quiz-portal-button-primary" type="button" data-demo-quiz-reset>
+              <i data-lucide="refresh-cw"></i>
+              <span>Repetera quizet</span>
+            </button>
+            <button class="quiz-portal-button quiz-portal-button-secondary" type="button" data-quiz-portal-home>
+              <span>Till portalen</span>
+            </button>
+          </div>
+        </div>
       </div>
+
+      <section class="quiz-portal-review" aria-label="Genomgång fråga för fråga">
+        <h3>Genomgång</h3>
+        <div>${reviewItems}</div>
+      </section>
     </section>
   `;
 }
@@ -2496,17 +2620,20 @@ function renderQuizPortalQuiz() {
   if (state.quizPortal.showResults) return renderQuizPortalResults(quiz);
 
   const question = quiz.questions[state.quizPortal.currentIndex];
-  const progress = (state.quizPortal.currentIndex / quiz.questions.length) * 100;
+  const progress = ((state.quizPortal.currentIndex + (state.quizPortal.isAnswered ? 1 : 0)) / quiz.questions.length) * 100;
 
   return `
     <section class="quiz-portal-engine" aria-labelledby="quizPortalEngineTitle">
+      <button class="quiz-portal-back" type="button" data-quiz-portal-home>
+        <i data-lucide="arrow-left"></i>
+        <span>Till Quiz Portalen</span>
+      </button>
+
       <div class="quiz-portal-engine-head">
         <div>
-          <span class="quiz-portal-demo-label">Demo quiz</span>
           <h2 id="quizPortalEngineTitle">${escapeHtml(quiz.title)}</h2>
           <p>Fråga ${state.quizPortal.currentIndex + 1} av ${quiz.questions.length}</p>
         </div>
-        <button class="quiz-portal-button quiz-portal-button-outline" type="button" data-quiz-portal-home>Avbryt</button>
       </div>
       <div class="quiz-portal-progress" aria-hidden="true"><span style="width: ${progress}%"></span></div>
 
@@ -2522,9 +2649,9 @@ function renderQuizPortalQuiz() {
               return `
                 <button class="quiz-portal-option ${selected ? "is-selected" : ""} ${correct ? "is-correct" : ""} ${wrong ? "is-wrong" : ""} ${muted ? "is-muted" : ""}"
                   type="button" data-demo-quiz-option="${index}" ${state.quizPortal.isAnswered ? "disabled" : ""}>
+                  <span class="quiz-portal-option-letter">${quizOptionLetter(index)}</span>
                   <span>${escapeHtml(option)}</span>
-                  ${correct ? '<i data-lucide="check-circle"></i>' : ""}
-                  ${wrong ? '<i data-lucide="circle-x"></i>' : ""}
+                  <strong class="quiz-portal-option-mark">${correct ? "✓" : wrong ? "!" : ""}</strong>
                 </button>
               `;
             })
@@ -2537,7 +2664,7 @@ function renderQuizPortalQuiz() {
               <div class="quiz-portal-explanation ${state.quizPortal.selectedOption === question.answer ? "is-correct" : ""}">
                 <i data-lucide="triangle-alert"></i>
                 <div>
-                  <strong>${state.quizPortal.selectedOption === question.answer ? "Rätt svar!" : "Faktainfo:"}</strong>
+                  <strong>${state.quizPortal.selectedOption === question.answer ? "Rätt svar!" : "Faktainfo"}</strong>
                   <p>${escapeHtml(question.explanation)}</p>
                 </div>
               </div>
@@ -2554,11 +2681,7 @@ function renderQuizPortalQuiz() {
                   <i data-lucide="arrow-right"></i>
                 </button>
               `
-              : `
-                <button class="quiz-portal-button quiz-portal-button-dark" type="button" data-demo-quiz-submit ${state.quizPortal.selectedOption === null ? "disabled" : ""}>
-                  <span>Svara</span>
-                </button>
-              `
+              : ""
           }
         </div>
       </article>
@@ -2570,33 +2693,45 @@ function renderQuizPortalFlashcards() {
   const card = quizPortalDemoFlashcards[state.quizPortal.flashcardIndex];
   return `
     <section class="quiz-portal-flashcards" aria-labelledby="quizPortalFlashcardsTitle">
+      <button class="quiz-portal-back" type="button" data-quiz-portal-home>
+        <i data-lucide="arrow-left"></i>
+        <span>Till Quiz Portalen</span>
+      </button>
+
       <div class="quiz-portal-engine-head">
         <div>
-          <span class="quiz-portal-demo-label">Demo flashcards</span>
           <h2 id="quizPortalFlashcardsTitle">Flashcards</h2>
           <p>Kort ${state.quizPortal.flashcardIndex + 1} av ${quizPortalDemoFlashcards.length}</p>
         </div>
-        <button class="quiz-portal-button quiz-portal-button-outline" type="button" data-quiz-portal-home>Avbryt</button>
       </div>
 
       <button class="quiz-portal-flashcard ${state.quizPortal.flashcardFlipped ? "is-flipped" : ""}" type="button" data-demo-flashcard-toggle aria-label="Vänd flashcard">
         <span class="quiz-portal-flashcard-inner">
           <span class="quiz-portal-flashcard-face quiz-portal-flashcard-front">
-            <i data-lucide="book-open"></i>
+            <small>Begrepp</small>
             <strong>${escapeHtml(card.term)}</strong>
-            <small>Klicka för att vända</small>
+            <em>Tryck på kortet för att vända</em>
           </span>
           <span class="quiz-portal-flashcard-face quiz-portal-flashcard-back">
-            <small>${escapeHtml(card.term)}</small>
+            <small>Förklaring</small>
             <strong>${escapeHtml(card.definition)}</strong>
+            <em>Tryck för att vända tillbaka</em>
           </span>
         </span>
       </button>
 
-      <div class="quiz-portal-flashcard-controls">
-        <button type="button" data-demo-flashcard-prev aria-label="Föregående kort"><i data-lucide="arrow-left"></i></button>
-        <span>${state.quizPortal.flashcardIndex + 1} / ${quizPortalDemoFlashcards.length}</span>
-        <button type="button" data-demo-flashcard-next aria-label="Nästa kort"><i data-lucide="arrow-right"></i></button>
+      <div class="quiz-portal-flashcard-controls" aria-label="Flashcard-kontroller">
+        <button type="button" data-demo-flashcard-prev>
+          <i data-lucide="arrow-left"></i>
+          <span>Föregående</span>
+        </button>
+        <button type="button" class="is-primary" data-demo-flashcard-toggle>
+          <span>Vänd kortet</span>
+        </button>
+        <button type="button" data-demo-flashcard-next>
+          <span>Nästa kort</span>
+          <i data-lucide="arrow-right"></i>
+        </button>
       </div>
     </section>
   `;
@@ -2605,13 +2740,18 @@ function renderQuizPortalFlashcards() {
 function renderQuizOverview() {
   if (!els.quizPortal) return;
 
+  renderQuizPortalSidebar();
+
+  let content = "";
   if (state.quizPortal.view === "flashcards") {
-    els.quizPortal.innerHTML = renderQuizPortalFlashcards();
+    content = renderQuizPortalFlashcards();
   } else if (getQuizPortalQuiz()) {
-    els.quizPortal.innerHTML = renderQuizPortalQuiz();
+    content = renderQuizPortalQuiz();
   } else {
-    els.quizPortal.innerHTML = renderQuizPortalHome();
+    content = renderQuizPortalHome();
   }
+
+  els.quizPortal.innerHTML = `${renderQuizPortalMobileHead()}${content}${renderQuizPortalMobileTabbar()}`;
 }
 
 function renderFinalExamInlineCta() {
@@ -3398,7 +3538,16 @@ function bindEvents() {
 
     const demoQuizOptionButton = event.target.closest("[data-demo-quiz-option]");
     if (demoQuizOptionButton && state.mode === "quiz-overview" && !state.quizPortal.isAnswered) {
+      const quiz = getQuizPortalQuiz();
+      const question = quiz?.questions[state.quizPortal.currentIndex];
+      if (!quiz || !question) return;
+
       state.quizPortal.selectedOption = Number(demoQuizOptionButton.dataset.demoQuizOption);
+      state.quizPortal.answers[state.quizPortal.currentIndex] = state.quizPortal.selectedOption;
+      state.quizPortal.isAnswered = true;
+      if (state.quizPortal.selectedOption === question.answer) {
+        state.quizPortal.score += 1;
+      }
       renderQuizOverview();
       refreshIcons();
       return;
