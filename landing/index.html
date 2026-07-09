@@ -93,8 +93,63 @@
             gap: 1.25rem;
             margin-bottom: 2rem;
         }
+        .hero-action-grid.hidden {
+            display: none !important;
+        }
         .hero-cta-stage {
             position: relative;
+        }
+        .hero-cta-stage.is-quiz-opening {
+            isolation: isolate;
+        }
+        .hero-cta-stage.is-quiz-opening .hero-action-grid {
+            pointer-events: none;
+        }
+        .hero-choice-primary {
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-cta-stage.is-quiz-opening .hero-choice-primary {
+            transform: none !important;
+        }
+        .hero-cta-stage.is-quiz-opening .hero-choice-primary > * {
+            animation: heroMorphContentOut 0.24s ease forwards;
+        }
+        .hero-cta-stage.is-quiz-opening .hero-choice-secondary {
+            animation: heroMorphSecondaryOut 0.28s ease forwards;
+        }
+        .hero-quiz-morph {
+            position: absolute;
+            z-index: 35;
+            left: var(--morph-start-left, 0px);
+            top: var(--morph-start-top, 0px);
+            width: var(--morph-start-width, 100%);
+            height: var(--morph-start-height, 60px);
+            border: 2px solid var(--mobile-brand-blue, #1366e4);
+            border-radius: var(--morph-start-radius, 16px);
+            background: var(--mobile-brand-blue, #1366e4);
+            box-shadow: 0 12px 26px -12px rgba(8, 104, 247, 0.52);
+            overflow: hidden;
+            pointer-events: none;
+            transform-origin: center top;
+            animation: heroQuizMorphBox 0.96s cubic-bezier(0.2, 0.92, 0.18, 1) forwards;
+        }
+        .hero-quiz-morph::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: #ffffff;
+            transform: scaleX(0);
+            transform-origin: center;
+            animation: heroQuizMorphSplit 0.46s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+        }
+        .hero-quiz-morph::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(19, 102, 228, 0.18);
+            border-radius: inherit;
+            pointer-events: none;
         }
         .hero-choice-icon {
             display: none;
@@ -112,6 +167,16 @@
             text-align: left;
             animation: heroQuizIn 0.36s cubic-bezier(0.22, 1, 0.36, 1);
         }
+        .hero-quick-quiz.is-measuring {
+            position: absolute !important;
+            inset: 0 auto auto 0 !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+        .hero-quick-quiz.is-filling-in {
+            animation: none;
+        }
         .hero-quiz-shell {
             background: #ffffff;
             border: 1px solid rgba(226, 231, 238, 0.9);
@@ -119,6 +184,13 @@
             box-shadow: 0 18px 48px rgba(31, 55, 88, 0.12);
             padding: 0.75rem;
             overflow: hidden;
+        }
+        .hero-quick-quiz.is-filling-in .hero-quiz-shell {
+            animation: heroQuizShellFill 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+        .hero-quick-quiz.is-filling-in .hero-quiz-header,
+        .hero-quick-quiz.is-filling-in [data-hero-quiz-content] {
+            animation: heroQuizContentFill 0.48s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
         }
         .hero-quiz-header {
             margin: -0.75rem -0.75rem 0.65rem;
@@ -372,6 +444,68 @@
             color: #ffffff;
             flex: 0 0 auto;
         }
+        @keyframes heroMorphContentOut {
+            to {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+        }
+        @keyframes heroMorphSecondaryOut {
+            to {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+        }
+        @keyframes heroQuizMorphSplit {
+            0% {
+                transform: scaleX(0);
+            }
+            100% {
+                transform: scaleX(1);
+            }
+        }
+        @keyframes heroQuizMorphBox {
+            0%, 48% {
+                left: var(--morph-start-left, 0px);
+                top: var(--morph-start-top, 0px);
+                width: var(--morph-start-width, 100%);
+                height: var(--morph-start-height, 60px);
+                border-radius: var(--morph-start-radius, 16px);
+                box-shadow: 0 12px 26px -12px rgba(8, 104, 247, 0.52);
+            }
+            100% {
+                left: var(--morph-end-left, 0px);
+                top: var(--morph-end-top, 0px);
+                width: var(--morph-end-width, 100%);
+                height: var(--morph-end-height, 240px);
+                border-radius: 18px;
+                box-shadow: 0 18px 48px rgba(31, 55, 88, 0.14);
+            }
+        }
+        @keyframes heroQuizShellFill {
+            0% {
+                opacity: 0.72;
+                transform: translateY(-8px) scale(0.985);
+                border-color: rgba(19, 102, 228, 0.72);
+                box-shadow: 0 18px 48px rgba(19, 102, 228, 0.14);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                border-color: rgba(226, 231, 238, 0.9);
+                box-shadow: 0 18px 48px rgba(31, 55, 88, 0.12);
+            }
+        }
+        @keyframes heroQuizContentFill {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
         @media (min-width: 640px) {
             .hero-action-grid {
                 flex-direction: row;
@@ -442,6 +576,14 @@
         @media (prefers-reduced-motion: reduce) {
             .hero-guard-image,
             .hero-guard-shape {
+                animation: none;
+            }
+            .hero-quiz-morph,
+            .hero-cta-stage.is-quiz-opening .hero-choice-primary > *,
+            .hero-cta-stage.is-quiz-opening .hero-choice-secondary,
+            .hero-quick-quiz.is-filling-in .hero-quiz-shell,
+            .hero-quick-quiz.is-filling-in .hero-quiz-header,
+            .hero-quick-quiz.is-filling-in [data-hero-quiz-content] {
                 animation: none;
             }
         }
@@ -2158,6 +2300,8 @@
         let heroQuizScore = 0;
         let heroQuizAnswered = false;
         let heroQuizSelected = null;
+        const HERO_QUIZ_MORPH_MS = 980;
+        const HERO_QUIZ_FILL_MS = 560;
 
         function setMobileMenu(open) {
             const menu = document.getElementById('mobileMenu');
@@ -2181,6 +2325,38 @@
             });
         }
 
+        function measureHeroQuizPanel(panel) {
+            panel.classList.remove('hidden');
+            panel.classList.add('is-measuring');
+
+            const rect = panel.getBoundingClientRect();
+
+            panel.classList.remove('is-measuring');
+            panel.classList.add('hidden');
+
+            return {
+                width: Math.ceil(rect.width),
+                height: Math.ceil(rect.height),
+            };
+        }
+
+        function cleanupHeroQuizMorph(stage, panel) {
+            if (stage) {
+                stage.classList.remove('is-quiz-opening');
+                stage.style.minHeight = '';
+                stage.querySelectorAll('.hero-quiz-morph').forEach((morph) => morph.remove());
+            }
+            if (panel) panel.classList.remove('is-filling-in', 'is-measuring');
+        }
+
+        function openHeroQuizInstant(actions, panel) {
+            cleanupHeroQuizMorph(actions.closest('.hero-cta-stage'), panel);
+            actions.classList.add('hidden');
+            panel.classList.remove('hidden');
+            resetHeroQuizModule();
+            keepHeroQuizInView();
+        }
+
         function openHeroQuiz(event) {
             if (event) event.preventDefault();
             setMobileMenu(false);
@@ -2189,10 +2365,57 @@
             const panel = document.querySelector('[data-hero-quiz-panel]');
             if (!actions || !panel) return;
 
-            actions.classList.add('hidden');
-            panel.classList.remove('hidden');
+            const stage = actions.closest('.hero-cta-stage');
+            const trigger = event ? event.currentTarget : null;
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const canMorph = stage && trigger && trigger.classList.contains('hero-choice-primary') && !reducedMotion;
+
+            if (!canMorph) {
+                openHeroQuizInstant(actions, panel);
+                return;
+            }
+
+            if (stage.classList.contains('is-quiz-opening') || !panel.classList.contains('hidden')) return;
+
             resetHeroQuizModule();
-            keepHeroQuizInView();
+
+            const primary = actions.querySelector('.hero-choice-primary');
+            const stageRect = stage.getBoundingClientRect();
+            const primaryRect = primary.getBoundingClientRect();
+            const panelSize = measureHeroQuizPanel(panel);
+            const targetWidth = Math.min(panelSize.width || stageRect.width, stageRect.width);
+            const targetHeight = Math.max(panelSize.height || 240, primaryRect.height);
+            const targetLeft = Math.max(0, (stageRect.width - targetWidth) / 2);
+            const targetTop = primaryRect.top - stageRect.top;
+            const morph = document.createElement('div');
+
+            morph.className = 'hero-quiz-morph';
+            morph.setAttribute('aria-hidden', 'true');
+            morph.style.setProperty('--morph-start-left', `${primaryRect.left - stageRect.left}px`);
+            morph.style.setProperty('--morph-start-top', `${targetTop}px`);
+            morph.style.setProperty('--morph-start-width', `${primaryRect.width}px`);
+            morph.style.setProperty('--morph-start-height', `${primaryRect.height}px`);
+            morph.style.setProperty('--morph-start-radius', getComputedStyle(primary).borderRadius);
+            morph.style.setProperty('--morph-end-left', `${targetLeft}px`);
+            morph.style.setProperty('--morph-end-top', `${targetTop}px`);
+            morph.style.setProperty('--morph-end-width', `${targetWidth}px`);
+            morph.style.setProperty('--morph-end-height', `${targetHeight}px`);
+
+            stage.style.minHeight = `${Math.ceil(targetTop + targetHeight)}px`;
+            stage.classList.add('is-quiz-opening');
+            stage.appendChild(morph);
+
+            window.setTimeout(() => {
+                actions.classList.add('hidden');
+                panel.classList.remove('hidden');
+                panel.classList.add('is-filling-in');
+                cleanupHeroQuizMorph(stage, null);
+                keepHeroQuizInView();
+
+                window.setTimeout(() => {
+                    panel.classList.remove('is-filling-in');
+                }, HERO_QUIZ_FILL_MS);
+            }, HERO_QUIZ_MORPH_MS);
         }
 
         function closeHeroQuiz(event) {
@@ -2202,6 +2425,7 @@
             const panel = document.querySelector('[data-hero-quiz-panel]');
             if (!actions || !panel) return;
 
+            cleanupHeroQuizMorph(actions.closest('.hero-cta-stage'), panel);
             panel.classList.add('hidden');
             actions.classList.remove('hidden');
         }
