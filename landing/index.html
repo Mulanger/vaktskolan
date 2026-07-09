@@ -2341,6 +2341,42 @@
             keepHeroQuizInView();
         }
 
+        function getHeroQuizViewportPadding() {
+            return {
+                top: window.matchMedia('(max-width: 639px)').matches ? 18 : 88,
+                bottom: 28,
+            };
+        }
+
+        function frameHeroQuizMorph(stage, targetTop, targetHeight) {
+            if (!stage) return;
+            if (!window.matchMedia('(max-width: 639px)').matches) return;
+
+            const stageRect = stage.getBoundingClientRect();
+            const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+            const padding = getHeroQuizViewportPadding();
+            const top = stageRect.top + targetTop;
+            const bottom = top + targetHeight;
+            const fitsViewport = targetHeight + padding.top + padding.bottom <= viewportHeight;
+            let delta = 0;
+
+            if (fitsViewport) {
+                if (bottom > viewportHeight - padding.bottom) {
+                    delta = bottom - viewportHeight + padding.bottom;
+                }
+
+                if (top - delta < padding.top) {
+                    delta = top - padding.top;
+                }
+            } else if (top < padding.top || bottom > viewportHeight - padding.bottom) {
+                delta = top - padding.top;
+            }
+
+            if (Math.abs(delta) > 1) {
+                window.scrollBy({ top: delta, behavior: 'auto' });
+            }
+        }
+
         function openHeroQuiz(event) {
             if (event) event.preventDefault();
             setMobileMenu(false);
@@ -2406,6 +2442,7 @@
             }
 
             stage.style.minHeight = `${Math.ceil(targetTop + targetHeight + 4)}px`;
+            frameHeroQuizMorph(stage, targetTop, targetHeight);
             stage.classList.add('is-quiz-opening');
             stage.appendChild(morph);
 
