@@ -99,6 +99,12 @@
         .hero-choice-icon {
             display: none;
         }
+        .hero-choice-label-desktop {
+            display: inline;
+        }
+        .hero-choice-label-mobile {
+            display: none;
+        }
         .hero-quick-quiz {
             width: 100%;
             max-width: 760px;
@@ -1175,7 +1181,7 @@
                 display: flex !important;
                 width: 100%;
                 flex-direction: column !important;
-                gap: 12px !important;
+                gap: 6px !important;
                 align-items: stretch !important;
                 margin: 0 !important;
             }
@@ -1187,11 +1193,11 @@
                 min-width: 0;
                 align-items: center !important;
                 flex-direction: row !important;
-                justify-content: flex-start !important;
+                justify-content: center !important;
                 gap: 11px !important;
-                border-radius: 15px !important;
-                padding: 15px 20px !important;
-                font-size: 15.5px !important;
+                border-radius: 16px !important;
+                padding: 20px 22px !important;
+                font-size: 17.5px !important;
                 font-weight: 700 !important;
                 line-height: 1.15 !important;
                 letter-spacing: -0.01em !important;
@@ -1203,13 +1209,17 @@
                 border: 0 !important;
                 background: var(--mobile-brand-blue) !important;
                 color: #ffffff !important;
-                box-shadow: none !important;
+                box-shadow: 0 12px 26px -12px color-mix(in srgb, var(--mobile-brand-blue) 70%, transparent) !important;
             }
 
             .hero-choice-secondary {
-                border: 1px solid var(--mobile-border) !important;
-                background: #ffffff !important;
-                color: var(--mobile-text-primary) !important;
+                min-height: 0 !important;
+                border: 0 !important;
+                background: transparent !important;
+                color: #55565d !important;
+                padding: 14px !important;
+                font-size: 15px !important;
+                font-weight: 600 !important;
                 box-shadow: none !important;
             }
 
@@ -1241,7 +1251,15 @@
                 font-weight: inherit !important;
                 line-height: inherit !important;
                 letter-spacing: inherit !important;
-                text-align: left;
+                text-align: center;
+            }
+
+            .hero-choice-label-desktop {
+                display: none;
+            }
+
+            .hero-choice-label-mobile {
+                display: inline;
             }
 
             .hero-arrow {
@@ -1249,13 +1267,17 @@
                 width: 18px !important;
                 height: 18px !important;
                 margin-top: 0 !important;
-                margin-left: auto;
+                margin-left: 0;
                 color: currentColor !important;
             }
 
             .hero-arrow svg {
                 width: 18px !important;
                 height: 18px !important;
+            }
+
+            .hero-choice-secondary .hero-arrow {
+                display: none !important;
             }
 
             .hero-quick-quiz {
@@ -1376,7 +1398,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 12v4c1.8 1.3 3.8 2 6 2s4.2-.7 6-2v-4"></path>
                             </svg>
                         </span>
-                        <span>Starta träningen</span>
+                        <span class="hero-choice-label-desktop">Starta träningen</span>
+                        <span class="hero-choice-label-mobile">Börja Gratis</span>
                         <svg class="hero-arrow w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                         </svg>
