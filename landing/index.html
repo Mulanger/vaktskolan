@@ -8,7 +8,7 @@
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Schibsted+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -890,6 +890,387 @@
                 padding-top: 18px;
             }
         }
+
+        @media (max-width: 639px) {
+            :root {
+                --mobile-page-padding: 24px;
+                --mobile-brand-blue: #1366e4;
+                --mobile-brand-blue-dark: #0f55c0;
+                --mobile-brand-blue-light: #edf5ff;
+                --mobile-text-primary: #0f1012;
+                --mobile-text-secondary: #6a6b72;
+                --mobile-border: #e6e7eb;
+            }
+
+            html,
+            body {
+                background: #ececef !important;
+            }
+
+            body {
+                min-height: 100%;
+                padding: 0;
+                font-family: "Schibsted Grotesk", Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            }
+
+            body > header,
+            main.relative {
+                width: min(calc(100% - 40px), 402px);
+                max-width: calc(100% - 40px);
+                margin-right: auto;
+                margin-left: auto;
+                background: #ffffff !important;
+            }
+
+            body > header {
+                position: relative !important;
+                inset: auto !important;
+                z-index: 30;
+                border-bottom: 0 !important;
+                border-radius: 34px 34px 0 0;
+                margin-top: 26px;
+                padding: 0;
+                backdrop-filter: none !important;
+            }
+
+            body > header > div:first-child {
+                height: auto !important;
+                max-width: none !important;
+                padding: 17px 20px 13px !important;
+                gap: 10px;
+            }
+
+            body > header .w-7 {
+                width: 26px !important;
+                height: 26px !important;
+                border: 0 !important;
+                border-radius: 999px !important;
+                background: var(--mobile-brand-blue) !important;
+                color: var(--mobile-brand-blue) !important;
+                box-shadow: inset 0 0 0 6px #ffffff;
+            }
+
+            body > header .w-7 > div {
+                width: 6px !important;
+                height: 6px !important;
+                background: var(--mobile-brand-blue) !important;
+            }
+
+            body > header span.uppercase {
+                color: var(--mobile-text-primary) !important;
+                font-size: 15px !important;
+                font-weight: 800 !important;
+                letter-spacing: 0.06em !important;
+            }
+
+            body > header [data-open-hero-quiz].sm\:hidden {
+                display: inline-flex !important;
+                min-height: 36px;
+                align-items: center;
+                justify-content: center;
+                border-radius: 999px;
+                background: var(--mobile-brand-blue) !important;
+                padding: 0 15px !important;
+                color: #ffffff;
+                font-size: 13px !important;
+                font-weight: 700 !important;
+                letter-spacing: -0.01em;
+                box-shadow: none;
+            }
+
+            #mobileMenuButton {
+                width: 40px !important;
+                height: 40px !important;
+                border-radius: 999px !important;
+                background: transparent !important;
+                padding: 0 !important;
+            }
+
+            #mobileMenuButton svg {
+                width: 22px !important;
+                height: 22px !important;
+            }
+
+            #mobileMenu {
+                top: 82px;
+                right: 24px;
+                width: min(20rem, calc(100vw - 5.5rem));
+                border-radius: 22px;
+            }
+
+            main.relative {
+                display: block !important;
+                min-height: 0 !important;
+                border-radius: 0 0 34px 34px;
+                padding: 6px 24px 30px !important;
+                overflow: hidden;
+                box-shadow: 0 30px 70px -24px rgba(15, 23, 42, 0.3), 0 8px 24px -12px rgba(15, 23, 42, 0.1);
+            }
+
+            main.relative > .max-w-5xl {
+                display: block !important;
+                width: 100%;
+                max-width: none !important;
+                padding: 0 !important;
+                text-align: left !important;
+            }
+
+            main.relative > .max-w-5xl > .relative {
+                margin-top: 0 !important;
+                display: block;
+            }
+
+            .inline-flex.sm\:hidden.items-center {
+                width: max-content;
+                min-height: 34px;
+                align-self: flex-start;
+                gap: 7px;
+                margin: 0 0 16px !important;
+                border-radius: 999px;
+                background: color-mix(in srgb, var(--mobile-brand-blue) 11%, #ffffff) !important;
+                padding: 7px 13px 7px 11px !important;
+                color: var(--mobile-brand-blue) !important;
+                font-size: 13px !important;
+                font-weight: 600 !important;
+                letter-spacing: -0.01em !important;
+            }
+
+            .inline-flex.sm\:hidden.items-center svg {
+                width: 14px !important;
+                height: 14px !important;
+            }
+
+            h1.sm\:hidden {
+                margin: 0 !important;
+                color: var(--mobile-text-primary) !important;
+                font-size: clamp(41px, 10.7vw, 43px) !important;
+                font-weight: 800 !important;
+                line-height: 1.02 !important;
+                letter-spacing: -0.02em !important;
+            }
+
+            h1.sm\:hidden span:first-child {
+                color: var(--mobile-text-primary) !important;
+            }
+
+            h1.sm\:hidden span:last-child {
+                margin-top: 0;
+                color: var(--mobile-brand-blue) !important;
+            }
+
+            .hero-content-mobile {
+                display: block !important;
+                min-height: 0;
+                margin-top: 14px;
+            }
+
+            .hero-copy-mobile p {
+                max-width: 335px !important;
+                margin: 0 !important;
+                color: var(--mobile-text-secondary) !important;
+                font-size: 15.5px !important;
+                line-height: 1.5 !important;
+                letter-spacing: 0 !important;
+            }
+
+            .hero-mobile-visual {
+                display: block !important;
+                position: relative;
+                width: 100%;
+                height: 300px;
+                min-height: 300px;
+                margin: 14px 0 0 !important;
+            }
+
+            .hero-mobile-guard-shape {
+                position: absolute;
+                z-index: 0;
+                top: 10px;
+                right: auto;
+                bottom: auto;
+                left: 50%;
+                width: 230px;
+                height: 230px;
+                transform: translateX(-50%);
+                border-radius: 50%;
+                background: color-mix(in srgb, var(--mobile-brand-blue) 15%, #ffffff);
+            }
+
+            .hero-mobile-visual::after {
+                content: "";
+                position: absolute;
+                z-index: 1;
+                bottom: 7px;
+                left: 50%;
+                width: 140px;
+                height: 22px;
+                transform: translateX(-50%);
+                border-radius: 999px;
+                background: radial-gradient(closest-side, rgba(15, 23, 42, 0.18), rgba(15, 23, 42, 0));
+            }
+
+            .hero-mobile-guard {
+                position: absolute;
+                z-index: 2;
+                right: auto;
+                bottom: 0;
+                left: 50%;
+                width: auto;
+                height: 300px;
+                max-height: 300px;
+                transform: translateX(-50%);
+                object-fit: contain;
+                filter: drop-shadow(0 14px 18px rgba(15, 23, 42, 0.1));
+            }
+
+            .hero-proof-card {
+                position: absolute;
+                z-index: 4;
+                bottom: 48px;
+                left: 0;
+                display: flex;
+                width: auto;
+                min-width: 0;
+                max-width: 186px;
+                align-items: center;
+                gap: 10px;
+                border: 0;
+                border-radius: 14px;
+                background: #ffffff;
+                padding: 10px 13px;
+                color: var(--mobile-text-primary);
+                font-size: 12.5px;
+                font-weight: 600;
+                line-height: 1.28;
+                box-shadow: 0 14px 30px -12px rgba(15, 23, 42, 0.32), 0 2px 6px -3px rgba(15, 23, 42, 0.12);
+                backdrop-filter: none;
+            }
+
+            .hero-proof-icon {
+                display: grid;
+                width: 30px !important;
+                height: 30px !important;
+                flex: 0 0 auto;
+                place-items: center;
+                border-radius: 999px;
+                background: var(--mobile-brand-blue);
+                clip-path: none;
+                color: #ffffff;
+            }
+
+            .hero-proof-icon svg {
+                width: 18px !important;
+                height: 18px !important;
+            }
+
+            .hero-cta-stage {
+                width: 100%;
+                min-height: 0 !important;
+                margin-top: 24px !important;
+                margin-bottom: 0 !important;
+                padding-top: 0 !important;
+            }
+
+            .hero-action-grid {
+                display: flex !important;
+                width: 100%;
+                flex-direction: column !important;
+                gap: 12px !important;
+                align-items: stretch !important;
+                margin: 0 !important;
+            }
+
+            .hero-choice {
+                display: flex !important;
+                width: 100% !important;
+                min-height: 50px !important;
+                min-width: 0;
+                align-items: center !important;
+                flex-direction: row !important;
+                justify-content: flex-start !important;
+                gap: 11px !important;
+                border-radius: 15px !important;
+                padding: 15px 20px !important;
+                font-size: 15.5px !important;
+                font-weight: 700 !important;
+                line-height: 1.15 !important;
+                letter-spacing: -0.01em !important;
+                transform: none !important;
+                white-space: nowrap;
+            }
+
+            .hero-choice-primary {
+                border: 0 !important;
+                background: var(--mobile-brand-blue) !important;
+                color: #ffffff !important;
+                box-shadow: none !important;
+            }
+
+            .hero-choice-secondary {
+                border: 1px solid var(--mobile-border) !important;
+                background: #ffffff !important;
+                color: var(--mobile-text-primary) !important;
+                box-shadow: none !important;
+            }
+
+            .hero-choice-icon {
+                display: inline-flex !important;
+                width: 20px !important;
+                height: 20px !important;
+                flex: 0 0 auto;
+                align-items: center;
+                justify-content: center;
+                border: 0 !important;
+                border-radius: 0 !important;
+                color: currentColor;
+            }
+
+            .hero-choice-icon svg {
+                width: 20px !important;
+                height: 20px !important;
+            }
+
+            .hero-choice-secondary .hero-choice-icon svg {
+                width: 15px !important;
+                height: 15px !important;
+            }
+
+            .hero-choice > span:not(.hero-choice-icon):not(.hero-arrow) {
+                min-width: 0;
+                font-size: inherit !important;
+                font-weight: inherit !important;
+                line-height: inherit !important;
+                letter-spacing: inherit !important;
+                text-align: left;
+            }
+
+            .hero-arrow {
+                display: inline-flex !important;
+                width: 18px !important;
+                height: 18px !important;
+                margin-top: 0 !important;
+                margin-left: auto;
+                color: currentColor !important;
+            }
+
+            .hero-arrow svg {
+                width: 18px !important;
+                height: 18px !important;
+            }
+
+            .hero-quick-quiz {
+                position: relative;
+                z-index: 20;
+                inset: auto;
+                width: 100%;
+                max-width: none;
+                margin: 0;
+            }
+
+            main.relative .border-t.border-gray-100 {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body class="font-sans bg-white text-vaktarDark antialiased overflow-x-hidden">
@@ -973,7 +1354,7 @@
 
                 <div class="hero-mobile-visual sm:hidden" aria-hidden="true">
                     <div class="hero-mobile-guard-shape"></div>
-                    <img src="/landing/assets/guard-figure.png" alt="" class="hero-mobile-guard" loading="eager" decoding="async">
+                    <img src="/landing/assets/vaktare.png" alt="" class="hero-mobile-guard" loading="eager" decoding="async">
                     <div class="hero-proof-card">
                         <span class="hero-proof-icon">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
