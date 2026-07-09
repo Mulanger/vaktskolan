@@ -117,12 +117,35 @@
             width: var(--morph-start-width, 100%);
             height: var(--morph-start-height, 60px);
             border-radius: var(--morph-start-radius, 16px);
+            border: 1px solid transparent;
             background: var(--mobile-brand-blue, #1366e4);
             box-shadow: 0 18px 48px rgba(31, 55, 88, 0.12);
             overflow: hidden;
             pointer-events: none;
             transform-origin: center top;
             animation: heroQuizMorphBox 0.96s cubic-bezier(0.2, 0.92, 0.18, 1) forwards;
+        }
+        .hero-quiz-morph-content {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: var(--morph-end-width, 100%);
+            height: var(--morph-end-height, auto);
+            opacity: 0;
+            transform: translateY(7px);
+            animation: heroQuizMorphContentIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) 0.62s forwards;
+        }
+        .hero-quiz-morph-content > .hero-quiz-morph-panel {
+            display: block !important;
+            position: static;
+            inset: auto;
+            width: 100%;
+            max-width: none;
+            margin: 0;
+        }
+        .hero-quiz-morph-content .hero-quiz-shell {
+            border-color: transparent;
+            box-shadow: none;
         }
         .hero-quiz-morph::before {
             content: "";
@@ -155,9 +178,6 @@
             visibility: hidden !important;
             opacity: 0 !important;
             pointer-events: none !important;
-        }
-        .hero-quick-quiz.is-filling-in {
-            animation: heroQuizPanelIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
         .hero-quiz-shell {
             background: #ffffff;
@@ -460,12 +480,13 @@
                 border-radius: 18px;
                 box-shadow: 0 18px 48px rgba(31, 55, 88, 0.14);
                 background: #ffffff;
+                border-color: rgba(226, 231, 238, 0.9);
             }
         }
-        @keyframes heroQuizPanelIn {
+        @keyframes heroQuizMorphContentIn {
             0% {
                 opacity: 0;
-                transform: translateY(-6px);
+                transform: translateY(7px);
             }
             100% {
                 opacity: 1;
@@ -545,9 +566,9 @@
                 animation: none;
             }
             .hero-quiz-morph,
+            .hero-quiz-morph-content,
             .hero-cta-stage.is-quiz-opening .hero-choice-primary > *,
-            .hero-cta-stage.is-quiz-opening .hero-choice-secondary,
-            .hero-quick-quiz.is-filling-in {
+            .hero-cta-stage.is-quiz-opening .hero-choice-secondary {
                 animation: none;
             }
         }
@@ -2265,7 +2286,6 @@
         let heroQuizAnswered = false;
         let heroQuizSelected = null;
         const HERO_QUIZ_MORPH_MS = 980;
-        const HERO_QUIZ_FILL_MS = 560;
 
         function setMobileMenu(open) {
             const menu = document.getElementById('mobileMenu');
@@ -2310,7 +2330,7 @@
                 stage.style.minHeight = '';
                 stage.querySelectorAll('.hero-quiz-morph').forEach((morph) => morph.remove());
             }
-            if (panel) panel.classList.remove('is-filling-in', 'is-measuring');
+            if (panel) panel.classList.remove('is-measuring');
         }
 
         function openHeroQuizInstant(actions, panel) {
@@ -2372,6 +2392,19 @@
             morph.style.setProperty('--morph-end-width', `${targetWidth}px`);
             morph.style.setProperty('--morph-end-height', `${targetHeight}px`);
 
+            if (panel) {
+                const morphContent = document.createElement('div');
+                const previewPanel = panel.cloneNode(true);
+
+                morphContent.className = 'hero-quiz-morph-content';
+                previewPanel.classList.remove('hidden');
+                previewPanel.classList.add('hero-quiz-morph-panel');
+                previewPanel.removeAttribute('data-hero-quiz-panel');
+                previewPanel.removeAttribute('aria-live');
+                morphContent.appendChild(previewPanel);
+                morph.appendChild(morphContent);
+            }
+
             stage.style.minHeight = `${Math.ceil(targetTop + targetHeight + 4)}px`;
             stage.classList.add('is-quiz-opening');
             stage.appendChild(morph);
@@ -2379,13 +2412,8 @@
             window.setTimeout(() => {
                 actions.classList.add('hidden');
                 panel.classList.remove('hidden');
-                panel.classList.add('is-filling-in');
                 cleanupHeroQuizMorph(stage, null);
                 keepHeroQuizInView();
-
-                window.setTimeout(() => {
-                    panel.classList.remove('is-filling-in');
-                }, HERO_QUIZ_FILL_MS);
             }, HERO_QUIZ_MORPH_MS);
         }
 
