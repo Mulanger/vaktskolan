@@ -942,7 +942,7 @@
             body > header > div:first-child {
                 height: auto !important;
                 max-width: none !important;
-                padding: 17px 20px 13px !important;
+                padding: 10px 20px 8px !important;
                 gap: 10px;
             }
 
@@ -985,16 +985,16 @@
             }
 
             #mobileMenuButton {
-                width: 40px !important;
-                height: 40px !important;
+                width: 36px !important;
+                height: 36px !important;
                 border-radius: 999px !important;
                 background: transparent !important;
                 padding: 0 !important;
             }
 
             #mobileMenuButton svg {
-                width: 22px !important;
-                height: 22px !important;
+                width: 21px !important;
+                height: 21px !important;
             }
 
             #mobileMenu {
@@ -1006,9 +1006,9 @@
 
             main.relative {
                 display: block !important;
-                min-height: 0 !important;
+                min-height: calc(100svh - 54px) !important;
                 border-radius: 0;
-                padding: 6px var(--mobile-page-padding) max(30px, env(safe-area-inset-bottom)) !important;
+                padding: 2px var(--mobile-page-padding) max(18px, env(safe-area-inset-bottom)) !important;
                 overflow: visible;
                 box-shadow: none;
             }
@@ -1031,12 +1031,12 @@
                 min-height: 34px;
                 align-self: flex-start;
                 gap: 7px;
-                margin: 0 0 16px !important;
+                margin: 0 0 12px !important;
                 border-radius: 999px;
                 background: color-mix(in srgb, var(--mobile-brand-blue) 11%, #ffffff) !important;
-                padding: 7px 13px 7px 11px !important;
+                padding: 6px 12px 6px 10px !important;
                 color: var(--mobile-brand-blue) !important;
-                font-size: 13px !important;
+                font-size: 12.5px !important;
                 font-weight: 600 !important;
                 letter-spacing: -0.01em !important;
             }
@@ -1049,9 +1049,9 @@
             h1.sm\:hidden {
                 margin: 0 !important;
                 color: var(--mobile-text-primary) !important;
-                font-size: clamp(41px, 10.7vw, 43px) !important;
+                font-size: clamp(36px, 10vw, 40px) !important;
                 font-weight: 800 !important;
-                line-height: 1.02 !important;
+                line-height: 1 !important;
                 letter-spacing: -0.02em !important;
             }
 
@@ -1067,15 +1067,15 @@
             .hero-content-mobile {
                 display: block !important;
                 min-height: 0;
-                margin-top: 14px;
+                margin-top: 10px;
             }
 
             .hero-copy-mobile p {
                 max-width: 335px !important;
                 margin: 0 !important;
                 color: var(--mobile-text-secondary) !important;
-                font-size: 15.5px !important;
-                line-height: 1.5 !important;
+                font-size: 14.5px !important;
+                line-height: 1.42 !important;
                 letter-spacing: 0 !important;
             }
 
@@ -1083,20 +1083,20 @@
                 display: block !important;
                 position: relative;
                 width: 100%;
-                height: 300px;
-                min-height: 300px;
-                margin: 14px 0 0 !important;
+                height: clamp(200px, 33svh, 250px);
+                min-height: 0;
+                margin: 8px 0 0 !important;
             }
 
             .hero-mobile-guard-shape {
                 position: absolute;
                 z-index: 0;
-                top: 10px;
+                top: 6px;
                 right: auto;
                 bottom: auto;
                 left: 50%;
-                width: 230px;
-                height: 230px;
+                width: clamp(180px, 30svh, 215px);
+                height: clamp(180px, 30svh, 215px);
                 transform: translateX(-50%);
                 border-radius: 50%;
                 background: color-mix(in srgb, var(--mobile-brand-blue) 15%, #ffffff);
@@ -1106,10 +1106,10 @@
                 content: "";
                 position: absolute;
                 z-index: 1;
-                bottom: 7px;
+                bottom: 4px;
                 left: 50%;
-                width: 140px;
-                height: 22px;
+                width: 128px;
+                height: 18px;
                 transform: translateX(-50%);
                 border-radius: 999px;
                 background: radial-gradient(closest-side, rgba(15, 23, 42, 0.18), rgba(15, 23, 42, 0));
@@ -1122,8 +1122,8 @@
                 bottom: 0;
                 left: 50%;
                 width: auto;
-                height: 300px;
-                max-height: 300px;
+                height: clamp(200px, 33svh, 250px);
+                max-height: 250px;
                 transform: translateX(-50%);
                 object-fit: contain;
                 filter: drop-shadow(0 14px 18px rgba(15, 23, 42, 0.1));
@@ -1132,20 +1132,20 @@
             .hero-proof-card {
                 position: absolute;
                 z-index: 4;
-                bottom: 48px;
+                bottom: clamp(28px, 6svh, 38px);
                 left: 0;
                 display: flex;
                 width: auto;
                 min-width: 0;
-                max-width: 186px;
+                max-width: 176px;
                 align-items: center;
-                gap: 10px;
+                gap: 8px;
                 border: 0;
                 border-radius: 14px;
                 background: #ffffff;
-                padding: 10px 13px;
+                padding: 9px 11px;
                 color: var(--mobile-text-primary);
-                font-size: 12.5px;
+                font-size: 12px;
                 font-weight: 600;
                 line-height: 1.28;
                 box-shadow: 0 14px 30px -12px rgba(15, 23, 42, 0.32), 0 2px 6px -3px rgba(15, 23, 42, 0.12);
@@ -1172,7 +1172,7 @@
             .hero-cta-stage {
                 width: 100%;
                 min-height: 0 !important;
-                margin-top: 24px !important;
+                margin-top: 16px !important;
                 margin-bottom: 0 !important;
                 padding-top: 0 !important;
             }
@@ -1195,9 +1195,9 @@
                 flex-direction: row !important;
                 justify-content: center !important;
                 gap: 11px !important;
-                border-radius: 16px !important;
-                padding: 20px 22px !important;
-                font-size: 17.5px !important;
+                border-radius: 15px !important;
+                padding: 16px 22px !important;
+                font-size: 16.5px !important;
                 font-weight: 700 !important;
                 line-height: 1.15 !important;
                 letter-spacing: -0.01em !important;
@@ -1217,8 +1217,8 @@
                 border: 0 !important;
                 background: transparent !important;
                 color: #55565d !important;
-                padding: 14px !important;
-                font-size: 15px !important;
+                padding: 10px !important;
+                font-size: 14.5px !important;
                 font-weight: 600 !important;
                 box-shadow: none !important;
             }
