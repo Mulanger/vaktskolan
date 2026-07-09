@@ -125,6 +125,12 @@
             transform-origin: center top;
             animation: heroQuizMorphBox 0.96s cubic-bezier(0.2, 0.92, 0.18, 1) forwards;
         }
+        .hero-quiz-morph.is-desktop-morph {
+            animation-name: heroQuizMorphDesktopBox;
+        }
+        .hero-quiz-morph.is-desktop-morph .hero-quiz-morph-content {
+            animation-delay: 0.78s;
+        }
         .hero-quiz-morph-content {
             position: absolute;
             left: 0;
@@ -156,6 +162,10 @@
             transform: scaleX(0);
             transform-origin: center;
             animation: heroQuizMorphSplit 0.46s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+        }
+        .hero-quiz-morph.is-desktop-morph::before {
+            animation-delay: 0.5s;
+            animation-duration: 0.22s;
         }
         .hero-choice-icon {
             display: none;
@@ -483,6 +493,45 @@
                 border-color: rgba(226, 231, 238, 0.9);
             }
         }
+        @keyframes heroQuizMorphDesktopBox {
+            0% {
+                left: var(--morph-start-left, 0px);
+                top: var(--morph-start-top, 0px);
+                width: var(--morph-start-width, 100%);
+                height: var(--morph-start-height, 60px);
+                border-radius: var(--morph-start-radius, 999px);
+                box-shadow: 0 12px 26px -12px rgba(8, 104, 247, 0.52);
+                background: var(--mobile-brand-blue, #1366e4);
+            }
+            36%, 56% {
+                left: var(--morph-mid-left, var(--morph-start-left, 0px));
+                top: var(--morph-mid-top, var(--morph-start-top, 0px));
+                width: var(--morph-mid-width, var(--morph-start-width, 100%));
+                height: var(--morph-mid-height, var(--morph-start-height, 60px));
+                border-radius: var(--morph-start-radius, 999px);
+                box-shadow: 0 14px 30px -14px rgba(8, 104, 247, 0.5);
+                background: var(--mobile-brand-blue, #1366e4);
+            }
+            64% {
+                left: var(--morph-mid-left, var(--morph-start-left, 0px));
+                top: var(--morph-mid-top, var(--morph-start-top, 0px));
+                width: var(--morph-mid-width, var(--morph-start-width, 100%));
+                height: var(--morph-mid-height, var(--morph-start-height, 60px));
+                border-radius: var(--morph-start-radius, 999px);
+                box-shadow: 0 16px 40px rgba(31, 55, 88, 0.1);
+                background: #ffffff;
+            }
+            100% {
+                left: var(--morph-end-left, 0px);
+                top: var(--morph-end-top, 0px);
+                width: var(--morph-end-width, 100%);
+                height: var(--morph-end-height, 240px);
+                border-radius: 18px;
+                box-shadow: 0 18px 48px rgba(31, 55, 88, 0.14);
+                background: #ffffff;
+                border-color: rgba(226, 231, 238, 0.9);
+            }
+        }
         @keyframes heroQuizMorphContentIn {
             0% {
                 opacity: 0;
@@ -496,6 +545,9 @@
         @media (min-width: 640px) {
             .hero-action-grid {
                 flex-direction: row;
+            }
+            .hero-cta-stage {
+                transition: min-height 0.96s cubic-bezier(0.2, 0.92, 0.18, 1);
             }
         }
         @media (max-width: 639px) {
@@ -2400,8 +2452,11 @@
             resetHeroQuizModule();
 
             const primary = actions.querySelector('.hero-choice-primary');
+            const secondary = actions.querySelector('.hero-choice-secondary');
+            const isDesktopMorph = window.matchMedia('(min-width: 640px)').matches;
             const stageRect = stage.getBoundingClientRect();
             const primaryRect = primary.getBoundingClientRect();
+            const secondaryRect = secondary?.getBoundingClientRect();
             const panelSize = measureHeroQuizPanel(panel);
             const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
             const coverInset = Math.min(8, Math.max(0, primaryRect.left - 8));
@@ -2410,19 +2465,32 @@
             const startTop = primaryRect.top - stageRect.top - 4;
             const startWidth = Math.min(primaryRect.width + coverInset * 2, maxMorphWidth);
             const startHeight = primaryRect.height + 8;
+            const groupLeft = secondaryRect ? Math.min(primaryRect.left, secondaryRect.left) : primaryRect.left;
+            const groupRight = secondaryRect ? Math.max(primaryRect.right, secondaryRect.right) : primaryRect.right;
+            const midLeft = isDesktopMorph ? groupLeft - stageRect.left - coverInset : startLeft;
+            const midTop = startTop;
+            const midWidth = isDesktopMorph
+                ? Math.min(groupRight - groupLeft + coverInset * 2, maxMorphWidth)
+                : startWidth;
+            const midHeight = startHeight;
             const targetWidth = Math.min(panelSize.width || stageRect.width, maxMorphWidth);
             const targetHeight = Math.max(panelSize.height || 240, primaryRect.height);
             const targetLeft = (stageRect.width - targetWidth) / 2;
             const targetTop = startTop;
+            const stageBottomGap = isDesktopMorph ? 36 : 4;
             const morph = document.createElement('div');
 
-            morph.className = 'hero-quiz-morph';
+            morph.className = `hero-quiz-morph${isDesktopMorph ? ' is-desktop-morph' : ''}`;
             morph.setAttribute('aria-hidden', 'true');
             morph.style.setProperty('--morph-start-left', `${startLeft}px`);
             morph.style.setProperty('--morph-start-top', `${startTop}px`);
             morph.style.setProperty('--morph-start-width', `${startWidth}px`);
             morph.style.setProperty('--morph-start-height', `${startHeight}px`);
             morph.style.setProperty('--morph-start-radius', getComputedStyle(primary).borderRadius);
+            morph.style.setProperty('--morph-mid-left', `${midLeft}px`);
+            morph.style.setProperty('--morph-mid-top', `${midTop}px`);
+            morph.style.setProperty('--morph-mid-width', `${midWidth}px`);
+            morph.style.setProperty('--morph-mid-height', `${midHeight}px`);
             morph.style.setProperty('--morph-end-left', `${targetLeft}px`);
             morph.style.setProperty('--morph-end-top', `${targetTop}px`);
             morph.style.setProperty('--morph-end-width', `${targetWidth}px`);
@@ -2441,7 +2509,7 @@
                 morph.appendChild(morphContent);
             }
 
-            stage.style.minHeight = `${Math.ceil(targetTop + targetHeight + 4)}px`;
+            stage.style.minHeight = `${Math.ceil(targetTop + targetHeight + stageBottomGap)}px`;
             frameHeroQuizMorph(stage, targetTop, targetHeight);
             stage.classList.add('is-quiz-opening');
             stage.appendChild(morph);
