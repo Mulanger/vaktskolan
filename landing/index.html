@@ -910,7 +910,7 @@
 
             html,
             body {
-                background: #ececef !important;
+                background: #ffffff !important;
             }
 
             body {
@@ -921,10 +921,10 @@
 
             body > header,
             main.relative {
-                width: calc(100% - 40px) !important;
-                max-width: 402px !important;
-                margin-right: auto !important;
-                margin-left: auto !important;
+                width: 100% !important;
+                max-width: none !important;
+                margin-right: 0 !important;
+                margin-left: 0 !important;
                 background: #ffffff !important;
             }
 
@@ -933,8 +933,8 @@
                 inset: auto !important;
                 z-index: 30;
                 border-bottom: 0 !important;
-                border-radius: 34px 34px 0 0;
-                margin-top: 26px;
+                border-radius: 0;
+                margin-top: 0;
                 padding: 0;
                 backdrop-filter: none !important;
             }
@@ -1007,10 +1007,10 @@
             main.relative {
                 display: block !important;
                 min-height: 0 !important;
-                border-radius: 0 0 34px 34px;
-                padding: 6px 24px 30px !important;
-                overflow: hidden;
-                box-shadow: 0 30px 70px -24px rgba(15, 23, 42, 0.3), 0 8px 24px -12px rgba(15, 23, 42, 0.1);
+                border-radius: 0;
+                padding: 6px var(--mobile-page-padding) max(30px, env(safe-area-inset-bottom)) !important;
+                overflow: visible;
+                box-shadow: none;
             }
 
             main.relative > .max-w-5xl {
