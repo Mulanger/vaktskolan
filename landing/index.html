@@ -1957,14 +1957,14 @@
             <!-- Middle Navigation Links -->
             <nav class="hidden lg:flex items-center gap-5 xl:gap-8 text-sm font-medium text-vaktarGray whitespace-nowrap">
                 <a href="#utbildningar" class="hover:text-vaktarDark transition">Utbildningsmaterial</a>
-                <a href="/quiz-demo" class="hover:text-vaktarDark transition">Testa gratis quiz</a>
+                <a href="/quiz-demo" class="hover:text-vaktarDark transition" data-open-hero-quiz>Testa gratis quiz</a>
                 <a href="/studieteknik" class="hover:text-vaktarDark transition">Studieteknik</a>
                 <a href="#utbildningar" onclick="switchStudyTab('yrket')" class="hover:text-vaktarDark transition">Väktaryrket</a>
             </nav>
 
             <!-- Right stats badge matching Screenshot_20260703-204209.png with blue details -->
             <div class="flex items-center space-x-3 sm:space-x-4 shrink-0">
-                <a href="/quiz-demo" class="sm:hidden bg-vaktarBlue hover:bg-vaktarBlueHover text-white text-sm font-bold px-6 py-3 rounded-full whitespace-nowrap transition duration-300">
+                <a href="/quiz-demo" class="sm:hidden bg-vaktarBlue hover:bg-vaktarBlueHover text-white text-sm font-bold px-6 py-3 rounded-full whitespace-nowrap transition duration-300" data-open-hero-quiz>
                     Öva nu
                 </a>
                 <a href="/login.html?mode=sign-in&redirect_url=/platform" class="hidden sm:inline-flex bg-vaktarDark hover:bg-vaktarBlue text-white text-xs sm:text-sm font-medium px-4 py-2 rounded-full whitespace-nowrap transition duration-300">
@@ -1979,7 +1979,7 @@
         </div>
         <div id="mobileMenu" class="mobile-menu-panel hidden lg:hidden absolute right-4 top-[4.5rem] w-[min(22rem,calc(100vw-2rem))] rounded-3xl border border-gray-100 bg-white shadow-2xl shadow-slate-900/10 p-3">
             <a href="#utbildningar" class="block rounded-2xl px-4 py-3 text-sm font-bold text-vaktarDark hover:bg-gray-50">Utbildningsmaterial</a>
-            <a href="/quiz-demo" class="block rounded-2xl px-4 py-3 text-sm font-bold text-vaktarDark hover:bg-gray-50">Prova gratis quiz</a>
+            <a href="/quiz-demo" class="block rounded-2xl px-4 py-3 text-sm font-bold text-vaktarDark hover:bg-gray-50" data-open-hero-quiz>Prova gratis quiz</a>
             <a href="/studieteknik" class="block rounded-2xl px-4 py-3 text-sm font-bold text-vaktarDark hover:bg-gray-50">Studieteknik</a>
             <a href="/login.html?mode=sign-in&redirect_url=/platform" class="block rounded-2xl px-4 py-3 text-sm font-bold text-vaktarBlue hover:bg-blue-50">Logga in</a>
         </div>
@@ -2037,7 +2037,7 @@
             <!-- Actions Buttons in blue style -->
             <div class="hero-cta-stage">
                 <div class="hero-action-grid" data-hero-actions>
-                    <a href="/quiz-demo" class="hero-choice hero-choice-primary w-full sm:w-auto px-9 py-4 bg-vaktarBlue hover:bg-vaktarBlueHover text-white text-base font-bold sm:font-medium rounded-full flex items-center justify-center sm:space-x-2 shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20 transform hover:-translate-y-0.5 transition duration-200">
+                    <a href="/quiz-demo" class="hero-choice hero-choice-primary w-full sm:w-auto px-9 py-4 bg-vaktarBlue hover:bg-vaktarBlueHover text-white text-base font-bold sm:font-medium rounded-full flex items-center justify-center sm:space-x-2 shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20 transform hover:-translate-y-0.5 transition duration-200" data-open-hero-quiz>
                         <span class="hero-choice-icon">
                             <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 10l8-4 8 4-8 4-8-4z"></path>
@@ -3097,7 +3097,8 @@
             const stage = actions.closest('.hero-cta-stage');
             const trigger = event ? event.currentTarget : null;
             const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const canMorph = stage && trigger && trigger.classList.contains('hero-choice-primary') && !reducedMotion;
+            const isMobileMorph = window.matchMedia('(max-width: 639px)').matches;
+            const canMorph = stage && trigger && trigger.classList.contains('hero-choice-primary') && isMobileMorph && !reducedMotion;
 
             if (!canMorph) {
                 openHeroQuizInstant(actions, panel);
