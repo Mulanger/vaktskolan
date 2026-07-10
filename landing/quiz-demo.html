@@ -8,7 +8,7 @@
     <link rel="apple-touch-icon" href="/landing/assets/logo/vaktskolan-icon-512.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -31,6 +31,21 @@
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
         }
+        .landing-brand-wordmark {
+            display: inline-block;
+            color: #141414;
+            font-family: "Hanken Grotesk", "Inter", system-ui, sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0;
+            line-height: 1;
+            white-space: nowrap;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: geometricPrecision;
+        }
+        .landing-brand-wordmark .brand-dot {
+            color: #1c64d6;
+        }
         .quiz-option.is-correct {
             border-color: #16a34a;
             background: #f0fdf4;
@@ -50,7 +65,7 @@
     <header class="fixed left-0 top-0 z-40 w-full border-b border-gray-200 bg-white/85 backdrop-blur-md">
         <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
             <a href="/" class="inline-flex items-center">
-                <img src="/landing/assets/logo/vaktskolan-wordmark.png" alt="vaktskolan." class="h-7 w-auto" decoding="async">
+                <span class="landing-brand-wordmark" aria-label="vaktskolan.">vaktskolan<span class="brand-dot">.</span></span>
             </a>
             <a href="/" class="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-bold text-vaktarDark transition hover:bg-gray-50">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">

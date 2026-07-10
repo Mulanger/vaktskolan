@@ -9,7 +9,7 @@
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Schibsted+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Schibsted+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -75,6 +75,27 @@
         }
         .mobile-menu-panel {
             transform-origin: top right;
+        }
+        .landing-brand-wordmark {
+            display: inline-block;
+            color: #141414;
+            font-family: "Hanken Grotesk", "Inter", system-ui, sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0;
+            line-height: 1;
+            white-space: nowrap;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: geometricPrecision;
+        }
+        .landing-brand-wordmark .brand-dot {
+            color: #1c64d6;
+        }
+        .landing-brand-wordmark.is-inverted {
+            color: #ffffff;
+        }
+        .landing-brand-wordmark.is-inverted .brand-dot {
+            color: #4e8df0;
         }
         @keyframes studyFadeUp {
             from {
@@ -1930,7 +1951,7 @@
     <header class="w-full bg-white/80 backdrop-blur-md border-b border-gray-100 fixed top-0 left-0 z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
             <div class="flex items-center shrink-0 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Till toppen">
-                <img src="/landing/assets/logo/vaktskolan-wordmark.png" alt="vaktskolan." class="h-7 w-auto sm:h-6" decoding="async">
+                <span class="landing-brand-wordmark" aria-label="vaktskolan.">vaktskolan<span class="brand-dot">.</span></span>
             </div>
 
             <!-- Middle Navigation Links -->
@@ -2827,7 +2848,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
                 <div class="space-y-4">
                     <div class="flex items-center text-white">
-                        <img src="/landing/assets/logo/vaktskolan-wordmark-white.png" alt="vaktskolan." class="h-7 w-auto" loading="lazy" decoding="async">
+                        <span class="landing-brand-wordmark is-inverted" aria-label="vaktskolan.">vaktskolan<span class="brand-dot">.</span></span>
                     </div>
                     <p class="text-xs text-zinc-500 leading-relaxed">
                         Sveriges modernaste studietjänst för framtida väktare. Vi hjälper dig att bemästra teorin för både VU1 & VU2 effektivt och enkelt.

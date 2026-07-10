@@ -1488,6 +1488,23 @@ body.app-booting .app-boot-screen {
   flex: 0 0 auto;
 }
 
+.brand-wordmark-text {
+  display: block;
+  color: #141414;
+  font-family: "Hanken Grotesk", "Inter", system-ui, sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 0.95;
+  white-space: nowrap;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+.brand-wordmark-text span {
+  color: #1c64d6;
+}
+
 .app-brand-wordmark {
   display: block;
   width: 92px;
