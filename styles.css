@@ -4690,7 +4690,6 @@ body.quiz-overview-mode .content-inner {
 
 .module-info-mobile-grid,
 .module-info-mobile-lessons,
-.lesson-mobile-progress,
 .lesson-reading-time {
   display: none;
 }
@@ -4709,120 +4708,44 @@ body.quiz-overview-mode .content-inner {
 }
 
 .page-tabs {
-  --step-count: 1;
-  --track-left: 0px;
-  --track-top: 58px;
-  --track-width: 0px;
-  --track-fill: 0px;
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(var(--step-count), minmax(0, 1fr));
-  gap: 0;
-  margin-bottom: 34px;
-  padding: 2px 28px 26px;
+  display: block;
+  margin-bottom: 30px;
+  padding: 4px 18px 24px;
   border-bottom: 1px solid var(--border);
 }
 
-.stepper-rail {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.stepper-track,
-.stepper-fill {
-  position: absolute;
-  left: var(--track-left);
-  top: var(--track-top);
-  height: 3px;
-  border-radius: 999px;
-  transform: translateY(-50%);
-}
-
-.stepper-track {
-  width: var(--track-width);
-  background: #d9d9d9;
-}
-
-.stepper-fill {
-  width: var(--track-fill);
-  background: #020617;
-  transition: width 240ms ease;
-}
-
-.page-tab {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-direction: column;
-  gap: 0;
-  min-width: 0;
-  min-height: 84px;
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: var(--muted);
-  cursor: default;
-  padding: 0 10px 32px;
-  text-align: center;
-  transition: color 180ms ease, transform 180ms ease;
-}
-
-.page-tab.is-locked {
-  color: var(--muted);
-}
-
-.page-tab.is-active {
-  color: var(--text);
-}
-
-.step-label {
+.lesson-step-progress > span {
   display: block;
-  overflow: visible;
-  max-width: 168px;
-  color: #64748b;
-  font-size: 12px;
-  font-weight: 750;
-  hyphens: auto;
-  line-height: 1.18;
-  overflow-wrap: break-word;
-  text-align: center;
-}
-
-.step-dot-large {
-  position: absolute;
-  bottom: 6px;
-  left: 50%;
-  display: block;
-  width: 18px;
-  height: 18px;
-  border: 4px solid var(--surface);
-  border-radius: 50%;
-  background: #d9d9d9;
-  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.04);
-  transform: translateX(-50%);
-  transition: background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
-}
-
-.page-tab.is-active .step-label {
-  color: #020617;
+  color: var(--teal);
+  font-size: 13px;
   font-weight: 850;
 }
 
-.page-tab.is-active .step-dot-large {
-  background: #000000;
-  box-shadow: 0 0 0 1px rgba(2, 6, 23, 0.1), 0 4px 10px rgba(2, 6, 23, 0.16);
-  transform: translateX(-50%) scale(1.08);
+.lesson-step-progress > strong {
+  display: block;
+  overflow: hidden;
+  margin-top: 4px;
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.page-tab.is-complete .step-dot-large {
-  background: #020617;
+.lesson-step-progress > div {
+  height: 5px;
+  margin-top: 13px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e2e8f0;
 }
 
-.page-tab.is-locked .step-dot-large {
-  background: #e5e7eb;
+.lesson-step-progress i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--teal);
+  transition: width 200ms ease;
 }
 
 .lesson-article h1,
@@ -6255,20 +6178,9 @@ body.modal-open {
   }
 
   .page-tabs {
-    margin-bottom: 24px;
-    padding: 2px 16px 18px;
-    overflow-x: auto;
-    scroll-snap-type: x proximity;
-  }
-
-  .page-tab {
-    min-width: 142px;
-    scroll-snap-align: center;
-  }
-
-  .step-label {
-    max-width: 132px;
-    font-size: 12px;
+    margin-bottom: 26px;
+    padding: 2px 10px 20px;
+    overflow: visible;
   }
 
   .lesson-article h1,
@@ -10157,23 +10069,18 @@ body.final-exam-result-mode .final-exam-question {
     padding: 13px 12px 14px;
   }
 
-  body.lesson-mobile-mode .page-tabs .stepper-rail,
-  body.lesson-mobile-mode .page-tabs .page-tab {
-    display: none;
-  }
-
-  body.lesson-mobile-mode .lesson-mobile-progress {
+  body.lesson-mobile-mode .lesson-step-progress {
     display: block;
   }
 
-  body.lesson-mobile-mode .lesson-mobile-progress > span {
+  body.lesson-mobile-mode .lesson-step-progress > span {
     display: block;
     color: var(--teal);
     font-size: 11px;
     font-weight: 850;
   }
 
-  body.lesson-mobile-mode .lesson-mobile-progress > strong {
+  body.lesson-mobile-mode .lesson-step-progress > strong {
     display: block;
     overflow: hidden;
     margin-top: 3px;
@@ -10184,7 +10091,7 @@ body.final-exam-result-mode .final-exam-question {
     white-space: nowrap;
   }
 
-  body.lesson-mobile-mode .lesson-mobile-progress > div {
+  body.lesson-mobile-mode .lesson-step-progress > div {
     height: 4px;
     margin-top: 12px;
     overflow: hidden;
@@ -10192,7 +10099,7 @@ body.final-exam-result-mode .final-exam-question {
     background: #e2e8f0;
   }
 
-  body.lesson-mobile-mode .lesson-mobile-progress i {
+  body.lesson-mobile-mode .lesson-step-progress i {
     display: block;
     height: 100%;
     border-radius: inherit;
@@ -10236,6 +10143,40 @@ body.final-exam-result-mode .final-exam-question {
 
   body.lesson-mobile-mode .lesson-article p {
     margin-bottom: 18px;
+  }
+
+  body.lesson-mobile-mode .remember-box {
+    grid-template-columns: 32px minmax(0, 1fr);
+    align-items: start;
+    gap: 10px;
+    margin: 20px 0 8px;
+    border-left-width: 3px;
+    border-radius: 0 10px 10px 0;
+    padding: 12px 12px 12px 14px;
+  }
+
+  body.lesson-mobile-mode .remember-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  }
+
+  body.lesson-mobile-mode .remember-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  body.lesson-mobile-mode .remember-box h3 {
+    margin: 0 0 2px;
+    font-size: 13.5px;
+    line-height: 1.3;
+  }
+
+  body.lesson-mobile-mode .remember-box p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.45;
   }
 
   body.lesson-mobile-mode .reader-footer {
@@ -10284,7 +10225,7 @@ body.final-exam-result-mode .final-exam-question {
 
 @media (prefers-reduced-motion: reduce) {
   .module-info-button svg,
-  body.lesson-mobile-mode .lesson-mobile-progress i {
+  .lesson-step-progress i {
     transition: none;
   }
 

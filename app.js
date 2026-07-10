@@ -2477,33 +2477,15 @@ function renderReader() {
   setQuizButtonLabel(isFinalExamModule(module) ? "Starta slutprov" : "Starta quiz");
   renderModuleContext();
 
-  els.pageTabs.style.setProperty("--step-count", lesson.pages.length);
   const mobilePageTitle = page.title.replace(/^Sida\s+\d+:\s*/, "");
   const mobileProgress = ((state.pageIndex + 1) / lesson.pages.length) * 100;
   els.pageTabs.innerHTML = `
-    <div class="lesson-mobile-progress">
+    <div class="lesson-step-progress">
       <span>Steg ${state.pageIndex + 1} av ${lesson.pages.length}</span>
       <strong>${escapeHtml(mobilePageTitle)}</strong>
       <div aria-hidden="true"><i style="width: ${mobileProgress}%"></i></div>
     </div>
-    <div class="stepper-rail" aria-hidden="true">
-      <span class="stepper-track"></span>
-      <span class="stepper-fill"></span>
-    </div>
-    ${lesson.pages
-    .map((item, index) => {
-      const unlocked = isPageUnlocked(state.moduleIndex, state.lessonIndex, index);
-      return `
-      <div class="page-tab ${index === state.pageIndex ? "is-active" : ""} ${index < state.pageIndex ? "is-complete" : ""} ${unlocked ? "" : "is-locked"}"
-        aria-current="${index === state.pageIndex ? "step" : "false"}" aria-label="${escapeHtml(item.title.replace(/^Sida\s+\d+:\s*/, ""))}">
-        <span class="step-label">${escapeHtml(item.title.replace(/^Sida\s+\d+:\s*/, ""))}</span>
-        <span class="step-dot-large" aria-hidden="true"></span>
-      </div>
-    `;
-    })
-    .join("")}
   `;
-  updatePageStepperLine();
 
   els.article.innerHTML = `<h1>${escapeHtml(mobilePageTitle)}</h1><div class="lesson-reading-time"><i data-lucide="clock-3"></i><span>${estimateReadingMinutes(page)} min</span></div>${renderBlocks(page.body)}${
     isFinalExamModule(module) ? renderFinalExamInlineCta() : ""
@@ -3575,39 +3557,6 @@ function showToast(message) {
     els.toast.hidden = true;
   }, 2600);
 }
-
-function updatePageStepperLine() {
-  const lesson = getCurrentLesson();
-  if (!lesson || lesson.pages.length <= 1) {
-    els.pageTabs.style.setProperty("--track-left", "0px");
-    els.pageTabs.style.setProperty("--track-width", "0px");
-    els.pageTabs.style.setProperty("--track-fill", "0px");
-    return;
-  }
-
-  window.requestAnimationFrame(() => {
-    const dots = [...els.pageTabs.querySelectorAll(".step-dot-large")];
-    const activeDot = dots[state.pageIndex];
-    const firstDot = dots[0];
-    if (!activeDot || !firstDot) return;
-
-    const firstRect = firstDot.getBoundingClientRect();
-    const lastRect = dots[dots.length - 1].getBoundingClientRect();
-    const activeRect = activeDot.getBoundingClientRect();
-    const containerRect = els.pageTabs.getBoundingClientRect();
-    const firstCenter = firstRect.left + firstRect.width / 2;
-    const lastCenter = lastRect.left + lastRect.width / 2;
-    const activeCenter = activeRect.left + activeRect.width / 2;
-    const dotCenterY = firstRect.top + firstRect.height / 2;
-
-    els.pageTabs.style.setProperty("--track-left", `${firstCenter - containerRect.left}px`);
-    els.pageTabs.style.setProperty("--track-top", `${dotCenterY - containerRect.top}px`);
-    els.pageTabs.style.setProperty("--track-width", `${Math.max(0, lastCenter - firstCenter)}px`);
-    els.pageTabs.style.setProperty("--track-fill", `${Math.max(0, activeCenter - firstCenter)}px`);
-  });
-}
-
-window.addEventListener("resize", updatePageStepperLine);
 
 function restoreSavedLocation() {
   const saved = readSavedLocation();

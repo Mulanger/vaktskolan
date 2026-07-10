@@ -564,6 +564,10 @@ Viktiga vyfunktioner:
 
 Status 2026-07-10: Lektionsläsaren har en dedikerad mobilvy under `560px`, baserad på den bifogade kompakta lektionsreferensen men med Vaktskolans befintliga färger. Den globala topbaren döljs under lektionsläsning, modulheadern har en chevron som fäller ut modulmål, progress, tidsomfattning och lektionslista, den gamla horisontella steppern ersätts visuellt med `Steg X av Y` och progresslinje, uppskattad lästid visas under sidrubriken och Föregående/Nästa ligger i en fast nederkant. Desktop, modulstart och quizläge är oförändrade.
 
+Status 2026-07-10: `Kom ihåg`-rutan i den dedikerade mobila lektionsvyn är komprimerad med mindre ikon, padding, mellanrum och text så att mer av notisen ryms ovanför den fasta lektionsnavigationen. Desktopstilen är oförändrad.
+
+Status 2026-07-10: Lektionssidornas tidigare breda desktop-stepper är ersatt av samma kompakta `Steg X av Y`-indikator och turkosa progresslinje som mobilvyn använder. Indikatorn renderas gemensamt för desktop och mobil och fylls proportionellt när eleven går mellan sidor.
+
 Vänsternavigering:
 
 - Hem går till `showHome()`.
