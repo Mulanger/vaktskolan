@@ -19,6 +19,13 @@ const mimeTypes = {
 
 function resolveRequest(url) {
   const pathname = decodeURIComponent(new URL(url, `http://localhost:${port}`).pathname);
+  if (pathname === "/quiz-demo" || pathname === "/quiz-demo/" || pathname === "/landing/quiz-demo" || pathname === "/landing/quiz-demo/") {
+    return join(root, "quiz-demo.html");
+  }
+  if (pathname === "/studieteknik" || pathname === "/studieteknik/" || pathname === "/landing/studieteknik" || pathname === "/landing/studieteknik/") {
+    return join(root, "studieteknik.html");
+  }
+
   const requested = pathname === "/" ? "/index.html" : pathname.replace(/^\/landing(?=\/)/, "");
   const resolved = normalize(join(root, requested));
 

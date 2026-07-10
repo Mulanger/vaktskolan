@@ -167,6 +167,12 @@ function resolveRequest(url) {
   if (pathname === "/platform") return join(root, "index.html");
   if (pathname === "/login" || pathname === "/sign-in" || pathname === "/sign-up") return join(root, "login.html");
   if (pathname === "/landing" || pathname === "/landing/") return join(root, "landing", "index.html");
+  if (pathname === "/quiz-demo" || pathname === "/quiz-demo/" || pathname === "/landing/quiz-demo" || pathname === "/landing/quiz-demo/") {
+    return join(root, "landing", "quiz-demo.html");
+  }
+  if (pathname === "/studieteknik" || pathname === "/studieteknik/" || pathname === "/landing/studieteknik" || pathname === "/landing/studieteknik/") {
+    return join(root, "landing", "studieteknik.html");
+  }
 
   const pathSegments = pathname.split("/").filter(Boolean);
   if (pathSegments.some((segment) => segment.startsWith("."))) return null;

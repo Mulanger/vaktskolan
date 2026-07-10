@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="sv" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gratis quizdemo - Vaktskolan</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233455d3'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial' font-size='22' font-weight='700' fill='white'%3EVS%3C/text%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        vaktarBlue: '#0052CC',
+                        vaktarBlueHover: '#0043A4',
+                        vaktarDark: '#111111',
+                        vaktarGray: '#666666',
+                        vaktarLightGray: '#F5F5F7'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+        .quiz-option.is-correct {
+            border-color: #16a34a;
+            background: #f0fdf4;
+            color: #166534;
+        }
+        .quiz-option.is-wrong {
+            border-color: #dc2626;
+            background: #fef2f2;
+            color: #991b1b;
+        }
+        .quiz-option[disabled] {
+            cursor: default;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-vaktarLightGray text-vaktarDark font-sans">
+    <header class="fixed left-0 top-0 z-40 w-full border-b border-gray-200 bg-white/85 backdrop-blur-md">
+        <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+            <a href="/" class="inline-flex items-center gap-3 text-sm font-extrabold uppercase tracking-wider">
+                <span class="flex h-6 w-6 items-center justify-center rounded-full border-4 border-vaktarBlue">
+                    <span class="h-1.5 w-1.5 rounded-full bg-vaktarBlue"></span>
+                </span>
+                Vaktskolan
+            </a>
+            <a href="/" class="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-bold text-vaktarDark transition hover:bg-gray-50">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M19 12H5"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="m12 19-7-7 7-7"></path>
+                </svg>
+                Till startsidan
+            </a>
+        </div>
+    </header>
+
+    <main class="px-4 pb-20 pt-28 sm:px-6 lg:px-8">
+        <section class="mx-auto max-w-4xl">
+            <div class="mb-10 text-center">
+                <div class="mb-4 text-xs font-extrabold uppercase tracking-[0.16em] text-vaktarBlue">Interaktiv demo</div>
+                <h1 class="mx-auto max-w-3xl text-4xl font-black tracking-tight sm:text-5xl">Testa dina kunskaper direkt</h1>
+                <p class="mx-auto mt-4 max-w-2xl text-base leading-7 text-vaktarGray">Svara på tre exempel som liknar frågetypen i väktarutbildningens teoridel. Efter varje svar får du kort feedback.</p>
+            </div>
+
+            <div class="overflow-hidden rounded-[28px] border border-gray-200 bg-white shadow-xl shadow-slate-900/5">
+                <div class="border-b border-gray-100 bg-white p-6 sm:p-8">
+                    <div class="mb-3 flex justify-between text-xs font-bold text-vaktarGray">
+                        <span data-progress-label>Fråga 1 av 3</span>
+                        <span data-progress-percent>33% klart</span>
+                    </div>
+                    <div class="h-2 overflow-hidden rounded-full bg-gray-200">
+                        <div data-progress-bar class="h-full rounded-full bg-vaktarBlue transition-all duration-300" style="width: 33%"></div>
+                    </div>
+                </div>
+
+                <div class="p-6 sm:p-8">
+                    <div data-quiz-content></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const questions = [
+            {
+                question: 'Vad krävs för ett envarsgripande enligt Rättegångsbalken 24:7?',
+                options: [
+                    'Att brottet har fängelse i straffskalan och personen tas på bar gärning eller flyende fot.',
+                    'Att personen uppträder misstänksamt och inte vill legitimera sig.',
+                    'Att butiksägaren har gett väktaren tillstånd att hålla kvar personen.'
+                ],
+                answer: 0,
+                explanation: 'Rätt villkor är fängelse i straffskalan samt bar gärning eller flyende fot.'
+            },
+            {
+                question: 'När kan nödvärn bli aktuellt enligt Brottsbalken 24:1?',
+                options: [
+                    'Bara efter godkännande från driftledare.',
+                    'Vid ett påbörjat eller överhängande brottsligt angrepp mot person eller egendom.',
+                    'När någon vägrar följa en instruktion.'
+                ],
+                answer: 1,
+                explanation: 'Nödvärn handlar om ett brottsligt angrepp eller när egendom återtas med stöd i lagen.'
+            },
+            {
+                question: 'Vilken myndighet utfärdar föreskrifter som reglerar väktarutbildningen?',
+                options: [
+                    'Arbetsmiljöverket',
+                    'Länsstyrelsen i Stockholms län',
+                    'Polismyndigheten'
+                ],
+                answer: 2,
+                explanation: 'Polismyndigheten utfärdar föreskrifterna för väktarutbildningens krav.'
+            }
+        ];
+
+        let currentIndex = 0;
+        let score = 0;
+        let answered = false;
+        let selected = null;
+
+        function renderQuiz() {
+            const content = document.querySelector('[data-quiz-content]');
+            const label = document.querySelector('[data-progress-label]');
+            const percent = document.querySelector('[data-progress-percent]');
+            const bar = document.querySelector('[data-progress-bar]');
+
+            if (currentIndex >= questions.length) {
+                const pct = Math.round((score / questions.length) * 100);
+                label.textContent = 'Quiz klart';
+                percent.textContent = '100%';
+                bar.style.width = '100%';
+                content.innerHTML = `
+                    <div class="py-8 text-center">
+                        <div class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-blue-50 text-vaktarBlue">
+                            <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-3xl font-black tracking-tight">${score} av ${questions.length} rätt</h2>
+                        <p class="mx-auto mt-3 max-w-md text-sm leading-6 text-vaktarGray">Du klarade ${pct}% av demon. I plattformen finns fler frågor, repetition och längre slutprov.</p>
+                        <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+                            <button type="button" data-restart class="rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-bold text-vaktarDark transition hover:bg-gray-50">Gör om testet</button>
+                            <a href="/login.html?mode=sign-up&redirect_url=/platform" class="rounded-xl bg-vaktarBlue px-7 py-3 text-sm font-bold text-white transition hover:bg-vaktarBlueHover">Bli gratis medlem</a>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            const question = questions[currentIndex];
+            const pct = Math.round(((currentIndex + 1) / questions.length) * 100);
+            label.textContent = `Fråga ${currentIndex + 1} av ${questions.length}`;
+            percent.textContent = `${pct}% klart`;
+            bar.style.width = `${pct}%`;
+
+            const optionHtml = question.options.map((option, index) => {
+                const isCorrect = answered && index === question.answer;
+                const isWrong = answered && selected === index && index !== question.answer;
+                const stateClass = isCorrect ? 'is-correct' : isWrong ? 'is-wrong' : '';
+                return `
+                    <button type="button" class="quiz-option ${stateClass} flex w-full items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 text-left text-sm transition hover:border-vaktarDark sm:text-base" data-answer="${index}" ${answered ? 'disabled' : ''}>
+                        <span class="font-black text-vaktarBlue">${String.fromCharCode(65 + index)}</span>
+                        <span>${option}</span>
+                    </button>
+                `;
+            }).join('');
+
+            const feedback = answered ? `
+                <div class="mt-6 rounded-2xl ${selected === question.answer ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'} p-4 text-sm leading-6">
+                    <strong>${selected === question.answer ? 'Rätt svar.' : 'Inte helt rätt.'}</strong>
+                    <span>${question.explanation}</span>
+                </div>
+                <button type="button" data-next class="mt-5 rounded-xl bg-vaktarDark px-6 py-3 text-sm font-bold text-white transition hover:bg-vaktarBlue">
+                    ${currentIndex + 1 < questions.length ? 'Nästa fråga' : 'Visa resultat'}
+                </button>
+            ` : '';
+
+            content.innerHTML = `
+                <h2 class="mb-6 text-xl font-extrabold leading-snug tracking-tight sm:text-2xl">${question.question}</h2>
+                <div class="space-y-3">${optionHtml}</div>
+                ${feedback}
+            `;
+        }
+
+        document.addEventListener('click', (event) => {
+            const answerButton = event.target.closest('[data-answer]');
+            if (answerButton && !answered) {
+                selected = Number(answerButton.dataset.answer);
+                answered = true;
+                if (selected === questions[currentIndex].answer) score++;
+                renderQuiz();
+                return;
+            }
+
+            if (event.target.closest('[data-next]')) {
+                currentIndex++;
+                answered = false;
+                selected = null;
+                renderQuiz();
+                return;
+            }
+
+            if (event.target.closest('[data-restart]')) {
+                currentIndex = 0;
+                score = 0;
+                answered = false;
+                selected = null;
+                renderQuiz();
+            }
+        });
+
+        renderQuiz();
+    </script>
+</body>
+</html>

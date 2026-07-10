@@ -75,6 +75,450 @@
         .mobile-menu-panel {
             transform-origin: top right;
         }
+        @keyframes studyFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .study-showcase {
+            --study-accent: #2563eb;
+            background: #f4f5f7;
+            border-top: 1px solid #e7e9ee;
+            border-bottom: 1px solid #e7e9ee;
+            color: #101114;
+        }
+        .study-showcase-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 76px 24px 92px;
+        }
+        .study-heading {
+            max-width: 720px;
+            margin: 0 auto 40px;
+            text-align: center;
+        }
+        .study-kicker {
+            margin-bottom: 16px;
+            color: var(--study-accent);
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+        .study-heading h2 {
+            margin: 0 0 18px;
+            color: #101114;
+            font-size: clamp(30px, 4.4vw, 46px);
+            font-weight: 800;
+            letter-spacing: -.025em;
+            line-height: 1.1;
+            text-wrap: balance;
+        }
+        .study-heading p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: #5b616e;
+            font-size: 18px;
+            line-height: 1.6;
+            text-wrap: pretty;
+        }
+        .study-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 0 0 40px;
+            padding: 6px;
+            border-radius: 18px;
+            background: #eaecf0;
+        }
+        .study-tab-btn {
+            flex: 1 1 170px;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 13px 16px;
+            border: 1px solid transparent;
+            border-radius: 14px;
+            background: transparent;
+            color: #6b7280;
+            cursor: pointer;
+            font: inherit;
+            text-align: left;
+            transition: background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+        }
+        .study-tab-btn:hover {
+            color: #101114;
+            transform: translateY(-1px);
+        }
+        .study-tab-btn.is-active {
+            background: #fff;
+            border-color: #e5e7eb;
+            color: #101114;
+            box-shadow: 0 10px 24px rgba(16, 17, 20, .06);
+        }
+        .study-tab-btn svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .study-tab-label {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+        .study-tab-label strong {
+            font-size: 14px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .study-tab-label span {
+            font-size: 12px;
+            font-weight: 600;
+            opacity: .66;
+            white-space: nowrap;
+        }
+        .study-panel {
+            display: none;
+        }
+        .study-panel.is-active {
+            display: block;
+            animation: studyFadeUp .28s ease;
+        }
+        .study-layout {
+            display: flex;
+            align-items: stretch;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+        .study-main-card,
+        .study-side-card {
+            border-radius: 24px;
+            padding: 40px;
+        }
+        .study-main-card {
+            flex: 1.42 1 440px;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            border: 1px solid #e7e9ee;
+            box-shadow: 0 12px 34px rgba(16, 17, 20, .05);
+        }
+        .study-pill {
+            align-self: flex-start;
+            display: inline-flex;
+            margin-bottom: 22px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--study-accent) 10%, #fff);
+            color: var(--study-accent);
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .study-main-card h3 {
+            margin: 0 0 16px;
+            color: #101114;
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -.02em;
+            line-height: 1.15;
+        }
+        .study-main-card p {
+            margin: 0 0 30px;
+            color: #5b616e;
+            font-size: 16.5px;
+            line-height: 1.65;
+        }
+        .study-subtitle {
+            margin-bottom: 18px;
+            color: #9aa1ad;
+            font-size: 12.5px;
+            font-weight: 800;
+            letter-spacing: .09em;
+            text-transform: uppercase;
+        }
+        .study-check-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px 24px;
+            margin-bottom: 34px;
+        }
+        .study-check,
+        .study-side-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .study-check-icon {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            margin-top: 1px;
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--study-accent) 12%, #fff);
+            color: var(--study-accent);
+        }
+        .study-check-icon svg {
+            width: 13px;
+            height: 13px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .study-check span:last-child {
+            color: #2c313b;
+            font-size: 15.5px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        .study-cta-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin-top: auto;
+            padding-top: 24px;
+            border-top: 1px solid #edeef1;
+        }
+        .study-meta-label {
+            margin-bottom: 5px;
+            color: #9aa1ad;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+        .study-meta-value {
+            color: #101114;
+            font-size: 15px;
+            font-weight: 800;
+        }
+        .study-primary-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 22px;
+            border-radius: 12px;
+            background: var(--study-accent);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            white-space: nowrap;
+            box-shadow: 0 8px 18px rgba(37, 99, 235, .28);
+            transition: transform .15s ease, background .15s ease;
+        }
+        .study-primary-link:hover {
+            color: #fff;
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+        .study-primary-link svg {
+            width: 17px;
+            height: 17px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .study-side-card {
+            flex: 1 1 340px;
+            display: flex;
+            flex-direction: column;
+            background: #101114;
+            color: #fff;
+            box-shadow: 0 12px 34px rgba(16, 17, 20, .14);
+        }
+        .study-side-kicker {
+            margin-bottom: 14px;
+            color: color-mix(in srgb, var(--study-accent) 58%, #fff);
+            font-size: 12.5px;
+            font-weight: 800;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+        .study-side-card h3 {
+            margin: 0 0 14px;
+            color: #fff;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -.01em;
+            line-height: 1.2;
+        }
+        .study-side-card p {
+            margin: 0 0 28px;
+            color: #aeb4bf;
+            font-size: 15.5px;
+            line-height: 1.6;
+        }
+        .study-side-feature {
+            margin-bottom: 18px;
+        }
+        .study-side-feature:last-child {
+            margin-bottom: 0;
+        }
+        .study-side-icon {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, .07);
+            border-radius: 12px;
+            background: #1b1e24;
+            color: color-mix(in srgb, var(--study-accent) 60%, #fff);
+        }
+        .study-side-icon svg {
+            width: 19px;
+            height: 19px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .study-side-feature strong {
+            display: block;
+            margin-bottom: 3px;
+            color: #fff;
+            font-size: 15.5px;
+            font-weight: 700;
+        }
+        .study-side-feature span {
+            color: #8f96a3;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .study-side-note {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+            color: #7e8593;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .study-mini-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 34px;
+        }
+        .study-mini-card {
+            padding: 20px;
+            border: 1px solid #eceef1;
+            border-radius: 16px;
+            background: #f6f7f9;
+        }
+        .study-mini-card strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #101114;
+            font-size: 16px;
+        }
+        .study-mini-card span {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .study-result-card {
+            padding: 20px 22px;
+            border: 1px solid rgba(255, 255, 255, .07);
+            border-radius: 16px;
+            background: #1b1e24;
+        }
+        .study-result-row {
+            margin-bottom: 16px;
+        }
+        .study-result-row:last-child {
+            margin-bottom: 0;
+        }
+        .study-result-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 8px;
+            color: #d4d8de;
+            font-size: 14px;
+        }
+        .study-result-track {
+            height: 8px;
+            overflow: hidden;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, .09);
+        }
+        .study-result-fill {
+            height: 100%;
+            border-radius: inherit;
+            background: #22c55e;
+        }
+        .study-result-fill.is-warning {
+            background: #f5a623;
+        }
+        @media (max-width: 760px) {
+            .study-showcase-inner {
+                padding: 58px 18px 72px;
+            }
+            .study-heading {
+                margin-bottom: 30px;
+            }
+            .study-heading p {
+                font-size: 16px;
+            }
+            .study-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                margin-right: -18px;
+                margin-left: -18px;
+                padding-right: 18px;
+                padding-left: 18px;
+                border-radius: 0;
+                scrollbar-width: none;
+            }
+            .study-tabs::-webkit-scrollbar {
+                display: none;
+            }
+            .study-tab-btn {
+                min-width: 212px;
+            }
+            .study-main-card,
+            .study-side-card {
+                padding: 26px;
+                border-radius: 22px;
+            }
+            .study-check-grid,
+            .study-mini-grid {
+                grid-template-columns: 1fr;
+            }
+            .study-main-card h3 {
+                font-size: 26px;
+            }
+            .study-main-card p,
+            .study-side-card p {
+                font-size: 15.5px;
+            }
+            .study-primary-link {
+                width: 100%;
+                justify-content: center;
+                white-space: normal;
+            }
+        }
         .hero-action-grid {
             display: flex;
             flex-direction: column;
@@ -1495,16 +1939,16 @@
             <!-- Middle Navigation Links -->
             <nav class="hidden lg:flex items-center gap-5 xl:gap-8 text-sm font-medium text-vaktarGray whitespace-nowrap">
                 <a href="#utbildningar" class="hover:text-vaktarDark transition">Utbildningsmaterial</a>
-                <a href="#quiz-demo" class="hover:text-vaktarDark transition">Testa gratis quiz</a>
-                <a href="#funktioner" class="hover:text-vaktarDark transition">Plattformen</a>
-                <a href="#utbildningar" onclick="switchTab('yrket')" class="hover:text-vaktarDark transition">Väktaryrket</a>
+                <a href="/quiz-demo" class="hover:text-vaktarDark transition">Testa gratis quiz</a>
+                <a href="/studieteknik" class="hover:text-vaktarDark transition">Studieteknik</a>
+                <a href="#utbildningar" onclick="switchStudyTab('yrket')" class="hover:text-vaktarDark transition">Väktaryrket</a>
             </nav>
 
             <!-- Right stats badge matching Screenshot_20260703-204209.png with blue details -->
             <div class="flex items-center space-x-3 sm:space-x-4 shrink-0">
-                <button type="button" data-open-hero-quiz class="sm:hidden bg-vaktarBlue hover:bg-vaktarBlueHover text-white text-sm font-bold px-6 py-3 rounded-full whitespace-nowrap transition duration-300">
+                <a href="/quiz-demo" class="sm:hidden bg-vaktarBlue hover:bg-vaktarBlueHover text-white text-sm font-bold px-6 py-3 rounded-full whitespace-nowrap transition duration-300">
                     Öva nu
-                </button>
+                </a>
                 <a href="/login.html?mode=sign-in&redirect_url=/platform" class="hidden sm:inline-flex bg-vaktarDark hover:bg-vaktarBlue text-white text-xs sm:text-sm font-medium px-4 py-2 rounded-full whitespace-nowrap transition duration-300">
                     Logga in
                 </a>
@@ -1517,8 +1961,8 @@
         </div>
         <div id="mobileMenu" class="mobile-menu-panel hidden lg:hidden absolute right-4 top-[4.5rem] w-[min(22rem,calc(100vw-2rem))] rounded-3xl border border-gray-100 bg-white shadow-2xl shadow-slate-900/10 p-3">
             <a href="#utbildningar" class="block rounded-2xl px-4 py-3 text-sm font-bold text-vaktarDark hover:bg-gray-50">Utbildningsmaterial</a>
-            <button type="button" data-open-hero-quiz class="w-full text-left rounded-2xl px-4 py-3 text-sm font-bold text-vaktarDark hover:bg-gray-50">Prova gratis quiz</button>
-            <a href="#funktioner" class="block rounded-2xl px-4 py-3 text-sm font-bold text-vaktarDark hover:bg-gray-50">Plattformen</a>
+            <a href="/quiz-demo" class="block rounded-2xl px-4 py-3 text-sm font-bold text-vaktarDark hover:bg-gray-50">Prova gratis quiz</a>
+            <a href="/studieteknik" class="block rounded-2xl px-4 py-3 text-sm font-bold text-vaktarDark hover:bg-gray-50">Studieteknik</a>
             <a href="/login.html?mode=sign-in&redirect_url=/platform" class="block rounded-2xl px-4 py-3 text-sm font-bold text-vaktarBlue hover:bg-blue-50">Logga in</a>
         </div>
     </header>
@@ -1575,7 +2019,7 @@
             <!-- Actions Buttons in blue style -->
             <div class="hero-cta-stage">
                 <div class="hero-action-grid" data-hero-actions>
-                    <button type="button" data-open-hero-quiz class="hero-choice hero-choice-primary w-full sm:w-auto px-9 py-4 bg-vaktarBlue hover:bg-vaktarBlueHover text-white text-base font-bold sm:font-medium rounded-full flex items-center justify-center sm:space-x-2 shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20 transform hover:-translate-y-0.5 transition duration-200">
+                    <a href="/quiz-demo" class="hero-choice hero-choice-primary w-full sm:w-auto px-9 py-4 bg-vaktarBlue hover:bg-vaktarBlueHover text-white text-base font-bold sm:font-medium rounded-full flex items-center justify-center sm:space-x-2 shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20 transform hover:-translate-y-0.5 transition duration-200">
                         <span class="hero-choice-icon">
                             <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 10l8-4 8 4-8 4-8-4z"></path>
@@ -1587,7 +2031,7 @@
                         <svg class="hero-arrow w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                         </svg>
-                    </button>
+                    </a>
                     <a href="/login.html?mode=sign-up&redirect_url=/platform" class="hero-choice hero-choice-secondary w-full sm:w-auto px-9 py-4 bg-white hover:bg-gray-50 text-vaktarDark text-base font-bold sm:font-medium rounded-full border border-gray-200 flex items-center justify-center sm:space-x-2 transition duration-200">
                         <span class="hero-choice-icon">
                             <svg class="w-7 h-7 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
@@ -1654,8 +2098,183 @@
         </div>
     </main>
 
+    <!-- Redesigned Study Explorer Section from provided design -->
+    <section id="utbildningar" class="study-showcase" aria-labelledby="study-heading-title">
+        <div class="study-showcase-inner">
+            <div class="study-heading">
+                <div class="study-kicker">Studera smartare</div>
+                <h2 id="study-heading-title">Allt du behöver för VU1, VU2 och väktarkarriären</h2>
+                <p>Vi har delat upp kursmaterialet i tydliga moduler, så att väktarutbildningens teori blir lättare att repetera, testa och förstå inför provet.</p>
+            </div>
+
+            <div class="study-tabs" role="tablist" aria-label="Utbildningsinnehåll">
+                <button type="button" id="study-tab-vu1" class="study-tab-btn is-active" role="tab" aria-selected="true" aria-controls="study-panel-vu1" data-study-tab="vu1">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+                    <span class="study-tab-label"><strong>Väktarutbildning 1</strong><span>(VU1)</span></span>
+                </button>
+                <button type="button" id="study-tab-vu2" class="study-tab-btn" role="tab" aria-selected="false" aria-controls="study-panel-vu2" data-study-tab="vu2">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                    <span class="study-tab-label"><strong>Väktarutbildning 2</strong><span>(VU2)</span></span>
+                </button>
+                <button type="button" id="study-tab-slutprov" class="study-tab-btn" role="tab" aria-selected="false" aria-controls="study-panel-slutprov" data-study-tab="slutprov">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="m9 14 2 2 4-4"></path></svg>
+                    <span class="study-tab-label"><strong>Slutprov & Quiz</strong><span>Öva & simulera</span></span>
+                </button>
+                <button type="button" id="study-tab-yrket" class="study-tab-btn" role="tab" aria-selected="false" aria-controls="study-panel-yrket" data-study-tab="yrket">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path><path d="M22 13H2"></path></svg>
+                    <span class="study-tab-label"><strong>Väktaryrket & Karriär</strong><span>Bransch & jobb</span></span>
+                </button>
+            </div>
+
+            <div id="study-panel-vu1" class="study-panel is-active" role="tabpanel" aria-labelledby="study-tab-vu1" data-study-panel="vu1">
+                <div class="study-layout">
+                    <article class="study-main-card">
+                        <span class="study-pill">Nybörjare till proffs</span>
+                        <h3>VU1: Grundutbildningen för väktare</h3>
+                        <p>Det här är första steget mot att bli väktare. VU1:s teori blir uppdelad i korta moduler med repetition, quiz och fokus på det du behöver kunna inför teoriprovet.</p>
+                        <div class="study-subtitle">Viktiga kapitel vi täcker</div>
+                        <div class="study-check-grid">
+                            <div class="study-check"><span class="study-check-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Rättskunskap & lagstöd (PL13, RB 24:7)</span></div>
+                            <div class="study-check"><span class="study-check-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Nödvärn & nöd (BrB 24:1)</span></div>
+                            <div class="study-check"><span class="study-check-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Bevakningstjänst & rutiner</span></div>
+                            <div class="study-check"><span class="study-check-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Brand & akutsjukvård (L-ABC)</span></div>
+                            <div class="study-check"><span class="study-check-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Rapportskrivning & kommunikation</span></div>
+                            <div class="study-check"><span class="study-check-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Yrkesetik & konflikthantering</span></div>
+                        </div>
+                        <div class="study-cta-row">
+                            <div>
+                                <div class="study-meta-label">Inkluderar</div>
+                                <div class="study-meta-value">350+ övningsfrågor & fullt provmaterial</div>
+                            </div>
+                            <a class="study-primary-link" href="/quiz-demo">Börja öva VU1 gratis<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+                        </div>
+                    </article>
+                    <aside class="study-side-card">
+                        <div class="study-side-kicker">Interaktiv inlärning</div>
+                        <h3>Varför träna digitalt inför VU1?</h3>
+                        <p>Övningsproven efterliknar faktiska examinationer hos auktoriserade utbildare. Direkt feedback gör att du förstår varför ett svar är rätt eller fel.</p>
+                        <div class="study-side-feature"><span class="study-side-icon"><svg viewBox="0 0 24 24"><path d="M9 17H7A5 5 0 0 1 7 7h2"></path><path d="M15 7h2a5 5 0 0 1 0 10h-2"></path><path d="M8 12h8"></path></svg></span><span><strong>Direkt lagrumsförklaring</strong><span>Varje fråga förklarar vilket lagrum som styr svaret.</span></span></div>
+                        <div class="study-side-feature"><span class="study-side-icon"><svg viewBox="0 0 24 24"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg></span><span><strong>Framstegsspårning</strong><span>Se vilka områden du behöver repetera mer.</span></span></div>
+                        <div class="study-side-note">Klarar du våra slutprov har du bättre förutsättningar inför teoriprovet.</div>
+                    </aside>
+                </div>
+            </div>
+
+            <div id="study-panel-vu2" class="study-panel" role="tabpanel" aria-labelledby="study-tab-vu2" data-study-panel="vu2">
+                <div class="study-layout">
+                    <article class="study-main-card">
+                        <span class="study-pill">Fortbildning & slutsteg</span>
+                        <h3>VU2: Den avslutande väktarutbildningen</h3>
+                        <p>VU2 fördjupar dina kunskaper i handfängsel, expanderbar batong, avancerad konflikthantering och juridik. Materialet är byggt för snabb repetition inför nästa steg.</p>
+                        <div class="study-subtitle">Material som ingår för VU2</div>
+                        <div class="study-check-grid">
+                            <div class="study-check"><span class="study-check-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Avancerat nödvärn och laga befogenhet</span></div>
+                            <div class="study-check"><span class="study-check-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Fängselteknik & regelverk</span></div>
+                            <div class="study-check"><span class="study-check-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Expanderbar batong, juridik och taktik</span></div>
+                            <div class="study-check"><span class="study-check-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Mental förberedelse & stresshantering</span></div>
+                            <div class="study-check"><span class="study-check-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Bevakning av skyddsobjekt</span></div>
+                            <div class="study-check"><span class="study-check-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Säkerhetsteknik och larm</span></div>
+                        </div>
+                        <div class="study-cta-row">
+                            <div>
+                                <div class="study-meta-label">Inkluderar</div>
+                                <div class="study-meta-value">Scenarioträning & teorifrågor</div>
+                            </div>
+                            <a class="study-primary-link" href="/quiz-demo">Utforska VU2-material<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+                        </div>
+                    </article>
+                    <aside class="study-side-card">
+                        <div class="study-side-kicker">Yrkeskompetens</div>
+                        <h3>Varför är VU2 viktigt?</h3>
+                        <p>Utan godkänd VU2 förlorar du din tillfälliga väktarlegitimation. Repetitionspaketet hjälper dig att säkra permanenta kunskaper snabbare.</p>
+                        <div class="study-side-feature"><span class="study-side-icon"><svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg></span><span><strong>Nödvärnsscenarier</strong><span>Interaktiva fallstudier där du bedömer om agerandet var försvarligt.</span></span></div>
+                        <div class="study-side-feature"><span class="study-side-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="m9 15 2 2 4-4"></path></svg></span><span><strong>Teoretiska kontrollprov</strong><span>Slumpade prov som följer branschens kvalitetskrav.</span></span></div>
+                        <div class="study-side-note">Uppdaterat för gällande föreskrifter.</div>
+                    </aside>
+                </div>
+            </div>
+
+            <div id="study-panel-slutprov" class="study-panel" role="tabpanel" aria-labelledby="study-tab-slutprov" data-study-panel="slutprov">
+                <div class="study-layout">
+                    <article class="study-main-card">
+                        <span class="study-pill">Simulera verkligheten</span>
+                        <h3>Smarta quiz & tidspressade slutprov</h3>
+                        <p>Proven blandar viktiga rättsområden, slumpade frågor och tidspress så att träningen känns närmare den riktiga examinationen.</p>
+                        <div class="study-mini-grid">
+                            <div class="study-mini-card"><strong>Snabba quiz</strong><span>Fokusera på specifika områden som laga befogenhet, nödvärn eller rapportskrivning.</span></div>
+                            <div class="study-mini-card"><strong>Fullständigt slutprov</strong><span>Simulera ett prov med tidsgräns och blandade frågor.</span></div>
+                        </div>
+                        <div class="study-cta-row">
+                            <div>
+                                <div class="study-meta-label">Tidtagning & statistik</div>
+                                <div class="study-meta-value">Se dina chanser att klara provet</div>
+                            </div>
+                            <a class="study-primary-link" href="/quiz-demo">Starta gratis quiz-test<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+                        </div>
+                    </article>
+                    <aside class="study-side-card">
+                        <div class="study-side-kicker">Resultat som visar vägen</div>
+                        <h3>Genomgång efter slutprov</h3>
+                        <p>Efter ett slutprov får du poäng, resultat per område och en tydlig bild av vilka frågor du bör repetera.</p>
+                        <div class="study-result-card" aria-label="Exempel på resultatöversikt">
+                            <div class="study-result-row">
+                                <div class="study-result-top"><span>Rättskunskap (PL13, RB 24:7)</span><strong>92%</strong></div>
+                                <div class="study-result-track"><div class="study-result-fill" style="width: 92%"></div></div>
+                            </div>
+                            <div class="study-result-row">
+                                <div class="study-result-top"><span>Nödvärn & nöd</span><strong>85%</strong></div>
+                                <div class="study-result-track"><div class="study-result-fill" style="width: 85%"></div></div>
+                            </div>
+                            <div class="study-result-row">
+                                <div class="study-result-top"><span>Brand & första hjälpen</span><strong>64%</strong></div>
+                                <div class="study-result-track"><div class="study-result-fill is-warning" style="width: 64%"></div></div>
+                            </div>
+                        </div>
+                        <div class="study-side-note">Efter provet ser du exakt vad du bör repetera.</div>
+                    </aside>
+                </div>
+            </div>
+
+            <div id="study-panel-yrket" class="study-panel" role="tabpanel" aria-labelledby="study-tab-yrket" data-study-panel="yrket">
+                <div class="study-layout">
+                    <article class="study-main-card">
+                        <span class="study-pill">Vägen till arbetet</span>
+                        <h3>Allt om väktaryrket och branschen</h3>
+                        <p>Det krävs mer än teori för att lyckas. Här samlar vi vägledning om intervjuer, tester hos bevakningsföretag och lathundar för vardagen i uniform.</p>
+                        <div class="study-subtitle">Karriärverktyg som ingår</div>
+                        <div class="study-check-grid">
+                            <div class="study-check"><span class="study-check-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span><span>CV-mallar för bevakningsbranschen</span></div>
+                            <div class="study-check"><span class="study-check-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Intervjutips och vanliga frågor</span></div>
+                            <div class="study-check"><span class="study-check-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Fysiska krav & konditionstester</span></div>
+                            <div class="study-check"><span class="study-check-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Löneguider & fackliga rättigheter</span></div>
+                        </div>
+                        <div class="study-cta-row">
+                            <div>
+                                <div class="study-meta-label">Inför rekrytering</div>
+                                <div class="study-meta-value">Förbered dig för nästa steg</div>
+                            </div>
+                            <a class="study-primary-link" href="/login.html?mode=sign-up&redirect_url=/platform">Läs karriärguiden<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+                        </div>
+                    </article>
+                    <aside class="study-side-card">
+                        <div class="study-side-kicker">Säkerhetsprövning</div>
+                        <h3>Godkänd av Länsstyrelsen</h3>
+                        <p>Alla väktare måste godkännas vid registerkontroll innan anställning. Vi visar vilka villkor som gäller och vad du behöver ha koll på.</p>
+                        <div class="study-result-card">
+                            <div class="study-side-feature">
+                                <span class="study-side-icon"><svg viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg></span>
+                                <span><strong>Visste du att?</strong><span>Bakgrundskontroll görs hos Polisen och Säkerhetspolisen innan praktisk utbildning kan påbörjas.</span></span>
+                            </div>
+                        </div>
+                        <div class="study-side-note">Din språngbräda ut i arbetslivet.</div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Dynamic Education Explorer Section in Blue Theme -->
-    <section id="utbildningar" class="bg-vaktarLightGray py-20 sm:py-24 border-y border-gray-100">
+    <section id="legacy-utbildningar" class="hidden bg-vaktarLightGray py-20 sm:py-24 border-y border-gray-100" aria-hidden="true">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="text-center max-w-3xl mx-auto mb-16">
@@ -1735,7 +2354,7 @@
                                     <div class="text-xs text-vaktarGray">Inkluderar</div>
                                     <div class="font-bold text-vaktarDark text-sm sm:text-base">350+ övningsfrågor & fullt provmaterial</div>
                                 </div>
-                                <a href="#quiz-demo" class="px-6 py-3 bg-vaktarDark hover:bg-vaktarBlue text-white font-medium text-sm rounded-xl transition duration-300">
+                                <a href="/quiz-demo" class="px-6 py-3 bg-vaktarDark hover:bg-vaktarBlue text-white font-medium text-sm rounded-xl transition duration-300">
                                     Börja öva VU1 gratis
                                 </a>
                             </div>
@@ -1822,7 +2441,7 @@
                                     <div class="text-xs text-vaktarGray">Inkluderar</div>
                                     <div class="font-bold text-vaktarDark text-sm sm:text-base">Scenarioträning & teorifrågor</div>
                                 </div>
-                                <a href="#quiz-demo" class="px-6 py-3 bg-vaktarDark hover:bg-vaktarBlue text-white font-medium text-sm rounded-xl transition duration-300">
+                                <a href="/quiz-demo" class="px-6 py-3 bg-vaktarDark hover:bg-vaktarBlue text-white font-medium text-sm rounded-xl transition duration-300">
                                     Utforska VU2 Material
                                 </a>
                             </div>
@@ -1892,7 +2511,7 @@
                                     <div class="text-xs text-vaktarGray">Tidtagning & statistik</div>
                                     <div class="font-bold text-vaktarDark text-sm sm:text-base">Se dina chanser att klara provet</div>
                                 </div>
-                                <a href="#quiz-demo" class="px-6 py-3 bg-vaktarBlue hover:bg-vaktarBlueHover text-white font-medium text-sm rounded-xl transition duration-300">
+                                <a href="/quiz-demo" class="px-6 py-3 bg-vaktarBlue hover:bg-vaktarBlueHover text-white font-medium text-sm rounded-xl transition duration-300">
                                     Starta Gratis Quiz-Test nedan
                                 </a>
                             </div>
@@ -2024,7 +2643,7 @@
     </section>
 
     <!-- Interactive Quiz Simulator Section in Blue Theme -->
-    <section id="quiz-demo" class="py-20 sm:py-24 bg-white">
+    <section id="legacy-quiz-demo" class="hidden py-20 sm:py-24 bg-white" aria-hidden="true">
         <div class="max-w-4xl mx-auto px-4">
             
             <div class="text-center mb-12">
@@ -2162,7 +2781,7 @@
     </section>
 
     <!-- Plattformens funktioner (Modern features grid) -->
-    <section id="funktioner" class="py-20 bg-white">
+    <section id="legacy-funktioner" class="hidden py-20 bg-white" aria-hidden="true">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="text-center max-w-3xl mx-auto mb-16">
@@ -2225,8 +2844,9 @@
                     <ul class="space-y-2 text-xs">
                         <li><a href="#utbildningar" class="hover:text-white transition">Väktarutbildning 1 (VU1)</a></li>
                         <li><a href="#utbildningar" class="hover:text-white transition">Väktarutbildning 2 (VU2)</a></li>
-                        <li><a href="#quiz-demo" class="hover:text-white transition">Teoretiska Slutprov</a></li>
-                        <li><a href="#quiz-demo" class="hover:text-white transition">Juridiska Snabb-Quiz</a></li>
+                        <li><a href="/quiz-demo" class="hover:text-white transition">Teoretiska Slutprov</a></li>
+                        <li><a href="/quiz-demo" class="hover:text-white transition">Juridiska Snabb-Quiz</a></li>
+                        <li><a href="/studieteknik" class="hover:text-white transition">Studieteknik</a></li>
                     </ul>
                 </div>
                 <div>
@@ -2261,6 +2881,28 @@
 
     <!-- INTERACTIVE SCRIPTS -->
     <script>
+        function switchStudyTab(tabId) {
+            const panels = document.querySelectorAll('[data-study-panel]');
+            const buttons = document.querySelectorAll('[data-study-tab]');
+            const targetPanel = document.querySelector(`[data-study-panel="${tabId}"]`);
+            const targetButton = document.querySelector(`[data-study-tab="${tabId}"]`);
+            if (!targetPanel || !targetButton) return;
+
+            panels.forEach((panel) => {
+                panel.classList.toggle('is-active', panel === targetPanel);
+            });
+
+            buttons.forEach((button) => {
+                const isActive = button === targetButton;
+                button.classList.toggle('is-active', isActive);
+                button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            });
+        }
+
+        document.querySelectorAll('[data-study-tab]').forEach((button) => {
+            button.addEventListener('click', () => switchStudyTab(button.dataset.studyTab));
+        });
+
         // 1. Interactive Tabs Mechanism
         function switchTab(tabId) {
             // Hide all tab contents
@@ -2297,7 +2939,7 @@
         }
 
         function scrollToDemo() {
-            document.getElementById('quiz-demo').scrollIntoView({ behavior: 'smooth' });
+            window.location.href = '/quiz-demo';
         }
 
         const heroQuizQuestions = [

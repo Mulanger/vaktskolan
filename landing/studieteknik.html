@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studieteknik - Vaktskolan</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233455d3'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial' font-size='22' font-weight='700' fill='white'%3EVS%3C/text%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        vaktarBlue: '#0052CC',
+                        vaktarBlueHover: '#0043A4',
+                        vaktarDark: '#111111',
+                        vaktarGray: '#666666',
+                        vaktarLightGray: '#F5F5F7'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-white text-vaktarDark font-sans">
+    <header class="fixed left-0 top-0 z-40 w-full border-b border-gray-200 bg-white/85 backdrop-blur-md">
+        <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+            <a href="/" class="inline-flex items-center gap-3 text-sm font-extrabold uppercase tracking-wider">
+                <span class="flex h-6 w-6 items-center justify-center rounded-full border-4 border-vaktarBlue">
+                    <span class="h-1.5 w-1.5 rounded-full bg-vaktarBlue"></span>
+                </span>
+                Vaktskolan
+            </a>
+            <a href="/" class="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-bold text-vaktarDark transition hover:bg-gray-50">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M19 12H5"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="m12 19-7-7 7-7"></path>
+                </svg>
+                Till startsidan
+            </a>
+        </div>
+    </header>
+
+    <main class="pt-24">
+        <section class="mx-auto max-w-6xl px-4 pb-16 pt-8 text-center sm:px-6 lg:px-8">
+            <div class="mb-4 text-xs font-extrabold uppercase tracking-[0.16em] text-vaktarBlue">Studieteknik</div>
+            <h1 class="mx-auto max-w-4xl text-4xl font-black tracking-tight sm:text-6xl">Träna smartare inför väktarprovet</h1>
+            <p class="mx-auto mt-5 max-w-2xl text-base leading-7 text-vaktarGray sm:text-lg">Vaktskolan är byggd runt aktiv återkallning, direkt feedback och tydlig repetition, så att du lägger tiden på det som faktiskt höjer provresultatet.</p>
+        </section>
+
+        <section class="bg-vaktarLightGray py-16 sm:py-20">
+            <div class="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-4 sm:px-6 md:grid-cols-3 lg:px-8">
+                <article class="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm shadow-slate-900/5">
+                    <div class="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-vaktarBlue">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M12 6.5v13"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M4 19.5A2.5 2.5 0 0 1 6.5 17H12"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M20 19.5A2.5 2.5 0 0 0 17.5 17H12"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M4 4.5h5.5A2.5 2.5 0 0 1 12 7v10"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M20 4.5h-5.5A2.5 2.5 0 0 0 12 7"></path>
+                        </svg>
+                    </div>
+                    <h2 class="mb-3 text-xl font-extrabold tracking-tight">Simulerade prov</h2>
+                    <p class="text-sm leading-6 text-vaktarGray">Tidsinställda prov hjälper dig att vänja dig vid tempot och frågestrukturen innan det riktiga slutprovet.</p>
+                </article>
+
+                <article class="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm shadow-slate-900/5">
+                    <div class="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-vaktarBlue">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M12 3v18"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M5 8h14"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M7 8l-3 7a4 4 0 0 0 6 0L7 8z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M17 8l-3 7a4 4 0 0 0 6 0l-3-7z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="mb-3 text-xl font-extrabold tracking-tight">Fokuserad lagkunskap</h2>
+                    <p class="text-sm leading-6 text-vaktarGray">Svår juridik bryts ned i praktiska exempel, så skillnaden mellan nödvärn, nöd, envarsgripande och laga befogenhet blir tydlig.</p>
+                </article>
+
+                <article class="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm shadow-slate-900/5">
+                    <div class="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-vaktarBlue">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M4 19V5"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M4 19h16"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M8 15l3-3 3 2 5-7"></path>
+                        </svg>
+                    </div>
+                    <h2 class="mb-3 text-xl font-extrabold tracking-tight">Detaljerad statistik</h2>
+                    <p class="text-sm leading-6 text-vaktarGray">Följ dina framsteg och se vilka kapitel du behöver repetera mer innan du skriver provet.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-[1.1fr_.9fr] lg:px-8">
+            <div>
+                <div class="mb-3 text-xs font-extrabold uppercase tracking-[0.16em] text-vaktarBlue">Metod</div>
+                <h2 class="text-3xl font-black tracking-tight sm:text-4xl">Kortare pass, bättre återkoppling</h2>
+                <p class="mt-5 text-base leading-8 text-vaktarGray">I stället för att läsa långa textblock utan kontrollfrågor får du arbeta i korta cykler: läs, svara, få återkoppling och repetera svaga områden. Det gör studierna lättare att hålla igång och enklare att mäta.</p>
+            </div>
+            <div class="rounded-[28px] bg-vaktarDark p-8 text-white">
+                <div class="mb-6 text-xs font-extrabold uppercase tracking-[0.16em] text-blue-300">Så används det</div>
+                <ol class="space-y-5 text-sm leading-6 text-gray-300">
+                    <li><strong class="block text-white">1. Läs en modul</strong>Fokusera på ett avgränsat ämne som nödvärn eller rapportskrivning.</li>
+                    <li><strong class="block text-white">2. Svara på quiz</strong>Testa om kunskapen sitter direkt efter modulen.</li>
+                    <li><strong class="block text-white">3. Repetera svaga delar</strong>Gå tillbaka till de områden där statistiken visar att du tappar poäng.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="border-t border-gray-100 bg-white py-12">
+            <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 text-center sm:px-6 md:flex-row md:text-left lg:px-8">
+                <div>
+                    <h2 class="text-2xl font-black tracking-tight">Vill du prova metoden direkt?</h2>
+                    <p class="mt-2 text-sm text-vaktarGray">Starta den korta quizdemon eller gå tillbaka till landningssidan.</p>
+                </div>
+                <div class="flex flex-col gap-3 sm:flex-row">
+                    <a href="/quiz-demo" class="rounded-full bg-vaktarBlue px-6 py-3 text-sm font-bold text-white transition hover:bg-vaktarBlueHover">Testa gratis quiz</a>
+                    <a href="/" class="rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-bold text-vaktarDark transition hover:bg-gray-50">Till startsidan</a>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
