@@ -3,7 +3,7 @@
 ## InstaPods och miljövariabler
 
 - Podden ska använda Node.js och bygga repots rot med `npm install`, `npm run build` och `npm start`.
-- Sätt `APP_ENV=production` och `SITE_URL=https://vaktskolan.se` i poddens Env-flik. Produktionsbygget stoppas om `SITE_URL` saknas.
+- Sätt `APP_ENV=production` och `SITE_URL=https://vaktskolan.se` i poddens Env-flik. Om InstaPods inte exponerar `SITE_URL` under build använder appen `https://vaktskolan.se` som canonical fallback.
 - Sätt produktionens Clerk- och Supabase-variabler enligt `.env.example`. Rotera alltid en serverhemlighet som har visats i en skärmbild, logg eller chatt innan deployment.
 - Clerk måste använda production instance: `CLERK_PUBLISHABLE_KEY` och `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` ska börja med `pk_live_`, `CLERK_FRONTEND_API_URL` ska vara `https://clerk.vaktskolan.se`, och `CLERK_JWKS_URL` ska vara `https://clerk.vaktskolan.se/.well-known/jwks.json`.
 - DNS-posterna `accounts`, `clerk`, `clk._domainkey`, `clk2._domainkey` och `clkmail` ska vara verifierade i Clerk innan login testas live. Om `clkmail` inte verifieras, kontrollera att target slutar på `.clerk.services`.

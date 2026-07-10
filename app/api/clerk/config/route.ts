@@ -3,8 +3,7 @@ import { NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 function getDefaultFrontendApiUrl() {
-  const siteUrl = process.env.SITE_URL || "";
-  if (!siteUrl) return "";
+  const siteUrl = process.env.SITE_URL || "https://vaktskolan.se";
 
   try {
     const hostname = new URL(siteUrl).hostname.replace(/^www\./, "");

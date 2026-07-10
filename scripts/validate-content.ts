@@ -61,8 +61,4 @@ for (const entry of entries) {
   }
 }
 
-if (process.env.APP_ENV?.toLowerCase() === "production" && !process.env.SITE_URL) {
-  throw new Error("SITE_URL is required for a production deployment.");
-}
-
 console.log(`Validated ${entries.length} MDX pages, including ${requiredCoreSlugs.size + 1} core routes with the homepage.`);

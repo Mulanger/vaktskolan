@@ -4,9 +4,6 @@ export const SITE_DESCRIPTION =
 
 export function getSiteUrl(): URL {
   const configured = process.env.SITE_URL?.trim();
-  if (process.env.APP_ENV?.toLowerCase() === "production" && !configured) {
-    throw new Error("SITE_URL must be configured for the production deployment.");
-  }
   return new URL(configured || "https://vaktskolan.se");
 }
 
