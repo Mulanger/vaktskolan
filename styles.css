@@ -15,8 +15,8 @@
   --success: #059669;
   --shadow: 0 16px 50px rgba(15, 23, 42, 0.08);
   --mobile-app-top-padding: calc(24px + env(safe-area-inset-top, 0px));
-  --portal-sidebar-width: 248px;
-  --portal-sidebar-padding-x: 16px;
+  --portal-sidebar-width: 276px;
+  --portal-sidebar-padding-x: 18px;
   --portal-sidebar-border: #e7ecf2;
   --portal-sidebar-active-bg: #eff4ff;
   --portal-sidebar-active: #1d4ed8;
@@ -81,9 +81,9 @@ body.final-portal-mode .brand-block h1 {
 body.final-portal-mode .brand-block p {
   margin-top: 0;
   color: #64748b;
-  font-size: 12.5px;
-  font-weight: 700;
-  letter-spacing: 0;
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
 }
 
 body.final-portal-mode .main-nav {
@@ -1477,8 +1477,9 @@ body.app-booting .app-boot-screen {
   min-width: 0;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
+  gap: 2px;
   white-space: normal;
+  transform: translateY(1px);
 }
 
 .brand-wordmark {
@@ -1492,7 +1493,7 @@ body.app-booting .app-boot-screen {
   display: block;
   color: #141414;
   font-family: "Hanken Grotesk", "Inter", system-ui, sans-serif;
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: 0;
   line-height: 0.95;
@@ -1534,10 +1535,10 @@ body.app-booting .app-boot-screen {
 
 .brand-block p {
   color: #64748b;
-  font-size: 12.5px;
-  font-weight: 700;
-  letter-spacing: 0;
-  line-height: 1.1;
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1;
   text-transform: none;
 }
 
@@ -1654,8 +1655,8 @@ body.app-booting .app-boot-screen {
 }
 
 .module-card:hover {
-  background: var(--surface);
-  border-color: var(--border);
+  background: #f8fbff;
+  border-color: #dbeafe;
 }
 
 .module-card:disabled,
@@ -1670,8 +1671,8 @@ body.app-booting .app-boot-screen {
 }
 
 .module-card.is-active {
-  background: var(--surface);
-  border-color: #bfdbfe;
+  background: #f5f9ff;
+  border-color: #bfd7fe;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
 }
 
@@ -1717,10 +1718,21 @@ body.app-booting .app-boot-screen {
 }
 
 .module-progress-ring .module-progress-value {
-  color: var(--text);
-  font-size: 11px;
-  font-weight: 900;
+  color: #475569;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
   line-height: 1;
+}
+
+.module-card.is-active .module-progress-ring,
+.module-card.is-active .module-progress-ring .module-progress-value {
+  color: var(--primary);
+}
+
+.module-card.is-active .module-number {
+  background: var(--primary-soft);
+  color: var(--primary);
 }
 
 .module-progress-ring svg {
@@ -1751,14 +1763,19 @@ body.app-booting .app-boot-screen {
 
 .module-card h3 {
   margin: 0 0 6px;
-  color: var(--text);
+  color: #475569;
   font-size: 14px;
-  line-height: 1.25;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.module-card.is-active h3 {
+  color: var(--primary);
 }
 
 .module-card p {
   margin: 0;
-  color: var(--muted);
+  color: #94a3b8;
   font-size: 11px;
 }
 
@@ -2035,8 +2052,22 @@ body.app-booting .app-boot-screen {
   padding: 32px 40px 88px;
 }
 
+body.module-milestone-mode .shell {
+  grid-template-columns: var(--portal-sidebar-width) minmax(0, 1fr) 304px;
+  background: #f8fafc;
+}
+
+body.module-milestone-mode .topbar {
+  display: none;
+}
+
 body.module-milestone-mode .content-inner {
-  width: min(100%, 1220px);
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100%;
+  padding: 16px clamp(20px, 2.4vw, 30px);
 }
 
 .home-panel {
@@ -3212,13 +3243,13 @@ body.final-portal-mode .final-portal-head p {
 .module-milestone-panel {
   position: relative;
   display: block;
-  width: min(100%, 1080px);
+  width: min(100%, 900px);
   margin: 0 auto;
   overflow: hidden;
   border: 1px solid #e2e8f0;
-  border-radius: 16px;
+  border-radius: 14px;
   background: #ffffff;
-  padding: clamp(42px, 4.4vw, 60px) clamp(48px, 5vw, 72px);
+  padding: clamp(22px, 2.2vw, 28px);
   box-shadow: 0 8px 30px rgba(15, 23, 42, 0.04);
   animation: milestone-panel-in 240ms ease-out both;
 }
@@ -3234,28 +3265,28 @@ body.final-portal-mode .final-portal-head p {
 .module-milestone-copy {
   position: relative;
   min-width: 0;
-  max-width: 940px;
+  max-width: none;
 }
 
 .module-milestone-kicker {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 28px;
-  margin-bottom: 24px;
+  min-height: 24px;
+  margin-bottom: 14px;
   border-radius: 999px;
   background: var(--primary-soft);
   color: #1d4ed8;
-  padding: 7px 12px;
-  font-size: 12px;
+  padding: 5px 10px;
+  font-size: 10px;
   font-weight: 900;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .module-milestone-kicker svg {
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
   flex: 0 0 auto;
   stroke-width: 3;
 }
@@ -3268,9 +3299,9 @@ body.final-portal-mode .final-portal-head p {
 
 .module-milestone-copy h1 {
   margin: 0;
-  max-width: 940px;
+  max-width: none;
   color: #0f172a;
-  font-size: clamp(40px, 4.3vw, 52px);
+  font-size: clamp(32px, 3vw, 42px);
   font-weight: 800;
   line-height: 1.04;
   letter-spacing: 0;
@@ -3279,43 +3310,43 @@ body.final-portal-mode .final-portal-head p {
 }
 
 .module-milestone-copy p {
-  margin: 20px 0 0;
-  max-width: 900px;
+  margin: 12px 0 0;
+  max-width: none;
   color: #475569;
-  font-size: clamp(18px, 2vw, 21px);
-  line-height: 1.62;
+  font-size: clamp(15px, 1.25vw, 17px);
+  line-height: 1.46;
 }
 
 .module-milestone-outline {
-  margin: 34px 0 42px;
+  margin: 22px 0 20px;
   border: 1px solid #e8eef6;
   border-radius: 12px;
   background: #f8fafc;
-  padding: 22px 24px;
+  padding: 16px 18px;
 }
 
 .module-milestone-outline h2 {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 0 0 18px;
+  margin: 0 0 12px;
   color: #0f172a;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 .module-milestone-outline h2 svg {
-  width: 17px;
-  height: 17px;
+  width: 15px;
+  height: 15px;
   color: var(--primary);
   stroke-width: 2.4;
 }
 
 .module-milestone-outline ul {
   display: grid;
-  gap: 13px;
+  gap: 8px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -3324,7 +3355,7 @@ body.final-portal-mode .final-portal-head p {
 @media (min-width: 980px) {
   .module-milestone-outline ul {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 13px 30px;
+    gap: 8px 20px;
   }
 
   .module-milestone-outline li.is-summary {
@@ -3335,18 +3366,18 @@ body.final-portal-mode .final-portal-head p {
 .module-milestone-outline li {
   display: flex;
   align-items: flex-start;
-  gap: 13px;
+  gap: 9px;
   min-width: 0;
   color: #0f172a;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 700;
-  line-height: 1.35;
+  line-height: 1.28;
 }
 
 .module-milestone-outline li.is-summary {
-  margin-top: 3px;
+  margin-top: 2px;
   border-top: 1px dashed #dbe3ee;
-  padding-top: 14px;
+  padding-top: 10px;
   font-weight: 800;
 }
 
@@ -3354,13 +3385,13 @@ body.final-portal-mode .final-portal-head p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 26px;
-  height: 26px;
+  min-width: 22px;
+  height: 22px;
   border: 1px solid #dbe8ff;
   border-radius: 6px;
   background: #ffffff;
   color: var(--primary);
-  font-size: 12px;
+  font-size: 10.5px;
   font-weight: 800;
   line-height: 1;
 }
@@ -3372,8 +3403,8 @@ body.final-portal-mode .final-portal-head p {
 }
 
 .module-milestone-outline-index svg {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   stroke-width: 2.5;
 }
 
@@ -3382,15 +3413,15 @@ body.final-portal-mode .final-portal-head p {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   max-width: 100%;
-  margin: 0 0 44px;
+  margin: 0 0 18px;
   border-top: 1px solid var(--border);
 }
 
 .module-milestone-details div {
   display: grid;
-  gap: 8px;
+  gap: 5px;
   min-width: 0;
-  padding: 32px 30px 0 0;
+  padding: 18px 20px 0 0;
 }
 
 .module-milestone-details div + div {
@@ -3401,24 +3432,24 @@ body.final-portal-mode .final-portal-head p {
 .module-milestone-detail-label {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   color: #94a3b8;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .module-milestone-detail-label svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   flex: 0 0 auto;
   stroke-width: 2.3;
 }
 
 .module-milestone-details strong {
   color: #0f172a;
-  font-size: clamp(20px, 2.2vw, 24px);
+  font-size: clamp(16px, 1.45vw, 18px);
   font-weight: 800;
   line-height: 1.25;
 }
@@ -3429,13 +3460,13 @@ body.final-portal-mode .final-portal-head p {
   justify-content: center;
   gap: 10px;
   width: fit-content;
-  min-height: 64px;
+  min-height: 48px;
   border: 0;
   border-radius: 12px;
   background: var(--primary);
   color: white;
-  padding: 18px 38px;
-  font-size: 18px;
+  padding: 12px 24px;
+  font-size: 15px;
   font-weight: 800;
   box-shadow: 0 16px 32px rgba(37, 99, 235, 0.28);
   transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
@@ -3455,8 +3486,8 @@ body.final-portal-mode .final-portal-head p {
 }
 
 .module-milestone-start svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 
 @keyframes milestone-panel-in {
@@ -5766,6 +5797,10 @@ body.modal-open {
     grid-template-columns: var(--portal-sidebar-width) minmax(0, 1fr);
   }
 
+  body.module-milestone-mode .shell {
+    grid-template-columns: var(--portal-sidebar-width) minmax(0, 1fr);
+  }
+
   .scenario-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -5910,7 +5945,7 @@ body.modal-open {
   .module-milestone-panel {
     min-height: auto;
     width: min(100%, 900px);
-    padding: 46px 38px;
+    padding: 28px 24px;
   }
 }
 
@@ -6302,9 +6337,9 @@ body.course-hub-modern-mode .brand-block h1 {
 body.course-hub-modern-mode .brand-block p {
   margin-top: 0;
   color: #64748b;
-  font-size: 12.5px;
-  font-weight: 700;
-  letter-spacing: 0;
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
 }
 
 body.course-hub-modern-mode .main-nav {
@@ -6328,7 +6363,7 @@ body.course-hub-modern-mode .nav-item svg {
 }
 
 body.course-hub-modern-mode .module-list-wrap {
-  padding: 8px 16px 18px;
+  padding: 8px var(--portal-sidebar-padding-x) 18px;
 }
 
 body.course-hub-modern-mode .section-label-row {
@@ -6353,64 +6388,75 @@ body.course-hub-modern-mode .module-list {
 
 body.course-hub-modern-mode .module-card {
   min-height: auto;
-  border-color: #e7ecf2;
-  border-radius: 10px;
-  background: #ffffff;
-  padding: 12px 13px;
+  border-color: transparent;
+  border-radius: 12px;
+  background: transparent;
+  padding: 12px 58px 12px 12px;
   box-shadow: none;
 }
 
 body.course-hub-modern-mode .module-card.is-active {
   border-color: #bfd7fe;
   background: #f5f9ff;
-  box-shadow: none;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
 }
 
 body.course-hub-modern-mode .module-card.is-active::before {
-  display: none;
+  display: block;
 }
 
 body.course-hub-modern-mode .module-card h3 {
-  margin-top: 9px;
-  font-size: 13px;
-  font-weight: 650;
-  line-height: 1.35;
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #475569;
+}
+
+body.course-hub-modern-mode .module-card.is-active h3 {
+  color: var(--primary);
 }
 
 body.course-hub-modern-mode .module-card p {
-  margin-top: 4px;
+  margin-top: 0;
   color: #94a3b8;
   font-size: 11px;
 }
 
 body.course-hub-modern-mode .module-number {
-  width: 22px;
-  height: 22px;
-  background: #f1f5f9;
-  color: #64748b;
-  font-size: 11px;
+  width: auto;
+  height: auto;
+  background: var(--primary-soft);
+  color: var(--primary);
+  padding: 2px 8px;
+  font-size: 12px;
 }
 
 body.course-hub-modern-mode .module-card.is-active .module-number {
-  background: var(--primary);
-  color: #ffffff;
+  background: var(--primary-soft);
+  color: var(--primary);
 }
 
 body.course-hub-modern-mode .module-progress-ring {
-  width: auto;
-  min-width: 30px;
-  height: 22px;
-  border: 1px solid #e7ecf2;
-  border-radius: 999px;
-  background: #ffffff;
-  color: #94a3b8;
-  padding: 3px 8px;
-  font-size: 10.5px;
+  top: 10px;
+  right: 10px;
+  width: 42px;
+  min-width: 0;
+  height: 42px;
+  border: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, var(--surface) 54%, transparent 55%),
+    conic-gradient(var(--teal) var(--module-progress-deg, 0deg), #dbe3ec 0deg);
+  padding: 0;
 }
 
 body.course-hub-modern-mode .module-card.is-active .module-progress-ring {
-  border-color: #bfd7fe;
-  color: #1d4ed8;
+  color: var(--primary);
+}
+
+body.course-hub-modern-mode .module-card.is-active .module-progress-ring .module-progress-value {
+  color: var(--primary);
 }
 
 body.course-hub-modern-mode .profile-block {
@@ -7157,9 +7203,9 @@ body.quiz-overview-mode .brand-block h1 {
 body.quiz-overview-mode .brand-block p {
   margin-top: 0;
   color: #64748b;
-  font-size: 12.5px;
-  font-weight: 700;
-  letter-spacing: 0;
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
 }
 
 body.quiz-overview-mode .main-nav {
@@ -9005,9 +9051,9 @@ body.final-exam-result-mode .brand-block h1 {
 body.final-exam-result-mode .brand-block p {
   margin-top: 0;
   color: #64748b;
-  font-size: 12.5px;
-  font-weight: 700;
-  letter-spacing: 0;
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
 }
 
 body.final-exam-result-mode .main-nav {
@@ -9068,9 +9114,9 @@ body.final-exam-result-mode .profile-block {
   body:is(.final-portal-mode, .course-hub-modern-mode, .quiz-overview-mode, .final-exam-result-mode) .brand-block p {
     margin-top: 0;
     color: #64748b;
-    font-size: 12.5px;
-    font-weight: 700;
-    letter-spacing: 0;
+    font-size: 7.5px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
   }
 
   body:is(.final-portal-mode, .course-hub-modern-mode, .quiz-overview-mode, .final-exam-result-mode) .main-nav {
