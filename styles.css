@@ -1725,9 +1725,12 @@ body.app-booting .app-boot-screen {
   line-height: 1;
 }
 
-.module-card.is-active .module-progress-ring,
-.module-card.is-active .module-progress-ring .module-progress-value {
+.module-card.is-active .module-progress-ring {
   color: var(--primary);
+}
+
+.module-card.is-active .module-progress-ring .module-progress-value {
+  color: #475569;
 }
 
 .module-card.is-active .module-number {
@@ -6456,7 +6459,7 @@ body.course-hub-modern-mode .module-card.is-active .module-progress-ring {
 }
 
 body.course-hub-modern-mode .module-card.is-active .module-progress-ring .module-progress-value {
-  color: var(--primary);
+  color: #475569;
 }
 
 body.course-hub-modern-mode .profile-block {
