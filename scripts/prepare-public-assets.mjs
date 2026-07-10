@@ -1,5 +1,5 @@
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
@@ -10,7 +10,8 @@ const siteAssetsRoot = join(publicRoot, "site-assets");
 
 for (const target of [legacyRoot, siteAssetsRoot]) {
   const resolvedTarget = resolve(target);
-  if (!resolvedTarget.startsWith(`${root}\\`)) {
+  const relativeTarget = relative(root, resolvedTarget);
+  if (relativeTarget === ".." || relativeTarget.startsWith("../") || relativeTarget.startsWith("..\\") || isAbsolute(relativeTarget)) {
     throw new Error(`Refusing to prepare assets outside workspace: ${target}`);
   }
   rmSync(target, { recursive: true, force: true });
