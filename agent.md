@@ -1,8 +1,21 @@
 # Agent Handoff - Vaktskolan
 
-Senast uppdaterad: 2026-07-07.
+Senast uppdaterad: 2026-07-10.
 
 Det här dokumentet beskriver appen i `D:\vaktskolan`: hur dashboarden och landing page fungerar, hur utbildningsmaterialet är uppbyggt, vilka lokala beslut som redan är tagna, och var framtida ändringar bör göras.
+
+## Aktuell drift och publik arkitektur (2026-07-10)
+
+- Produktion hostas i InstaPods-podden `vaktskolan` som en Node.js-app. Vercel används inte.
+- Den publika webbplatsen är migrerad till Next.js App Router i repots rot. `npm run build` bygger och `npm start` startar Next på `0.0.0.0` samt den `PORT` som hostingmiljön tilldelar.
+- Den ursprungliga landningssidans visuella design i `landing/index.html` är byggkälla för Next-startsidan via `lib/original-landing.ts`. Den ska inte ersättas med en ny design utan uttryckligt godkännande.
+- Den gamla dashboarden och auth-sidan paketeras av `scripts/prepare-public-assets.mjs` och nås via `/plattform` respektive `/login`. De är `noindex`.
+- InstaPods Env ska minst innehålla `APP_ENV=production`, `SITE_URL=https://vaktskolan.se`, Clerk production-värdena i `.env.example` samt Supabase-värdena.
+- Clerk i produktion får inte använda `pk_test` eller `*.clerk.accounts.dev`. `CLERK_PUBLISHABLE_KEY`/`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` ska vara `pk_live...` och `CLERK_FRONTEND_API_URL` ska vara `https://clerk.vaktskolan.se`.
+- Endast canonical-hostnamnet får indexeras. Lokala adresser, poddomäner och preview-hostar får `X-Robots-Tag: noindex` av `proxy.ts`.
+- Deploymentinstruktioner och lanseringsgrind finns i `docs/seo-launch-checklist.md`.
+
+Avsnitten nedan beskriver i stor utsträckning legacy-plattformens interna funktioner. Påståenden om att root-sajten saknar byggsystem eller npm-dependencies är historiska och ska inte användas för den publika Next-ytan.
 
 ## Kort Sammanfattning
 
@@ -312,7 +325,7 @@ Clerk-komponenterna laddas med svensk localization via `@clerk/localizations` oc
 
 Status 2026-07-07: `auth.js` har robustare mount-logik för Clerk-formuläret. Sign in/sign up monteras i en separat `data-auth-clerk-root`, mounten kontrolleras efter render, och sidan försöker montera om formuläret om containern blir tom vid hash-/historiknavigering eller fokusbyte. `login.html` cache-bustar detta med `auth.js?v=20260707-mobile-auth` och `auth.css?v=20260707-mobile-auth`. Mobilvyn använder en egen toppbar, maskot, dynamisk mobilrubrik och kompakt Clerk-layout; skapa-konto-copy ska vara `Skapa ett konto.` med `konto.` blått och undertiteln `Innan du börjar behöver du skapa ett konto.`
 
-Status 2026-07-05: Clerk publishable key är inlagd som statisk fallback i `authProvider.js`, så login-sidan kan fungera även när appen körs via Python/static server utan `/api/clerk/config`. Publika Clerk-värden som används: frontend API URL `https://main-caribou-31.clerk.accounts.dev`, backend API URL `https://api.clerk.com` och JWKS URL `https://main-caribou-31.clerk.accounts.dev/.well-known/jwks.json`. Node-servern accepterar även `CLERK_PUBLISHABLE_KEY`, `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `VITE_CLERK_PUBLISHABLE_KEY`, `CLERK_FRONTEND_API_URL`, `CLERK_BACKEND_API_URL` och `CLERK_JWKS_URL` från `.env`. Clerk secret key ska inte sparas i projektfiler och används inte av frontendflödet.
+Status 2026-07-10: Den statiska Clerk test-fallbacken är borttagen ur `authProvider.js`. Login kräver `/api/clerk/config`; i produktion returnerar endpointen inte `ok: true` om publishable key saknas eller börjar med `pk_test_`. Production ska använda custom frontend API `https://clerk.vaktskolan.se` och JWKS `https://clerk.vaktskolan.se/.well-known/jwks.json`. Node-servern accepterar även `CLERK_PUBLISHABLE_KEY`, `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `VITE_CLERK_PUBLISHABLE_KEY`, `CLERK_FRONTEND_API_URL`, `CLERK_BACKEND_API_URL` och `CLERK_JWKS_URL` från `.env`. Clerk secret key ska inte sparas i projektfiler och används inte av frontendflödet.
 
 ### Quiz Portal-Schema
 
@@ -933,7 +946,7 @@ Efter ändringar i landing page:
 - Quiz Portal-schema finns som SQL-migration och är redan körd i Supabase-projektet.
 - Scenariofrågorna finns som SQL-seed och REST-importskript, och seed/import är redan körd i Supabase-projektet.
 - `.env` innehåller riktiga nycklar och är ignorerad av `.gitignore`. Dela inte secret key till frontend eller GitHub.
-- Clerk-auth använder publishable key i browsern. `authProvider.js` har en statisk publishable fallback för Python/static server, och Node-servern kan också läsa publishable key från `.env`. Clerk secret key får aldrig skickas till browsern eller sparas i projektfiler.
+- Clerk-auth använder publishable key i browsern via `/api/clerk/config`. `authProvider.js` har ingen statisk publishable fallback; Node/Next-servern läser publishable key från env och blockerar `pk_test_` i produktion. Clerk secret key får aldrig skickas till browsern eller sparas i projektfiler.
 - Clerk secret key delades i chatten 2026-07-05 och bör roteras i Clerk Dashboard.
 - Databaslösenordet bör roteras i Supabase Dashboard eftersom det delades i chatten under setupen.
 - Slutprovsmodulen finns i `utbildning.md` som en modul för att parsern ska kunna läsa frågebanken, men i UI ska den behandlas som slutprov, inte som vanlig modul.

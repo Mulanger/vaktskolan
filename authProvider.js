@@ -1,8 +1,5 @@
 (function () {
   const CONFIG_ENDPOINT = "/api/clerk/config";
-  const FALLBACK_PUBLISHABLE_KEY = "pk_test_bWFpbi1jYXJpYm91LTMxLmNsZXJrLmFjY291bnRzLmRldiQ";
-  const FALLBACK_FRONTEND_API_URL = "https://main-caribou-31.clerk.accounts.dev";
-  const FALLBACK_JWKS_URL = "https://main-caribou-31.clerk.accounts.dev/.well-known/jwks.json";
   const LOCALIZATION_MODULE_URL = "https://esm.sh/@clerk/localizations@4.12.0?bundle";
   const CLERK_JS_VERSION = "6";
   const CLERK_UI_VERSION = "1";
@@ -73,10 +70,10 @@
 
   async function loadConfig() {
     let config = {
-      ok: Boolean(FALLBACK_PUBLISHABLE_KEY),
-      publishableKey: FALLBACK_PUBLISHABLE_KEY,
-      frontendApiUrl: FALLBACK_FRONTEND_API_URL,
-      jwksUrl: FALLBACK_JWKS_URL,
+      ok: false,
+      publishableKey: "",
+      frontendApiUrl: "",
+      jwksUrl: "",
     };
 
     try {
@@ -87,11 +84,7 @@
       if (response.ok && contentType.includes("application/json")) {
         const serverConfig = await response.json();
         if (serverConfig?.publishableKey) {
-          config = {
-            frontendApiUrl: FALLBACK_FRONTEND_API_URL,
-            jwksUrl: FALLBACK_JWKS_URL,
-            ...serverConfig,
-          };
+          config = serverConfig;
         }
       }
     } catch (error) {

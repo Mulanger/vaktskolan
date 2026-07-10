@@ -1,0 +1,2911 @@
+{
+  "meta": {
+    "name": "Väktarskolan – flashcards",
+    "version": "2.0",
+    "language": "sv",
+    "generated": "2026-07-10",
+    "count": 200,
+    "notes": "200 begrepp för blivande väktare, fördelade på 10 kategorier. Kort 1–100 är oförändrade från v1.0. Kort 101–200 (tillagda 2026-07-10) utökar varje kategori med ytterligare VU1-begrepp samt fördjupning ur VU2 – bland annat försök och medverkan, uppsiktskedjan, rättskedjan och rättsvårdande myndigheter, normalbild och förberedelsetecken, larmteknik, handfängselsäkerhet, akutlägen, droger samt etik under press. Fältet front är den visningsklara framsidan (begrepp + ev. lagrum, samma format som demokortet 'Envarsgripande (RB 24:7)'), term är begreppet utan lagrum och lawRef är den fullständiga hänvisningen (null när lagrum saknas). back är baksidans definition. level anges per kort (grund/fordjupning) och kan avvika inom en kategori. Lagrum är kontrollerade mot utbildningsmaterialet och gängse lagtext i juli 2026, men innehållet bör juridikgranskas före publicering precis som scenariobanken."
+  },
+  "categories": [
+    {
+      "id": "juridik_ingripanden",
+      "label": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "count": 38
+    },
+    {
+      "id": "straffratt_brott",
+      "label": "Straffrätt – relevanta brott",
+      "level": "grund",
+      "count": 22
+    },
+    {
+      "id": "bransch_regler",
+      "label": "Bevakningsbranschen – regler och roller",
+      "level": "grund",
+      "count": 17
+    },
+    {
+      "id": "bevakningsformer",
+      "label": "Bevakningsformer och arbetssätt",
+      "level": "grund",
+      "count": 21
+    },
+    {
+      "id": "utrustning",
+      "label": "Utrustning och uniform",
+      "level": "grund",
+      "count": 21
+    },
+    {
+      "id": "akutsjukvard",
+      "label": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "count": 21
+    },
+    {
+      "id": "brandskydd",
+      "label": "Brandskydd",
+      "level": "grund",
+      "count": 18
+    },
+    {
+      "id": "arbetsmiljo",
+      "label": "Arbetsmiljö",
+      "level": "grund",
+      "count": 16
+    },
+    {
+      "id": "konflikthantering",
+      "label": "Konflikthantering och självskydd",
+      "level": "grund",
+      "count": 15
+    },
+    {
+      "id": "etik_integritet",
+      "label": "Yrkesetik och integritet",
+      "level": "grund",
+      "count": 11
+    }
+  ],
+  "flashcards": [
+    {
+      "id": 1,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Envarsgripande",
+      "lawRef": "RB 24 kap. 7 § 2 st.",
+      "front": "Envarsgripande (RB 24:7)",
+      "back": "Rätt för var och en att gripa den som har begått ett brott på vilket fängelse kan följa, om personen påträffas på bar gärning eller flyende fot. Envar får även gripa den som är efterlyst för brott. Den gripne ska skyndsamt överlämnas till närmaste polisman.",
+      "tags": [
+        "gripande",
+        "juridik"
+      ]
+    },
+    {
+      "id": 2,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Bar gärning",
+      "lawRef": null,
+      "front": "Bar gärning",
+      "back": "Gärningspersonen upptäcks medan brottet begås eller i omedelbar anslutning till brottet och brottsplatsen. Ett av grundkraven för att ett envarsgripande ska vara tillåtet.",
+      "tags": [
+        "gripande",
+        "juridik"
+      ]
+    },
+    {
+      "id": 3,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Flyende fot",
+      "lawRef": null,
+      "front": "Flyende fot",
+      "back": "Gärningspersonen flyr från brottsplatsen direkt efter brottet och förföljs utan avbrott. Kravet på oavbruten iakttagelse är centralt – tappar du personen ur sikte under en längre stund upphör i regel rätten att gripa.",
+      "tags": [
+        "gripande",
+        "juridik"
+      ]
+    },
+    {
+      "id": 4,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Nödvärn",
+      "lawRef": "BrB 24 kap. 1 §",
+      "front": "Nödvärn (BrB 24:1)",
+      "back": "Rätten att försvara sig själv, andra eller egendom mot bland annat ett påbörjat eller överhängande brottsligt angrepp. Försvarsvåldet är tillåtet så länge det inte är uppenbart oförsvarligt. Nödvärnsrätten gäller alla – även väktare.",
+      "tags": [
+        "nodvarn",
+        "vald",
+        "juridik"
+      ]
+    },
+    {
+      "id": 5,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "De fyra nödvärnssituationerna",
+      "lawRef": "BrB 24 kap. 1 §",
+      "front": "De fyra nödvärnssituationerna (BrB 24:1)",
+      "back": "1) Påbörjat eller överhängande brottsligt angrepp på person eller egendom. 2) Någon hindrar med våld eller hot att egendom återtas på bar gärning. 3) Någon har olovligen trängt in i eller försöker tränga in i rum, hus, gård eller fartyg. 4) Någon vägrar att lämna en bostad efter tillsägelse.",
+      "tags": [
+        "nodvarn",
+        "juridik"
+      ]
+    },
+    {
+      "id": 6,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Uppenbart oförsvarligt",
+      "lawRef": "BrB 24 kap. 1 §",
+      "front": "Uppenbart oförsvarligt",
+      "back": "Gränsen för nödvärn: försvarsvåldet får inte stå i klar disproportion till angreppet. Bedömningen görs utifrån angreppets beskaffenhet, det angripnas betydelse och omständigheterna i övrigt. Viss marginal finns – men tydliga övertramp blir straffbara.",
+      "tags": [
+        "nodvarn",
+        "vald",
+        "juridik"
+      ]
+    },
+    {
+      "id": 7,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Nöd",
+      "lawRef": "BrB 24 kap. 4 §",
+      "front": "Nöd (BrB 24:4)",
+      "back": "Rätt att begå en annars otillåten handling när fara hotar liv, hälsa, egendom eller något annat viktigt intresse som skyddas av rättsordningen – till exempel att krossa en bilruta för att rädda ett barn ur en överhettad bil. Handlingen får inte vara oförsvarlig.",
+      "tags": [
+        "nod",
+        "juridik"
+      ]
+    },
+    {
+      "id": 8,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "fordjupning",
+      "term": "Excess",
+      "lawRef": "BrB 24 kap. 6 §",
+      "front": "Excess (BrB 24:6)",
+      "back": "Att gå över gränsen för vad nödvärn, nöd eller laga befogenhet tillåter. Kan ändå vara fritt från ansvar om situationen var sådan att personen svårligen kunde besinna sig – till exempel vid ett plötsligt och mycket skrämmande angrepp.",
+      "tags": [
+        "nodvarn",
+        "vald",
+        "juridik"
+      ]
+    },
+    {
+      "id": 9,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "fordjupning",
+      "term": "Putativt nödvärn",
+      "lawRef": null,
+      "front": "Putativt nödvärn",
+      "back": "Inbillat nödvärn: personen tror felaktigt att en nödvärnssituation föreligger, till exempel att en leksakspistol är ett riktigt vapen. Bedömningen görs då utifrån situationen så som personen uppfattade den.",
+      "tags": [
+        "nodvarn",
+        "juridik"
+      ]
+    },
+    {
+      "id": 10,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Laga befogenhet",
+      "lawRef": "Polislagen 10 § första stycket 2 via 29 §",
+      "front": "Laga befogenhet (PL 10 § via 29 §)",
+      "back": "Rätten att använda försvarligt våld för att genomföra en laglig tjänsteåtgärd. För väktare gäller den framför allt vid envarsgripande: möts du av motstånd får du använda det våld som behövs och är försvarligt för att genomföra gripandet.",
+      "tags": [
+        "vald",
+        "gripande",
+        "juridik"
+      ]
+    },
+    {
+      "id": 11,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Proportionalitetsprincipen",
+      "lawRef": null,
+      "front": "Proportionalitetsprincipen",
+      "back": "Åtgärdens art, styrka och varaktighet ska stå i rimligt förhållande till det du vill uppnå. Skadan eller olägenheten som ingripandet orsakar får aldrig vara större än nyttan – gäller vid allt våld och tvång.",
+      "tags": [
+        "vald",
+        "juridik",
+        "principer"
+      ]
+    },
+    {
+      "id": 12,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Behovsprincipen",
+      "lawRef": null,
+      "front": "Behovsprincipen",
+      "back": "Våld eller tvång får bara användas när det verkligen behövs och mildare medel är otillräckliga – och ska upphöra omedelbart när målet är uppnått. Prova alltid dialog först om situationen tillåter.",
+      "tags": [
+        "vald",
+        "juridik",
+        "principer"
+      ]
+    },
+    {
+      "id": 13,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Skyddsvisitation",
+      "lawRef": "Polislagen 19 § första stycket 1 via 29 §",
+      "front": "Skyddsvisitation (PL 19 § via 29 §)",
+      "back": "Ytlig undersökning av en gripen persons kläder för att söka efter vapen och andra farliga föremål – av säkerhetsskäl. Den som med laga stöd verkställer ett frihetsberövande, till exempel en väktare vid envarsgripande, får skyddsvisitera i anslutning till gripandet.",
+      "tags": [
+        "gripande",
+        "visitation",
+        "juridik"
+      ]
+    },
+    {
+      "id": 14,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Kroppsvisitation",
+      "lawRef": "RB 28 kap. 11 §",
+      "front": "Kroppsvisitation (RB 28:11)",
+      "back": "En mer ingående undersökning av någons kläder och medhavda föremål, till exempel väskor, för att söka efter bevis. Detta är en straffprocessuell tvångsåtgärd som väktare inte har rätt att utföra – förväxla den inte med skyddsvisitation.",
+      "tags": [
+        "visitation",
+        "juridik"
+      ]
+    },
+    {
+      "id": 15,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "fordjupning",
+      "term": "Beslag vid envarsgripande",
+      "lawRef": "RB 27 kap. 4 §",
+      "front": "Beslag vid envarsgripande (RB 27:4)",
+      "back": "Den som med laga rätt griper en misstänkt får ta föremål som då påträffas i beslag, till exempel stöldgods eller vapen. Föremålen ska tillsammans med den gripne skyndsamt överlämnas till polisen – dokumentera vad som tagits om hand.",
+      "tags": [
+        "gripande",
+        "beslag",
+        "juridik"
+      ]
+    },
+    {
+      "id": 16,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Tjänstemannaskydd",
+      "lawRef": "7 § lagen (1974:191) om bevakningsföretag och BrB 17 kap. 5 §",
+      "front": "Tjänstemannaskydd (7 § LOB)",
+      "back": "Förstärkt straffrättsligt skydd. Enligt 7 § lagen om bevakningsföretag har väktare i bevakningstjänst det skydd som avses i 17 kap. 5 § brottsbalken. Den som angriper en väktare i tjänst kan därmed dömas för till exempel våld mot tjänsteman i stället för enbart misshandel.",
+      "tags": [
+        "tjanstemannaskydd",
+        "juridik"
+      ]
+    },
+    {
+      "id": 17,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Våld eller hot mot tjänsteman",
+      "lawRef": "BrB 17 kap. 1 §",
+      "front": "Våld eller hot mot tjänsteman (BrB 17:1)",
+      "back": "Att med våld eller hot om våld angripa någon i eller på grund av dennes tjänsteutövning. Skyddet omfattar bland annat poliser och ordningsvakter – och väktare när de utför bevakningstjänst.",
+      "tags": [
+        "tjanstemannaskydd",
+        "vald",
+        "juridik"
+      ]
+    },
+    {
+      "id": 18,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "fordjupning",
+      "term": "Förgripelse mot tjänsteman",
+      "lawRef": "BrB 17 kap. 2 §",
+      "front": "Förgripelse mot tjänsteman (BrB 17:2)",
+      "back": "Annan otillbörlig gärning än våld eller hot som orsakar lidande, skada eller olägenhet för tjänstemannen på grund av tjänsten – till exempel att som hämnd för ett ingripande skära sönder däcken på väktarens privata bil.",
+      "tags": [
+        "tjanstemannaskydd",
+        "juridik"
+      ]
+    },
+    {
+      "id": 19,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Våldsamt motstånd",
+      "lawRef": "BrB 17 kap. 4 §",
+      "front": "Våldsamt motstånd (BrB 17:4)",
+      "back": "Att sätta sig till motvärn eller på annat sätt med våld försöka hindra någons skyddade tjänsteutövning utan att direkt angripa personen – till exempel att spjärna emot, rycka sig loss eller klamra sig fast vid ett gripande.",
+      "tags": [
+        "tjanstemannaskydd",
+        "gripande",
+        "juridik"
+      ]
+    },
+    {
+      "id": 20,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "fordjupning",
+      "term": "Gripande av barn under 15 år",
+      "lawRef": "LUL 35 §",
+      "front": "Gripande av barn under 15 år (LUL 35 §)",
+      "back": "Även den som är under 15 år får gripas av envar om personen påträffas på bar gärning eller på flykt från brottsplatsen och brottet är sådant att fängelse kan följa. Den gripne ska skyndsamt överlämnas till närmaste polisman – barn ska alltid hanteras med extra varsamhet.",
+      "tags": [
+        "gripande",
+        "unga",
+        "juridik"
+      ]
+    },
+    {
+      "id": 21,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "fordjupning",
+      "term": "Uppsåt",
+      "lawRef": "BrB 1 kap. 2 §",
+      "front": "Uppsåt",
+      "back": "Att begå en gärning med vett och vilja. Huvudregeln i brottsbalken är att en gärning bara är brott om den begås uppsåtligen, om inte oaktsamhet uttryckligen är straffbelagd. Viktigt vid butikstillgrepp – ren glömska är inte stöld.",
+      "tags": [
+        "straffratt",
+        "juridik"
+      ]
+    },
+    {
+      "id": 22,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "grund",
+      "term": "Straffmyndighetsålder",
+      "lawRef": "BrB 1 kap. 6 §",
+      "front": "Straffmyndighetsålder (BrB 1:6)",
+      "back": "15 år. Den som begår brott innan hen fyllt 15 år får inte dömas till påföljd. Barnet kan i vissa fall ändå gripas (LUL 35 §) och blir föremål för socialtjänstens insatser i stället för straff.",
+      "tags": [
+        "straffratt",
+        "unga",
+        "juridik"
+      ]
+    },
+    {
+      "id": 23,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "grund",
+      "term": "Stöld",
+      "lawRef": "BrB 8 kap. 1 §",
+      "front": "Stöld (BrB 8:1)",
+      "back": "Att olovligen ta något som tillhör någon annan med uppsåt att tillägna sig det, när tagandet innebär skada. Straffet är fängelse i högst två år – envarsgripande är alltså möjligt.",
+      "tags": [
+        "straffratt",
+        "tillgrepp",
+        "butik"
+      ]
+    },
+    {
+      "id": 24,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "grund",
+      "term": "Ringa stöld",
+      "lawRef": "BrB 8 kap. 2 §",
+      "front": "Ringa stöld (BrB 8:2)",
+      "back": "Kallades tidigare snatteri. Stöld som med hänsyn till värdet och övriga omständigheter är ringa – vid butikstillgrepp går värdegränsen enligt Högsta domstolens praxis vid cirka 1 250 kronor. Straffskalan är böter eller fängelse i högst sex månader, så envarsgripande är möjligt.",
+      "tags": [
+        "straffratt",
+        "tillgrepp",
+        "butik"
+      ]
+    },
+    {
+      "id": 25,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "grund",
+      "term": "Rån",
+      "lawRef": "BrB 8 kap. 5 §",
+      "front": "Rån (BrB 8:5)",
+      "back": "Stöld med våld eller med hot som innebär eller framstår som trängande fara. Ett butikstillgrepp kan uppgraderas till rån om gärningspersonen anträffas på bar gärning och använder våld eller allvarligt hot för att behålla godset.",
+      "tags": [
+        "straffratt",
+        "vald",
+        "butik"
+      ]
+    },
+    {
+      "id": 26,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "fordjupning",
+      "term": "Egenmäktigt förfarande",
+      "lawRef": "BrB 8 kap. 8 §",
+      "front": "Egenmäktigt förfarande (BrB 8:8)",
+      "back": "Att olovligen ta eller använda något utan avsikt att behålla det, eller att på annat sätt rubba någon annans besittning – till exempel att utan lov låna en cykel och lämna den på annan plats.",
+      "tags": [
+        "straffratt",
+        "tillgrepp"
+      ]
+    },
+    {
+      "id": 27,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "grund",
+      "term": "Misshandel",
+      "lawRef": "BrB 3 kap. 5 §",
+      "front": "Misshandel (BrB 3:5)",
+      "back": "Att tillfoga en annan person kroppsskada, sjukdom eller smärta, eller att försätta personen i vanmakt eller något annat sådant tillstånd.",
+      "tags": [
+        "straffratt",
+        "vald"
+      ]
+    },
+    {
+      "id": 28,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "grund",
+      "term": "Olaga hot",
+      "lawRef": "BrB 4 kap. 5 §",
+      "front": "Olaga hot (BrB 4:5)",
+      "back": "Att hota någon med brottslig gärning på ett sätt som är ägnat att framkalla allvarlig rädsla för egen eller annans säkerhet till person, egendom, frihet eller frid.",
+      "tags": [
+        "straffratt",
+        "hot"
+      ]
+    },
+    {
+      "id": 29,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "grund",
+      "term": "Ofredande",
+      "lawRef": "BrB 4 kap. 7 §",
+      "front": "Ofredande (BrB 4:7)",
+      "back": "Att fysiskt antasta någon, utsätta någon för störande kontakter eller annat hänsynslöst agerande, om gärningen är ägnad att kränka personens frid på ett kännbart sätt.",
+      "tags": [
+        "straffratt",
+        "frid"
+      ]
+    },
+    {
+      "id": 30,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "grund",
+      "term": "Hemfridsbrott och olaga intrång",
+      "lawRef": "BrB 4 kap. 6 §",
+      "front": "Hemfridsbrott och olaga intrång (BrB 4:6)",
+      "back": "Hemfridsbrott: att olovligen tränga in eller stanna kvar i någons bostad. Olaga intrång: motsvarande i till exempel kontor, butiker, lagerlokaler eller inhägnade områden. Vanliga situationer vid bevakning av fastigheter och byggarbetsplatser.",
+      "tags": [
+        "straffratt",
+        "intrang",
+        "fastighet"
+      ]
+    },
+    {
+      "id": 31,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "grund",
+      "term": "Skadegörelse",
+      "lawRef": "BrB 12 kap. 1 §",
+      "front": "Skadegörelse (BrB 12:1)",
+      "back": "Att förstöra eller skada någon annans egendom, till exempel klotter eller krossade rutor. Straffet är fängelse i högst två år, vilket gör envarsgripande möjligt vid bar gärning.",
+      "tags": [
+        "straffratt",
+        "skadegorelse",
+        "fastighet"
+      ]
+    },
+    {
+      "id": 32,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "fordjupning",
+      "term": "Häleri",
+      "lawRef": "BrB 9 kap. 6 §",
+      "front": "Häleri (BrB 9:6)",
+      "back": "Att ta befattning med något som är frånhänt någon annan genom brott – till exempel att köpa, sälja, förvara eller transportera stöldgods.",
+      "tags": [
+        "straffratt",
+        "tillgrepp"
+      ]
+    },
+    {
+      "id": 33,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "fordjupning",
+      "term": "Narkotikabrott",
+      "lawRef": "Narkotikastrafflagen (1968:64)",
+      "front": "Narkotikabrott (NSL)",
+      "back": "Att olovligen inneha, bruka, överlåta eller framställa narkotika. Även ringa narkotikabrott har fängelse i straffskalan, vilket innebär att envarsgripande är möjligt vid bar gärning – en situation som kan uppstå vid bevakning i offentliga miljöer.",
+      "tags": [
+        "straffratt",
+        "narkotika"
+      ]
+    },
+    {
+      "id": 34,
+      "category": "bransch_regler",
+      "categoryLabel": "Bevakningsbranschen – regler och roller",
+      "level": "grund",
+      "term": "Bevakningsföretag",
+      "lawRef": "Lagen (1974:191) om bevakningsföretag",
+      "front": "Bevakningsföretag (lagen 1974:191)",
+      "back": "Företag som yrkesmässigt åtar sig att för annans räkning bevaka fastigheter, anläggningar, verksamheter, offentliga tillställningar, enskilda personer eller värdetransporter. Verksamheten kräver auktorisation och personalen ska vara godkänd.",
+      "tags": [
+        "bransch",
+        "juridik"
+      ]
+    },
+    {
+      "id": 35,
+      "category": "bransch_regler",
+      "categoryLabel": "Bevakningsbranschen – regler och roller",
+      "level": "grund",
+      "term": "Auktorisation",
+      "lawRef": "2–3 §§ lagen (1974:191) om bevakningsföretag",
+      "front": "Auktorisation",
+      "back": "Länsstyrelsens tillstånd som krävs för att få bedriva bevakningsverksamhet eller föreskriven väktarutbildning. Kräver bland annat att verksamheten bedrivs sakkunnigt, omdömesgillt och i enlighet med god branschsed samt att företaget har en föreståndare.",
+      "tags": [
+        "bransch",
+        "tillstand"
+      ]
+    },
+    {
+      "id": 36,
+      "category": "bransch_regler",
+      "categoryLabel": "Bevakningsbranschen – regler och roller",
+      "level": "grund",
+      "term": "Godkännandeprövning",
+      "lawRef": "4 § lagen (1974:191) om bevakningsföretag",
+      "front": "Godkännandeprövning (4 § LOB)",
+      "back": "All personal i ett auktoriserat bevakningsföretag ska vara godkänd av länsstyrelsen. Prövningen avser laglydnad, medborgerlig pålitlighet och lämplighet i övrigt – bland annat kontrolleras belastnings- och misstankeregistret.",
+      "tags": [
+        "bransch",
+        "godkannande"
+      ]
+    },
+    {
+      "id": 37,
+      "category": "bransch_regler",
+      "categoryLabel": "Bevakningsbranschen – regler och roller",
+      "level": "grund",
+      "term": "Väktare",
+      "lawRef": "7 § lagen (1974:191) om bevakningsföretag",
+      "front": "Väktare",
+      "back": "Den som är godkänd för anställning i ett auktoriserat bevakningsföretag och har till uppgift att utföra bevakningstjänst. Väktaren har i grunden samma befogenheter som envar, men omfattas av tjänstemannaskydd i tjänsten och får efter utbildning bära viss utrustning.",
+      "tags": [
+        "bransch",
+        "roller"
+      ]
+    },
+    {
+      "id": 38,
+      "category": "bransch_regler",
+      "categoryLabel": "Bevakningsbranschen – regler och roller",
+      "level": "grund",
+      "term": "Ordningsvakt",
+      "lawRef": "Lagen (2023:421) om ordningsvakter",
+      "front": "Ordningsvakt (LOV)",
+      "back": "Förordnas av Polismyndigheten för att medverka till att upprätthålla allmän ordning och säkerhet. Har befogenheter som väktare saknar, till exempel att avvisa, avlägsna och i vissa fall omhänderta personer, och står under Polismyndighetens ledning.",
+      "tags": [
+        "bransch",
+        "roller"
+      ]
+    },
+    {
+      "id": 39,
+      "category": "bransch_regler",
+      "categoryLabel": "Bevakningsbranschen – regler och roller",
+      "level": "grund",
+      "term": "Skyddsvakt",
+      "lawRef": "Skyddslagen (2010:305)",
+      "front": "Skyddsvakt (skyddslagen)",
+      "back": "Bevakar skyddsobjekt, till exempel militära anläggningar och samhällsviktig infrastruktur. Har inom och vid skyddsobjektet utökade befogenheter, bland annat att kroppsvisitera och tillfälligt omhänderta personer.",
+      "tags": [
+        "bransch",
+        "roller",
+        "skyddsobjekt"
+      ]
+    },
+    {
+      "id": 40,
+      "category": "bransch_regler",
+      "categoryLabel": "Bevakningsbranschen – regler och roller",
+      "level": "fordjupning",
+      "term": "FAP 573-1",
+      "lawRef": "PMFS 2017:10, FAP 573-1",
+      "front": "FAP 573-1 (PMFS 2017:10)",
+      "back": "Polismyndighetens föreskrifter och allmänna råd om bevakningsföretag och bevakningspersonal. Styr bland annat väktarutbildningens innehåll och ordning, uniformering, väktarlegitimation samt utrustning som batong, handfängsel och OC-spray.",
+      "tags": [
+        "bransch",
+        "foreskrifter"
+      ]
+    },
+    {
+      "id": 41,
+      "category": "bransch_regler",
+      "categoryLabel": "Bevakningsbranschen – regler och roller",
+      "level": "grund",
+      "term": "Tystnadsplikt",
+      "lawRef": null,
+      "front": "Tystnadsplikt",
+      "back": "Väktare får inte föra vidare vad de fått veta i tjänsten om kunders säkerhetsarrangemang, larmsystem eller enskildas personliga förhållanden. Skyldigheten följer i första hand av anställningsavtalet och branschens regler – för vissa uppdrag även direkt av lag – och gäller även efter att anställningen upphört.",
+      "tags": [
+        "bransch",
+        "etik",
+        "sekretess"
+      ]
+    },
+    {
+      "id": 42,
+      "category": "bransch_regler",
+      "categoryLabel": "Bevakningsbranschen – regler och roller",
+      "level": "grund",
+      "term": "Rapporteringsskyldighet",
+      "lawRef": null,
+      "front": "Rapporteringsskyldighet",
+      "back": "Brott och viktiga händelser som upptäcks i tjänsten ska rapporteras: brott till polisen och samtliga avvikelser enligt företagets och uppdragets rutiner. Väktarens rapporter är ofta avgörande underlag i brottsutredningar och för uppdragsgivarens säkerhetsarbete.",
+      "tags": [
+        "bransch",
+        "rapportering"
+      ]
+    },
+    {
+      "id": 43,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "grund",
+      "term": "Ronderande bevakning",
+      "lawRef": null,
+      "front": "Ronderande bevakning",
+      "back": "Väktaren förflyttar sig mellan flera bevakningsobjekt enligt rondschema och kontrollerar skalskydd, lås, larm, brandrisker och andra avvikelser. Ofta natt- och ensamarbete med bil.",
+      "tags": [
+        "bevakningsform",
+        "rondering"
+      ]
+    },
+    {
+      "id": 44,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "grund",
+      "term": "Stationär bevakning",
+      "lawRef": null,
+      "front": "Stationär bevakning",
+      "back": "Tjänstgöring på ett fast objekt under hela passet, till exempel en reception, industriport eller galleria. Ger god lokalkännedom, kontinuitet och en tydlig servicefunktion gentemot uppdragsgivaren och besökare.",
+      "tags": [
+        "bevakningsform",
+        "stationar"
+      ]
+    },
+    {
+      "id": 45,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "grund",
+      "term": "Larmutryckning",
+      "lawRef": null,
+      "front": "Larmutryckning",
+      "back": "Väktaren åker på utlösta inbrotts-, brand- eller driftlarm. Grundprincipen är yttre kontroll först – leta efter inbrottsspår innan du går in – därefter invändig kontroll, åtgärd, återställning och rapport till larmcentralen.",
+      "tags": [
+        "bevakningsform",
+        "larm"
+      ]
+    },
+    {
+      "id": 46,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "grund",
+      "term": "Butikskontrollant",
+      "lawRef": null,
+      "front": "Butikskontrollant",
+      "back": "Ofta civilklädd väktare som arbetar mot stölder i butik. Kräver särskild utbildning utöver väktargrundutbildningen. Ingripanden bygger på envarsgripande – därför krävs säkra, oavbrutna iakttagelser från intag till passerad betalningsmöjlighet.",
+      "tags": [
+        "bevakningsform",
+        "butik"
+      ]
+    },
+    {
+      "id": 47,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "grund",
+      "term": "Värdetransport",
+      "lawRef": null,
+      "front": "Värdetransport",
+      "back": "Bevakad transport av sedlar, mynt och annan värdefull egendom. Kräver särskild utbildning utöver väktargrundutbildningen samt strikta säkerhetsrutiner kring hämtning, färdväg och lämning.",
+      "tags": [
+        "bevakningsform",
+        "vardetransport"
+      ]
+    },
+    {
+      "id": 48,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "grund",
+      "term": "Skalskydd",
+      "lawRef": null,
+      "front": "Skalskydd",
+      "back": "Ett objekts yttre skydd: dörrar, fönster, lås, galler, staket, belysning och larm. Vid rondering kontrolleras skalskyddet systematiskt – ett brutet skalskydd är ofta det första tecknet på inbrott.",
+      "tags": [
+        "bevakningsform",
+        "fastighet"
+      ]
+    },
+    {
+      "id": 49,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "grund",
+      "term": "Rondstation",
+      "lawRef": null,
+      "front": "Rondstation (kontrollpunkt)",
+      "back": "Elektronisk punkt som väktaren registrerar under ronden, till exempel med en läsare eller app. Registreringarna bevisar att ronden genomförts, styr ronderingens omfattning och skapar spårbarhet gentemot uppdragsgivaren.",
+      "tags": [
+        "bevakningsform",
+        "rondering",
+        "teknik"
+      ]
+    },
+    {
+      "id": 50,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "grund",
+      "term": "Objektsinstruktion",
+      "lawRef": null,
+      "front": "Objektsinstruktion",
+      "back": "Skriftlig instruktion för ett bevakningsobjekt: arbetsuppgifter, larmkoder, nyckelhantering, kontaktpersoner, särskilda risker och åtgärder vid olika händelser. Ska alltid läsas innan tjänstgöring på ett nytt objekt.",
+      "tags": [
+        "bevakningsform",
+        "rutiner"
+      ]
+    },
+    {
+      "id": 51,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "grund",
+      "term": "Larmcentral",
+      "lawRef": null,
+      "front": "Larmcentral (LC)",
+      "back": "Bemannad central som tar emot larm, prioriterar och leder utryckningar samt dokumenterar händelser. Väktarens trygghetspunkt – bland annat genom in- och avanmälan samt regelbundna kontrolluppringningar vid ensamarbete.",
+      "tags": [
+        "bevakningsform",
+        "larm",
+        "teknik"
+      ]
+    },
+    {
+      "id": 52,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Batong",
+      "lawRef": null,
+      "front": "Batong",
+      "back": "Slagvapen som väktare får bära i tjänst efter genomförd föreskriven utbildning. Får endast användas i nödvärns- eller laga befogenhetssituationer, alltid försvarligt och för att avvärja – aldrig för att bestraffa. Användning ska alltid rapporteras.",
+      "tags": [
+        "utrustning",
+        "vald"
+      ]
+    },
+    {
+      "id": 53,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Expanderbar batong",
+      "lawRef": null,
+      "front": "Expanderbar batong",
+      "back": "Teleskopbatong som fälls ut vid användning och är smidigare att bära än en fast batong. Kräver särskild utbildning enligt Polismyndighetens föreskrifter innan den får bäras i tjänst.",
+      "tags": [
+        "utrustning",
+        "vald"
+      ]
+    },
+    {
+      "id": 54,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Handfängsel",
+      "lawRef": "FAP 573-1 med hänvisning till häkteslagen 4 kap. 10 §",
+      "front": "Handfängsel",
+      "back": "Fängsel som väktare efter utbildning får använda vid envarsgripande – i huvudsak om den gripne uppträder våldsamt eller om det av säkerhetsskäl är nödvändigt, enligt de regler i häkteslagen som då gäller. Kontrollera åtsittning, lås och den gripnes mående, och rapportera alltid användningen.",
+      "tags": [
+        "utrustning",
+        "gripande"
+      ]
+    },
+    {
+      "id": 55,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "fordjupning",
+      "term": "OC-spray",
+      "lawRef": null,
+      "front": "OC-spray (pepparspray)",
+      "back": "Försvarsspray med capsaicin som ger kraftig sveda i ögon och luftvägar. Räknas som vapen och är hårt reglerad: väktare får bära OC-spray endast efter särskild utbildning enligt FAP 573-1 och när uppdraget kräver det. En drabbad person ska alltid ses till efteråt.",
+      "tags": [
+        "utrustning",
+        "vald"
+      ]
+    },
+    {
+      "id": 56,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Skyddsväst",
+      "lawRef": null,
+      "front": "Skyddsväst",
+      "back": "Personlig skyddsutrustning mot stick, slag och i vissa utföranden skott. Arbetsgivaren ska utifrån riskbedömning tillhandahålla den skyddsutrustning som arbetet kräver – rätt storlek och passform är avgörande för skyddet.",
+      "tags": [
+        "utrustning",
+        "arbetsmiljo"
+      ]
+    },
+    {
+      "id": 57,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Väktaruniform",
+      "lawRef": null,
+      "front": "Väktaruniform",
+      "back": "Ska vara godkänd, tydligt märkt med beteckningen VÄKTARE och får inte kunna förväxlas med polisens uniform. Uniformen signalerar både befogenhet och ansvar – bär den korrekt och komplett. Civil klädsel förekommer främst för butikskontrollanter.",
+      "tags": [
+        "utrustning",
+        "uniform"
+      ]
+    },
+    {
+      "id": 58,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Väktarlegitimation",
+      "lawRef": null,
+      "front": "Väktarlegitimation",
+      "back": "Legitimation som visar att väktaren är godkänd för bevakningstjänst. Ska bäras under tjänstgöring och på begäran visas upp för envar – undantag gäller bara om begäran uppenbart görs i trakasseringssyfte eller saknar samband med uppdraget.",
+      "tags": [
+        "utrustning",
+        "legitimation"
+      ]
+    },
+    {
+      "id": 59,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Kommunikationsradio",
+      "lawRef": null,
+      "front": "Kommunikationsradio",
+      "back": "Väktarens samband med larmcentral och kollegor. God radiodisciplin: lyssna av innan du sänder, fatta dig kort, använd anropssignaler och bekräfta mottagna meddelanden. Radion är också en trygghetslina vid ensamarbete.",
+      "tags": [
+        "utrustning",
+        "teknik"
+      ]
+    },
+    {
+      "id": 60,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Överfallslarm",
+      "lawRef": null,
+      "front": "Överfallslarm",
+      "back": "Personligt larm som med ett tryck kallar på hjälp vid hot eller angrepp, ofta med positionering. Ska testas vid passets början och bäras lätt åtkomligt – ett larm du inte når i ett skarpt läge är inget skydd.",
+      "tags": [
+        "utrustning",
+        "larm",
+        "arbetsmiljo"
+      ]
+    },
+    {
+      "id": 61,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "term": "L-ABC",
+      "lawRef": null,
+      "front": "L-ABC",
+      "back": "Prioriteringsordning vid olyckor och akut sjukdom: Livsfarligt läge, Andning, Blödning, Cirkulation. Åtgärda i denna ordning – flytta först personen ur livsfara, säkra sedan andningen, stoppa blödningar och förebygg cirkulationssvikt.",
+      "tags": [
+        "sjukvard",
+        "prioritering"
+      ]
+    },
+    {
+      "id": 62,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "term": "Medvetande- och andningskontroll",
+      "lawRef": null,
+      "front": "Medvetande- och andningskontroll",
+      "back": "Kontrollera medvetandet: tala högt och ruska försiktigt i axlarna. Vid medvetslöshet: öppna luftvägen genom att böja huvudet bakåt och lyfta hakan, och kontrollera andningen i högst 10 sekunder. Normal andning – stabilt sidoläge. Onormal eller ingen andning – larma 112 och starta HLR.",
+      "tags": [
+        "sjukvard",
+        "hlr"
+      ]
+    },
+    {
+      "id": 63,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "term": "Stabilt sidoläge",
+      "lawRef": null,
+      "front": "Stabilt sidoläge",
+      "back": "Läge för en medvetslös person som andas normalt. Hindrar tungan från att blockera luftvägen och låter kräkning rinna ut i stället för ner i lungorna. Övervaka andningen kontinuerligt tills ambulans anländer.",
+      "tags": [
+        "sjukvard",
+        "medvetsloshet"
+      ]
+    },
+    {
+      "id": 64,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "term": "HLR",
+      "lawRef": null,
+      "front": "HLR (hjärt-lungräddning)",
+      "back": "Vid hjärtstopp: växla 30 bröstkompressioner och 2 inblåsningar. Tryck mitt på bröstkorgen, 5–6 centimeter djupt i takten 100–120 per minut. Fortsätt utan avbrott tills en hjärtstartare är kopplad, ambulanspersonal tar över eller personen visar tydliga livstecken.",
+      "tags": [
+        "sjukvard",
+        "hlr"
+      ]
+    },
+    {
+      "id": 65,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "term": "Hjärtstartare",
+      "lawRef": null,
+      "front": "Hjärtstartare (AED)",
+      "back": "Apparat som analyserar hjärtrytmen och vid behov ger en strömstöt som kan återstarta hjärtat. Starta den tidigt och följ röstinstruktionerna – den ger bara stöt när det behövs. Tidig defibrillering ökar överlevnaden dramatiskt vid hjärtstopp.",
+      "tags": [
+        "sjukvard",
+        "hlr",
+        "teknik"
+      ]
+    },
+    {
+      "id": 66,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "term": "Luftvägsstopp",
+      "lawRef": null,
+      "front": "Luftvägsstopp",
+      "back": "Vid totalt luftvägsstopp hos vuxen: uppmana först till hostning, ge därefter upp till 5 ryggslag mellan skulderbladen växlat med upp till 5 buktryck. Blir personen medvetslös – larma 112 och starta HLR.",
+      "tags": [
+        "sjukvard",
+        "luftvag"
+      ]
+    },
+    {
+      "id": 67,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "term": "Cirkulationssvikt",
+      "lawRef": null,
+      "front": "Cirkulationssvikt (chock)",
+      "back": "Livshotande tillstånd där blodcirkulationen inte räcker till, till exempel vid stor blödning. Tecken: blekhet, kallsvett, snabb puls, oro och törst. Åtgärd: låt personen ligga ner, stoppa synliga blödningar, håll personen varm och larma 112. Ge inget att dricka.",
+      "tags": [
+        "sjukvard",
+        "chock"
+      ]
+    },
+    {
+      "id": 68,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "term": "Blödningskontroll",
+      "lawRef": null,
+      "front": "Blödningskontroll",
+      "back": "Stoppa kraftig blödning med direkt tryck mot såret, lägg tryckförband och håll om möjligt den skadade kroppsdelen i högläge. Låt personen ligga ner och larma vid stora blödningar – förebygg cirkulationssvikt.",
+      "tags": [
+        "sjukvard",
+        "blodning"
+      ]
+    },
+    {
+      "id": 69,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "term": "112",
+      "lawRef": null,
+      "front": "112 – nödsamtalet",
+      "back": "SOS Alarms nödnummer vid fara för liv, hälsa, egendom eller miljö. Var beredd att svara på: Vad har hänt? Var – adress och ort? Hur många är skadade? Vem ringer? Lägg inte på förrän operatören säger till, och möt om möjligt upp räddningsenheterna.",
+      "tags": [
+        "sjukvard",
+        "larm"
+      ]
+    },
+    {
+      "id": 70,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "term": "Brännskada – första hjälpen",
+      "lawRef": null,
+      "front": "Brännskada – första hjälpen",
+      "back": "Kyl omedelbart med svalt rinnande vatten i 10–20 minuter – inte iskallt. Ta inte bort kläder som fastnat i huden och stick inte hål på blåsor. Sök vård vid större skador, brännskador i ansikte eller över leder samt vid el- och kemskador.",
+      "tags": [
+        "sjukvard",
+        "brand"
+      ]
+    },
+    {
+      "id": 71,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "term": "Epileptiskt anfall",
+      "lawRef": null,
+      "front": "Epileptiskt anfall",
+      "back": "Skydda huvudet, flytta undan farliga föremål och håll inte fast personen – stoppa aldrig något i munnen. När krampen släppt: lägg personen i stabilt sidoläge. Larma 112 om anfallet varar mer än 5 minuter, upprepas eller om personen skadat sig.",
+      "tags": [
+        "sjukvard",
+        "kramper"
+      ]
+    },
+    {
+      "id": 72,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "grund",
+      "term": "Brandtriangeln",
+      "lawRef": null,
+      "front": "Brandtriangeln",
+      "back": "Modellen som visar brandens tre förutsättningar: bränsle, syre och värme. Alla tre krävs samtidigt – all släckning går ut på att ta bort minst en av dem, till exempel kyla med vatten eller kväva med skum.",
+      "tags": [
+        "brand",
+        "teori"
+      ]
+    },
+    {
+      "id": 73,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "grund",
+      "term": "Rädda – Varna – Larma – Släck",
+      "lawRef": null,
+      "front": "Rädda – Varna – Larma – Släck",
+      "back": "Grundordningen vid brand: rädda människor i omedelbar fara, varna andra i närheten, larma 112 och släck om det kan ske utan risk för dig själv. Ordningen anpassas efter situationen – din egen säkerhet går alltid först.",
+      "tags": [
+        "brand",
+        "rutiner"
+      ]
+    },
+    {
+      "id": 74,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "grund",
+      "term": "Brandklasser",
+      "lawRef": null,
+      "front": "Brandklasser (A–F)",
+      "back": "A: fasta, fibrösa material som trä, papper och textil. B: brännbara vätskor. C: gaser. D: metaller. F: matfetter och matoljor. Klasserna avgör vilket släckmedel som är lämpligt och står angivna på varje släckare.",
+      "tags": [
+        "brand",
+        "slackmedel"
+      ]
+    },
+    {
+      "id": 75,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "grund",
+      "term": "Pulversläckare",
+      "lawRef": null,
+      "front": "Pulversläckare",
+      "back": "Effektiv allroundsläckare för klass A, B och C med hög släckkapacitet – ofta förstahandsvalet. Nackdelar: kraftig siktnedsättning vid användning inomhus och omfattande sanering efteråt.",
+      "tags": [
+        "brand",
+        "slackmedel"
+      ]
+    },
+    {
+      "id": 76,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "grund",
+      "term": "Koldioxidsläckare",
+      "lawRef": null,
+      "front": "Koldioxidsläckare (CO2)",
+      "back": "Kväver branden utan att lämna släckmedelsrester – idealisk för elektronik, serverrum och annan elutrustning. Varning: munstycket blir extremt kallt och gasen tränger undan syre, så använd den inte i små slutna utrymmen där människor vistas.",
+      "tags": [
+        "brand",
+        "slackmedel"
+      ]
+    },
+    {
+      "id": 77,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "fordjupning",
+      "term": "Brandcell",
+      "lawRef": null,
+      "front": "Brandcell",
+      "back": "Avgränsad del av en byggnad som ska stå emot brand och rök under en bestämd tid, ofta 30 eller 60 minuter, för att hindra spridning. Branddörrar mellan brandceller ska hållas stängda – en uppkilad branddörr är en allvarlig brist som ska rapporteras.",
+      "tags": [
+        "brand",
+        "fastighet"
+      ]
+    },
+    {
+      "id": 78,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "grund",
+      "term": "Utrymningsväg",
+      "lawRef": null,
+      "front": "Utrymningsväg",
+      "back": "Väg som leder till säker plats och markeras med gröna skyltar, ofta belysta eller efterlysande. Ska alltid hållas fri från hinder och gå att öppna inifrån utan nyckel. Blockerade utrymningsvägar rapporteras omedelbart.",
+      "tags": [
+        "brand",
+        "utrymning",
+        "fastighet"
+      ]
+    },
+    {
+      "id": 79,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "fordjupning",
+      "term": "SBA",
+      "lawRef": "Lagen (2003:778) om skydd mot olyckor",
+      "front": "SBA – systematiskt brandskyddsarbete",
+      "back": "Verksamheters löpande brandskyddsarbete enligt lagen om skydd mot olyckor: dokumentation, egenkontroller, utbildning och åtgärder. Väktarens ronderingskontroller av släckare, branddörrar och utrymningsvägar är ofta en del av kundens SBA.",
+      "tags": [
+        "brand",
+        "rutiner"
+      ]
+    },
+    {
+      "id": 80,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "grund",
+      "term": "Brandrök",
+      "lawRef": null,
+      "front": "Brandrök",
+      "back": "Den vanligaste dödsorsaken vid bränder. Röken är giftig (bland annat kolmonoxid), het och tar snabbt bort sikten. Håll dig under röken – krypande om det behövs – och gå aldrig in i rökfyllda utrymmen utan andningsskydd.",
+      "tags": [
+        "brand",
+        "sakerhet"
+      ]
+    },
+    {
+      "id": 81,
+      "category": "arbetsmiljo",
+      "categoryLabel": "Arbetsmiljö",
+      "level": "grund",
+      "term": "Arbetsmiljölagen",
+      "lawRef": "Arbetsmiljölagen (1977:1160)",
+      "front": "Arbetsmiljölagen (AML)",
+      "back": "Ramlagen för arbetsmiljön. Arbetsgivaren har huvudansvaret för att förebygga ohälsa och olycksfall, medan arbetstagaren ska medverka, följa säkerhetsrutiner och använda den skyddsutrustning som föreskrivs.",
+      "tags": [
+        "arbetsmiljo",
+        "juridik"
+      ]
+    },
+    {
+      "id": 82,
+      "category": "arbetsmiljo",
+      "categoryLabel": "Arbetsmiljö",
+      "level": "grund",
+      "term": "Systematiskt arbetsmiljöarbete",
+      "lawRef": null,
+      "front": "Systematiskt arbetsmiljöarbete (SAM)",
+      "back": "Arbetsgivarens metod för att kontinuerligt undersöka arbetsmiljön, bedöma risker, genomföra åtgärder och följa upp resultatet. Regleras i Arbetsmiljöverkets föreskrifter och omfattar även hot- och våldsrisker i bevakningsarbetet.",
+      "tags": [
+        "arbetsmiljo",
+        "rutiner"
+      ]
+    },
+    {
+      "id": 83,
+      "category": "arbetsmiljo",
+      "categoryLabel": "Arbetsmiljö",
+      "level": "grund",
+      "term": "Skyddsombud",
+      "lawRef": null,
+      "front": "Skyddsombud",
+      "back": "Arbetstagarnas valda företrädare i arbetsmiljöfrågor. Har rätt att delta i planeringen, begära åtgärder och att avbryta arbete som innebär omedelbar och allvarlig fara för liv eller hälsa till dess Arbetsmiljöverket tagit ställning.",
+      "tags": [
+        "arbetsmiljo",
+        "roller"
+      ]
+    },
+    {
+      "id": 84,
+      "category": "arbetsmiljo",
+      "categoryLabel": "Arbetsmiljö",
+      "level": "grund",
+      "term": "Ensamarbete",
+      "lawRef": null,
+      "front": "Ensamarbete",
+      "back": "Vanligt i väktaryrket, särskilt vid rondering och nattarbete. Arbetsgivaren ska riskbedöma ensamarbetet och ordna larmmöjligheter och kontaktrutiner – till exempel in- och avanmälan till larmcentral. Vid påtaglig risk för hot och våld ska ensamarbete undvikas.",
+      "tags": [
+        "arbetsmiljo",
+        "rondering"
+      ]
+    },
+    {
+      "id": 85,
+      "category": "arbetsmiljo",
+      "categoryLabel": "Arbetsmiljö",
+      "level": "grund",
+      "term": "Tillbud",
+      "lawRef": null,
+      "front": "Tillbud",
+      "back": "En händelse som hade kunnat leda till olycka eller ohälsa men som slutade väl – en så kallad nästan-olycka. Ska alltid rapporteras till arbetsgivaren: tillbuden visar var nästa olycka kan inträffa och är grunden för det förebyggande arbetet.",
+      "tags": [
+        "arbetsmiljo",
+        "rapportering"
+      ]
+    },
+    {
+      "id": 86,
+      "category": "arbetsmiljo",
+      "categoryLabel": "Arbetsmiljö",
+      "level": "grund",
+      "term": "Arbetsskada",
+      "lawRef": null,
+      "front": "Arbetsskada",
+      "back": "Skada eller sjukdom som orsakats av arbetet, inklusive hot- och våldshändelser. Anmäls alltid till arbetsgivaren. Allvarliga olyckor och tillbud ska arbetsgivaren utan dröjsmål anmäla till Arbetsmiljöverket, och arbetsskador anmäls till Försäkringskassan.",
+      "tags": [
+        "arbetsmiljo",
+        "rapportering"
+      ]
+    },
+    {
+      "id": 87,
+      "category": "arbetsmiljo",
+      "categoryLabel": "Arbetsmiljö",
+      "level": "grund",
+      "term": "Hot och våld i arbetsmiljön",
+      "lawRef": null,
+      "front": "Hot och våld i arbetsmiljön",
+      "back": "Arbetsmiljöverkets föreskrifter kräver att arbetet ordnas så att risken för hot och våld förebyggs så långt det är möjligt: säkerhetsrutiner, utbildning, larm, möjlighet att snabbt kalla på hjälp – och stöd till den som drabbats.",
+      "tags": [
+        "arbetsmiljo",
+        "hot"
+      ]
+    },
+    {
+      "id": 88,
+      "category": "arbetsmiljo",
+      "categoryLabel": "Arbetsmiljö",
+      "level": "grund",
+      "term": "Krisstöd",
+      "lawRef": null,
+      "front": "Krisstöd",
+      "back": "Organiserat psykiskt och socialt omhändertagande efter allvarliga händelser som rån, våld eller svåra olyckor. Arbetsgivaren ska ha beredskap för krisstöd. Att tidigt få prata igenom händelsen minskar risken för långvariga besvär.",
+      "tags": [
+        "arbetsmiljo",
+        "kris"
+      ]
+    },
+    {
+      "id": 89,
+      "category": "konflikthantering",
+      "categoryLabel": "Konflikthantering och självskydd",
+      "level": "grund",
+      "term": "Deeskalering",
+      "lawRef": null,
+      "front": "Deeskalering",
+      "back": "Att medvetet trappa ner en konflikt: sänkt och lugnt röstläge, aktivt lyssnande, respektfullt bemötande, tydliga men icke-provocerande besked och att erbjuda motparten en utväg utan prestigeförlust.",
+      "tags": [
+        "konflikt",
+        "bemotande"
+      ]
+    },
+    {
+      "id": 90,
+      "category": "konflikthantering",
+      "categoryLabel": "Konflikthantering och självskydd",
+      "level": "grund",
+      "term": "Aggressionstrappan",
+      "lawRef": null,
+      "front": "Aggressionstrappan",
+      "back": "Modell som beskriver hur en person trappas upp stegvis – från irritation via verbal aggression och hot till fysiskt våld. Ju tidigare du känner igen signalerna och möter personen med rätt bemötande, desto större är chansen att vända förloppet.",
+      "tags": [
+        "konflikt",
+        "bemotande"
+      ]
+    },
+    {
+      "id": 91,
+      "category": "konflikthantering",
+      "categoryLabel": "Konflikthantering och självskydd",
+      "level": "grund",
+      "term": "Icke-verbal kommunikation",
+      "lawRef": null,
+      "front": "Icke-verbal kommunikation",
+      "back": "Kroppsspråk, mimik, avstånd och tonfall påverkar ofta mer än orden. Öppna handflator, sänkta axlar, lugna rörelser och lagom ögonkontakt signalerar trygghet utan hot – ditt eget kroppsspråk smittar av sig på motparten.",
+      "tags": [
+        "konflikt",
+        "kommunikation"
+      ]
+    },
+    {
+      "id": 92,
+      "category": "konflikthantering",
+      "categoryLabel": "Konflikthantering och självskydd",
+      "level": "grund",
+      "term": "Personligt revir",
+      "lawRef": null,
+      "front": "Personligt revir (zoner)",
+      "back": "Varje människa har ett personligt avstånd som upplevs som privat. Att kliva in i det i onödan kan utlösa aggression. Håll säkerhetsavstånd – minst en dryg armlängd – tills situationen kräver något annat; avståndet ger dig dessutom reaktionstid.",
+      "tags": [
+        "konflikt",
+        "sjalvskydd"
+      ]
+    },
+    {
+      "id": 93,
+      "category": "konflikthantering",
+      "categoryLabel": "Konflikthantering och självskydd",
+      "level": "grund",
+      "term": "Reträttväg",
+      "lawRef": null,
+      "front": "Reträttväg",
+      "back": "Placera dig alltid så att du har en väg ut och aldrig blir instängd – till exempel snett framför en dörr i stället för i ett hörn. Undvik samtidigt att helt blockera motpartens utväg: en person som känner sig trängd blir farligare.",
+      "tags": [
+        "konflikt",
+        "sjalvskydd"
+      ]
+    },
+    {
+      "id": 94,
+      "category": "konflikthantering",
+      "categoryLabel": "Konflikthantering och självskydd",
+      "level": "grund",
+      "term": "Skyddsställning",
+      "lawRef": null,
+      "front": "Skyddsställning",
+      "back": "Grundposition vid hotfulla lägen: sidoställd kropp, fötterna axelbrett med ena foten något bakåt, händerna öppna och höjda framför kroppen. Ger balans och skydd och gör dig redo att parera – samtidigt som hållningen uppfattas som lugnande snarare än aggressiv.",
+      "tags": [
+        "konflikt",
+        "sjalvskydd"
+      ]
+    },
+    {
+      "id": 95,
+      "category": "konflikthantering",
+      "categoryLabel": "Konflikthantering och självskydd",
+      "level": "grund",
+      "term": "Mental förberedelse",
+      "lawRef": null,
+      "front": "Mental förberedelse",
+      "back": "Att i förväg gå igenom tänkbara situationer – vad gör jag om detta händer? – höjer din handlingsberedskap, sänker stressen och minskar risken för både handlingsförlamning och överreaktion när något verkligen inträffar.",
+      "tags": [
+        "konflikt",
+        "sjalvskydd",
+        "mental"
+      ]
+    },
+    {
+      "id": 96,
+      "category": "etik_integritet",
+      "categoryLabel": "Yrkesetik och integritet",
+      "level": "grund",
+      "term": "Olaga diskriminering",
+      "lawRef": "BrB 16 kap. 9 §",
+      "front": "Olaga diskriminering (BrB 16:9)",
+      "back": "Näringsidkare och deras anställda – dit väktare i tjänst räknas – får inte diskriminera någon på grund av till exempel etniskt ursprung, hudfärg, trosbekännelse eller sexuell läggning genom att vägra service eller tillträde på de villkor som gäller för andra.",
+      "tags": [
+        "etik",
+        "diskriminering",
+        "juridik"
+      ]
+    },
+    {
+      "id": 97,
+      "category": "etik_integritet",
+      "categoryLabel": "Yrkesetik och integritet",
+      "level": "grund",
+      "term": "Diskrimineringslagens sju grunder",
+      "lawRef": "Diskrimineringslagen (2008:567)",
+      "front": "Diskrimineringslagens sju grunder",
+      "back": "Kön, könsöverskridande identitet eller uttryck, etnisk tillhörighet, religion eller annan trosuppfattning, funktionsnedsättning, sexuell läggning och ålder. Väktarens bemötande och urval vid kontroller får aldrig grundas på någon av dessa.",
+      "tags": [
+        "etik",
+        "diskriminering"
+      ]
+    },
+    {
+      "id": 98,
+      "category": "etik_integritet",
+      "categoryLabel": "Yrkesetik och integritet",
+      "level": "grund",
+      "term": "Kamerabevakningslagen",
+      "lawRef": "Kamerabevakningslagen (2018:1200)",
+      "front": "Kamerabevakningslagen",
+      "back": "Reglerar kamerabevakning tillsammans med dataskyddsförordningen. Kräver bland annat upplysning genom tydlig skyltning, och tillstånd för myndigheter och vissa andra aktörer på platser dit allmänheten har tillträde. Inspelat material ska skyddas och bara användas för sitt ändamål.",
+      "tags": [
+        "etik",
+        "kamerabevakning",
+        "juridik"
+      ]
+    },
+    {
+      "id": 99,
+      "category": "etik_integritet",
+      "categoryLabel": "Yrkesetik och integritet",
+      "level": "grund",
+      "term": "Objektiv rapportering",
+      "lawRef": null,
+      "front": "Objektiv rapportering",
+      "back": "Skriv vad du själv sett och hört – inte vad du tror, tycker eller antar. Skilj på iakttagelser och slutsatser, ange tid, plats, inblandade och vidtagna åtgärder. En saklig rapport kan bli bevismaterial i domstol.",
+      "tags": [
+        "etik",
+        "rapportering"
+      ]
+    },
+    {
+      "id": 100,
+      "category": "etik_integritet",
+      "categoryLabel": "Yrkesetik och integritet",
+      "level": "grund",
+      "term": "Väktarens serviceroll",
+      "lawRef": null,
+      "front": "Väktarens serviceroll",
+      "back": "Väktaren är ofta uppdragsgivarens ansikte utåt. Ett professionellt, hjälpsamt och rättvist bemötande förebygger konflikter och bygger förtroende för hela branschen – och gör dig samtidigt säkrare, eftersom de flesta situationer löses med ord.",
+      "tags": [
+        "etik",
+        "bemotande"
+      ]
+    },
+    {
+      "id": 101,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Legalitetsprincipen",
+      "lawRef": null,
+      "front": "Legalitetsprincipen",
+      "back": "Inget är brott utan stöd i lag – och ingen får ingripa mot någon annan utan stöd i lag. Varje ingripande en väktare gör måste därför ha lagstöd; ett ingripande utan lagstöd kan göra väktaren själv till gärningsman. Juridiken är väktarens arbetsbeskrivning, inte teori.",
+      "tags": [
+        "juridik",
+        "principer"
+      ]
+    },
+    {
+      "id": 102,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Objektiva och subjektiva rekvisit",
+      "lawRef": null,
+      "front": "Objektiva och subjektiva rekvisit",
+      "back": "För straffansvar krävs att gärningen stämmer med lagens brottsbeskrivning (objektiva rekvisit) och att den begicks med uppsåt – eller, där lagen medger det, av oaktsamhet (subjektiva rekvisit). Den som av ren glömska går förbi kassan med en vara begår därför ingen stöld – tillägnelseuppsåt saknas.",
+      "tags": [
+        "juridik",
+        "straffratt"
+      ]
+    },
+    {
+      "id": 103,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Samtycke",
+      "lawRef": "BrB 24 kap. 7 §",
+      "front": "Samtycke (BrB 24:7)",
+      "back": "Ansvarsfrihetsgrund som kan göra en annars otillåten gärning tillåten. Samtycket är grunden för all frivillig visitation – väskkontrollen i butiken och entrévisitationen på arenan – och kan när som helst tas tillbaka. Förväxla inte med rättegångsbalkens gripanderegel med samma paragrafsiffror.",
+      "tags": [
+        "juridik",
+        "visitation"
+      ]
+    },
+    {
+      "id": 104,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "fordjupning",
+      "term": "Uppsiktskedja i stafett",
+      "lawRef": null,
+      "front": "Uppsiktskedja i stafett",
+      "back": "Kontinuerlig uppsikt vid flyende fot behöver inte hållas av en och samma person – den får lämnas över mellan kollegor, till exempel via radio, så länge ingen lucka uppstår. Bryts kedjan bryts gripanderätten. Andrahandsuppgifter, som en kunds utpekande, ger däremot aldrig gripanderätt.",
+      "tags": [
+        "gripande",
+        "juridik"
+      ]
+    },
+    {
+      "id": 105,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "fordjupning",
+      "term": "Att avstå eller avbryta ett gripande",
+      "lawRef": null,
+      "front": "Att avstå eller avbryta ett gripande",
+      "back": "Envarsgripandet är en rättighet, aldrig en skyldighet. Vid övermakt, beväpnad motpart eller växande riskbild kan proportionaliteten tala för att avstå – och ett påbörjat gripande får avbrytas när risken växer. Dokumentera alltid varför du avstod eller avbröt, med signalement, färdriktning och tider.",
+      "tags": [
+        "gripande",
+        "juridik"
+      ]
+    },
+    {
+      "id": 106,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "fordjupning",
+      "term": "Försök till brott",
+      "lawRef": "BrB 23 kap. 1 §",
+      "front": "Försök till brott (BrB 23:1)",
+      "back": "Straffbart när gärningsmannen har påbörjat utförandet – men bara vid brott där lagen särskilt anger det. Försök till stöld är straffbart, men försök till ringa stöld är det inte: vid låga varuvärden finns inget gripbart brott förrän stölden fullbordats vid sista betalningsmöjligheten.",
+      "tags": [
+        "juridik",
+        "straffratt",
+        "butik"
+      ]
+    },
+    {
+      "id": 107,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "fordjupning",
+      "term": "Medverkan till brott",
+      "lawRef": "BrB 23 kap. 4 §",
+      "front": "Medverkan till brott (BrB 23:4)",
+      "back": "Ansvar för den som främjar ett brott: anstiftaren som förmår någon att begå det och medhjälparen som underlättar det – vakthållaren, distraktören, den väntande chauffören. Medhjälparen kan gripas på bar gärning på samma villkor som gärningsmannen, om huvudbrottet har fängelse i straffskalan.",
+      "tags": [
+        "juridik",
+        "straffratt",
+        "gripande"
+      ]
+    },
+    {
+      "id": 108,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "fordjupning",
+      "term": "Återtagande på bar gärning",
+      "lawRef": "BrB 24 kap. 1 §",
+      "front": "Återtagande på bar gärning (BrB 24:1)",
+      "back": "Egendom får tas tillbaka på bar gärning, och mot den som med våld eller hot hindrar återtagandet råder nödvärn. Rycker någon en väska och du hinner ifatt under obruten förföljelse får den tas tillbaka – men tidsfönstret är just bar gärning; efteråt gäller polisanmälan.",
+      "tags": [
+        "nodvarn",
+        "juridik",
+        "tillgrepp"
+      ]
+    },
+    {
+      "id": 109,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "fordjupning",
+      "term": "Självtäkt",
+      "lawRef": "BrB 8 kap. 9 §",
+      "front": "Självtäkt (BrB 8:9)",
+      "back": "Att olovligen rubba annans besittning för att själv ta sig rätt – till exempel att egenhändigt återta stulen egendom dagen efter brottet. Utanför bar gärning är återtagande straffbar självtäkt, hur säker du än är på din sak. Rätt väg är dokumentation och polisanmälan.",
+      "tags": [
+        "juridik",
+        "straffratt",
+        "tillgrepp"
+      ]
+    },
+    {
+      "id": 110,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Olaga frihetsberövande",
+      "lawRef": "BrB 4 kap. 2 §",
+      "front": "Olaga frihetsberövande (BrB 4:2)",
+      "back": "Att beröva någon friheten utan lagstöd – brottet ett felaktigt gripande kan utgöra. Ett gripande på lösa grunder, ett kvarhållande utan gripande eller ett gripande på enbart andras utpekande kan alltså göra väktaren själv till gärningsman. Tvekar du på något led i kedjan – grip inte.",
+      "tags": [
+        "juridik",
+        "straffratt",
+        "gripande"
+      ]
+    },
+    {
+      "id": 111,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Olaga tvång",
+      "lawRef": "BrB 4 kap. 4 §",
+      "front": "Olaga tvång (BrB 4:4)",
+      "back": "Att genom våld eller hot tvinga någon att göra, tåla eller underlåta något – till exempel att utan lagstöd tvinga en person att stanna kvar, öppna väskan eller visa legitimation. Utpasserings- och väskkontroller bygger på samtycke; vägran möts med rapport, aldrig med tvång.",
+      "tags": [
+        "juridik",
+        "straffratt"
+      ]
+    },
+    {
+      "id": 112,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "grund",
+      "term": "Sista betalningsmöjligheten",
+      "lawRef": null,
+      "front": "Sista betalningsmöjligheten",
+      "back": "Fullbordanspunkten vid butiksstöld: brottet är fullbordat när personen passerar den sista möjligheten att betala utan att göra det – gripande är möjligt redan vid kassalinjen, inte först utanför dörren. Hela kedjan ska vara iakttagen: att varan tas, göms och förs förbi kassan utan betalning.",
+      "tags": [
+        "butik",
+        "gripande",
+        "juridik"
+      ]
+    },
+    {
+      "id": 113,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "fordjupning",
+      "term": "Tillträdesförbud till butik",
+      "lawRef": "Lagen (2021:34) om tillträdesförbud till butik",
+      "front": "Tillträdesförbud till butik (lagen 2021:34)",
+      "back": "Beslutas av åklagare och är straffsanktionerat: den som trots förbudet går in i butiken begår ett brott med fängelse i straffskalan och kan gripas på bar gärning. Butikens egen portning är däremot inte straffsanktionerad och ger i sig ingen gripanderätt.",
+      "tags": [
+        "juridik",
+        "butik",
+        "gripande"
+      ]
+    },
+    {
+      "id": 114,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "fordjupning",
+      "term": "Rättskedjan",
+      "lawRef": null,
+      "front": "Rättskedjan",
+      "back": "Stafetten från brott till påföljd: anmälan eller upptäckt → förundersökning → åtal → rättegång → påföljd och verkställighet. Väktaren är ofta kedjans första länk – gripandet, beslaget, kamerasekvensen och rapporten blir startmaterialet, och kvaliteten i första länken följer med hela vägen.",
+      "tags": [
+        "juridik",
+        "rattsvasende"
+      ]
+    },
+    {
+      "id": 115,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "fordjupning",
+      "term": "Åklagarmyndigheten",
+      "lawRef": null,
+      "front": "Åklagarmyndigheten",
+      "back": "Navet mellan utredning och domstol: leder förundersökningen vid allvarligare brott, beslutar om åtal, kan anhålla misstänkta och begära häktning hos domstol samt utfärda strafföreläggande vid enklare erkända brott. Åklagaren beslutar även om kontaktförbud och tillträdesförbud till butik.",
+      "tags": [
+        "juridik",
+        "rattsvasende"
+      ]
+    },
+    {
+      "id": 116,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "fordjupning",
+      "term": "Domstolarna i brottmål",
+      "lawRef": null,
+      "front": "Domstolarna i brottmål",
+      "back": "Tingsrätten dömer i första instans, hovrätten prövar överklaganden och Högsta domstolen tar endast mål som kan ge vägledande prejudikat. Förvaltningsdomstolarna prövar i stället myndighetsbeslut – dit vänder sig den väktare vars godkännande återkallats av Länsstyrelsen.",
+      "tags": [
+        "juridik",
+        "rattsvasende"
+      ]
+    },
+    {
+      "id": 117,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "fordjupning",
+      "term": "Kriminalvården",
+      "lawRef": null,
+      "front": "Kriminalvården",
+      "back": "Verkställer påföljderna i tre grenar: häktena håller häktade under utredning, anstalterna verkställer fängelsestraff med villkorlig frigivning normalt efter två tredjedelar av tiden, och frivården sköter påföljder i frihet – skyddstillsyn, samhällstjänst och elektronisk fotboja.",
+      "tags": [
+        "juridik",
+        "rattsvasende"
+      ]
+    },
+    {
+      "id": 118,
+      "category": "juridik_ingripanden",
+      "categoryLabel": "Juridik – befogenheter och ingripanden",
+      "level": "fordjupning",
+      "term": "Vittnesplikt",
+      "lawRef": "RB 36 kap.",
+      "front": "Vittnesplikt (RB 36 kap.)",
+      "back": "En kallelse att vittna i domstol måste följas – den som uteblir riskerar vite och kan hämtas av polis. Vittnet avlägger ed, och medvetet felaktiga uppgifter är mened. Tystnadsplikten hindrar inte vittnesmålet, rapporten får användas som minnesstöd, och 'jag vet inte' är ett fullgott svar.",
+      "tags": [
+        "juridik",
+        "rattsvasende",
+        "rapportering"
+      ]
+    },
+    {
+      "id": 119,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "fordjupning",
+      "term": "Grov stöld",
+      "lawRef": "BrB 8 kap. 4 §",
+      "front": "Grov stöld (BrB 8:4)",
+      "back": "Stöld som bedöms som grov, till exempel efter intrång i bostad, om den avsett sak som någon bar på sig eller om gärningen varit av särskilt farlig eller hänsynslös art. Straffskalan är fängelse i lägst sex månader och högst sex år – gripbar vid bar gärning eller flyende fot.",
+      "tags": [
+        "straffratt",
+        "tillgrepp"
+      ]
+    },
+    {
+      "id": 120,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "fordjupning",
+      "term": "Bedrägeri",
+      "lawRef": "BrB 9 kap. 1 §",
+      "front": "Bedrägeri (BrB 9:1)",
+      "back": "Att genom vilseledande förmå någon till en handling som ger vinning och skada – i butik till exempel prislappsbyten och falska returer. Fängelse ingår i straffskalan, men bedömningen på plats är ofta svårare än vid stöld, så tröskeln för att välja dokumentation och polisanmälan är lägre.",
+      "tags": [
+        "straffratt",
+        "butik"
+      ]
+    },
+    {
+      "id": 121,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "grund",
+      "term": "Sexuellt ofredande",
+      "lawRef": "BrB 6 kap. 10 §",
+      "front": "Sexuellt ofredande (BrB 6:10)",
+      "back": "Att sexuellt beröra någon eller genom ord eller handlande ofreda en person på ett sätt som kränker den sexuella integriteten – till exempel blottning. Fängelse ingår i straffskalan, vilket gör brottet gripbart på bar gärning eller flyende fot.",
+      "tags": [
+        "straffratt"
+      ]
+    },
+    {
+      "id": 122,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "grund",
+      "term": "Brott mot knivlagen",
+      "lawRef": "Knivlagen (1988:254)",
+      "front": "Brott mot knivlagen (1988:254)",
+      "back": "Knivar och andra farliga föremål får inte innehas på allmän plats, inom skolområden eller i fordon på allmän plats, om innehavet inte är befogat – som ett verktyg i arbetet. Ett brott väktaren ofta möter på objekten; fynd och iakttagelser dokumenteras och polis kontaktas enligt rutin.",
+      "tags": [
+        "straffratt",
+        "juridik"
+      ]
+    },
+    {
+      "id": 123,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "grund",
+      "term": "Brott mot tystnadsplikt",
+      "lawRef": "BrB 20 kap. 3 §",
+      "front": "Brott mot tystnadsplikt (BrB 20:3)",
+      "back": "Den som röjer uppgifter som omfattas av lagstadgad tystnadsplikt kan dömas till böter eller fängelse. Väktarens tystnadsplikt gäller kunders förhållanden – larm, rutiner, personuppgifter och händelser på objekten – dygnet runt och även efter att anställningen har upphört.",
+      "tags": [
+        "straffratt",
+        "sekretess"
+      ]
+    },
+    {
+      "id": 124,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "grund",
+      "term": "Brukande av falsk urkund",
+      "lawRef": "BrB 14 kap. 10 §",
+      "front": "Brukande av falsk urkund (BrB 14:10)",
+      "back": "Att åberopa eller använda en förfalskad handling, till exempel att visa upp falsk legitimation vid en kontroll. Vid misstänkt falsk handling: neka det som kontrollen gällde, dokumentera och kontakta polis enligt instruktion – handlingen får tas i beslag först i samband med ett gripande.",
+      "tags": [
+        "straffratt",
+        "legitimation"
+      ]
+    },
+    {
+      "id": 125,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "fordjupning",
+      "term": "Mened",
+      "lawRef": "BrB 15 kap. 1 §",
+      "front": "Mened (BrB 15:1)",
+      "back": "Att under laga ed lämna osann uppgift eller förtiga sanningen – till exempel som vittne i domstol. Sanningsplikten i vittnesbåset är alltså straffsanktionerad. Berätta det du iakttagit, skilj iakttagelse från slutsats och minns att 'jag minns inte' är ett fullgott svar.",
+      "tags": [
+        "straffratt",
+        "rattsvasende"
+      ]
+    },
+    {
+      "id": 126,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "fordjupning",
+      "term": "Ringa narkotikabrott",
+      "lawRef": "2 § narkotikastrafflagen (1968:64)",
+      "front": "Ringa narkotikabrott (NSL 2 §)",
+      "back": "Narkotikabrott som med hänsyn till art och mängd är ringa – hit hör ofta eget bruk, som är straffbart i Sverige. Straffskalan är böter eller fängelse i högst sex månader; fängelse ingår alltså. Väktarens huvudregel är ändå dokumentation och polis, inte egna narkotikaingripanden.",
+      "tags": [
+        "straffratt",
+        "droger"
+      ]
+    },
+    {
+      "id": 127,
+      "category": "straffratt_brott",
+      "categoryLabel": "Straffrätt – relevanta brott",
+      "level": "grund",
+      "term": "Förargelseväckande beteende",
+      "lawRef": "BrB 16 kap. 16 §",
+      "front": "Förargelseväckande beteende (BrB 16:16)",
+      "back": "Att på allmän plats bete sig på ett sätt som är ägnat att väcka förargelse hos allmänheten. Straffskalan innehåller endast penningböter – därför är brottet aldrig gripbart för envar, hur störande beteendet än är. Ett nyckelexempel på att straffskalan styr väktarens befogenheter.",
+      "tags": [
+        "straffratt",
+        "juridik"
+      ]
+    },
+    {
+      "id": 128,
+      "category": "bransch_regler",
+      "categoryLabel": "Bevakningsbranschen – regler och roller",
+      "level": "grund",
+      "term": "Länsstyrelsen",
+      "lawRef": "Lagen (1974:191) om bevakningsföretag",
+      "front": "Länsstyrelsen",
+      "back": "Prövar auktorisation av bevaknings- och utbildningsföretag, godkänner all personal och utövar tillsyn över branschen – och kan återkalla både auktorisationer och godkännanden. Ärendena är koncentrerade till länsstyrelserna i Stockholms, Västra Götalands och Skåne län, som handlägger för hela landet.",
+      "tags": [
+        "bransch",
+        "tillstand"
+      ]
+    },
+    {
+      "id": 129,
+      "category": "bransch_regler",
+      "categoryLabel": "Bevakningsbranschen – regler och roller",
+      "level": "grund",
+      "term": "Föreståndare",
+      "lawRef": "Lagen (1974:191) om bevakningsföretag",
+      "front": "Föreståndare",
+      "back": "Varje auktoriserat bevakningsföretag ska ha en godkänd föreståndare som ansvarar för verksamheten. Föreståndaren prövas av Länsstyrelsen på samma sätt som företagets ledning – ett led i kravet att verksamheten bedrivs sakkunnigt, omdömesgillt och i enlighet med god branschsed.",
+      "tags": [
+        "bransch",
+        "roller"
+      ]
+    },
+    {
+      "id": 130,
+      "category": "bransch_regler",
+      "categoryLabel": "Bevakningsbranschen – regler och roller",
+      "level": "grund",
+      "term": "Utbildningstrappan",
+      "lawRef": "PMFS 2017:10, FAP 573-1",
+      "front": "Utbildningstrappan (FAP 573-1)",
+      "back": "Väktarens grundutbildning sker i tre steg: VU1 om 88 lektionstimmar, praktisk yrkesträning (PYT) om minst 160 timmar under handledning och VU2 om 40 lektionstimmar med examination. Först därefter är väktaren behörig för självständigt arbete – och därefter krävs återkommande fortbildning.",
+      "tags": [
+        "bransch",
+        "utbildning"
+      ]
+    },
+    {
+      "id": 131,
+      "category": "bransch_regler",
+      "categoryLabel": "Bevakningsbranschen – regler och roller",
+      "level": "grund",
+      "term": "Praktisk yrkesträning (PYT)",
+      "lawRef": "PMFS 2017:10, FAP 573-1",
+      "front": "Praktisk yrkesträning (PYT)",
+      "back": "Steget mellan VU1 och VU2: minst 160 timmars praktiskt bevakningsarbete under handledning hos ett auktoriserat bevakningsföretag. Här omsätts teorin i verkligt arbete – och erfarenheterna från praktiken är grunden för VU2:s fördjupning och fallbaserade undervisning.",
+      "tags": [
+        "bransch",
+        "utbildning"
+      ]
+    },
+    {
+      "id": 132,
+      "category": "bransch_regler",
+      "categoryLabel": "Bevakningsbranschen – regler och roller",
+      "level": "grund",
+      "term": "Återkallelse av auktorisation och godkännande",
+      "lawRef": "Lagen (1974:191) om bevakningsföretag",
+      "front": "Återkallelse av auktorisation och godkännande",
+      "back": "Missköter sig ett bevakningsföretag kan Länsstyrelsen återkalla auktorisationen – då upphör rätten att bedriva bevakning omedelbart. På samma sätt kan en enskild väktares godkännande återkallas, till exempel vid brott, och personen får då inte längre arbeta i bevakningsbranschen.",
+      "tags": [
+        "bransch",
+        "tillstand"
+      ]
+    },
+    {
+      "id": 133,
+      "category": "bransch_regler",
+      "categoryLabel": "Bevakningsbranschen – regler och roller",
+      "level": "grund",
+      "term": "Personskydd",
+      "lawRef": null,
+      "front": "Personskydd",
+      "back": "Bevakning av enskild person för dennes skydd – en specialtjänst som kräver särskild auktorisation av företaget och särskild utbildning av väktaren, utöver grundutbildningen. Ska inte förväxlas med Säkerhetspolisens ansvar för den centrala statsledningens personskydd.",
+      "tags": [
+        "bransch",
+        "bevakningsform"
+      ]
+    },
+    {
+      "id": 134,
+      "category": "bransch_regler",
+      "categoryLabel": "Bevakningsbranschen – regler och roller",
+      "level": "grund",
+      "term": "Bevakningshund",
+      "lawRef": null,
+      "front": "Bevakningshund",
+      "back": "Hund i bevakningstjänst kräver ett godkänt hundekipage: förare och hund utbildas, prövas och certifieras tillsammans. Ekipaget används bland annat vid rondering och områdesbevakning, och hunden är både ett sök- och skyddshjälpmedel som ställer särskilda krav på föraren.",
+      "tags": [
+        "bransch",
+        "utrustning"
+      ]
+    },
+    {
+      "id": 135,
+      "category": "bransch_regler",
+      "categoryLabel": "Bevakningsbranschen – regler och roller",
+      "level": "grund",
+      "term": "Polismyndigheten",
+      "lawRef": null,
+      "front": "Polismyndigheten",
+      "back": "Sedan 2015 en nationell myndighet indelad i sju polisregioner. För bevakningsbranschen är den regelmakaren: skriver föreskrifterna om utbildning och utrustning (PMFS/FAP) och förordnar ordningsvakter. Kontaktvägar: 112 vid pågående brott och fara, 114 14 för anmälningar som inte är akuta.",
+      "tags": [
+        "bransch",
+        "roller",
+        "rattsvasende"
+      ]
+    },
+    {
+      "id": 136,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "grund",
+      "term": "Allmän instruktion",
+      "lawRef": null,
+      "front": "Allmän instruktion",
+      "back": "Bevakningsföretagets generella regler som gäller alla väktare och uppdrag, till skillnad från objektsinstruktionen som gäller ett visst objekt. Tillsammans utgör de uppdragsbeskrivningen och väktarens trygghet: den som agerar enligt instruktionerna har företaget bakom sig.",
+      "tags": [
+        "bevakningsform",
+        "rutiner"
+      ]
+    },
+    {
+      "id": 137,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "grund",
+      "term": "Yttre och inre rond",
+      "lawRef": null,
+      "front": "Yttre och inre rond",
+      "back": "Den yttre ronden kontrollerar skalskyddet: dörrar, fönster, portar, staket, belysning – och sådant som kan användas för intrång, som stegar mot fasaden. Den inre ronden kontrollerar lås, larmpunkter, brandrisker och avvikelser. Variera tider och vägar – oförutsägbarheten är rondens vassaste vapen.",
+      "tags": [
+        "rondering",
+        "bevakningsform"
+      ]
+    },
+    {
+      "id": 138,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "fordjupning",
+      "term": "Normalbild",
+      "lawRef": null,
+      "front": "Normalbild",
+      "back": "Den erfarna väktarens främsta verktyg: kunskapen om hur objektet ser ut, låter och beter sig en vanlig natt. Mot en känd normalbild blir avvikelser synliga av sig själva – bilen som inte brukar stå där, ljuset som är släckt, dörren som är olåst för första gången. Byggs medvetet under de första passen.",
+      "tags": [
+        "rondering",
+        "bevakningsform"
+      ]
+    },
+    {
+      "id": 139,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "fordjupning",
+      "term": "Förberedelsetecken",
+      "lawRef": null,
+      "front": "Förberedelsetecken",
+      "back": "Planerade brott föregås ofta av rekognosering som syns för den som tittar: samma fordon flera nätter i rad, personer som fotograferar grindar och kameror, ovanligt intresserade frågor om rutiner och tider. Rapportera mönster – inte bara enskilda händelser – så att ledningscentralen ser helheten.",
+      "tags": [
+        "rondering",
+        "rapportering"
+      ]
+    },
+    {
+      "id": 140,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "fordjupning",
+      "term": "Testlarm",
+      "lawRef": null,
+      "front": "Testlarm",
+      "back": "Avsiktligt utlösta larm för att mäta responstider eller trötta ut responsen tills larmen börjar avfärdas. Motmedlet: rapportera mönstret som en egen avvikelse och möt upprepade larm med högre beredskap, inte lägre. Falsklarm är alltid en slutsats efter fullständig kontroll – aldrig en förhandsgissning.",
+      "tags": [
+        "larm",
+        "rondering"
+      ]
+    },
+    {
+      "id": 141,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "fordjupning",
+      "term": "Uppläggning",
+      "lawRef": null,
+      "front": "Uppläggning",
+      "back": "Stöldgods som flyttats och lagts upp, till exempel vid ett staket, för att kastas över eller hämtas genom ett förberett hål. Rör inte godset: larma ledningscentral och polis enligt rutin, dokumentera plats och tid och håll diskret uppsikt på avstånd – polisen kan vilja ta gärningsmännen på bar gärning.",
+      "tags": [
+        "rondering",
+        "rapportering"
+      ]
+    },
+    {
+      "id": 142,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "fordjupning",
+      "term": "Skydd i lager",
+      "lawRef": null,
+      "front": "Skydd i lager",
+      "back": "Principen bakom industri- och områdesbevakning: områdesskyddet (perimetern med staket, grindar, belysning och kameror) ytterst, byggnadsskalet därinnanför och cellskyddet kring det mest skyddsvärda innerst. Ju längre in, desto starkare skydd – och en brist i ett yttre lager höjer kraven på de inre.",
+      "tags": [
+        "bevakningsform",
+        "fastighet"
+      ]
+    },
+    {
+      "id": 143,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "grund",
+      "term": "Tailgating",
+      "lawRef": null,
+      "front": "Tailgating",
+      "back": "Att en obehörig person följer med in på en behörig persons kortdragning – inpasseringskontrollens största hot. Motmedlet är rutin och likabehandling: stoppa artigt och hänvisa till besöksregistreringen. Ett undantag 'bara den här gången' är exakt vad en angripare räknar med.",
+      "tags": [
+        "bevakningsform",
+        "rutiner"
+      ]
+    },
+    {
+      "id": 144,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "grund",
+      "term": "Utpasseringskontroll",
+      "lawRef": null,
+      "front": "Utpasseringskontroll",
+      "back": "Kontroll av väskor, fordon och gods vid utpassering bygger på avtal och frivillighet – aldrig tvång. Vägrar någon: inget kvarhållande och ingen visitation; notera, rapportera och följ rutinen. Slumpkontroller ska vara äkta slumpmässiga och lika för alla – urval på utseende är diskriminering.",
+      "tags": [
+        "bevakningsform",
+        "visitation",
+        "etik"
+      ]
+    },
+    {
+      "id": 145,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "fordjupning",
+      "term": "Social manipulation",
+      "lawRef": null,
+      "front": "Social manipulation",
+      "back": "Angriparens tre hävstänger vid passerkontroller: auktoritet (titlar, namndroppning), tidspress ('det är akut, vi är sena') och normalisering ('alla brukar släppa in mig'). Motmedlet är att verifiera via en egen, känd kanal – och känslan av att pressas till ett undantag är själva varningssignalen.",
+      "tags": [
+        "bevakningsform",
+        "sakerhet"
+      ]
+    },
+    {
+      "id": 146,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "grund",
+      "term": "Passöverlämning",
+      "lawRef": null,
+      "front": "Passöverlämning",
+      "back": "Ett säkerhetsmoment vid skiftbyte: pågående ärenden, avvikelser, besked från ledningscentralen och utkvitterad utrustning lämnas över både muntligt och i rapport. Det avlösaren inte får veta kan bli nattens problem – en slarvig överlämning är en klassisk felkälla i bevakningsarbete.",
+      "tags": [
+        "rutiner",
+        "bevakningsform"
+      ]
+    },
+    {
+      "id": 147,
+      "category": "bevakningsformer",
+      "categoryLabel": "Bevakningsformer och arbetssätt",
+      "level": "grund",
+      "term": "Legitimationskontroll",
+      "lawRef": null,
+      "front": "Legitimationskontroll",
+      "back": "Godtagna handlingar är normalt svenskt pass, nationellt id-kort, svenskt körkort samt SIS-märkta och Skatteverkets id-kort. Kontrollera giltighetstid, att fotot stämmer, personnummer och ålder samt säkerhetsdetaljer: håll själv handlingen, känn på ytan, vinkla mot ljuset och jämför trycket. Neka hellre än chansa.",
+      "tags": [
+        "legitimation",
+        "rutiner"
+      ]
+    },
+    {
+      "id": 148,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Skjutvapen i bevakningstjänst",
+      "lawRef": null,
+      "front": "Skjutvapen i bevakningstjänst",
+      "back": "Förekommer endast i särskilda uppdrag, främst värdetransport och personskydd, och kräver särskild vapenutbildning, tillstånd och återkommande kompetensprov. Grundregeln för all utrustning gäller: bär bara det som uppdraget kräver, som arbetsgivaren beslutat om och som du är utbildad för.",
+      "tags": [
+        "utrustning",
+        "vald"
+      ]
+    },
+    {
+      "id": 149,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Inbrottslarmets uppbyggnad",
+      "lawRef": null,
+      "front": "Inbrottslarmets uppbyggnad",
+      "back": "Ett inbrottslarm består av detektorer (magnetkontakter, rörelse-, glaskross- och vibrationsdetektorer), en centralapparat, en manöverpanel och larmöverföring till larmcentral. Anläggningen delas in i sektioner så att larmet visar var något har hänt – till exempel 'sektion Kontor 2'.",
+      "tags": [
+        "larm",
+        "teknik"
+      ]
+    },
+    {
+      "id": 150,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Volymskydd",
+      "lawRef": null,
+      "front": "Volymskydd",
+      "back": "Larmskydd som känner av rörelse inne i lokalerna och larmar när någon redan är inne – till skillnad från skalskyddet, som övervakar omslutningsytan och larmar när någon försöker ta sig in. Vanliga onödiga utlösare är djur, gardiner, ballonger och insekter framför rörelsedetektorer.",
+      "tags": [
+        "larm",
+        "teknik"
+      ]
+    },
+    {
+      "id": 151,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Driftlarm",
+      "lawRef": null,
+      "front": "Driftlarm",
+      "back": "Larm som övervakar teknik i stället för intrång: kyla och frys, temperatur, vattenflöden, el och ventilation. Snabb åtgärd kan rädda stora värden – ett frysrum som larmat eller en vattenläcka i en serverhall väntar inte till morgonen. Åtgärderna följer objektsinstruktionen.",
+      "tags": [
+        "larm",
+        "teknik"
+      ]
+    },
+    {
+      "id": 152,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Tyst larm",
+      "lawRef": null,
+      "front": "Tyst larm",
+      "back": "Överfallslarm är tysta larm som en hotad person utlöser – och de får aldrig röjas på platsen. Vid utryckning hanteras läget som skarpt enligt instruktion; att uppträda som om du bara kontrollerar ett vanligt larm kan utsätta den hotade för allvarlig fara. Utlöst tyst larm har alltid högsta prioritet.",
+      "tags": [
+        "larm",
+        "sakerhet"
+      ]
+    },
+    {
+      "id": 153,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Kameraverifiering",
+      "lawRef": null,
+      "front": "Kameraverifiering",
+      "back": "Att före och under en utryckning använda kamerabilden för att bedöma läget: om någon syns i lokalen, antal personer och riskbild. Men kameror har döda vinklar, mörker och driftstopp – att inget syns i bild betyder aldrig att ingen är där, och kameran ersätter aldrig den fysiska kontrollen.",
+      "tags": [
+        "kamerabevakning",
+        "teknik",
+        "larm"
+      ]
+    },
+    {
+      "id": 154,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Kroppskamera",
+      "lawRef": null,
+      "front": "Kroppskamera",
+      "back": "Bärs allt oftare för dokumentation och trygghet i tjänsten. Kroppskameran omfattas av samma regler som annan kamerabevakning – rättslig grund, upplysning och skyddad hantering av materialet – och aktiveras enligt företagets rutin. Allt inspelat material omfattas av tystnadsplikten.",
+      "tags": [
+        "kamerabevakning",
+        "utrustning"
+      ]
+    },
+    {
+      "id": 155,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Bokstaveringsalfabetet",
+      "lawRef": null,
+      "front": "Bokstaveringsalfabetet",
+      "back": "Det svenska bokstaveringsalfabetet används i radiotrafik för namn, registreringsnummer och koder: Adam, Bertil, Cesar, David, Erik, Filip och så vidare till Åke, Ärlig, Östen. Siffror uttalas en och en – ABC 123 sänds 'Adam Bertil Cesar, ett–två–tre'. Bokstavera allt som kan missuppfattas.",
+      "tags": [
+        "kommunikation",
+        "rutiner"
+      ]
+    },
+    {
+      "id": 156,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Nyckelkvittens",
+      "lawRef": null,
+      "front": "Nyckelkvittens",
+      "back": "Nycklar och passerkort kvitteras in och ut enligt rutin, förvaras säkert och lämnas aldrig utan uppsikt. En tappad nyckel eller ett tappat kort rapporteras omedelbart – kunden kan behöva byta lås eller spärra behörigheter, och varje timmes fördröjning ökar risken för hela objektet.",
+      "tags": [
+        "rutiner",
+        "utrustning"
+      ]
+    },
+    {
+      "id": 157,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Bevakningsfordon i trafiken",
+      "lawRef": null,
+      "front": "Bevakningsfordon i trafiken",
+      "back": "Bevakningsbilar är inte utryckningsfordon – trafikreglerna gäller fullt ut även vid larmutryckning: hastighet, bälte och mobilförbud. Vid larmobjekt: parkera en bit ifrån så att du ser innan du syns, ställ bilen för snabb avfärd och lås den alltid – nycklar och rapporter i bilen är ett stöldmål.",
+      "tags": [
+        "teknik",
+        "sakerhet",
+        "rondering"
+      ]
+    },
+    {
+      "id": 158,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "fordjupning",
+      "term": "Inaktivitetslarm",
+      "lawRef": null,
+      "front": "Inaktivitetslarm",
+      "back": "Funktion i personlarm som automatiskt slår larm om bäraren blir stilla för länge – ofta kombinerad med GPS-position. Gör att hjälpen hittar dig även när du inte själv kan kalla på den, och är en del av arbetsgivarens skyddsåtgärder vid ensamarbete med risk för hot och våld.",
+      "tags": [
+        "larm",
+        "arbetsmiljo",
+        "utrustning"
+      ]
+    },
+    {
+      "id": 159,
+      "category": "utrustning",
+      "categoryLabel": "Utrustning och uniform",
+      "level": "grund",
+      "term": "Låsspärr (dubbellås)",
+      "lawRef": null,
+      "front": "Låsspärr (dubbellås)",
+      "back": "Spärr på handfängsel som aktiveras direkt efter påsättningen och hindrar fängslet från att dras åt hårdare av sig självt vid rörelse – ett skydd mot nerv- och kärlskador. Kontroll av åtsittningen och aktivering av spärren är reflexer efter varje påsättning, och klagomål på domningar kontrolleras alltid.",
+      "tags": [
+        "utrustning",
+        "gripande"
+      ]
+    },
+    {
+      "id": 160,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "fordjupning",
+      "term": "ABCDE-bedömningen",
+      "lawRef": null,
+      "front": "ABCDE-bedömningen",
+      "back": "Den systematiska bedömningen av en skadad eller sjuk person, alltid i samma ordning: A luftväg (öppna med käklyft vid hinder), B andning (se, lyssna, känn), C cirkulation (stora blödningar, hudfärg), D medvetandegrad och E exponera och skydda mot kyla. Åtgärda varje fynd innan du går vidare.",
+      "tags": [
+        "sjukvard",
+        "prioritering"
+      ]
+    },
+    {
+      "id": 161,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "term": "Agonal andning",
+      "lawRef": null,
+      "front": "Agonal andning",
+      "back": "Enstaka djupa, suckande eller rosslande andetag hos en medvetslös person – ett tecken på hjärtstopp, inte på normal andning. Fällan är att vänta: ingen reaktion plus ingen normal andning betyder larma 112 och starta HLR direkt. Tveka inte på grund av enstaka andetag.",
+      "tags": [
+        "sjukvard",
+        "hlr"
+      ]
+    },
+    {
+      "id": 162,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "term": "AKUT-testet",
+      "lawRef": null,
+      "front": "AKUT-testet",
+      "back": "Snabbtest vid misstänkt stroke: Ansikte – hänger ena mungipan? Kroppsdel – kan båda armarna hållas uppe? Uttal – sluddrar talet? Tid – ring 112 omedelbart vid något av tecknen. Tid är hjärna: varje minut till behandling påverkar utgången.",
+      "tags": [
+        "sjukvard"
+      ]
+    },
+    {
+      "id": 163,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "term": "Hjärtinfarkt",
+      "lawRef": null,
+      "front": "Hjärtinfarkt",
+      "back": "Tryckande bröstsmärta, ofta med strålning mot arm eller käke, kallsvett och ångest. Åtgärd: halvsittande viloläge, larma 112 och lugna – låt aldrig personen försöka 'gå av sig' smärtan. Vid medvetslöshet utan normal andning gäller hjärtstoppsrutinen: HLR och hjärtstartare.",
+      "tags": [
+        "sjukvard"
+      ]
+    },
+    {
+      "id": 164,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "term": "Insulinkänning",
+      "lawRef": null,
+      "front": "Insulinkänning",
+      "back": "Lågt blodsocker hos en person med diabetes: förvirring, svettningar, ibland aggressivitet – ser ut som berusning men luktar inte alkohol. Ge socker om personen är vaken och kan svälja; larma 112 vid medvetslöshet. Ett nyckelexempel på att det som ser ut som fylla kan vara sjukdom.",
+      "tags": [
+        "sjukvard",
+        "bemotande"
+      ]
+    },
+    {
+      "id": 165,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "term": "Anafylaxi",
+      "lawRef": null,
+      "front": "Anafylaxi",
+      "back": "Snabb och allvarlig allergisk reaktion – svullnad, andningspåverkan och nässelutslag efter till exempel föda eller insektsstick. Larma 112 direkt och hjälp personen att ta sin egen adrenalinpenna mot lårets utsida om en sådan finns. Övervaka andning och medvetande tills ambulansen tar över.",
+      "tags": [
+        "sjukvard"
+      ]
+    },
+    {
+      "id": 166,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "grund",
+      "term": "Positionsasfyxi",
+      "lawRef": null,
+      "front": "Positionsasfyxi",
+      "back": "Kvävning till följd av kroppsställning: en person i bukläge – särskilt med händerna fängslade bak och tryck mot ryggen – kan inte andas tillräckligt och kan få hjärtstopp på minuter. Lämna aldrig någon på mage: sätt eller res upp direkt, alternativt sidoläge. 'Jag kan inte andas' tas alltid på allvar.",
+      "tags": [
+        "sjukvard",
+        "gripande"
+      ]
+    },
+    {
+      "id": 167,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "fordjupning",
+      "term": "Avsnörande förband",
+      "lawRef": null,
+      "front": "Avsnörande förband",
+      "back": "Sista utvägen vid livshotande blödning från arm eller ben när direkt tryck inte räcker – förutsätter utbildning och utrustning. Anläggs ovanför skadan, dras åt tills blödningen upphör och tidpunkten noteras alltid. Grundregeln kvarstår: direkt hårt tryck mot såret som aldrig släpps.",
+      "tags": [
+        "sjukvard",
+        "blodning"
+      ]
+    },
+    {
+      "id": 168,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "fordjupning",
+      "term": "Tecken på narkotikapåverkan",
+      "lawRef": null,
+      "front": "Tecken på narkotikapåverkan",
+      "back": "Väktaren läser avvikelser, inte diagnoser: centralstimulantia ger stora pupiller och rastlöshet, opioider små pupiller, dåsighet och farligt långsam andning, cannabis röda ögon och sötaktig lukt. Samma tecken kan vara stroke, diabetes eller skallskada – bedöm läget, inte preparatet, och hälsan först.",
+      "tags": [
+        "droger",
+        "sjukvard",
+        "bemotande"
+      ]
+    },
+    {
+      "id": 169,
+      "category": "akutsjukvard",
+      "categoryLabel": "Akutsjukvård och första hjälpen",
+      "level": "fordjupning",
+      "term": "GHB",
+      "lawRef": null,
+      "front": "GHB",
+      "back": "Drog i vätskeform där marginalen mellan rus och överdos är mycket liten, med snabb medvetslöshet som följd. Regeln är absolut: en medvetslös person efter fest eller krogkväll ska alltid till 112 – ingen läggs att 'sova av sig' ett okänt intag. Sidoläge och kontinuerlig andningskontroll tills ambulansen är framme.",
+      "tags": [
+        "droger",
+        "sjukvard"
+      ]
+    },
+    {
+      "id": 170,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "grund",
+      "term": "Brandförloppet",
+      "lawRef": null,
+      "front": "Brandförloppet",
+      "back": "En brand växer i faser: antändning, tillväxt, övertändning och fullt utvecklad brand. Ett vanligt rum kan gå från liten låga till övertändning på bara några minuter – tiden att agera är kort. De flesta som omkommer dör av röken, inte lågorna: den är giftig, het och stiger uppåt – kryp under den.",
+      "tags": [
+        "brand",
+        "teori"
+      ]
+    },
+    {
+      "id": 171,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "grund",
+      "term": "Fettbrand",
+      "lawRef": null,
+      "front": "Fettbrand",
+      "back": "Specialfallet att kunna utantill: vatten i brinnande fett ger en explosionsartad ångutveckling som kastar brinnande fett omkring sig. Kväv i stället med lock eller brandfilt, eller använd en F-klassad släckare avsedd för matfetter. Gäller fritöser, stekbord och matoljor – aldrig vatten.",
+      "tags": [
+        "brand",
+        "slackmedel"
+      ]
+    },
+    {
+      "id": 172,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "grund",
+      "term": "Brandfilt",
+      "lawRef": null,
+      "front": "Brandfilt",
+      "back": "Kväver mindre bränder genom att ta bort syret – och är förstahandsvalet när kläder brinner: lägg ner personen och kväv lågorna från huvudet och nedåt. Filten är också ett rätt verktyg mot fettbränder i kök. Kontrollera på ronden att filtar och släckare finns på plats och är oblockerade.",
+      "tags": [
+        "brand",
+        "slackmedel"
+      ]
+    },
+    {
+      "id": 173,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "grund",
+      "term": "Anlagd brand",
+      "lawRef": null,
+      "front": "Anlagd brand",
+      "back": "En av de vanligaste brandorsakerna i verksamheter. Därför är brännbart material mot fasaden en allvarlig brist – containrar ska stå på säkert avstånd från byggnaden, ofta minst sex meter enligt rekommendationerna. Väktarens brandrond och rapporter är ett direkt skydd mot anlagda bränder.",
+      "tags": [
+        "brand",
+        "rondering"
+      ]
+    },
+    {
+      "id": 174,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "grund",
+      "term": "Släckteknik",
+      "lawRef": null,
+      "front": "Släckteknik",
+      "back": "Rikta mot lågornas bas och glödbädden, inte mot rök och flammor. Arbeta med svepande rörelser, närma dig lågt och ha alltid reträttvägen bakom dig. En 6-kilos pulversläckare är tömd på 10–20 sekunder – bomma inte. Bevaka återantändning, och kan branden inte släckas snabbt: stäng in den och utrym.",
+      "tags": [
+        "brand",
+        "slackmedel"
+      ]
+    },
+    {
+      "id": 175,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "grund",
+      "term": "Automatiskt brandlarm",
+      "lawRef": null,
+      "front": "Automatiskt brandlarm",
+      "back": "Larmet går ofta direkt till räddningstjänsten. Väktarens uppgifter: undersök orsaken enligt rutin utan att avfärda larmet, möt räddningstjänsten med nycklar och orienteringsritning vid centralapparaten – och återställ aldrig anläggningen förrän orsaken är klarlagd. Bränder kan pyra dolt ovanför undertak.",
+      "tags": [
+        "brand",
+        "larm"
+      ]
+    },
+    {
+      "id": 176,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "grund",
+      "term": "Återsamlingsplats",
+      "lawRef": null,
+      "front": "Återsamlingsplats",
+      "back": "Den förutbestämda plats dit alla beger sig vid utrymning. Där försöker väktaren få grepp om ifall någon saknas – information som är guld för räddningstjänsten – och möter räddningstjänsten med nycklar, orienteringsritning och läget. Ingen går in igen förrän räddningsledaren gett klartecken.",
+      "tags": [
+        "brand",
+        "utrymning"
+      ]
+    },
+    {
+      "id": 177,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "grund",
+      "term": "Rökfyllt trapphus",
+      "lawRef": null,
+      "front": "Rökfyllt trapphus",
+      "back": "Passeras aldrig. I flerbostadshus är varje lägenhet en egen brandcell byggd att stå emot brand i cirka en timme – brinner det hos grannen: stanna inne, stäng dörren och larma 112. Blir du instängd: stäng dörrar mot branden, täta med kläder, ta dig till ett fönster och gör dig synlig.",
+      "tags": [
+        "brand",
+        "utrymning"
+      ]
+    },
+    {
+      "id": 178,
+      "category": "brandskydd",
+      "categoryLabel": "Brandskydd",
+      "level": "grund",
+      "term": "Heta arbeten",
+      "lawRef": null,
+      "front": "Heta arbeten",
+      "back": "Svetsning, skärning och andra arbeten med verktyg som alstrar värme eller gnistor kräver tillstånd, utsedd brandvakt och släckutrustning på plats. Heta arbeten utan dessa skyddsåtgärder är en klassisk brandorsak – och en avvikelse som väktaren rapporterar direkt vid upptäckt.",
+      "tags": [
+        "brand",
+        "rutiner"
+      ]
+    },
+    {
+      "id": 179,
+      "category": "arbetsmiljo",
+      "categoryLabel": "Arbetsmiljö",
+      "level": "grund",
+      "term": "Riskobservation",
+      "lawRef": null,
+      "front": "Riskobservation",
+      "back": "Upptäckten av en fara innan något har hänt – som trasig belysning i ett garage eller en blockerad nödutgång. Rapporteras enligt rutin precis som tillbud ('oj') och olyckor ('aj'). Det som aldrig rapporteras kan aldrig åtgärdas – riskobservationen är det billigaste skyddet av alla.",
+      "tags": [
+        "arbetsmiljo",
+        "rapportering"
+      ]
+    },
+    {
+      "id": 180,
+      "category": "arbetsmiljo",
+      "categoryLabel": "Arbetsmiljö",
+      "level": "grund",
+      "term": "Rätt att avbryta arbetet",
+      "lawRef": "AML 3 kap. 4 §",
+      "front": "Rätt att avbryta arbetet (AML 3:4)",
+      "back": "Innebär ett arbete omedelbar och allvarlig fara för liv eller hälsa får arbetstagaren avbryta det och ska genast underrätta arbetsgivaren eller skyddsombudet – som att vägra gå in ensam i en byggnad där ett pågående inbrott kan innebära ett väpnat möte. Säkerheten går före uppgiften.",
+      "tags": [
+        "arbetsmiljo",
+        "sakerhet"
+      ]
+    },
+    {
+      "id": 181,
+      "category": "arbetsmiljo",
+      "categoryLabel": "Arbetsmiljö",
+      "level": "fordjupning",
+      "term": "Åtgärdstrappan",
+      "lawRef": null,
+      "front": "Åtgärdstrappan",
+      "back": "Rangordningen när risker ska åtgärdas: eliminera risken helt, därefter tekniska åtgärder (belysning, larm, avspärrning), sedan organisatoriska (rutiner, dubbelbemanning, utbildning) – och personlig skyddsutrustning alltid sist. Skyddsvästen är ett kvitto på risker som inte kunnat byggas bort.",
+      "tags": [
+        "arbetsmiljo",
+        "principer"
+      ]
+    },
+    {
+      "id": 182,
+      "category": "arbetsmiljo",
+      "categoryLabel": "Arbetsmiljö",
+      "level": "fordjupning",
+      "term": "Sista-minuten-riskbedömning",
+      "lawRef": null,
+      "front": "Sista-minuten-riskbedömning",
+      "back": "Den snabba bedömningen i huvudet före varje riskmoment – ingripandet, larmutryckningen, ronden som känns fel. Tre frågor på trettio sekunder: Vad kan hända? Hur illa kan det bli? Vad gör jag åt det nu – avstånd, förstärkning, annan väg, avvakta? Motiverade avsteg från rutinen dokumenteras i rapporten.",
+      "tags": [
+        "arbetsmiljo",
+        "sakerhet"
+      ]
+    },
+    {
+      "id": 183,
+      "category": "arbetsmiljo",
+      "categoryLabel": "Arbetsmiljö",
+      "level": "fordjupning",
+      "term": "Ansvar på annans arbetsställe",
+      "lawRef": null,
+      "front": "Ansvar på annans arbetsställe",
+      "back": "På kundens objekt möts flera ansvar: bevakningsföretaget behåller hela arbetsgivaransvaret för din arbetsmiljö, kunden ansvarar för att lokaler och fasta anordningar inte utgör en risk, och på gemensamma arbetsställen finns ett samordningsansvar. Du följer två regelverk – och det strängaste vinner.",
+      "tags": [
+        "arbetsmiljo",
+        "principer"
+      ]
+    },
+    {
+      "id": 184,
+      "category": "arbetsmiljo",
+      "categoryLabel": "Arbetsmiljö",
+      "level": "grund",
+      "term": "Dygns- och veckovila",
+      "lawRef": "Arbetstidslagen (1982:673)",
+      "front": "Dygns- och veckovila (arbetstidslagen)",
+      "back": "Huvudreglerna: minst 11 timmars sammanhängande dygnsvila och minst 36 timmars sammanhängande veckovila, med särskilda regler för nattarbete och rätt till medicinska kontroller för nattarbetande. Vilotiderna är skyddsregler, inte önskemål – och trötthet hanteras som den risk den är.",
+      "tags": [
+        "arbetsmiljo"
+      ]
+    },
+    {
+      "id": 185,
+      "category": "arbetsmiljo",
+      "categoryLabel": "Arbetsmiljö",
+      "level": "fordjupning",
+      "term": "Skyddskommitté",
+      "lawRef": "AML 6 kap. 8 §",
+      "front": "Skyddskommitté (AML 6:8)",
+      "back": "På arbetsställen med minst 50 anställda ska det finnas en skyddskommitté där arbetsgivare och arbetstagare tillsammans planerar och följer upp arbetsmiljöarbetet. Skyddsombudet kan dessutom göra en formell framställan om åtgärd – och gå vidare till Arbetsmiljöverket om svar uteblir.",
+      "tags": [
+        "arbetsmiljo",
+        "roller"
+      ]
+    },
+    {
+      "id": 186,
+      "category": "arbetsmiljo",
+      "categoryLabel": "Arbetsmiljö",
+      "level": "fordjupning",
+      "term": "Kränkande särbehandling",
+      "lawRef": null,
+      "front": "Kränkande särbehandling",
+      "back": "Handlingar som riktas mot enskilda på ett kränkande sätt och kan ställa någon utanför gemenskapen: systematisk exkludering, förlöjligande, 'skämt' på samma persons bekostnad gång på gång. Arbetsgivaren ska ha rutiner för anmälan och skydd. Testet på jargong: skrattar alla – eller alla utom en?",
+      "tags": [
+        "arbetsmiljo",
+        "etik"
+      ]
+    },
+    {
+      "id": 187,
+      "category": "konflikthantering",
+      "categoryLabel": "Konflikthantering och självskydd",
+      "level": "grund",
+      "term": "Taktisk andning",
+      "lawRef": null,
+      "front": "Taktisk andning",
+      "back": "Motmedlet mot adrenalinpåslagets tunnelseende och förlorade finmotorik: andas in på fyra sekunder, håll andan i fyra, andas ut på fyra. Sänker pulsen mätbart och kan göras mitt i en konflikt. Tillsammans med nötta rutiner ger den autopiloten något att köra på när tänkandet blir långsamt.",
+      "tags": [
+        "konflikt",
+        "mental"
+      ]
+    },
+    {
+      "id": 188,
+      "category": "konflikthantering",
+      "categoryLabel": "Konflikthantering och självskydd",
+      "level": "grund",
+      "term": "Plötsligt lugn",
+      "lawRef": null,
+      "front": "Plötsligt lugn",
+      "back": "En varningssignal att ta på största allvar: när en uppjagad person plötsligt blir tyst och lugn kan det betyda att beslutet att angripa redan är fattat. Andra försignaler: knutna nävar, spänd käke, blick som låser sig eller flackar mot hakparti och utgångar, viktförflyttning till främre foten.",
+      "tags": [
+        "konflikt",
+        "sakerhet"
+      ]
+    },
+    {
+      "id": 189,
+      "category": "konflikthantering",
+      "categoryLabel": "Konflikthantering och självskydd",
+      "level": "grund",
+      "term": "Lågaffektivt bemötande",
+      "lawRef": null,
+      "front": "Lågaffektivt bemötande",
+      "back": "Affekt smittar åt båda hållen – ditt lugn är ett aktivt verktyg. Ge tid och utrymme, undvik pekande och beordrande gester, ställ dig inte öga mot öga på nära håll och minska publiken: en person som förnedras inför andra slåss hellre än backar. Säg aldrig 'lugna ner dig' – det eskalerar.",
+      "tags": [
+        "konflikt",
+        "bemotande"
+      ]
+    },
+    {
+      "id": 190,
+      "category": "konflikthantering",
+      "categoryLabel": "Konflikthantering och självskydd",
+      "level": "grund",
+      "term": "Gyllene bro",
+      "lawRef": null,
+      "front": "Gyllene bro",
+      "back": "Ett sätt för motparten att backa med värdigheten i behåll – ofta hela skillnaden mellan avmarsch och slagsmål. 'Vi tar det här lite avsides så löser vi det' eller ett val mellan två godtagbara utvägar ger känslan av kontroll. Bygg alltid en bro att backa över, särskilt inför publik.",
+      "tags": [
+        "konflikt",
+        "bemotande"
+      ]
+    },
+    {
+      "id": 191,
+      "category": "konflikthantering",
+      "categoryLabel": "Konflikthantering och självskydd",
+      "level": "fordjupning",
+      "term": "Trasig skiva",
+      "lawRef": null,
+      "front": "Trasig skiva",
+      "back": "Tekniken mot provokationer som bara vill ha din reaktion: neutral röst, saklig hållning och samma lugna uppmaning med samma ordval, hur många varv motparten än tar. Den som inte får en reaktion tröttnar – den som får en har vunnit. Särskilt viktig när någon filmar i hopp om ett klipp.",
+      "tags": [
+        "konflikt",
+        "bemotande"
+      ]
+    },
+    {
+      "id": 192,
+      "category": "konflikthantering",
+      "categoryLabel": "Konflikthantering och självskydd",
+      "level": "fordjupning",
+      "term": "Gruppdynamik",
+      "lawRef": null,
+      "front": "Gruppdynamik",
+      "back": "En grupp är modigare och mindre eftertänksam än sina medlemmar. Tre arbetsregler: identifiera ledaren och rikta dialogen dit, gärna ett par steg åt sidan – gruppen följer ledarens val. Förnedra aldrig någon inför publiken. Och vid larmning: peka ut en specifik person – 'du i röd jacka, ring 112'.",
+      "tags": [
+        "konflikt",
+        "bemotande"
+      ]
+    },
+    {
+      "id": 193,
+      "category": "konflikthantering",
+      "categoryLabel": "Konflikthantering och självskydd",
+      "level": "fordjupning",
+      "term": "Kontaktperson och säkerhetsperson",
+      "lawRef": null,
+      "front": "Kontaktperson och säkerhetsperson",
+      "back": "Rollfördelningen vid teamingripanden: kontaktpersonen sköter all kommunikation – en enda röst, så att motparten aldrig får motstridiga besked – medan säkerhetspersonen håller position i vinkel, läser omgivningen och är beredd att agera. Blir det fysiskt: samordnat, bestämt och kort.",
+      "tags": [
+        "konflikt",
+        "sjalvskydd"
+      ]
+    },
+    {
+      "id": 194,
+      "category": "konflikthantering",
+      "categoryLabel": "Konflikthantering och självskydd",
+      "level": "fordjupning",
+      "term": "Batongens träffområden",
+      "lawRef": null,
+      "front": "Batongens träffområden",
+      "back": "Slag riktas mot stora muskelgrupper – lår, vader, överarmar – där effekten är smärta och nedsatt funktion, inte bestående skada. Huvud, hals, nacke, ryggrad, bröstkorg, njurtrakt och leder kan ge livshotande skador och kan bara försvaras i yttersta nödvärnslägen. Ett slag i taget – och utvärdera.",
+      "tags": [
+        "sjalvskydd",
+        "vald",
+        "utrustning"
+      ]
+    },
+    {
+      "id": 195,
+      "category": "etik_integritet",
+      "categoryLabel": "Yrkesetik och integritet",
+      "level": "grund",
+      "term": "Beslutstrappan",
+      "lawRef": null,
+      "front": "Beslutstrappan",
+      "back": "Fyra frågor vid etiska dilemman: Är det lagligt? Följer det instruktion och rutin? Är det förenligt med alla människors lika värde? Tål det dagsljus – kan jag stå för beslutet inför arbetsledningen, den berörda, media och domstol? Fastnar du på ett trappsteg är svaret nej.",
+      "tags": [
+        "etik",
+        "principer"
+      ]
+    },
+    {
+      "id": 196,
+      "category": "etik_integritet",
+      "categoryLabel": "Yrkesetik och integritet",
+      "level": "grund",
+      "term": "Direkt och indirekt diskriminering",
+      "lawRef": "Diskrimineringslagen (2008:567)",
+      "front": "Direkt och indirekt diskriminering",
+      "back": "Diskrimineringslagen förbjuder direkt diskriminering (sämre behandling), indirekt (neutralt villkor som i praktiken missgynnar en grupp), trakasserier och bristande tillgänglighet för personer med funktionsnedsättning. Tillsynsmyndighet är DO, och den som diskriminerar kan få betala diskrimineringsersättning.",
+      "tags": [
+        "etik",
+        "diskriminering",
+        "juridik"
+      ]
+    },
+    {
+      "id": 197,
+      "category": "etik_integritet",
+      "categoryLabel": "Yrkesetik och integritet",
+      "level": "grund",
+      "term": "Otillbörliga förmåner och jäv",
+      "lawRef": null,
+      "front": "Otillbörliga förmåner och jäv",
+      "back": "Ta aldrig emot förmåner som kan påverka – eller ens se ut att kunna påverka – tjänsteutövningen: tacka vänligt nej och rapportera försöket enligt rutin. Samma logik gäller jäv: bevaka inte situationer där du har personliga intressen eller relationer – anmäl och låt någon annan ta uppdraget.",
+      "tags": [
+        "etik"
+      ]
+    },
+    {
+      "id": 198,
+      "category": "etik_integritet",
+      "categoryLabel": "Yrkesetik och integritet",
+      "level": "grund",
+      "term": "Falsk lojalitet",
+      "lawRef": null,
+      "front": "Falsk lojalitet",
+      "back": "Tystnad om en kollegas felsteg känns som lojalitet men skyddar beteendet, inte människan. Äkta kollegialitet är att säga ifrån direkt på plats – och att rapportera när gränsen passerats. Det skyddar tredje man, yrket och i längden även kollegan; tystnad gör dig dessutom själv delaktig.",
+      "tags": [
+        "etik"
+      ]
+    },
+    {
+      "id": 199,
+      "category": "etik_integritet",
+      "categoryLabel": "Yrkesetik och integritet",
+      "level": "grund",
+      "term": "Bekräftelsebias",
+      "lawRef": null,
+      "front": "Bekräftelsebias",
+      "back": "Hjärnan ser det den letar efter: bevakar du 'en misstänkt typ' hittar du misstänkta beteenden hos vem som helst. Professionalitet är att känna sina egna genvägar och korrigera dem. Profilering på beteende – föremål som göms, systematisk rekognosering – är verktyget; profilering på utseende är felkälla och olaglig.",
+      "tags": [
+        "etik",
+        "diskriminering"
+      ]
+    },
+    {
+      "id": 200,
+      "category": "etik_integritet",
+      "categoryLabel": "Yrkesetik och integritet",
+      "level": "grund",
+      "term": "Vägra brottslig order",
+      "lawRef": null,
+      "front": "Vägra brottslig order",
+      "back": "Beordras du diskriminera – av kund eller arbetsledare – är svaret detsamma: vägra. Ordern är brottslig och den som lyder kan dömas personligen; 'chefen sa det' är inget försvar. Förklara vad lagen säger, erbjud det som är tillåtet, dokumentera vad som sagts och rapportera till bevakningsföretaget.",
+      "tags": [
+        "etik",
+        "diskriminering",
+        "juridik"
+      ]
+    }
+  ]
+}

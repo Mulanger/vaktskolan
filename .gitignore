@@ -2,5 +2,11 @@
 .env.*
 !.env.example
 node_modules/
+.next/
+public/legacy-platform/
+public/site-assets/
+lighthouse-report.*
+npm-debug.log*
+*.tsbuildinfo
 .agents/node-tools/
 .DS_Store

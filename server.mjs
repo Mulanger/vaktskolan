@@ -63,16 +63,31 @@ function getSupabaseConfig() {
 }
 
 function getClerkConfig() {
+  const publishableKey =
+    process.env.CLERK_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
+    process.env.VITE_CLERK_PUBLISHABLE_KEY ||
+    "";
+  const frontendApiUrl = process.env.CLERK_FRONTEND_API_URL || getDefaultClerkFrontendApiUrl();
+
   return {
-    publishableKey:
-      process.env.CLERK_PUBLISHABLE_KEY ||
-      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
-      process.env.VITE_CLERK_PUBLISHABLE_KEY ||
-      "",
-    frontendApiUrl: process.env.CLERK_FRONTEND_API_URL || "",
+    publishableKey,
+    frontendApiUrl,
     backendApiUrl: process.env.CLERK_BACKEND_API_URL || "",
-    jwksUrl: process.env.CLERK_JWKS_URL || "",
+    jwksUrl: process.env.CLERK_JWKS_URL || (frontendApiUrl ? `${frontendApiUrl}/.well-known/jwks.json` : ""),
   };
+}
+
+function getDefaultClerkFrontendApiUrl() {
+  const siteUrl = process.env.SITE_URL || "";
+  if (!siteUrl) return "";
+
+  try {
+    const hostname = new URL(siteUrl).hostname.replace(/^www\./, "");
+    return `https://clerk.${hostname}`;
+  } catch {
+    return "";
+  }
 }
 
 function sendJson(response, status, payload) {
@@ -85,11 +100,16 @@ function sendJson(response, status, payload) {
 
 function handleClerkConfig(response) {
   const config = getClerkConfig();
+  const isProduction = process.env.APP_ENV?.toLowerCase() === "production";
+  const isLiveKey = config.publishableKey.startsWith("pk_live_");
+  const ok = Boolean(config.publishableKey && (!isProduction || isLiveKey));
+
   sendJson(response, 200, {
-    ok: Boolean(config.publishableKey),
-    publishableKey: config.publishableKey,
-    frontendApiUrl: config.frontendApiUrl,
-    jwksUrl: config.jwksUrl,
+    ok,
+    publishableKey: ok ? config.publishableKey : "",
+    frontendApiUrl: ok ? config.frontendApiUrl : "",
+    jwksUrl: ok ? config.jwksUrl : "",
+    error: config.publishableKey && isProduction && !isLiveKey ? "Clerk production publishable key is required." : undefined,
     signInUrl: "/login.html?mode=sign-in",
     signUpUrl: "/login.html?mode=sign-up",
     afterSignInUrl: "/platform",
