@@ -51,11 +51,13 @@ transformText("login.html", "login.html", [
   ["/login.html?", "/login?"],
 ]);
 transformText("app.js", "app.js", [
+  ...sharedAssetReplacements,
   ['"/platform"', '"/plattform"'],
   ["`/login.html?", "`/login?"],
   ['fetch("utbildning.md', 'fetch("/legacy-platform/utbildning.md'],
 ]);
 transformText("auth.js", "auth.js", [
+  ...sharedAssetReplacements,
   ['"/platform"', '"/plattform"'],
   ["`/login.html?", "`/login?"],
 ]);
