@@ -1471,8 +1471,8 @@ function renderHome() {
       <div class="home-dashboard-body">
         <div class="home-mobile-head">
           <div class="home-shell-brand">
-            <span class="home-shell-mark">VS</span>
-            <strong>Vaktskolan</strong>
+            <img class="app-brand-icon" src="/assets/logo/vaktskolan-icon-512.png" alt="" aria-hidden="true">
+            <img class="app-brand-wordmark" src="/assets/logo/vaktskolan-wordmark.png" alt="vaktskolan.">
           </div>
           <span class="home-mobile-avatar">${escapeHtml(initials)}</span>
         </div>
@@ -1815,8 +1815,8 @@ function renderFinalPortalMobileHead() {
   return `
     <div class="final-portal-mobile-head">
       <div class="final-portal-mobile-brand">
-        <span>VS</span>
-        <strong>Vaktskolan</strong>
+        <img class="app-brand-icon" src="/assets/logo/vaktskolan-icon-512.png" alt="" aria-hidden="true">
+        <img class="app-brand-wordmark" src="/assets/logo/vaktskolan-wordmark.png" alt="vaktskolan.">
       </div>
       <span class="final-portal-mobile-avatar">${escapeHtml(initials)}</span>
     </div>
@@ -2603,8 +2603,8 @@ function renderQuizPortalMobileHead() {
   return `
     <div class="quiz-portal-mobile-head">
       <div class="quiz-portal-mobile-brand">
-        <span>VS</span>
-        <strong>Vaktskolan</strong>
+        <img class="app-brand-icon" src="/assets/logo/vaktskolan-icon-512.png" alt="" aria-hidden="true">
+        <img class="app-brand-wordmark" src="/assets/logo/vaktskolan-wordmark.png" alt="vaktskolan.">
       </div>
       <span class="quiz-portal-mobile-avatar">${escapeHtml(initials)}</span>
     </div>

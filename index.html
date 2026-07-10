@@ -7,12 +7,13 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>Vaktskolan - Lärplattform</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233455d3'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial' font-size='22' font-weight='700' fill='white'%3EVS%3C/text%3E%3C/svg%3E">
+  <link rel="icon" type="image/png" href="/assets/logo/vaktskolan-favicon-transparent.png">
+  <link rel="apple-touch-icon" href="/assets/logo/vaktskolan-icon-512.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="styles.css?v=20260710-single-sidebar">
+  <link rel="stylesheet" href="styles.css?v=20260710-logo-1b">
 </head>
 <body class="app-booting">
   <div class="shell">
@@ -21,9 +22,11 @@
         <button class="icon-button mobile-only" id="closeNavButton" aria-label="Stäng meny">
           <i data-lucide="x"></i>
         </button>
-        <div class="brand-mark">VS</div>
-        <div>
-          <h1>Vaktskolan</h1>
+        <div class="brand-mark" aria-hidden="true">
+          <img src="/assets/logo/vaktskolan-icon-512.png" alt="">
+        </div>
+        <div class="brand-copy">
+          <img class="brand-wordmark" src="/assets/logo/vaktskolan-wordmark.png" alt="vaktskolan.">
           <p>Lärplattform</p>
         </div>
       </div>
@@ -88,8 +91,8 @@
           <section class="course-hub" id="courseHub" aria-labelledby="courseHubTitle" hidden>
             <div class="vu1-hub-mobile-head">
               <div class="vu1-hub-mobile-brand">
-                <span>VS</span>
-                <strong>Vaktskolan</strong>
+                <img class="app-brand-icon" src="/assets/logo/vaktskolan-icon-512.png" alt="" aria-hidden="true">
+                <img class="app-brand-wordmark" src="/assets/logo/vaktskolan-wordmark.png" alt="vaktskolan.">
               </div>
               <span class="vu1-hub-mobile-avatar" id="vu1HubMobileAvatar">SS</span>
             </div>
@@ -270,7 +273,9 @@
           <section class="reader-panel final-exam-panel" id="finalExamPanel" hidden>
             <div class="final-exam-head">
               <div class="final-exam-brand">
-                <span class="final-exam-brand-mark">VS</span>
+                <span class="final-exam-brand-mark" aria-hidden="true">
+                  <img src="/assets/logo/vaktskolan-icon-512.png" alt="">
+                </span>
                 <div>
                   <h3 id="finalExamTitle">Slutprov VU1</h3>
                   <p id="finalExamSubtitle">Slutprov · fokusläge</p>
@@ -344,7 +349,9 @@
 
   <div class="app-boot-screen" id="appBootScreen" role="status" aria-live="polite">
     <div class="app-boot-card">
-      <span class="app-boot-mark">VS</span>
+      <span class="app-boot-mark" aria-hidden="true">
+        <img src="/assets/logo/vaktskolan-icon-512.png" alt="">
+      </span>
       <span class="app-boot-loader" aria-hidden="true"></span>
       <strong>Laddar lärplattformen</strong>
       <p>Vi hämtar din profil och senaste kursposition.</p>
@@ -371,6 +378,6 @@
 
   <script src="authProvider.js?v=20260706-light-auth"></script>
   <script src="supabaseApi.js?v=20260705-supabase"></script>
-  <script src="app.js?v=20260710-single-sidebar"></script>
+  <script src="app.js?v=20260710-logo-1b"></script>
 </body>
 </html>

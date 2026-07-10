@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="vaktskolan">
+  <defs>
+    
+  </defs>
+  <rect x="1" y="1" width="510" height="510" rx="116" fill="#FFFFFF" stroke="#E7E6E2" stroke-width="2"></rect>
+  <text class="ic" x="256" y="352" text-anchor="middle" font-size="300" letter-spacing="-6" fill="#141414">v<tspan fill="#1C64D6">.</tspan></text>
+</svg>

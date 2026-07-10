@@ -1374,12 +1374,15 @@ body.app-booting .app-boot-screen {
   place-items: center;
   width: 44px;
   height: 44px;
-  border-radius: 15px;
-  background: var(--primary);
-  color: white;
-  font-size: 16px;
-  font-weight: 850;
-  box-shadow: 0 14px 24px rgba(37, 99, 235, 0.2);
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: 0 14px 24px rgba(15, 23, 42, 0.08);
+}
+
+.app-boot-mark img {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .app-boot-loader {
@@ -1456,10 +1459,36 @@ body.app-booting .app-boot-screen {
   height: var(--portal-brand-mark-size);
   flex: 0 0 auto;
   border-radius: 8px;
-  background: var(--primary);
-  color: white;
-  font-size: 12px;
-  font-weight: 900;
+  background: transparent;
+}
+
+.brand-mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.brand-copy {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.brand-wordmark,
+.app-brand-wordmark {
+  display: block;
+  width: 92px;
+  height: auto;
+  flex: 0 0 auto;
+}
+
+.app-brand-icon {
+  display: block;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
 }
 
 .brand-block h1,
@@ -2014,6 +2043,21 @@ body.module-milestone-mode .content-inner {
   color: #ffffff;
   font-size: 12px;
   font-weight: 900;
+}
+
+.home-shell-brand .app-brand-icon,
+.final-portal-mobile-brand .app-brand-icon,
+.quiz-portal-mobile-brand .app-brand-icon,
+.vu1-hub-mobile-brand .app-brand-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.home-shell-brand .app-brand-wordmark,
+.final-portal-mobile-brand .app-brand-wordmark,
+.quiz-portal-mobile-brand .app-brand-wordmark,
+.vu1-hub-mobile-brand .app-brand-wordmark {
+  width: 98px;
 }
 
 .home-shell-brand strong {
@@ -2582,6 +2626,10 @@ body.module-milestone-mode .content-inner {
 
   .home-mobile-head .home-shell-brand strong {
     font-size: 14px;
+  }
+
+  .home-mobile-head .home-shell-brand .app-brand-wordmark {
+    width: 96px;
   }
 
   .home-dashboard-head {
@@ -8473,10 +8521,13 @@ body.final-exam-focus-mode .final-exam-head {
   height: 32px;
   flex: 0 0 auto;
   border-radius: 9px;
-  background: #2563eb;
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 850;
+  background: transparent;
+}
+
+.final-exam-brand-mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 body.final-exam-focus-mode .final-exam-head h3 {
