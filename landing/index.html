@@ -1089,6 +1089,12 @@
             .hero-cta-stage.is-quiz-opening .hero-choice-secondary {
                 animation: none;
             }
+            .study-panel.is-active {
+                animation: none;
+            }
+            .study-tab-btn {
+                transition: none;
+            }
         }
 
         @media (max-width: 639px) {
@@ -1420,6 +1426,238 @@
 
             main.relative .border-t.border-gray-100 {
                 display: none;
+            }
+        }
+
+        /* Mobile study explorer: proposal 1a — swipeable quick-navigation tabs. */
+        @media (max-width: 639px) {
+            .study-showcase {
+                scroll-margin-top: 12px;
+                border-top-color: #e7e9ee;
+                background: #f4f5f7;
+                font-family: "Hanken Grotesk", "Schibsted Grotesk", Inter, system-ui, sans-serif;
+            }
+
+            .study-showcase-inner {
+                max-width: none;
+                padding: 54px 20px 68px;
+            }
+
+            .study-heading {
+                max-width: none;
+                margin: 0 0 8px;
+                text-align: left;
+            }
+
+            .study-kicker {
+                margin-bottom: 9px;
+                font-size: 12px;
+                letter-spacing: .13em;
+            }
+
+            .study-heading h2 {
+                max-width: 350px;
+                margin-bottom: 10px;
+                font-size: clamp(25px, 7.2vw, 29px);
+                line-height: 1.15;
+            }
+
+            .study-heading p {
+                max-width: 350px;
+                margin: 0;
+                font-size: 14.5px;
+                line-height: 1.55;
+            }
+
+            .study-tabs {
+                position: sticky;
+                top: 0;
+                z-index: 20;
+                display: flex;
+                width: calc(100% + 40px);
+                margin: 0 -20px;
+                padding: 14px 20px 16px;
+                gap: 8px;
+                overflow-x: auto;
+                overflow-y: hidden;
+                border-radius: 0;
+                background: linear-gradient(180deg, #f4f5f7 0%, #f4f5f7 76%, rgba(244, 245, 247, 0) 100%);
+                overscroll-behavior-inline: contain;
+                scroll-padding-inline: 20px;
+                scroll-snap-type: x proximity;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .study-tab-btn {
+                flex: 0 0 auto;
+                min-width: 0;
+                min-height: 40px;
+                gap: 7px;
+                padding: 9px 14px;
+                scroll-snap-align: center;
+                border: 1px solid #e1e4ea;
+                border-radius: 12px;
+                background: #fff;
+                color: #5b6270;
+                box-shadow: 0 1px 2px rgba(16, 17, 20, .04);
+                font-size: 13.5px;
+                font-weight: 700;
+                line-height: 1;
+                white-space: nowrap;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .study-tab-btn::after {
+                content: attr(data-short-label);
+            }
+
+            .study-tab-btn:hover {
+                color: #5b6270;
+                transform: none;
+            }
+
+            .study-tab-btn:focus-visible {
+                outline: 3px solid rgba(37, 99, 235, .24);
+                outline-offset: 2px;
+            }
+
+            .study-tab-btn.is-active,
+            .study-tab-btn.is-active:hover {
+                border-color: transparent;
+                background: var(--study-accent);
+                color: #fff;
+                box-shadow: 0 6px 16px rgba(37, 99, 235, .28);
+            }
+
+            .study-tab-btn svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            .study-tab-label {
+                display: none;
+            }
+
+            .study-panel.is-active {
+                animation-duration: .3s;
+            }
+
+            .study-layout {
+                flex-direction: column;
+                gap: 14px;
+            }
+
+            .study-main-card,
+            .study-side-card {
+                flex: none;
+                width: 100%;
+                padding: 24px 22px;
+                border-radius: 22px;
+            }
+
+            .study-main-card {
+                box-shadow: 0 8px 24px rgba(16, 17, 20, .05);
+            }
+
+            .study-pill {
+                margin-bottom: 16px;
+                padding: 6px 13px;
+                font-size: 12.5px;
+            }
+
+            .study-main-card h3 {
+                margin-bottom: 12px;
+                font-size: 22px;
+                line-height: 1.2;
+            }
+
+            .study-main-card p {
+                margin-bottom: 24px;
+                font-size: 15px;
+                line-height: 1.6;
+            }
+
+            .study-subtitle {
+                margin-bottom: 14px;
+                font-size: 11.5px;
+            }
+
+            .study-check-grid {
+                gap: 12px;
+                margin-bottom: 26px;
+            }
+
+            .study-check span:last-child {
+                font-size: 15px;
+                font-weight: 600;
+            }
+
+            .study-mini-grid {
+                gap: 12px;
+                margin-bottom: 26px;
+            }
+
+            .study-mini-card {
+                padding: 18px;
+            }
+
+            .study-cta-row {
+                align-items: stretch;
+                padding-top: 20px;
+            }
+
+            .study-primary-link {
+                min-height: 50px;
+                padding: 14px 18px;
+            }
+
+            .study-side-card {
+                box-shadow: 0 12px 30px rgba(16, 17, 20, .16);
+            }
+
+            .study-side-kicker {
+                margin-bottom: 12px;
+                font-size: 11.5px;
+            }
+
+            .study-side-card h3 {
+                margin-bottom: 12px;
+                font-size: 21px;
+            }
+
+            .study-side-card p {
+                margin-bottom: 22px;
+                font-size: 15px;
+            }
+
+            .study-result-card {
+                padding: 18px;
+            }
+        }
+
+        @media (max-width: 359px) {
+            .study-showcase-inner {
+                padding-right: 16px;
+                padding-left: 16px;
+            }
+
+            .study-tabs {
+                width: calc(100% + 32px);
+                margin-right: -16px;
+                margin-left: -16px;
+                padding-right: 16px;
+                padding-left: 16px;
+            }
+
+            .study-tab-btn {
+                padding-right: 12px;
+                padding-left: 12px;
+            }
+
+            .study-main-card,
+            .study-side-card {
+                padding-right: 19px;
+                padding-left: 19px;
             }
         }
 
@@ -2126,19 +2364,19 @@
             </div>
 
             <div class="study-tabs" role="tablist" aria-label="Utbildningsinnehåll">
-                <button type="button" id="study-tab-vu1" class="study-tab-btn is-active" role="tab" aria-selected="true" aria-controls="study-panel-vu1" data-study-tab="vu1">
+                <button type="button" id="study-tab-vu1" class="study-tab-btn is-active" role="tab" aria-selected="true" aria-controls="study-panel-vu1" data-study-tab="vu1" data-short-label="VU1" tabindex="0">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
                     <span class="study-tab-label"><strong>Väktarutbildning 1</strong><span>(VU1)</span></span>
                 </button>
-                <button type="button" id="study-tab-vu2" class="study-tab-btn" role="tab" aria-selected="false" aria-controls="study-panel-vu2" data-study-tab="vu2">
+                <button type="button" id="study-tab-vu2" class="study-tab-btn" role="tab" aria-selected="false" aria-controls="study-panel-vu2" data-study-tab="vu2" data-short-label="VU2" tabindex="-1">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
                     <span class="study-tab-label"><strong>Väktarutbildning 2</strong><span>(VU2)</span></span>
                 </button>
-                <button type="button" id="study-tab-slutprov" class="study-tab-btn" role="tab" aria-selected="false" aria-controls="study-panel-slutprov" data-study-tab="slutprov">
+                <button type="button" id="study-tab-slutprov" class="study-tab-btn" role="tab" aria-selected="false" aria-controls="study-panel-slutprov" data-study-tab="slutprov" data-short-label="Slutprov" tabindex="-1">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="m9 14 2 2 4-4"></path></svg>
                     <span class="study-tab-label"><strong>Slutprov & Quiz</strong><span>Öva & simulera</span></span>
                 </button>
-                <button type="button" id="study-tab-yrket" class="study-tab-btn" role="tab" aria-selected="false" aria-controls="study-panel-yrket" data-study-tab="yrket">
+                <button type="button" id="study-tab-yrket" class="study-tab-btn" role="tab" aria-selected="false" aria-controls="study-panel-yrket" data-study-tab="yrket" data-short-label="Yrke" tabindex="-1">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path><path d="M22 13H2"></path></svg>
                     <span class="study-tab-label"><strong>Väktaryrket & Karriär</strong><span>Bransch & jobb</span></span>
                 </button>
@@ -2911,12 +3149,42 @@
                 const isActive = button === targetButton;
                 button.classList.toggle('is-active', isActive);
                 button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+                button.tabIndex = isActive ? 0 : -1;
             });
+
+            if (window.matchMedia('(max-width: 639px)').matches) {
+                targetButton.scrollIntoView({
+                    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+                    block: 'nearest',
+                    inline: 'center'
+                });
+            }
         }
 
         document.querySelectorAll('[data-study-tab]').forEach((button) => {
             button.addEventListener('click', () => switchStudyTab(button.dataset.studyTab));
         });
+
+        const studyTabList = document.querySelector('.study-tabs');
+        if (studyTabList) {
+            studyTabList.addEventListener('keydown', (event) => {
+                if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+
+                const tabs = [...studyTabList.querySelectorAll('[data-study-tab]')];
+                const currentIndex = tabs.indexOf(document.activeElement);
+                if (currentIndex < 0) return;
+
+                event.preventDefault();
+                let nextIndex = currentIndex;
+                if (event.key === 'Home') nextIndex = 0;
+                if (event.key === 'End') nextIndex = tabs.length - 1;
+                if (event.key === 'ArrowLeft') nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+                if (event.key === 'ArrowRight') nextIndex = (currentIndex + 1) % tabs.length;
+
+                switchStudyTab(tabs[nextIndex].dataset.studyTab);
+                tabs[nextIndex].focus({ preventScroll: true });
+            });
+        }
 
         // 1. Interactive Tabs Mechanism
         function switchTab(tabId) {

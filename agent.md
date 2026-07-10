@@ -729,6 +729,8 @@ Om text klipps av i UI, kontrollera först:
 
 Aktiv landing page är `landing/index.html`.
 
+Status 2026-07-10: Sektionen `#utbildningar` använder designalternativ `1a` från `D:\Mobile adaptation proposals (1).zip` på mobil (`max-width: 639px`). Mobilvyn har kompakta, horisontellt scrollbara snabbflikar för `VU1`, `VU2`, `Slutprov` och `Yrke`, sticky flikrad under läsning samt en aktiv modulpanel i taget. Desktop behåller den befintliga breda flikraden och tvåkolumnslayouten. `switchStudyTab()` synkroniserar aktiv panel, ARIA-state, roving `tabindex` och centrerar vald mobilflik; piltangenter samt Home/End stöds för tangentbordsnavigation.
+
 Den innehåller:
 
 - Header/nav.
