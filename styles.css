@@ -21,6 +21,8 @@
   --portal-sidebar-active-bg: #eff4ff;
   --portal-sidebar-active: #1d4ed8;
   --portal-brand-mark-size: 32px;
+  --sidebar-brand-mark-size: 42px;
+  --sidebar-brand-wordmark-width: 118px;
   --portal-nav-row-height: 42px;
   --portal-nav-icon-size: 18px;
   --portal-nav-font-size: 13.5px;
@@ -58,14 +60,14 @@ body.final-portal-mode .primary-sidebar {
 }
 
 body.final-portal-mode .brand-block {
-  gap: 10px;
-  padding: 20px 20px 18px;
+  gap: 12px;
+  padding: 20px 20px 19px;
   border-bottom: 0;
 }
 
 body.final-portal-mode .brand-mark {
-  width: 34px;
-  height: 34px;
+  width: var(--sidebar-brand-mark-size);
+  height: var(--sidebar-brand-mark-size);
   border-radius: 9px;
   font-size: 13px;
   box-shadow: none;
@@ -77,10 +79,11 @@ body.final-portal-mode .brand-block h1 {
 }
 
 body.final-portal-mode .brand-block p {
-  margin-top: 1px;
-  color: #94a3b8;
-  font-size: 9.5px;
-  letter-spacing: 0.12em;
+  margin-top: 0;
+  color: #64748b;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0;
 }
 
 body.final-portal-mode .main-nav {
@@ -1439,26 +1442,27 @@ body.app-booting .app-boot-screen {
 .brand-block {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 18px 20px;
+  gap: 12px;
+  padding: 20px 20px 19px;
   border-bottom: 1px solid #eef2f7;
 }
 
 .brand-block > div:not(.brand-mark) {
   display: flex;
   min-width: 0;
-  align-items: baseline;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 4px;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .brand-mark {
   display: grid;
   place-items: center;
-  width: var(--portal-brand-mark-size);
-  height: var(--portal-brand-mark-size);
+  width: var(--sidebar-brand-mark-size);
+  height: var(--sidebar-brand-mark-size);
   flex: 0 0 auto;
-  border-radius: 8px;
+  border-radius: 10px;
   background: transparent;
 }
 
@@ -1471,12 +1475,19 @@ body.app-booting .app-boot-screen {
 .brand-copy {
   display: flex;
   min-width: 0;
-  align-items: baseline;
-  gap: 5px;
-  white-space: nowrap;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  white-space: normal;
 }
 
-.brand-wordmark,
+.brand-wordmark {
+  display: block;
+  width: var(--sidebar-brand-wordmark-width);
+  height: auto;
+  flex: 0 0 auto;
+}
+
 .app-brand-wordmark {
   display: block;
   width: 92px;
@@ -1505,17 +1516,16 @@ body.app-booting .app-boot-screen {
 }
 
 .brand-block p {
-  color: #94a3b8;
-  font-size: 12px;
-  font-weight: 650;
+  color: #64748b;
+  font-size: 12.5px;
+  font-weight: 700;
   letter-spacing: 0;
   line-height: 1.1;
   text-transform: none;
 }
 
 .brand-block p::before {
-  content: "\00b7";
-  margin-right: 4px;
+  content: none;
 }
 
 .main-nav {
@@ -6254,15 +6264,15 @@ body.course-hub-modern-mode .primary-sidebar {
 }
 
 body.course-hub-modern-mode .brand-block {
-  gap: 10px;
-  padding: 20px 22px 18px;
+  gap: 12px;
+  padding: 20px 22px 19px;
   border-bottom: 0;
 }
 
 body.course-hub-modern-mode .brand-mark {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
+  width: var(--sidebar-brand-mark-size);
+  height: var(--sidebar-brand-mark-size);
+  border-radius: 10px;
   font-size: 12px;
   box-shadow: none;
 }
@@ -6273,10 +6283,11 @@ body.course-hub-modern-mode .brand-block h1 {
 }
 
 body.course-hub-modern-mode .brand-block p {
-  margin-top: 1px;
-  color: #94a3b8;
-  font-size: 9.5px;
-  letter-spacing: 0.13em;
+  margin-top: 0;
+  color: #64748b;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0;
 }
 
 body.course-hub-modern-mode .main-nav {
@@ -7108,15 +7119,15 @@ body.quiz-overview-mode .primary-sidebar {
 }
 
 body.quiz-overview-mode .brand-block {
-  gap: 10px;
-  padding: 20px 20px 18px;
+  gap: 12px;
+  padding: 20px 20px 19px;
   border-bottom: 0;
 }
 
 body.quiz-overview-mode .brand-mark {
-  width: 34px;
-  height: 34px;
-  border-radius: 9px;
+  width: var(--sidebar-brand-mark-size);
+  height: var(--sidebar-brand-mark-size);
+  border-radius: 10px;
   font-size: 13px;
   box-shadow: none;
 }
@@ -7127,10 +7138,11 @@ body.quiz-overview-mode .brand-block h1 {
 }
 
 body.quiz-overview-mode .brand-block p {
-  margin-top: 1px;
-  color: #94a3b8;
-  font-size: 9.5px;
-  letter-spacing: 0.12em;
+  margin-top: 0;
+  color: #64748b;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0;
 }
 
 body.quiz-overview-mode .main-nav {
@@ -8955,15 +8967,15 @@ body.final-exam-result-mode .primary-sidebar {
 }
 
 body.final-exam-result-mode .brand-block {
-  gap: 10px;
-  padding: 20px 20px 18px;
+  gap: 12px;
+  padding: 20px 20px 19px;
   border-bottom: 0;
 }
 
 body.final-exam-result-mode .brand-mark {
-  width: 34px;
-  height: 34px;
-  border-radius: 9px;
+  width: var(--sidebar-brand-mark-size);
+  height: var(--sidebar-brand-mark-size);
+  border-radius: 10px;
   font-size: 13px;
   box-shadow: none;
 }
@@ -8974,10 +8986,11 @@ body.final-exam-result-mode .brand-block h1 {
 }
 
 body.final-exam-result-mode .brand-block p {
-  margin-top: 1px;
-  color: #94a3b8;
-  font-size: 9.5px;
-  letter-spacing: 0.12em;
+  margin-top: 0;
+  color: #64748b;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0;
 }
 
 body.final-exam-result-mode .main-nav {
@@ -9017,15 +9030,15 @@ body.final-exam-result-mode .profile-block {
   }
 
   body:is(.final-portal-mode, .course-hub-modern-mode, .quiz-overview-mode, .final-exam-result-mode) .brand-block {
-    gap: 10px;
-    padding: 18px 20px;
+    gap: 12px;
+    padding: 20px 20px 19px;
     border-bottom: 1px solid #eef2f7;
   }
 
   body:is(.final-portal-mode, .course-hub-modern-mode, .quiz-overview-mode, .final-exam-result-mode) .brand-mark {
-    width: var(--portal-brand-mark-size);
-    height: var(--portal-brand-mark-size);
-    border-radius: 8px;
+    width: var(--sidebar-brand-mark-size);
+    height: var(--sidebar-brand-mark-size);
+    border-radius: 10px;
     font-size: 12px;
     box-shadow: none;
   }
@@ -9037,9 +9050,9 @@ body.final-exam-result-mode .profile-block {
 
   body:is(.final-portal-mode, .course-hub-modern-mode, .quiz-overview-mode, .final-exam-result-mode) .brand-block p {
     margin-top: 0;
-    color: #94a3b8;
-    font-size: 12px;
-    font-weight: 650;
+    color: #64748b;
+    font-size: 12.5px;
+    font-weight: 700;
     letter-spacing: 0;
   }
 
