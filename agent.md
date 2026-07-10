@@ -663,6 +663,8 @@ Regler:
 
 ## Modulquiz Och Scenarioquiz
 
+Status 2026-07-10: Quiz Portalens startvy använder hela desktoparbetsytan från `1280px`. Panelen kan växa till `1320px`, introytan blir en kompakt tvåkolumnskomposition och de fem modulerna visas på en enda rad. Detta gör att rubrik, intro och samtliga modulkort ryms utan vertikal scroll i en vanlig bred desktopviewport. Under `1280px` behålls responsiv radbrytning, och mobilens listlayout under `940px` är oförändrad.
+
 Modulquiz fungerar per modul och kurs. Svar sparas i `state.answers` med kurs-prefix.
 
 Viktiga funktioner:
