@@ -4667,6 +4667,11 @@ body.quiz-overview-mode .content-inner {
 .module-info-button svg {
   width: 16px;
   height: 16px;
+  transition: transform 180ms ease;
+}
+
+.module-info-button[aria-expanded="true"] svg {
+  transform: rotate(180deg);
 }
 
 .module-context-details {
@@ -4677,6 +4682,17 @@ body.quiz-overview-mode .content-inner {
   color: #475569;
   font-size: 14px;
   line-height: 1.55;
+}
+
+.module-context-details > p {
+  margin: 0;
+}
+
+.module-info-mobile-grid,
+.module-info-mobile-lessons,
+.lesson-mobile-progress,
+.lesson-reading-time {
+  display: none;
 }
 
 .module-context-details[hidden] {
@@ -9940,5 +9956,339 @@ body.final-exam-result-mode .final-exam-question {
   .final-review-row p,
   .final-review-row small {
     font-size: 11.5px;
+  }
+}
+
+@keyframes mobileModuleInfoReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 560px) {
+  body.lesson-mobile-mode {
+    overflow: hidden;
+    background: #ffffff;
+  }
+
+  body.lesson-mobile-mode .shell {
+    display: block;
+    min-height: 100dvh;
+    background: #ffffff;
+  }
+
+  body.lesson-mobile-mode .topbar {
+    display: none !important;
+  }
+
+  body.lesson-mobile-mode .workspace,
+  body.lesson-mobile-mode .content-scroll {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+
+  body.lesson-mobile-mode .content-scroll {
+    background: #ffffff;
+  }
+
+  body.lesson-mobile-mode .content-inner {
+    width: 100%;
+    max-width: none;
+    padding: 0 0 calc(76px + env(safe-area-inset-bottom));
+  }
+
+  body.lesson-mobile-mode .module-context-bar {
+    grid-template-columns: minmax(0, 1fr) 36px;
+    gap: 10px;
+    border-width: 0 0 1px;
+    border-radius: 0;
+    background: #ffffff;
+    padding: 14px 12px 13px;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.035);
+  }
+
+  body.lesson-mobile-mode .module-context-meta {
+    margin-bottom: 6px;
+    color: var(--teal);
+    font-size: 9.5px;
+    letter-spacing: 0.09em;
+  }
+
+  body.lesson-mobile-mode .module-context-bar h2 {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 17px;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: normal;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  body.lesson-mobile-mode .module-info-button {
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+    border: 0;
+    background: transparent;
+    color: #64748b;
+  }
+
+  body.lesson-mobile-mode .module-info-button:hover,
+  body.lesson-mobile-mode .module-info-button[aria-expanded="true"] {
+    background: var(--primary-soft);
+    color: var(--primary);
+  }
+
+  body.lesson-mobile-mode .module-context-details {
+    margin: 2px 0 0;
+    border-top-color: #e2e8f0;
+    padding-top: 13px;
+    animation: mobileModuleInfoReveal 180ms ease both;
+  }
+
+  body.lesson-mobile-mode .module-context-details > p {
+    color: #475569;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  body.lesson-mobile-mode .module-info-mobile-grid {
+    display: grid;
+    grid-template-columns: 0.7fr 1.3fr;
+    gap: 8px;
+    margin-top: 13px;
+  }
+
+  body.lesson-mobile-mode .module-info-mobile-grid > div {
+    min-width: 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
+    padding: 10px 11px;
+  }
+
+  body.lesson-mobile-mode .module-info-mobile-grid span,
+  body.lesson-mobile-mode .module-info-mobile-lessons > span {
+    display: block;
+    color: #94a3b8;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  body.lesson-mobile-mode .module-info-mobile-grid strong {
+    display: block;
+    overflow: hidden;
+    margin-top: 3px;
+    color: #0f172a;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  body.lesson-mobile-mode .module-info-mobile-lessons {
+    display: block;
+    margin-top: 14px;
+  }
+
+  body.lesson-mobile-mode .module-info-mobile-lessons ol {
+    display: grid;
+    max-height: 164px;
+    gap: 4px;
+    margin: 8px 0 0;
+    overflow-y: auto;
+    padding: 0;
+    list-style: none;
+    overscroll-behavior: contain;
+  }
+
+  body.lesson-mobile-mode .module-info-mobile-lessons li {
+    display: grid;
+    grid-template-columns: 22px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    color: #475569;
+    padding: 6px 8px;
+  }
+
+  body.lesson-mobile-mode .module-info-mobile-lessons li.is-active {
+    background: var(--primary-soft);
+    color: var(--primary);
+  }
+
+  body.lesson-mobile-mode .module-info-mobile-lessons li > span {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    background: #ffffff;
+    font-size: 10px;
+    font-weight: 850;
+  }
+
+  body.lesson-mobile-mode .module-info-mobile-lessons li strong {
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  body.lesson-mobile-mode .reader-panel {
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background: #ffffff;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  body.lesson-mobile-mode .page-tabs {
+    display: block;
+    margin: 0;
+    overflow: visible;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 13px 12px 14px;
+  }
+
+  body.lesson-mobile-mode .page-tabs .stepper-rail,
+  body.lesson-mobile-mode .page-tabs .page-tab {
+    display: none;
+  }
+
+  body.lesson-mobile-mode .lesson-mobile-progress {
+    display: block;
+  }
+
+  body.lesson-mobile-mode .lesson-mobile-progress > span {
+    display: block;
+    color: var(--teal);
+    font-size: 11px;
+    font-weight: 850;
+  }
+
+  body.lesson-mobile-mode .lesson-mobile-progress > strong {
+    display: block;
+    overflow: hidden;
+    margin-top: 3px;
+    color: #0f172a;
+    font-size: 14px;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  body.lesson-mobile-mode .lesson-mobile-progress > div {
+    height: 4px;
+    margin-top: 12px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e2e8f0;
+  }
+
+  body.lesson-mobile-mode .lesson-mobile-progress i {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--teal);
+    transition: width 200ms ease;
+  }
+
+  body.lesson-mobile-mode .lesson-article {
+    padding: 22px 12px 30px;
+  }
+
+  body.lesson-mobile-mode .lesson-article h1,
+  body.lesson-mobile-mode .lesson-article h2 {
+    margin-bottom: 8px;
+    font-size: 29px;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+  }
+
+  body.lesson-mobile-mode .lesson-reading-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 18px;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 650;
+  }
+
+  body.lesson-mobile-mode .lesson-reading-time svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  body.lesson-mobile-mode .lesson-article p,
+  body.lesson-mobile-mode .lesson-article li {
+    color: #334155;
+    font-size: 15.5px;
+    line-height: 1.68;
+  }
+
+  body.lesson-mobile-mode .lesson-article p {
+    margin-bottom: 18px;
+  }
+
+  body.lesson-mobile-mode .reader-footer {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 45;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    border-top: 1px solid #e2e8f0;
+    background: rgba(255, 255, 255, 0.96);
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.06);
+    backdrop-filter: blur(12px);
+  }
+
+  body.lesson-mobile-mode .reader-footer button {
+    width: 100%;
+    min-height: 46px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  body.lesson-mobile-mode .reader-footer .ghost-action {
+    justify-content: flex-start;
+    padding-left: 0;
+  }
+
+  body.lesson-mobile-mode .reader-footer .dark-action {
+    justify-content: center;
+    background: var(--text);
+  }
+}
+
+@media (max-width: 380px) {
+  body.lesson-mobile-mode .lesson-article h1,
+  body.lesson-mobile-mode .lesson-article h2 {
+    font-size: 27px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .module-info-button svg,
+  body.lesson-mobile-mode .lesson-mobile-progress i {
+    transition: none;
+  }
+
+  body.lesson-mobile-mode .module-context-details {
+    animation: none;
   }
 }

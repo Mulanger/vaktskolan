@@ -396,6 +396,9 @@ const els = {
   moduleHeroText: $("#moduleHeroText"),
   moduleInfoButton: $("#moduleInfoButton"),
   moduleInfoPanel: $("#moduleInfoPanel"),
+  moduleInfoProgress: $("#moduleInfoProgress"),
+  moduleInfoTime: $("#moduleInfoTime"),
+  moduleInfoLessons: $("#moduleInfoLessons"),
   moduleMilestonePanel: $("#moduleMilestonePanel"),
   moduleMilestoneKickerIcon: $("#moduleMilestoneKickerIcon"),
   moduleMilestoneKicker: $("#moduleMilestoneKicker"),
@@ -469,6 +472,16 @@ function inlineMarkdown(value) {
 function sentenceCase(value) {
   const text = value.trim();
   return text ? text.charAt(0).toLocaleUpperCase("sv-SE") + text.slice(1) : "";
+}
+
+function estimateReadingMinutes(page) {
+  const body = Array.isArray(page?.body) ? page.body.join(" ") : String(page?.body || "");
+  const wordCount = `${page?.title || ""} ${body}`
+    .replace(/[#*_`>\-]/g, " ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
+  return Math.max(1, Math.ceil(wordCount / 180));
 }
 
 function cleanTitle(title) {
@@ -2070,12 +2083,26 @@ function renderModuleContext() {
   const module = getCurrentModule();
   if (!module) return;
   const course = getCourseConfig();
+  const progress = getModuleProgress(module, state.moduleIndex);
 
   els.moduleHeroMeta.textContent = `${course.educationLabel} · Modul ${moduleNumber(module)}`;
   els.moduleHeroTitle.textContent = moduleDisplayTitle(module);
   els.moduleHeroText.textContent = sentenceCase(module.objective || "Följ kursen sida för sida och repetera nyckelrutor inför quiz.");
+  els.moduleInfoProgress.textContent = `${progress}%`;
+  els.moduleInfoTime.textContent = moduleMetaSummary(module);
+  els.moduleInfoLessons.innerHTML = module.lessons
+    .map(
+      (item, index) => `
+        <li class="${index === state.lessonIndex ? "is-active" : ""}" ${index === state.lessonIndex ? 'aria-current="step"' : ""}>
+          <span>${index + 1}</span>
+          <strong>${escapeHtml(item.title.replace(/^\d+\.\d+\s+/, ""))}</strong>
+        </li>
+      `
+    )
+    .join("");
   els.moduleInfoPanel.hidden = true;
   els.moduleInfoButton.setAttribute("aria-expanded", "false");
+  els.moduleInfoButton.setAttribute("aria-label", "Visa modulinformation");
 }
 
 function setBodyLayoutMode(mode = "") {
@@ -2087,6 +2114,7 @@ function setBodyLayoutMode(mode = "") {
   document.body.classList.toggle("final-exam-focus-mode", mode === "final-exam-focus");
   document.body.classList.toggle("final-exam-result-mode", mode === "final-exam-result");
   document.body.classList.toggle("module-milestone-mode", mode === "module-milestone");
+  document.body.classList.toggle("lesson-mobile-mode", mode === "lesson");
   document.body.classList.toggle("course-hub-modern-mode", isModernCourseHub);
   document.body.classList.toggle("vu1-hub-mode", isModernCourseHub && state.courseId === "vu1");
   document.body.classList.toggle("vu2-hub-mode", isModernCourseHub && state.courseId === "vu2");
@@ -2442,7 +2470,7 @@ function renderReader() {
   els.finalExamPanel.hidden = true;
   els.metaPills.hidden = false;
   els.quizButton.hidden = false;
-  setBodyLayoutMode();
+  setBodyLayoutMode(state.mode === "lesson" ? "lesson" : "");
   els.lessonTitle.textContent = lesson.title.replace(/^\d+\.\d+\s+/, "");
   els.timeEstimate.textContent = moduleMetaSummary(module);
   els.pageCount.textContent = `Sida ${state.pageIndex + 1} av ${lesson.pages.length}`;
@@ -2450,7 +2478,14 @@ function renderReader() {
   renderModuleContext();
 
   els.pageTabs.style.setProperty("--step-count", lesson.pages.length);
+  const mobilePageTitle = page.title.replace(/^Sida\s+\d+:\s*/, "");
+  const mobileProgress = ((state.pageIndex + 1) / lesson.pages.length) * 100;
   els.pageTabs.innerHTML = `
+    <div class="lesson-mobile-progress">
+      <span>Steg ${state.pageIndex + 1} av ${lesson.pages.length}</span>
+      <strong>${escapeHtml(mobilePageTitle)}</strong>
+      <div aria-hidden="true"><i style="width: ${mobileProgress}%"></i></div>
+    </div>
     <div class="stepper-rail" aria-hidden="true">
       <span class="stepper-track"></span>
       <span class="stepper-fill"></span>
@@ -2470,7 +2505,7 @@ function renderReader() {
   `;
   updatePageStepperLine();
 
-  els.article.innerHTML = `<h1>${escapeHtml(page.title.replace(/^Sida\s+\d+:\s*/, ""))}</h1>${renderBlocks(page.body)}${
+  els.article.innerHTML = `<h1>${escapeHtml(mobilePageTitle)}</h1><div class="lesson-reading-time"><i data-lucide="clock-3"></i><span>${estimateReadingMinutes(page)} min</span></div>${renderBlocks(page.body)}${
     isFinalExamModule(module) ? renderFinalExamInlineCta() : ""
   }`;
 
@@ -3633,6 +3668,7 @@ function bindEvents() {
       const isOpen = !els.moduleInfoPanel.hidden;
       els.moduleInfoPanel.hidden = isOpen;
       els.moduleInfoButton.setAttribute("aria-expanded", String(!isOpen));
+      els.moduleInfoButton.setAttribute("aria-label", isOpen ? "Visa modulinformation" : "Dölj modulinformation");
       return;
     }
 

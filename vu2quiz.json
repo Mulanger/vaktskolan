@@ -1,0 +1,1389 @@
+{
+  "meta": {
+    "name": "Väktarskolan – VU2 quizbank",
+    "version": "1.0",
+    "language": "sv",
+    "generated": "2026-07-10",
+    "count": 74,
+    "source": "utbildning.md",
+    "notes": "Extraherad ur utbildningsmaterialet. source=modulquiz är modulernas quiz, source=sluttest är sluttestets frågebank (slumpbart, viktat urval per modul). Alternativen ligger i ursprunglig A–D-ordning med rätt svar i correct/correctIndex – appen bör slumpa alternativens ordning vid visning. Samma schema som scenariobanken och flashcardsbanken, så samma quizkomponent kan återanvändas."
+  },
+  "modules": [
+    {
+      "id": 1,
+      "label": "Bevakningsjuridik – fördjupning",
+      "quizCount": 8,
+      "examBankCount": 6,
+      "count": 14
+    },
+    {
+      "id": 2,
+      "label": "Bevakningstjänst – fördjupning",
+      "quizCount": 8,
+      "examBankCount": 6,
+      "count": 14
+    },
+    {
+      "id": 3,
+      "label": "Konflikthantering och självskydd – fördjupning",
+      "quizCount": 8,
+      "examBankCount": 6,
+      "count": 14
+    },
+    {
+      "id": 4,
+      "label": "Arbetsmiljö – fördjupning",
+      "quizCount": 8,
+      "examBankCount": 6,
+      "count": 14
+    },
+    {
+      "id": 5,
+      "label": "Samhällets rättsvårdande myndigheter",
+      "quizCount": 6,
+      "examBankCount": 3,
+      "count": 9
+    },
+    {
+      "id": 6,
+      "label": "Droger",
+      "quizCount": 6,
+      "examBankCount": 3,
+      "count": 9
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "course": "VU2",
+      "module": 1,
+      "moduleLabel": "Bevakningsjuridik – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 1,
+      "question": "Din kollega ser en stöld, följer gärningsmannen och lämnar över uppsikten till dig via radio utan avbrott. Du griper mannen efter kassalinjen. Är gripandet korrekt?",
+      "options": [
+        "Nej – bara den som själv såg brottet får gripa",
+        "Nej – radiokommunikation bryter alltid kedjan",
+        "Ja – uppsikten får hållas i stafett av flera personer, så länge kedjan från brott till gripande är obruten",
+        "Ja, men bara om ni arbetar för samma bevakningsföretag"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Flyende fot kräver kontinuerlig uppsikt – inte att en och samma person håller den. Luckan är det som dödar gripanderätten, inte överlämningen."
+    },
+    {
+      "id": 2,
+      "course": "VU2",
+      "module": 1,
+      "moduleLabel": "Bevakningsjuridik – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 2,
+      "question": "En man försöker stoppa på sig ett paket kaffe för 89 kronor men avbryts av personalen före kassalinjen. Får du gripa honom för försök till stöld?",
+      "options": [
+        "Nej – försök till ringa stöld är inte straffbart, så något gripbart brott finns inte förrän stölden fullbordats",
+        "Ja – alla försök till brott är gripbara",
+        "Ja, om han erkänner",
+        "Nej, men du får hålla kvar honom tills polisen kommer"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Försöksansvar gäller stöld men inte ringa stöld. Vid låga värden finns brottet först när personen passerat sista betalningsmöjligheten – och att \"hålla kvar\" utan gripande är olaga frihetsberövande."
+    },
+    {
+      "id": 3,
+      "course": "VU2",
+      "module": 1,
+      "moduleLabel": "Bevakningsjuridik – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 3,
+      "question": "Vid en butiksstöld distraherar en person personalen medan kompisen bär ut varorna. Vad gäller för distraktören?",
+      "options": [
+        "Distraktören kan aldrig gripas – han rörde inga varor",
+        "Distraktören kan bara polisanmälas i efterhand",
+        "Distraktören begår förargelseväckande beteende",
+        "Distraktören kan gripas på bar gärning som medverkande, eftersom huvudbrottet har fängelse i straffskalan – förutsatt säkra iakttagelser av hans agerande"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Medhjälp till stöld är straffbart enligt medverkansreglerna, och envarsgripandet gäller på samma villkor. Nyckeln är dina iakttagelser av att agerandet var en del av brottsplanen."
+    },
+    {
+      "id": 4,
+      "course": "VU2",
+      "module": 1,
+      "moduleLabel": "Bevakningsjuridik – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 4,
+      "question": "En kund pekar ut en kvinna på väg ut ur butiken: \"Hon stal nyss!\" Ingen i personalen eller du har sett något. Vad gör du?",
+      "options": [
+        "Griper kvinnan – kundens uppgift räcker",
+        "Griper inte – utan egen eller stafettöverlämnad kontinuerlig uppsikt finns varken bar gärning eller flyende fot; du noterar signalement, säkrar kundens vittnesuppgifter och larmar polis",
+        "Ber kunden själv gripa kvinnan",
+        "Låser entrén tills saken är utredd"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Andrahandsuppgifter ger ingen gripanderätt, hur trovärdiga de än verkar. Ett gripande på utpekande riskerar olaga frihetsberövande – dokumentationen och vittnet är i stället guld för polisen."
+    },
+    {
+      "id": 5,
+      "course": "VU2",
+      "module": 1,
+      "moduleLabel": "Bevakningsjuridik – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 5,
+      "question": "Vilka uppgifter ska alltid dokumenteras vid ett frihetsberövande?",
+      "options": [
+        "Endast den gripnes namn och personnummer",
+        "Endast tidpunkten för gripandet",
+        "Väktarens tjänstgöringstider för hela veckan",
+        "Tiderna för gripande, larm, polisens ankomst och överlämning, grunden med de bärande iakttagelserna, eventuell våldsanvändning och fängselkontroller, den gripnes tillstånd och klagomål samt vittnen"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Frihetsberövandet ska kunna följas minut för minut – uppgifterna blir stommen i polisens förundersökning och ditt skydd när tvångsanvändningen granskas."
+    },
+    {
+      "id": 6,
+      "course": "VU2",
+      "module": 1,
+      "moduleLabel": "Bevakningsjuridik – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 6,
+      "question": "En väska rycks från en kvinna. Du förföljer gärningsmannen utan avbrott, hinner ifatt och tar tillbaka väskan. Dagen därpå känner du igen samma man med en annan stulen väska från i går. Vad gäller de två dagarna?",
+      "options": [
+        "Återtagandet på bar gärning är tillåtet – men dagen efter är egenhändigt återtagande förbjuden självtäkt, och då gäller polisanmälan",
+        "Båda återtagandena är tillåtna – stulet är stulet",
+        "Inget av återtagandena är tillåtet – bara polis får ta tillbaka gods",
+        "Dagen-efter-återtagandet är tillåtet om du är säker på din sak"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Bar gärning är hela skillnaden: under det obrutna förloppet får egendom återtas, och nödvärn råder mot den som med våld hindrar det. Efteråt är samma handling ett brott – oavsett hur rätt du har i sak."
+    },
+    {
+      "id": 7,
+      "course": "VU2",
+      "module": 1,
+      "moduleLabel": "Bevakningsjuridik – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 7,
+      "question": "Under ett gripande slår den gripne dig plötsligt i ansiktet, men ger upp efter en kort stund och blir passiv. Hur förändras din våldsrätt?",
+      "options": [
+        "Nödvärnet gäller resten av ingripandet eftersom han slagit dig",
+        "Under angreppet råder nödvärn utöver laga befogenheten – när han blir passiv slocknar nödvärnet, och kvar finns bara det våld som behövs för att hålla kvar honom",
+        "Du får ge igen med ett slag för att markera",
+        "All våldsrätt upphör när han slutar slåss, även rätten att hålla kvar honom"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Grunderna avlöser varandra i realtid, och våldet ska trappas ned i samma takt. Frågan vid granskningen är inte bara om du fick använda våld – utan om du fick använda det våldet just då."
+    },
+    {
+      "id": 8,
+      "course": "VU2",
+      "module": 1,
+      "moduleLabel": "Bevakningsjuridik – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 8,
+      "question": "Efter ett rån mot din reception vill polisen ha kamerabilderna. Vad är viktigast för att materialet ska hålla som bevis?",
+      "options": [
+        "Att du mejlar filmen till alla berörda direkt",
+        "Att du klipper ihop de bästa sekvenserna åt polisen",
+        "Att sekvensen säkras direkt enligt rutin innan systemets rullande radering, med noterad kamera, tidsintervall och vem som säkrade – och lämnas till polisen den dokumenterade vägen",
+        "Att filmen läggs på objektets gemensamma server så den inte försvinner"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Bevisvärde kräver en obruten och dokumenterad hanteringskedja – och tiden är knapp eftersom de flesta system raderar rullande. Spridning och egen redigering förstör både integritetsskyddet och bevisningen."
+    },
+    {
+      "id": 9,
+      "course": "VU2",
+      "module": 2,
+      "moduleLabel": "Bevakningstjänst – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 1,
+      "question": "Hur är skyddet uppbyggt på ett större industriområde?",
+      "options": [
+        "All säkerhet koncentreras till huvudentrén",
+        "I lager – områdesskydd (perimeter), byggnadsskal och innerst cellskydd kring det mest skyddsvärda – där en brist i ett yttre lager höjer kraven på de inre",
+        "Enbart genom kameraövervakning",
+        "Skyddet är likadant överallt på området"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Lagerprincipen gör att en angripare måste forcera flera oberoende skydd – och att väktarens rond ska täcka alla lagren, inte bara byggnaderna."
+    },
+    {
+      "id": 10,
+      "course": "VU2",
+      "module": 2,
+      "moduleLabel": "Bevakningstjänst – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 2,
+      "question": "Under nattronden hittar du en pall med kopparkabel upplagd på insidan av staketet, långt från alla upplag. Vad gör du?",
+      "options": [
+        "Bär genast tillbaka kabeln till upplaget",
+        "Lastar in kabeln i väktarbilen för säker förvaring",
+        "Ignorerar den – den ligger ju innanför staketet",
+        "Rör inte godset: larmar ledningscentral och polis enligt rutin, dokumenterar och håller diskret uppsikt på avstånd – hämtningen kan ge polisen ett gripande på bar gärning"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "En uppläggning är ett pågående brottsupplägg. Att flytta godset röjer upptäckten och förstör polisens läge – rapportera, bevaka säkert och följ polisens besked."
+    },
+    {
+      "id": 11,
+      "course": "VU2",
+      "module": 2,
+      "moduleLabel": "Bevakningstjänst – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 3,
+      "question": "Vad menas med ett objekts \"normalbild\"?",
+      "options": [
+        "Kunskapen om hur objektet ser ut, låter och beter sig en vanlig dag – den referens som gör avvikelser synliga",
+        "Fotografierna i objektsinstruktionen",
+        "Kamerasystemets standardvy",
+        "Ritningen över byggnaden"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Avvikelser upptäcks bara mot ett känt normalläge – därför ägnas de första passen på ett nytt objekt åt att bygga normalbilden: fråga, läs, gå långsamt."
+    },
+    {
+      "id": 12,
+      "course": "VU2",
+      "module": 2,
+      "moduleLabel": "Bevakningstjänst – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 4,
+      "question": "Samma larmsektion har larmat tre nätter i rad utan att någon orsak hittats. Vad är rätt inför natt fyra?",
+      "options": [
+        "Avvakta i bilen – det är säkert detektorn igen",
+        "Be ledningscentralen ignorera sektionen tills teknikern varit där",
+        "Rapportera mönstret som egen avvikelse, begär fördjupad teknikerkontroll – och möt nästa larm med högre beredskap, inte lägre: upprepade larm kan vara en uttröttningstaktik",
+        "Återställa larmet på distans"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Att trötta ut responsen tills larm avfärdas är en känd metod. Mönstret är informationen – och falsklarm förblir en slutsats som kräver fullständig kontroll, varje gång."
+    },
+    {
+      "id": 13,
+      "course": "VU2",
+      "module": 2,
+      "moduleLabel": "Bevakningstjänst – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 5,
+      "question": "En stressad man i kostym kräver access: \"Revisionen väntar, vi är redan sena!\" Ingen föranmälan finns och kontaktpersonen svarar inte. Vilka manipulationshävstänger använder han – och vad gör du?",
+      "options": [
+        "Auktoritet och tidspress – du bemöter vänligt, låter honom vänta och ger ingen access förrän besöket bekräftats via en egen kanal, till exempel växeln eller avdelningens funktionsnummer",
+        "Inga – revisorer har alltid rätt till tillträde",
+        "Tidspress – därför släpper du in honom snabbt och registrerar i efterhand",
+        "Auktoritet – därför ber du om hans visitkort och släpper in honom"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Auktoritet, tidspress och namndroppning är manipulationens klassiska treklang. Verifieringen sker via dina kanaler, aldrig hans – och en äkta revisor respekterar kontrollen."
+    },
+    {
+      "id": 14,
+      "course": "VU2",
+      "module": 2,
+      "moduleLabel": "Bevakningstjänst – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 6,
+      "question": "En lastbil ska lämna området med gods och föraren visar en följesedel. Vad innebär en korrekt utpasseringskontroll?",
+      "options": [
+        "Att följesedeln har läslig underskrift",
+        "Att föraren kan namnet på sin chef",
+        "Att registreringsnumret antecknas – lasten är chaufförens ansvar",
+        "Att handlingen kontrolleras mot den faktiska lasten – en följesedel på tre pallar säger inget om en fjärde – och att avvikelser rapporteras, inte förhandlas"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Papper utan kontroll mot verkligheten är ingen kontroll. Plomberade transporter stäms av på plombnummer, och varje avvikelse vid grinden är rapportmaterial."
+    },
+    {
+      "id": 15,
+      "course": "VU2",
+      "module": 2,
+      "moduleLabel": "Bevakningstjänst – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 7,
+      "question": "Vad är problemet med formuleringen \"mannen var aggressiv\" i en ingriparapport?",
+      "options": [
+        "Den är för lång",
+        "Ordet \"man\" ska inte användas i rapporter",
+        "Det är ett värdeord utan konkretion – rapporten ska i stället återge exakta handlingar och ordagranna citat: vad han gjorde, vad han sa, med klockslag",
+        "Aggressivitet är ingen relevant omständighet"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Domstolen kan inte väga din åsikt, bara dina iakttagelser. \"Höjde rösten, knöt händerna, sa: 'jag vet var du bor'\" bär ett åtal – \"aggressiv\" gör det inte."
+    },
+    {
+      "id": 16,
+      "course": "VU2",
+      "module": 2,
+      "moduleLabel": "Bevakningstjänst – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 8,
+      "question": "Du upptäcker att kunden ändrat en rutin så att verkligheten inte längre stämmer med objektsinstruktionen. Vad gör du?",
+      "options": [
+        "Följer den gamla instruktionen tills någon säger annat och lämnar saken där",
+        "Skriver en avvikelserapport samma pass med förslag till ändring – uppdateringen beslutas av bevakningsföretaget i dialog med kunden",
+        "Ändrar själv i instruktionspärmen",
+        "Anpassar dig tyst till den nya verkligheten"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Glappet mellan karta och verklighet är farligare än förändringen själv – varje orapporterat glapp är en incident som väntar. Initiativet till levande instruktioner kommer från väktaren på golvet."
+    },
+    {
+      "id": 17,
+      "course": "VU2",
+      "module": 3,
+      "moduleLabel": "Konflikthantering och självskydd – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 1,
+      "question": "Vad innebär professionell distans när någon skriker hotelser mot dig i tjänsten?",
+      "options": [
+        "Att hålla minst fem meters fysiskt avstånd",
+        "Att aldrig prata med upprörda personer",
+        "Att svara med samma tonläge för att visa styrka",
+        "Att inse att aggressionen riktas mot uniformen och rollen – inte mot dig som person – vilket skyddar ditt omdöme från att dras in i konflikten"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Den som tar provokationen personligt börjar försvara sig själv i stället för att lösa situationen. Distansen är mental, inte kall – du kan vara varm i bemötandet och ändå låta orden studsa mot uniformen."
+    },
+    {
+      "id": 18,
+      "course": "VU2",
+      "module": 3,
+      "moduleLabel": "Konflikthantering och självskydd – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 2,
+      "question": "Ett gäng på åtta personer blockerar entrén och en tydlig ledare provocerar högljutt. Vad är rätt taktik?",
+      "options": [
+        "Ge hela gruppen en gemensam order med höjd röst",
+        "Rikta lugn dialog till ledaren, gärna ett par steg från publiken, och erbjud en utväg som låter honom välja att flytta gruppen med värdigheten intakt",
+        "Peka ut ledaren inför gruppen och kräv att han lämnar först",
+        "Vänta tills gruppen tröttnar av sig själv"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Gruppen följer ledarens val – och ledaren väljer det som räddar hans ansikte. Att sätta dit honom inför publiken tvingar honom att välja ansiktet framför din uppmaning, med gruppens hejarop i ryggen."
+    },
+    {
+      "id": 19,
+      "course": "VU2",
+      "module": 3,
+      "moduleLabel": "Konflikthantering och självskydd – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 3,
+      "question": "Du behöver hjälp av allmänheten i ett nödläge. Hur utnyttjar du kunskapen om åskådareffekten?",
+      "options": [
+        "Ropar \"kan någon ringa 112?\" till folkmassan",
+        "Litar på att någon redan har larmat",
+        "Pekar ut en specifik person och ger en specifik uppgift: \"Du i röd jacka – ring 112 nu\"",
+        "Skickar iväg alla åskådare från platsen först"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "När alla är tillfrågade känner sig ingen ansvarig – åskådareffekten gör att \"någon\" ofta blir \"ingen\". En utpekad person med en tydlig uppgift agerar nästan alltid."
+    },
+    {
+      "id": 20,
+      "course": "VU2",
+      "module": 3,
+      "moduleLabel": "Konflikthantering och självskydd – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 4,
+      "question": "En person provocerar dig verbalt medan kompisen filmar med mobilen. Vad är rätt förhållningssätt?",
+      "options": [
+        "Neutral röst, saklig hållning och samma lugna budskap upprepat – reaktionen är provokationens mål, och den ska utebli",
+        "Beslagta mobilen som filmar",
+        "Svara med en skarp tillrättavisning så att filmen visar vem som bestämmer",
+        "Vänd ryggen till och gå därifrån oavsett vad ditt uppdrag kräver"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Klippet de vill ha är väktaren som tappar det – ge dem i stället tre minuter oanvändbar film av en lugn professionell. Filmning på allmän plats är dessutom tillåten (VU1 scenariobanken), så mobilen rör du inte."
+    },
+    {
+      "id": 21,
+      "course": "VU2",
+      "module": 3,
+      "moduleLabel": "Konflikthantering och självskydd – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 5,
+      "question": "Hur fördelas rollerna när två väktare ingriper tillsammans?",
+      "options": [
+        "Båda talar samtidigt för att visa enighet",
+        "En kontaktperson sköter all kommunikation – en enda röst – medan säkerhetspersonen håller position i vinkel, läser omgivningen och är beredd",
+        "Den mest erfarne gör allt medan den andre tittar på",
+        "En håller alltid i fängslen och en i batongen"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Motstridiga besked från två röster skapar förvirring och eskalering. Rollfördelningen görs före kontakt – och blir det fysiskt gäller samordnat, bestämt och kort."
+    },
+    {
+      "id": 22,
+      "course": "VU2",
+      "module": 3,
+      "moduleLabel": "Konflikthantering och självskydd – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 6,
+      "question": "Var riktas batongslag – och var får de i princip aldrig träffa?",
+      "options": [
+        "Mot benens leder, som ger snabbast effekt",
+        "Var som helst – batongen är ju godkänd utrustning",
+        "Mot händerna, så att motparten tappar greppet",
+        "Mot stora muskelgrupper som lår, vader och överarmar – medan huvud, hals, nacke, ryggrad och leder kan ge livshotande eller bestående skador och bara kan försvaras i yttersta nödvärnslägen med livsfara"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Målet med batongen är tillfällig smärta och nedsatt funktion, inte skada. Träffområdet är därför själva försvarlighetsfrågan – ett slag mot låret och ett mot huvudet är juridiskt två helt olika handlingar."
+    },
+    {
+      "id": 23,
+      "course": "VU2",
+      "module": 3,
+      "moduleLabel": "Konflikthantering och självskydd – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 7,
+      "question": "Vad ger det godkända batongmomentet i VU2 dig rätt att göra?",
+      "options": [
+        "Att bära den föreskrivna raka gummibatongen i tjänst enligt arbetsgivarens beslut – expanderbar batong kräver ytterligare särskild utbildning",
+        "Att bära valfri batongtyp, även expanderbar",
+        "Att använda batongen även utanför tjänsten",
+        "Ingenting – batong kräver alltid en helt separat kurs efter VU2"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Den föreskrivna gummibatongen ingår i VU2:s utbildning; den expanderbara är en påbyggnad. Och juridiken följer inte pinnen utan situationen – batongen är ett hjälpmedel inom nödvärn och laga befogenhet, inget mer."
+    },
+    {
+      "id": 24,
+      "course": "VU2",
+      "module": 3,
+      "moduleLabel": "Konflikthantering och självskydd – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 8,
+      "question": "Vad bedömer det praktiska rollspelet i VU2 främst?",
+      "options": [
+        "Hur snabbt du får kontroll på motparten fysiskt",
+        "Hur många grepptekniker du behärskar",
+        "Helheten i rätt ordning: kontakt och kommunikation först, korrekt lagstöd, minsta möjliga våld med nedtrappning, egen säkerhet – och en klar redogörelse efteråt",
+        "Din fysiska styrka och kondition"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Provets huvudmål är yrkets: lösa konflikten utan våld, och använda minsta möjliga när våld krävs. Den som pratar för lite och tar i för tidigt faller på just det som bedöms högst."
+    },
+    {
+      "id": 25,
+      "course": "VU2",
+      "module": 4,
+      "moduleLabel": "Arbetsmiljö – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 1,
+      "question": "Vad innebär det att arbetsmiljölagen är en ramlag?",
+      "options": [
+        "Den anger mål och huvudkrav, medan Arbetsmiljöverkets föreskrifter fyller ut ramen med konkreta krav",
+        "Den gäller bara ramavtal mellan företag",
+        "Den saknar sanktioner helt",
+        "Den gäller endast fysiska risker"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Lagen sätter ramen – \"alla åtgärder som behövs\" – och föreskrifterna gör kraven konkreta per riskområde. Vissa föreskriftsbrott ger sanktionsavgift direkt, och åsidosatt ansvar som skadar någon kan bli arbetsmiljöbrott."
+    },
+    {
+      "id": 26,
+      "course": "VU2",
+      "module": 4,
+      "moduleLabel": "Arbetsmiljö – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 2,
+      "question": "En identifierad risk kan inte åtgärdas omedelbart. Vad kräver det systematiska arbetsmiljöarbetet?",
+      "options": [
+        "Att risken accepteras tills vidare",
+        "Att muntlig information ges på nästa arbetsplatsträff",
+        "Att risken förs in i en skriftlig handlingsplan med åtgärd, ansvarig och tidpunkt",
+        "Att skyddsombudet tar över ansvaret för risken"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Ingen risk får bli liggande utan ägare – handlingsplanen gör att åtgärden kan följas upp och att ansvaret inte försvinner i vardagen."
+    },
+    {
+      "id": 27,
+      "course": "VU2",
+      "module": 4,
+      "moduleLabel": "Arbetsmiljö – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 3,
+      "question": "Du arbetar som väktare på en kunds industriområde. Hur fördelas arbetsmiljöansvaret?",
+      "options": [
+        "Kunden tar över hela ansvaret så länge du är på deras område",
+        "Bevakningsföretaget behåller arbetsgivaransvaret för dig, kunden ansvarar för arbetsställets lokaler och anordningar, och på gemensamma arbetsställen finns ett samordningsansvar – du följer båda regelverken, och det strängaste gäller",
+        "Ingen har ansvar för inhyrd personal",
+        "Du ansvarar själv eftersom du arbetar ensam"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Ansvaret följer rollerna: arbetsgivaren för dig, den som råder över stället för stället, samordnaren för helheten. För dig i praktiken: företagets och objektets skyddsregler gäller samtidigt."
+    },
+    {
+      "id": 28,
+      "course": "VU2",
+      "module": 4,
+      "moduleLabel": "Arbetsmiljö – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 4,
+      "question": "Kundens driftjour ber dig nattetid kontrollera ett larm uppe på ett tak utan räcken – du saknar fallskyddsutrustning och utbildning. Vad gör du?",
+      "options": [
+        "Går upp försiktigt – kunden betalar ju för servicen",
+        "Går upp om ledningscentralen stannar kvar i telefon",
+        "Ber en kollega göra det i stället",
+        "Avböjer med hänvisning till att uppgiften ligger utanför uppdraget och innebär allvarlig fara, erbjuder det du kan göra från marken – och rapporterar till ledningscentral och arbetsledning"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Två självständiga skäl räcker vart och ett: ändringar av uppdraget går via företaget, och allvarlig fara ger rätt att avstå. Ett motiverat nej är professionell leverans – taket löses av behörig personal i dagsljus."
+    },
+    {
+      "id": 29,
+      "course": "VU2",
+      "module": 4,
+      "moduleLabel": "Arbetsmiljö – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 5,
+      "question": "Var i åtgärdstrappan hör personlig skyddsutrustning hemma?",
+      "options": [
+        "Först – det är den snabbaste åtgärden",
+        "Var som helst, bara risken minskar",
+        "Sist – när risken inte kunnat elimineras, byggas bort tekniskt eller hanteras organisatoriskt",
+        "Personlig skyddsutrustning ingår inte i arbetsmiljöarbetet"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Trappan går eliminera → teknik → organisation → skyddsutrustning. Västen skyddar dig i mötet med risken – de högre stegen ser till att mötet aldrig sker."
+    },
+    {
+      "id": 30,
+      "course": "VU2",
+      "module": 4,
+      "moduleLabel": "Arbetsmiljö – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 6,
+      "question": "Vilka tre frågor utgör sista-minuten-riskbedömningen före ett riskmoment?",
+      "options": [
+        "Vad kan hända? Hur illa kan det bli? Vad gör jag åt det – nu?",
+        "Vem bär ansvaret? Vad säger avtalet? Vem betalar?",
+        "Hur lång tid tar det? Vad tycker kunden? Hinner jag rasten?",
+        "Var är kamerorna? Vem tittar? Vad syns i bild?"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Trettio sekunders strukturerad eftertanke före ingripandet, utryckningen eller ronden som känns fel – och när svaret får dig att avvika från rutinen dokumenteras beslutet med skälen."
+    },
+    {
+      "id": 31,
+      "course": "VU2",
+      "module": 4,
+      "moduleLabel": "Arbetsmiljö – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 7,
+      "question": "En väktare har hotats två gånger av samma gäng på ett objekt. Vad ska tillbudsrapporterna leda till?",
+      "options": [
+        "Att väktaren byter arbetsplats",
+        "Att rapporterna arkiveras för statistik",
+        "Att väktaren uppmanas vara mer försiktig",
+        "En uppdaterad riskbedömning i samråd med kunden och konkreta åtgärder – omlagd rond, dubbelbemanning, personlarm – samt uppföljning av att åtgärderna fungerar"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Varje händelse ska följas upp så att rutinerna skärps av verkligheten. Rapporterna är det som styr resurser och bemanning – orapporterade hot lämnar nästa kollega ensam med samma risk."
+    },
+    {
+      "id": 32,
+      "course": "VU2",
+      "module": 4,
+      "moduleLabel": "Arbetsmiljö – fördjupning",
+      "source": "modulquiz",
+      "numberInSection": 8,
+      "question": "Vad kännetecknar kränkande särbehandling – och vad ska finnas på arbetsplatsen?",
+      "options": [
+        "Enstaka meningsskiljaktigheter mellan kollegor – som löses av sig själva",
+        "Handlingar som kränker och kan ställa någon utanför gemenskapen, till exempel systematisk exkludering eller \"skämt\" på samma persons bekostnad – och arbetsgivaren ska ha rutiner för anmälan och hantering",
+        "All form av kritik från arbetsledningen",
+        "Endast fysiska angrepp mellan anställda"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Gränsen mot jargong är enkel: skrattar alla, eller alla utom en? Den utsatte dokumenterar och tar det till chef, skyddsombud eller HR – och den som ser det säger ifrån, precis som vid alla andra övertramp."
+    },
+    {
+      "id": 33,
+      "course": "VU2",
+      "module": 5,
+      "moduleLabel": "Samhällets rättsvårdande myndigheter",
+      "source": "modulquiz",
+      "numberInSection": 1,
+      "question": "Vilken är rättskedjans ordning?",
+      "options": [
+        "Åtal → förundersökning → anmälan → dom",
+        "Brott och anmälan → förundersökning → åtal → rättegång → påföljd och verkställighet",
+        "Rättegång → förundersökning → åtal → påföljd",
+        "Anmälan → häktning → påföljd → åtal"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Kedjan är en stafett där varje myndighet äger sin sträcka – och väktarens gripande, beslag och rapport är ofta det allra första materialet i den."
+    },
+    {
+      "id": 34,
+      "course": "VU2",
+      "module": 5,
+      "moduleLabel": "Samhällets rättsvårdande myndigheter",
+      "source": "modulquiz",
+      "numberInSection": 2,
+      "question": "Vem leder förundersökningen vid allvarligare brott och beslutar om åtal?",
+      "options": [
+        "Polismyndighetens vakthavande befäl",
+        "Tingsrättens ordförande",
+        "Kriminalvården",
+        "Åklagaren"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Åklagaren är navet mellan utredning och domstol: förundersökningsledare vid allvarligare brott, åtalsbeslutet, anhållanden och häktningsframställningar."
+    },
+    {
+      "id": 35,
+      "course": "VU2",
+      "module": 5,
+      "moduleLabel": "Samhällets rättsvårdande myndigheter",
+      "source": "modulquiz",
+      "numberInSection": 3,
+      "question": "Vilken domstol dömer brottmål i första instans?",
+      "options": [
+        "Tingsrätten – med hovrätten som överinstans och Högsta domstolen för prejudikat",
+        "Förvaltningsrätten",
+        "Hovrätten",
+        "Högsta domstolen"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "De allmänna domstolarnas trappa är tingsrätt–hovrätt–HD. Förvaltningsdomstolarna prövar i stället myndighetsbeslut – dit hör ett överklagat väktargodkännande."
+    },
+    {
+      "id": 36,
+      "course": "VU2",
+      "module": 5,
+      "moduleLabel": "Samhällets rättsvårdande myndigheter",
+      "source": "modulquiz",
+      "numberInSection": 4,
+      "question": "Vad ansvarar Kriminalvårdens frivård för?",
+      "options": [
+        "Häktade under pågående utredning",
+        "Domstolarnas säkerhetskontroller",
+        "Påföljder som verkställs i frihet – skyddstillsyn med övervakning, samhällstjänst, fotboja och stödet efter villkorlig frigivning",
+        "Utfärdande av strafförelägganden"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Kriminalvårdens tre grenar är häkte, anstalt och frivård – och en stor del av påföljderna verkställs utanför murarna."
+    },
+    {
+      "id": 37,
+      "course": "VU2",
+      "module": 5,
+      "moduleLabel": "Samhällets rättsvårdande myndigheter",
+      "source": "modulquiz",
+      "numberInSection": 5,
+      "question": "Du kallas som vittne till tingsrätten men vill helst slippa. Vad gäller?",
+      "options": [
+        "Du kan tacka nej – vittnesmål är frivilliga",
+        "Du kan skicka din rapport i stället för att komma",
+        "Ditt bevakningsföretag kan skicka en kollega i ditt ställe",
+        "Kallelsen måste följas – den som uteblir riskerar vite och kan hämtas – och i rätten gäller vittnesed och sanningsplikt, med din rapport som tillåtet minnesstöd"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Vittnesplikten är en medborgerlig skyldighet som väger tyngre än både olust och tystnadsplikt. Förbered dig genom att läsa rapporten – den skrevs för exakt det här."
+    },
+    {
+      "id": 38,
+      "course": "VU2",
+      "module": 5,
+      "moduleLabel": "Samhällets rättsvårdande myndigheter",
+      "source": "modulquiz",
+      "numberInSection": 6,
+      "question": "Vem beslutar om tillträdesförbud till en butik – och vad betyder beslutet för väktaren?",
+      "options": [
+        "Butikschefen – och beslutet ger väktaren rätt att visitera personen",
+        "Åklagaren – och den som trots förbudet går in begår ett brott och kan gripas, till skillnad från den som bara är \"portad\" av butiken själv",
+        "Polismyndigheten – och beslutet gäller alla butiker i kommunen",
+        "Länsstyrelsen – och beslutet gäller i sex månader"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Det åklagarbeslutade tillträdesförbudet är straffsanktionerat – butikens egen portning är det inte. Skillnaden avgör om ett gripande är möjligt, precis som i scenariobanken."
+    },
+    {
+      "id": 39,
+      "course": "VU2",
+      "module": 6,
+      "moduleLabel": "Droger",
+      "source": "modulquiz",
+      "numberInSection": 1,
+      "question": "Vad är ett internationellt särdrag i den svenska narkotikalagstiftningen?",
+      "options": [
+        "Att endast försäljning är straffbar",
+        "Att innehav är lagligt under en viss mängd",
+        "Att även det egna bruket av narkotika är straffbart",
+        "Att narkotikabrott aldrig kan ge fängelse"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Den restriktiva linjen kriminaliserar i princip all icke-medicinsk befattning – framställning, överlåtelse, innehav och eget bruk. Ringa narkotikabrott har böter eller fängelse i högst sex månader i skalan."
+    },
+    {
+      "id": 40,
+      "course": "VU2",
+      "module": 6,
+      "moduleLabel": "Droger",
+      "source": "modulquiz",
+      "numberInSection": 2,
+      "question": "Under en rond hittar du en påse med misstänkt narkotika i ett cykelförråd. Vad gör du?",
+      "options": [
+        "Rör inte påsen, säkrar platsen så ingen annan kommer åt den och kontaktar polis enligt rutin – fyndet dokumenteras med plats och tid",
+        "Tar med påsen till vaktlokalen för säker förvaring",
+        "Spolar ner innehållet så det inte hamnar i fel händer",
+        "Lämnar den – den ligger ju gömd"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Fyndet är bevis i ett möjligt brott: fingeravtryck och DNA förstörs av hantering, och egen \"förvaring\" av narkotika försätter dig i ett omöjligt läge. Rör inte, säkra, larma – samma princip som vid vapenfyndet i scenariobanken."
+    },
+    {
+      "id": 41,
+      "course": "VU2",
+      "module": 6,
+      "moduleLabel": "Droger",
+      "source": "modulquiz",
+      "numberInSection": 3,
+      "question": "En person har mycket små pupiller, hängande ögonlock och blir alltmer dåsig – till slut svarar hen inte på tilltal och andningen är långsam. Vad misstänker du och vad gör du?",
+      "options": [
+        "Vanlig trötthet – låt personen sova",
+        "Cannabispåverkan – ingen åtgärd behövs",
+        "Stimulantiapåverkan – håll avstånd och invänta",
+        "Möjlig opioidpåverkan med överdosrisk – larma 112 omedelbart, lägg i stabilt sidoläge och övervaka andningen med HLR-beredskap"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Knappnålspupiller, dåsighet och långsam andning är opioidbilden – och andningsdepressionen är det som dödar. Sänkt medvetande plus påverkad andning är alltid ett akutläge, oavsett orsak."
+    },
+    {
+      "id": 42,
+      "course": "VU2",
+      "module": 6,
+      "moduleLabel": "Droger",
+      "source": "modulquiz",
+      "numberInSection": 4,
+      "question": "Varför kräver GHB särskild vaksamhet?",
+      "options": [
+        "Det luktar så starkt att det avslöjar sig självt",
+        "Marginalen mellan rus och överdos är mycket liten och medvetslöshet kommer snabbt – en medvetslös person efter fest ska därför alltid till 112, aldrig läggas att \"sova av sig\"",
+        "Det ger alltid aggressivitet",
+        "Det är den enda substans som inte är narkotikaklassad"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "GHB:s smala marginal gör \"sova av sig\" till en livsfarlig chansning. Regeln är absolut: okontaktbar efter fest är ett sjukvårdslarm, varje gång."
+    },
+    {
+      "id": 43,
+      "course": "VU2",
+      "module": 6,
+      "moduleLabel": "Droger",
+      "source": "modulquiz",
+      "numberInSection": 5,
+      "question": "Vad är säkerhetsmässigt viktigast att veta om en person som är kraftigt påverkad av centralstimulantia?",
+      "options": [
+        "Oberäkneligheten och den höga smärttåligheten – håll avstånd, kalla förstärkning tidigt och räkna inte med att kunna prata ner personen i stunden",
+        "Att personen snart somnar av sig själv",
+        "Att personen alltid lyder tydliga order",
+        "Att fysiskt ingripande är riskfritt eftersom personen är försvagad"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Rastlöshet, misstänksamhet och smärttålighet gör både dialog och fysiska ingripanden opålitliga. Det är VU1 modul 9:s regel i praktiken: vissa tillstånd möts med avstånd, tid och förstärkning."
+    },
+    {
+      "id": 44,
+      "course": "VU2",
+      "module": 6,
+      "moduleLabel": "Droger",
+      "source": "modulquiz",
+      "numberInSection": 6,
+      "question": "Vilka är väktarens tre spår vid misstänkt drogpåverkan?",
+      "options": [
+        "Förhöra, visitera, avvisa",
+        "Fotografera, filma, publicera",
+        "Fara för någon → larma polis; medicinsk påverkan → 112, sidoläge och övervakning; enbart avvikande beteende → observera, dokumentera och rapportera",
+        "Ignorera, avvakta, gå vidare"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Sorteringen styr allt agerande – och hälsan bedöms alltid, oavsett spår. Väktarens uppgift är säkerhet, liv och rapport; diagnosen är vårdens och skuldfrågan polisens."
+    },
+    {
+      "id": 45,
+      "course": "VU2",
+      "module": 1,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 1,
+      "question": "En person övertalar en tonåring att stjäla varor åt honom och väntar utanför. Vad kallas hans roll juridiskt?",
+      "options": [
+        "Medhjälpare",
+        "Anstiftare – han har förmått en annan att begå brottet, och medverkansansvaret gör honom straffbar",
+        "Vittne",
+        "Hälare"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Anstiftan är att förmå någon till brott, medhjälp att underlätta det – båda är medverkan och kan vara gripbara på bar gärning vid brott med fängelse i skalan."
+    },
+    {
+      "id": 46,
+      "course": "VU2",
+      "module": 1,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 2,
+      "question": "Du har påbörjat ett gripande när tre av gärningsmannens kamrater närmar sig hotfullt. Vad gäller?",
+      "options": [
+        "Ett påbörjat gripande måste alltid fullföljas",
+        "Du får släppa bara om polisen godkänner det per telefon",
+        "Du ropar på hjälp från förbipasserande och håller fast",
+        "Gripandet får avbrytas – du släpper, skapar avstånd, larmar och dokumenterar skälen, signalement och färdriktning"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Gripanderätten är en rättighet i varje sekund, aldrig en skyldighet. Att avbryta när riskbilden växer är ett professionellt beslut – som dokumenteras precis som ett fullföljt gripande."
+    },
+    {
+      "id": 47,
+      "course": "VU2",
+      "module": 1,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 3,
+      "question": "Den du gripit för stöld har en stängd ryggsäck. Får du öppna och söka igenom den efter stöldgodset?",
+      "options": [
+        "Nej – skyddsvisitationen söker vapen av säkerhetsskäl, och det som då påträffas eller ligger synligt får tas i beslag, men systematisk genomsökning efter gods är polisens uppgift",
+        "Ja – beslag förutsätter att du letar",
+        "Ja, om ett vittne ser på",
+        "Nej, men du får kräva att personen själv tömmer väskan"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Beslagsrätten är ingen genomsökningsrätt. Väskan följer med orörd till polisen – och att tvinga någon tömma den är olaga tvång."
+    },
+    {
+      "id": 48,
+      "course": "VU2",
+      "module": 1,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 4,
+      "question": "Du har gripit en 16-åring. Vem kontaktar vårdnadshavarna?",
+      "options": [
+        "Du själv, snarast möjligt",
+        "Butikschefen",
+        "Polisen – väktaren tar aldrig egen kontakt med föräldrar eller gör egna uppgörelser, och hela hanteringen präglas av extra varsamhet",
+        "Socialtjänstens jour, som du ringer direkt"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Unga mellan 15 och 17 grips på vanliga villkor men särbehandlas därefter – underrättelser till vårdnadshavare och socialtjänst är polisens ansvar. Din uppgift är varsamhet, dokumentation och snabb överlämning."
+    },
+    {
+      "id": 49,
+      "course": "VU2",
+      "module": 1,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 5,
+      "question": "En kund byter prislappen på en dyr vara mot en billigare och betalar det lägre priset i kassan. Vilket brott ligger närmast – och vad krävs för ingripande?",
+      "options": [
+        "Ringa stöld – gripande kräver att varan lämnat butiken",
+        "Egenmäktigt förfarande – inte gripbart",
+        "Inget brott – kunden har ju betalat",
+        "Bedrägeri eller bedrägligt beteende – fängelse ingår i skalan, och gripande på bar gärning förutsätter säkra iakttagelser av själva prislappsbytet"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Vilseledandet av kassören är bedrägeribrottets kärna, och betalningen friar inte. Men beviskravet är detsamma som alltid: du ska ha sett hela kedjan – bytet, inte bara det låga priset."
+    },
+    {
+      "id": 50,
+      "course": "VU2",
+      "module": 1,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 6,
+      "question": "Du är sen till ett larm och överväger att köra över kundens gräsmatta för att spara en minut. Är det nöd?",
+      "options": [
+        "Nej – nöd kräver en verklig fara för liv, hälsa eller egendom och att ingen rimlig annan utväg finns; tidsvinst är ingen nöd",
+        "Ja – larm är alltid nödlägen",
+        "Ja, om gräsmattan repareras efteråt",
+        "Nej, men det är tillåtet som laga befogenhet"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Nödbestämmelsen är ett undantag för verkliga farolägen, inte en genväg. Vid ett obekräftat larm finns ingen konstaterad fara – och skadan du orsakar bär du själv ansvaret för."
+    },
+    {
+      "id": 51,
+      "course": "VU2",
+      "module": 2,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "sluttest",
+      "numberInSection": 1,
+      "question": "Vid områdesronden ser du att buskaget utmed staketets utsida vuxit sig högt och tätt. Varför är det en avvikelse värd att rapportera?",
+      "options": [
+        "Det ser ovårdat ut inför kundbesök",
+        "Växtligheten kan skada stängslet på sikt",
+        "Det ger insynsskydd och gömställen åt den som vill arbeta ostört mot skalskyddet – belysning och fri sikt är en del av områdesskyddet",
+        "Det är ingen avvikelse – växtlighet är kundens ensak"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Perimeterskyddet bygger på att kunna se och synas. Vegetation som skymmer är en försvagning av skalskyddet, precis som en trasig lampa – och rapporteras likadant."
+    },
+    {
+      "id": 52,
+      "course": "VU2",
+      "module": 2,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "sluttest",
+      "numberInSection": 2,
+      "question": "Samma bil står parkerad utanför grinden tre kvällar i rad, och föraren fotograferar mot kameror och infarter. Vad gör du?",
+      "options": [
+        "Konfronterar föraren och kräver att få se bilderna",
+        "Dokumenterar registreringsnummer, signalement och tider, och rapporterar det som ett mönster till ledningscentralen och polis enligt rutin – rekognosering är ett förberedelsetecken",
+        "Punkterar ett däck så bilen inte kan återvända",
+        "Ignorerar det – fotografering är lagligt"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Fotografering på allmän plats är i sig tillåten – men mönstret är informationen. Systematisk rekognosering föregår många brott, och din mönsterrapport kan bli polisens lägesbild."
+    },
+    {
+      "id": 53,
+      "course": "VU2",
+      "module": 2,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "sluttest",
+      "numberInSection": 3,
+      "question": "En plomberad lastbil ska lämna området. Vad innebär kontrollen?",
+      "options": [
+        "Att lasten packas upp och räknas",
+        "Att föraren intygar innehållet muntligt",
+        "Att fordonet vägs vid grinden",
+        "Att plombens nummer stäms av mot handlingen och att plomben är obruten – innehållet kontrolleras inte"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Plomben är kontrollen: rätt nummer och obruten försegling betyder att lasten är orörd sedan avsändaren. En bruten eller avvikande plomb är en avvikelse som rapporteras, inte förhandlas."
+    },
+    {
+      "id": 54,
+      "course": "VU2",
+      "module": 2,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "sluttest",
+      "numberInSection": 4,
+      "question": "Vad är \"negativ fakta\" i en rapport – och varför skrivs den?",
+      "options": [
+        "Uppgifter som \"inga synliga skador\" och \"inga klagomål framfördes\" – de stänger dörren för efterhandskonstruktioner och har eget bevisvärde",
+        "Kritik mot kollegors agerande",
+        "Uppgifter som talar emot din egen version och därför utelämnas",
+        "Klagomål från motparten"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Det som inte hände kan vara lika viktigt som det som hände. Den som en vecka senare påstår skador möter din tidsnära anteckning \"inga synliga skador\" – skriven innan påståendet fanns."
+    },
+    {
+      "id": 55,
+      "course": "VU2",
+      "module": 2,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "sluttest",
+      "numberInSection": 5,
+      "question": "Du börjar på ett nytt objekt. Hur bygger du normalbilden snabbast?",
+      "options": [
+        "Väntar tills något avviker – då lär man sig",
+        "Kopierar en kollegas gamla rapporter rakt av",
+        "Ägnar de första passen åt att gå ronden långsamt, fråga personal och läsa tidigare rapporter och instruktioner",
+        "Normalbilden går inte att påverka – den kommer med åren"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Normalbilden är ett aktivt bygge: frågor, långsamma varv och gamla rapporter ger dig på veckor det som annars tar månader. Utan normalbild finns inga avvikelser – bara intryck."
+    },
+    {
+      "id": 56,
+      "course": "VU2",
+      "module": 2,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "sluttest",
+      "numberInSection": 6,
+      "question": "Vad är ID06?",
+      "options": [
+        "Polisens id-kontrollsystem vid gränserna",
+        "Ett behörighets- och närvarokort som används på byggarbetsplatser och kontrolleras enligt objektets rutin",
+        "En larmklass för byggarbetsplatser",
+        "Väktarens tjänstelegitimation"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "ID06 är byggbranschens standard för att veta vem som är på arbetsplatsen. För väktaren är det ytterligare en handling att kontrollera korrekt – enligt rutinen, lika för alla."
+    },
+    {
+      "id": 57,
+      "course": "VU2",
+      "module": 3,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "sluttest",
+      "numberInSection": 1,
+      "question": "Vad innebär \"trasig skiva\"-tekniken vid provokationer?",
+      "options": [
+        "Att lugnt upprepa samma sakliga budskap med samma ordval, utan att ge provokatören något nytt att arbeta med",
+        "Att avbryta samtalet tvärt och gå",
+        "Att upprepa motpartens ord tills denne tröttnar",
+        "Att höja rösten lite för varje upprepning"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Provokationen lever på din reaktion – den uteblivna reaktionen svälter den. Samma lugna mening, varv efter varv, ger ingenting att klippa, ingenting att eskalera mot."
+    },
+    {
+      "id": 58,
+      "course": "VU2",
+      "module": 3,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "sluttest",
+      "numberInSection": 2,
+      "question": "Varför räknas ingripanden i pågående relationsbråk som särskilt riskfyllda?",
+      "options": [
+        "De tar längre tid än andra ingripanden",
+        "De sker oftast utomhus",
+        "Juridiken är annorlunda vid relationsbråk",
+        "Parternas konflikt kan på en sekund bli en gemensam front mot den som ingriper – håll avstånd, larma tidigt och stå aldrig mitt emellan"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "\"Lägg dig inte i\" kan komma från båda hållen samtidigt. Separera med vinkelposition, tala med en i taget – och minns att pågående brott ingriper du mot enligt vanliga regler, med nödvärn för annan som grund."
+    },
+    {
+      "id": 59,
+      "course": "VU2",
+      "module": 3,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "sluttest",
+      "numberInSection": 3,
+      "question": "Vad menas med kumulativ stress?",
+      "options": [
+        "Stress som bara drabbar nyanställda",
+        "Många mindre påfrestningar utan återhämtning som tillsammans sliter lika hårt som en stor händelse – en signal att söka stöd, prata och få variation i tjänsten",
+        "Stressen under själva ingripandet",
+        "Stress som försvinner av sig själv efter semestern"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Det är inte alltid den stora händelsen som knäcker – det är hundra små utan paus. Att känna igen mönstret hos sig själv och kollegor är en del av yrkespsykologin."
+    },
+    {
+      "id": 60,
+      "course": "VU2",
+      "module": 3,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "sluttest",
+      "numberInSection": 4,
+      "question": "Vad är gummibatongens främsta värde i de flesta situationer?",
+      "options": [
+        "Slaget mot benen",
+        "Den psykologiska effekten av att dras snabbt",
+        "Avståndet – att blockera, hålla ifrån och markera beredskap kan avgöra situationen utan en enda träff",
+        "Att den kan användas som bräckverktyg"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Batongen är först ett avståndsverktyg, sist ett slagverktyg. Varje träff ska klara försvarlighetsprövningen – varje meter avstånd är gratis."
+    },
+    {
+      "id": 61,
+      "course": "VU2",
+      "module": 3,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "sluttest",
+      "numberInSection": 5,
+      "question": "Vilka tre steg följer obligatoriskt efter varje batonganvändning?",
+      "options": [
+        "Rengöring, inlämning och byte av batong",
+        "Vila, samtal med kollega och kaffe",
+        "Fotografering av motparten, förhör och avrapportering till kunden",
+        "Sjukvårdsbedömning av den träffade, exakt dokumentation – antal slag, träffområden, skäl, effekt och deeskaleringen före – samt händelse- och tillbudsrapportering"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Slag mot muskulatur kan ge dolda blödningar, och batonganvändning granskas alltid. Sjukvård, dokumentation och rapport är inte efterarbete – de är en del av användningen."
+    },
+    {
+      "id": 62,
+      "course": "VU2",
+      "module": 3,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "sluttest",
+      "numberInSection": 6,
+      "question": "Varför genomförs transportgrepp i den gripnes egen gångtakt?",
+      "options": [
+        "Den som släpas eller forceras tappar balansen och blir tyngre och mer skadeutsatt – och faller ni ansvarar du för huvudet på den du håller",
+        "Det ser lugnare ut på kamerorna",
+        "För att spara väktarens krafter",
+        "Det är ett krav från försäkringsbolagen"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Kontroll är målet, inte fart. En person i balans går själv – en person ur balans hänger i dina armar, och varje fall är ditt ansvar eftersom den hållne inte kan ta emot sig."
+    },
+    {
+      "id": 63,
+      "course": "VU2",
+      "module": 4,
+      "moduleLabel": "Arbetsmiljö",
+      "source": "sluttest",
+      "numberInSection": 1,
+      "question": "Skyddsombudet har lämnat en formell framställan om åtgärd, men arbetsgivaren svarar inte. Vad kan ombudet göra?",
+      "options": [
+        "Ingenting – framställan är sista steget",
+        "Utfärda böter mot arbetsgivaren",
+        "Ta frågan vidare till Arbetsmiljöverket, som kan förelägga arbetsgivaren att agera",
+        "Säga upp kollektivavtalet"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Framställan är skyddsombudets formella verktyg – och Arbetsmiljöverket är nästa instans när svar eller åtgärd uteblir. Vid omedelbar och allvarlig fara finns dessutom alltid skyddsombudsstoppet."
+    },
+    {
+      "id": 64,
+      "course": "VU2",
+      "module": 4,
+      "moduleLabel": "Arbetsmiljö",
+      "source": "sluttest",
+      "numberInSection": 2,
+      "question": "Vilka är huvudreglerna för dygns- och veckovila?",
+      "options": [
+        "8 timmars dygnsvila och 24 timmars veckovila",
+        "Minst 11 timmars sammanhängande dygnsvila och minst 36 timmars sammanhängande veckovila",
+        "6 timmars dygnsvila och 48 timmars veckovila",
+        "Vilotider regleras inte i lag utan bara i schemat"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Vilotiderna är skyddsregler mot yrkets största slitagefaktor – och nattarbetande har dessutom rätt till medicinska kontroller. Trötthet hanteras som den risk den är."
+    },
+    {
+      "id": 65,
+      "course": "VU2",
+      "module": 4,
+      "moduleLabel": "Arbetsmiljö",
+      "source": "sluttest",
+      "numberInSection": 3,
+      "question": "Vad skiljer en sanktionsavgift från ett arbetsmiljöbrott?",
+      "options": [
+        "Det är två ord för samma sak",
+        "Sanktionsavgiften kräver en fällande dom i tingsrätt",
+        "Arbetsmiljöbrott hanteras av Arbetsmiljöverket utan polis",
+        "Sanktionsavgiften tas ut direkt vid vissa föreskriftsbrott utan att någon skadats – arbetsmiljöbrott är straffrätt när åsidosatt ansvar lett till att någon skadats eller omkommit"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Två olika tänder i samma regelverk: avgiften verkar förebyggande och automatiskt, straffrätten träder in när det redan gått illa."
+    },
+    {
+      "id": 66,
+      "course": "VU2",
+      "module": 4,
+      "moduleLabel": "Arbetsmiljö",
+      "source": "sluttest",
+      "numberInSection": 4,
+      "question": "Vad gör ett inaktivitetslarm?",
+      "options": [
+        "Larmar om bäraren är stilla för länge, så att hjälp når fram även när väktaren inte själv kan larma",
+        "Larmar när radiobatteriet är svagt",
+        "Stänger av larmsystemet vid inaktivitet",
+        "Påminner om att rondpunkter missats"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Vid ensamarbete är det farligaste scenariot att bli liggande utan att kunna kalla på hjälp – inaktivitetslarmet, gärna kombinerat med GPS-position, täcker exakt det glappet."
+    },
+    {
+      "id": 67,
+      "course": "VU2",
+      "module": 4,
+      "moduleLabel": "Arbetsmiljö",
+      "source": "sluttest",
+      "numberInSection": 5,
+      "question": "När ska det finnas en skyddskommitté på ett arbetsställe?",
+      "options": [
+        "Endast inom industrin",
+        "Vid arbetsställen med minst 50 anställda",
+        "Bara om skyddsombudet begär det skriftligt",
+        "På alla arbetsplatser oavsett storlek"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Från 50 anställda ska arbetsgivare och arbetstagare planera arbetsmiljöarbetet tillsammans i en skyddskommitté – ett forum där även bevakningens risker på objekten hör hemma."
+    },
+    {
+      "id": 68,
+      "course": "VU2",
+      "module": 4,
+      "moduleLabel": "Arbetsmiljö",
+      "source": "sluttest",
+      "numberInSection": 6,
+      "question": "Kundens industriområde kräver hjälm och varselväst i vissa zoner, men ditt företags egen rutin nämner inget om det. Vad gäller för dig?",
+      "options": [
+        "Företagets rutin – det är din arbetsgivare",
+        "Du väljer själv utifrån vädret",
+        "Kundens platsregler gäller dig fullt ut – du följer båda regelverken, och det strängaste vinner",
+        "Skyddsregler gäller bara kundens egna anställda"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "På annans arbetsställe är du gäst i deras riskmiljö: kundens skyddsregler omfattar inhyrda och entreprenörer. När regelverk skiljer sig åt är svaret alltid det strängaste."
+    },
+    {
+      "id": 69,
+      "course": "VU2",
+      "module": 5,
+      "moduleLabel": "Samhällets rättsvårdande myndigheter",
+      "source": "sluttest",
+      "numberInSection": 1,
+      "question": "När används 114 14 i stället för 112?",
+      "options": [
+        "För anmälningar och tips som inte är akuta – 112 är till för pågående brott och fara för liv, hälsa eller egendom",
+        "114 14 är polisens interna nummer",
+        "Endast på vardagar före klockan 17",
+        "När 112 är upptaget"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Rätt nummer till rätt läge håller akutlinjen fri: pågående händelser till 112, efterhandsanmälan av inbrottet till 114 14 eller polisen.se."
+    },
+    {
+      "id": 70,
+      "course": "VU2",
+      "module": 5,
+      "moduleLabel": "Samhällets rättsvårdande myndigheter",
+      "source": "sluttest",
+      "numberInSection": 2,
+      "question": "När sker villkorlig frigivning från ett fängelsestraff som huvudregel?",
+      "options": [
+        "Efter halva strafftiden",
+        "Aldrig – hela straffet avtjänas alltid",
+        "När anstalten behöver platsen",
+        "Normalt efter två tredjedelar av strafftiden, med frivårdens stöd och övervakning därefter"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Två tredjedelar är huvudregeln, och tiden därefter hör till frivårdens värld – övervakning, stöd och villkor som kan återkalla friheten vid misskötsamhet."
+    },
+    {
+      "id": 71,
+      "course": "VU2",
+      "module": 5,
+      "moduleLabel": "Samhällets rättsvårdande myndigheter",
+      "source": "sluttest",
+      "numberInSection": 3,
+      "question": "Vad är mened?",
+      "options": [
+        "Att vägra infinna sig som vittne",
+        "Att medvetet lämna osanna uppgifter under ed i domstol – ett allvarligt brott",
+        "Att använda sin rapport som minnesstöd",
+        "Att svara \"jag minns inte\" i vittnesbåset"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Sanningsplikten under ed är straffsanktionerad. Däremot är \"jag vet inte\" och \"jag minns inte\" fullgoda, ärliga svar – och rapporten som minnesstöd är både tillåten och klok."
+    },
+    {
+      "id": 72,
+      "course": "VU2",
+      "module": 6,
+      "moduleLabel": "Droger",
+      "source": "sluttest",
+      "numberInSection": 1,
+      "question": "En besökare har röda, glansiga ögon, en sötaktig lukt kring kläderna och reagerar trögt. Vilken bild stämmer det med – och vad styr ditt agerande?",
+      "options": [
+        "Opioidpåverkan – larma 112 omedelbart",
+        "Stimulantiapåverkan – kalla förstärkning",
+        "Cannabisbilden – men agerandet styrs som alltid av läget: säkerhetsrisk, vårdbehov eller enbart dokumentation",
+        "Ingen känd bild – tecknen säger ingenting"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Röda ögon, söt lukt och tröghet är den klassiska cannabisbilden. Men igenkänningen är bara bakgrund – de tre spåren (fara, medicinskt, avvikande) avgör vad du faktiskt gör."
+    },
+    {
+      "id": 73,
+      "course": "VU2",
+      "module": 6,
+      "moduleLabel": "Droger",
+      "source": "sluttest",
+      "numberInSection": 2,
+      "question": "Vid en misstänkt förgiftning finns en flaska med okänd vätska bredvid den medvetslöse. Varför säkras den orörd?",
+      "options": [
+        "Den kan innehålla fingeravtryck som du ska analysera",
+        "Innehållet kan styra sjukvårdens behandling och är samtidigt bevis – flaskan följer orörd med till ambulanspersonal och polis",
+        "Den ska hällas ut för att ingen annan ska dricka",
+        "Den ska fotograferas och sedan slängas"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Vården behandlar snabbare och säkrare när intaget är känt – och polisen behöver beviset. Din hantering: rör inte, peka ut den för ambulansen, dokumentera."
+    },
+    {
+      "id": 74,
+      "course": "VU2",
+      "module": 6,
+      "moduleLabel": "Droger",
+      "source": "sluttest",
+      "numberInSection": 3,
+      "question": "En man uppträder \"berusat\" men luktar inte alkohol. Vad gör du innan du drar slutsatsen drogpåverkan?",
+      "options": [
+        "Avvisar honom från platsen",
+        "Begär att han visar legitimation",
+        "Väntar tio minuter och ser om det går över",
+        "Överväger medicinska orsaker – diabetes, stroke, skallskada – och gör hälsobedömningen först; slutsatsen om orsak är vårdens och polisens, inte din"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "\"Fyllan som inte luktar\" är materialets återkommande varning, från VU1:s akutsjukvård till etiken: det som ser ut som påverkan kan vara sjukdom – och hälsan bedöms alltid först."
+    }
+  ]
+}

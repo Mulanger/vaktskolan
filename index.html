@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="styles.css?v=20260710-quiz-portal-fit">
+  <link rel="stylesheet" href="styles.css?v=20260710-mobile-lesson-reader">
 </head>
 <body class="app-booting">
   <div class="shell">
@@ -179,13 +179,21 @@
               <span class="module-context-meta" id="moduleHeroMeta">Väktarutbildning 1 · Modul 1</span>
               <h2 id="moduleHeroTitle">Regler för bevakningsverksamheten</h2>
             </div>
-            <button class="module-info-button" id="moduleInfoButton" type="button" aria-controls="moduleInfoPanel" aria-expanded="false">
-              <i data-lucide="info"></i>
-              <span>Info</span>
+            <button class="module-info-button" id="moduleInfoButton" type="button" aria-controls="moduleInfoPanel" aria-expanded="false" aria-label="Visa modulinformation">
+              <i data-lucide="chevron-down"></i>
+              <span>Modulinfo</span>
             </button>
-            <p class="module-context-details" id="moduleInfoPanel" hidden>
-              <span id="moduleHeroText">Följ kursen sida för sida, repetera nyckelrutor och avsluta varje modul med quiz.</span>
-            </p>
+            <div class="module-context-details" id="moduleInfoPanel" hidden>
+              <p id="moduleHeroText">Följ kursen sida för sida, repetera nyckelrutor och avsluta varje modul med quiz.</p>
+              <div class="module-info-mobile-grid" aria-label="Modulstatus">
+                <div><span>Progress</span><strong id="moduleInfoProgress">0%</strong></div>
+                <div><span>Omfattning</span><strong id="moduleInfoTime">--</strong></div>
+              </div>
+              <div class="module-info-mobile-lessons">
+                <span>Lektioner i modulen</span>
+                <ol id="moduleInfoLessons"></ol>
+              </div>
+            </div>
           </section>
 
           <section class="module-milestone-panel" id="moduleMilestonePanel" aria-labelledby="moduleMilestoneTitle" hidden>
@@ -378,6 +386,6 @@
 
   <script src="authProvider.js?v=20260706-light-auth"></script>
   <script src="supabaseApi.js?v=20260705-supabase"></script>
-  <script src="app.js?v=20260710-logo-1b"></script>
+  <script src="app.js?v=20260710-mobile-lesson-reader"></script>
 </body>
 </html>

@@ -1,0 +1,2864 @@
+{
+  "meta": {
+    "name": "Väktarskolan – VU1 quizbank",
+    "version": "1.0",
+    "language": "sv",
+    "generated": "2026-07-10",
+    "count": 154,
+    "source": "utbildning.md",
+    "notes": "Extraherad ur utbildningsmaterialet. source=modulquiz är modulernas quiz, source=sluttest är sluttestets frågebank (slumpbart, viktat urval per modul). Alternativen ligger i ursprunglig A–D-ordning med rätt svar i correct/correctIndex – appen bör slumpa alternativens ordning vid visning. Samma schema som scenariobanken och flashcardsbanken, så samma quizkomponent kan återanvändas."
+  },
+  "modules": [
+    {
+      "id": 1,
+      "label": "Regler för bevakningsverksamheten",
+      "quizCount": 8,
+      "examBankCount": 5,
+      "count": 13
+    },
+    {
+      "id": 2,
+      "label": "Bevakningsjuridik",
+      "quizCount": 16,
+      "examBankCount": 12,
+      "count": 28
+    },
+    {
+      "id": 3,
+      "label": "Arbetsmiljö",
+      "quizCount": 6,
+      "examBankCount": 2,
+      "count": 8
+    },
+    {
+      "id": 4,
+      "label": "Bevakningstjänst",
+      "quizCount": 10,
+      "examBankCount": 7,
+      "count": 17
+    },
+    {
+      "id": 5,
+      "label": "Tekniska hjälpmedel",
+      "quizCount": 8,
+      "examBankCount": 5,
+      "count": 13
+    },
+    {
+      "id": 6,
+      "label": "Brand",
+      "quizCount": 10,
+      "examBankCount": 7,
+      "count": 17
+    },
+    {
+      "id": 7,
+      "label": "Yrkesetik och moral",
+      "quizCount": 8,
+      "examBankCount": 5,
+      "count": 13
+    },
+    {
+      "id": 8,
+      "label": "Olaga diskriminering och mänskliga beteenden",
+      "quizCount": 6,
+      "examBankCount": 3,
+      "count": 9
+    },
+    {
+      "id": 9,
+      "label": "Konflikthantering och självskydd",
+      "quizCount": 8,
+      "examBankCount": 5,
+      "count": 13
+    },
+    {
+      "id": 10,
+      "label": "Handfängsel",
+      "quizCount": 6,
+      "examBankCount": 3,
+      "count": 9
+    },
+    {
+      "id": 11,
+      "label": "Akutsjukvård",
+      "quizCount": 8,
+      "examBankCount": 6,
+      "count": 14
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "course": "VU1",
+      "module": 1,
+      "moduleLabel": "Regler för bevakningsverksamheten",
+      "source": "modulquiz",
+      "numberInSection": 1,
+      "question": "Vad krävs för att ett företag ska få bedriva yrkesmässig bevakning för annans räkning?",
+      "options": [
+        "Registrering hos Bolagsverket räcker",
+        "Auktorisation från Länsstyrelsen",
+        "Tillstånd från Polismyndigheten",
+        "Medlemskap i en branschorganisation"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Lagen om bevakningsföretag kräver auktorisation, och utan den är verksamheten straffbar. Polismyndigheten skriver föreskrifter om bland annat utbildning, men det är Länsstyrelsen som prövar auktorisationen."
+    },
+    {
+      "id": 2,
+      "course": "VU1",
+      "module": 1,
+      "moduleLabel": "Regler för bevakningsverksamheten",
+      "source": "modulquiz",
+      "numberInSection": 2,
+      "question": "Vilka tre saker prövas när en person ska godkännas för anställning i ett bevakningsföretag?",
+      "options": [
+        "Utbildning, erfarenhet och referenser",
+        "Fysik, syn och hörsel",
+        "Körkort, språkkunskaper och medborgarskap",
+        "Laglydnad, medborgerlig pålitlighet och lämplighet i övrigt"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Det är lagens tre kriterier, och de kontrolleras bland annat genom registerkontroll. Prövningen gäller all personal i företaget, inte bara väktarna."
+    },
+    {
+      "id": 3,
+      "course": "VU1",
+      "module": 1,
+      "moduleLabel": "Regler för bevakningsverksamheten",
+      "source": "modulquiz",
+      "numberInSection": 3,
+      "question": "Vilken är rätt ordning i väktarens grundutbildning?",
+      "options": [
+        "VU1 → praktisk yrkesträning (PYT) → VU2",
+        "VU2 → VU1 → PYT",
+        "PYT → VU1 → VU2",
+        "VU1 → VU2 → PYT"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Först 88 timmar VU1, sedan minst 160 timmars praktisk yrkesträning under handledning, och därefter VU2. Först då är man behörig för självständigt väktararbete."
+    },
+    {
+      "id": 4,
+      "course": "VU1",
+      "module": 1,
+      "moduleLabel": "Regler för bevakningsverksamheten",
+      "source": "modulquiz",
+      "numberInSection": 4,
+      "question": "En person knuffar och hotar en uniformerad väktare som utför sitt arbete. Vad gäller straffrättsligt?",
+      "options": [
+        "Det bedöms som vanligt ofredande eftersom väktare är civilanställda",
+        "Det är straffritt om väktaren inte skadas",
+        "Gärningen bedöms enligt reglerna om våld eller hot mot tjänsteman – väktare i tjänst har förstärkt rättsskydd",
+        "Det bedöms som brott endast om polis är på plats"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Väktare i tjänsteutövning har genom lagen om bevakningsföretag samma straffrättsliga skydd som tjänstemän. Angrepp mot en väktare i tjänst är därför ett allvarligare brott än motsvarande angrepp mot en privatperson."
+    },
+    {
+      "id": 5,
+      "course": "VU1",
+      "module": 1,
+      "moduleLabel": "Regler för bevakningsverksamheten",
+      "source": "modulquiz",
+      "numberInSection": 5,
+      "question": "Vilket påstående om väktarens utrustning stämmer?",
+      "options": [
+        "Väktare får bära pepparspray efter genomförd VU1",
+        "Batong kräver särskild utbildning utöver VU1",
+        "Handfängsel får bäras helt utan utbildning",
+        "Skyddsväst kräver tillstånd från Länsstyrelsen"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Batong förutsätter en särskild påbyggnadsutbildning. Handfängsel får bäras efter utbildningsmomentet i VU1, skyddsväst är fri skyddsutrustning – och pepparspray får väktare aldrig bära."
+    },
+    {
+      "id": 6,
+      "course": "VU1",
+      "module": 1,
+      "moduleLabel": "Regler för bevakningsverksamheten",
+      "source": "modulquiz",
+      "numberInSection": 6,
+      "question": "I vilka fall kan väktare vara beväpnade med skjutvapen?",
+      "options": [
+        "Vid särskilda uppdrag, främst värdetransport och personskydd, efter särskild vapenutbildning och tillstånd",
+        "Vid all nattbevakning",
+        "Aldrig – väktare får under inga omständigheter bära skjutvapen",
+        "Så snart uppdragsgivaren begär det, oavsett utbildning"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Beväpning är ett snävt undantag knutet till vissa uppdrag och kräver särskild utbildning med återkommande prov. Varken nattarbete i sig eller en kunds önskemål ger rätt att bära vapen."
+    },
+    {
+      "id": 7,
+      "course": "VU1",
+      "module": 1,
+      "moduleLabel": "Regler för bevakningsverksamheten",
+      "source": "modulquiz",
+      "numberInSection": 7,
+      "question": "Vad skiljer en ordningsvakt från en väktare?",
+      "options": [
+        "Ingenting – det är två ord för samma yrke",
+        "Ordningsvakten är anställd av Polismyndigheten",
+        "Väktaren har fler tvångsbefogenheter än ordningsvakten",
+        "Ordningsvakten förordnas av Polismyndigheten för att upprätthålla allmän ordning och har befogenheter som väktaren saknar, till exempel att avvisa och omhänderta"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Ordningsvakten lyder under Polismyndigheten genom sitt förordnande och har lagstadgade ordningshållande befogenheter. Väktaren arbetar med envars rättigheter och uppdragsgivarens rättigheter – men har inga egna tvångsmedel."
+    },
+    {
+      "id": 8,
+      "course": "VU1",
+      "module": 1,
+      "moduleLabel": "Regler för bevakningsverksamheten",
+      "source": "modulquiz",
+      "numberInSection": 8,
+      "question": "Hur länge gäller väktarens tystnadsplikt?",
+      "options": [
+        "Under pågående arbetspass",
+        "Under anställningstiden",
+        "Även efter att anställningen har upphört",
+        "I fem år efter anställningens slut"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Tystnadsplikten enligt lagen om bevakningsföretag är inte tidsbegränsad – den gäller dygnet runt under anställningen och fortsätter gälla efter att den upphört."
+    },
+    {
+      "id": 9,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "modulquiz",
+      "numberInSection": 1,
+      "question": "Vilka är grundvillkoren för ett envarsgripande?",
+      "options": [
+        "Att brottet har böter i straffskalan och att polisen godkänner gripandet i förväg",
+        "Att gärningsmannen erkänner brottet på plats",
+        "Att brottet har fängelse i straffskalan, att personen tas på bar gärning eller flyende fot, och att den gripne skyndsamt överlämnas till polis",
+        "Att väktaren är i tjänst och bär uniform"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Det är de tre nycklarna i rättegångsbalken 24 kap. 7 §. Rätten gäller envar – uniform eller tjänstgöring krävs inte, och något erkännande eller förhandsgodkännande finns inte i lagen."
+    },
+    {
+      "id": 10,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "modulquiz",
+      "numberInSection": 2,
+      "question": "Vilket av följande brott ger INTE rätt till envarsgripande?",
+      "options": [
+        "Förargelseväckande beteende",
+        "Ringa stöld",
+        "Misshandel",
+        "Skadegörelse"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Förargelseväckande beteende har endast penningböter i straffskalan – fängelse ingår inte, och då finns ingen gripanderätt. Ringa stöld, misshandel och skadegörelse har alla fängelse i skalan."
+    },
+    {
+      "id": 11,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "modulquiz",
+      "numberInSection": 3,
+      "question": "En butikskontrollant ser en stöld men tappar bort gärningsmannen i folkvimlet. Tio minuter senare upptäcks samma person i en annan del av gallerian. Vad gäller?",
+      "options": [
+        "Gripande får ske – det har gått mindre än en timme",
+        "Gripande får ske om en kollega bekräftar identiteten",
+        "Gripande får ske, men bara utanför gallerian",
+        "Gripande får inte ske – den kontinuerliga uppsikten är bruten, så varken bar gärning eller flyende fot föreligger längre"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Flyende fot kräver ett oavbrutet flyende under kontinuerlig uppsikt. Bryts kedjan återstår att larma polis och lämna ett bra signalement."
+    },
+    {
+      "id": 12,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "modulquiz",
+      "numberInSection": 4,
+      "question": "Får envar gripa en person som är efterlyst för brott, utan att någon bar gärning föreligger?",
+      "options": [
+        "Nej, bar gärning krävs alltid",
+        "Ja – den som är efterlyst för brott får gripas av envar, men säkerhetsbedömningen avgör om det är lämpligt",
+        "Ja, men bara om det har gått mindre än en vecka sedan efterlysningen",
+        "Nej, efterlysta får endast gripas av polis"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Efterlysta är lagens undantag från kravet på bar gärning. Men gripanderätten är aldrig en skyldighet – mot en person efterlyst för grova brott är diskret uppsikt och snabb larmning ofta det rätta."
+    },
+    {
+      "id": 13,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "modulquiz",
+      "numberInSection": 5,
+      "question": "Vad får en skyddsvisitation i samband med ett envarsgripande användas till?",
+      "options": [
+        "Att leta efter stöldgodset",
+        "Att fastställa personens identitet",
+        "Att säkra bevis inför rättegången",
+        "Att av säkerhetsskäl söka efter vapen och andra farliga föremål"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Skyddsvisitationen (polislagen 19 § via 29 §) finns enbart för säkerheten. Gods, ID och bevis är polisens sak – däremot får stöldgods som påträffas öppet i samband med gripandet tas i beslag."
+    },
+    {
+      "id": 14,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "modulquiz",
+      "numberInSection": 6,
+      "question": "Du griper en person för stöld och stöldgodset ligger synligt i personens öppna kasse. Vad gäller?",
+      "options": [
+        "Godset får tas i beslag i samband med gripandet och överlämnas till polisen",
+        "Godset får inte röras under några omständigheter",
+        "Godset ska genast återlämnas till butikshyllan",
+        "Godset får behållas av bevakningsföretaget som ersättning"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Enligt rättegångsbalken 27 kap. 4 § får den som med laga rätt griper en misstänkt ta föremål som därvid påträffas i beslag. Beslaget dokumenteras och överlämnas till polisen tillsammans med den gripne."
+    },
+    {
+      "id": 15,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "modulquiz",
+      "numberInSection": 7,
+      "question": "En kollega blir plötsligt angripen med knytnävsslag. Vad ger dig rätt att ingripa fysiskt?",
+      "options": [
+        "Endast din anställning som väktare",
+        "Ingenting – nödvärn gäller bara den som själv angrips",
+        "Nödvärnsrätten, som gäller även till förmån för annan",
+        "Kollegans muntliga tillstånd"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Nödvärn enligt brottsbalken 24 kap. 1 § gäller mot brottsliga angrepp på person – och rätten omfattar uttryckligen försvar av andra. Samma försvarlighetsgränser gäller som när du försvarar dig själv."
+    },
+    {
+      "id": 16,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "modulquiz",
+      "numberInSection": 8,
+      "question": "När upphör rätten till nödvärn?",
+      "options": [
+        "När polisen anländer",
+        "När angreppet har upphört",
+        "Fem minuter efter angreppet",
+        "När angriparen ber om ursäkt"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Nödvärn är ett försvar under pågående eller överhängande angrepp. Våld efter att angreppet upphört är inte försvar utan ett nytt brott – hämnd är aldrig nödvärn."
+    },
+    {
+      "id": 17,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "modulquiz",
+      "numberInSection": 9,
+      "question": "Var går lagens gräns för hur mycket våld som får användas i en nödvärnssituation?",
+      "options": [
+        "Gärningen får inte vara uppenbart oförsvarlig i förhållande till angreppet",
+        "Våldet får aldrig orsaka någon skada alls",
+        "Endast exakt samma våld som angriparen använder är tillåtet",
+        "Det finns ingen gräns så länge man är angripen"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Formuleringen \"uppenbart oförsvarlig\" ger den angripne en marginal – men våldet ska stå i rimligt förhållande till angreppets art och upphöra när angreppet upphör."
+    },
+    {
+      "id": 18,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "modulquiz",
+      "numberInSection": 10,
+      "question": "Du utsätts för ett plötsligt, våldsamt angrepp och använder i paniken mer våld än vad som var nödvändigt. Vad kan gälla?",
+      "options": [
+        "Du döms alltid för misshandel – gränsen är absolut",
+        "Ingenting – i nödvärn finns inga gränser",
+        "Du går fri endast om angriparen var beväpnad",
+        "Nödvärnsexcess: du kan vara fri från ansvar om omständigheterna var sådana att du svårligen kunde besinna dig"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Brottsbalken 24 kap. 6 § tar hänsyn till att verkliga angrepp präglas av rädsla och tidsnöd. Den som gick över gränsen men svårligen kunde besinna sig kan ändå gå fri."
+    },
+    {
+      "id": 19,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "modulquiz",
+      "numberInSection": 11,
+      "question": "En varm sommardag ser du ett litet barn ensamt i en låst bil i solen. Barnet är rött i ansiktet och slött. Ingen förare syns. Får du krossa rutan?",
+      "options": [
+        "Nej, skadegörelse är alltid ett brott",
+        "Ja – nödbestämmelsen gör gärningen tillåten när fara hotar liv och hälsa, om gärningen inte är oförsvarlig",
+        "Endast om bilägaren ger sitt samtycke i efterhand",
+        "Endast om polisen ger tillstånd per telefon"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Detta är ett klassiskt nödfall enligt brottsbalken 24 kap. 4 §: faran för barnets liv väger långt tyngre än skadan på rutan. Larma 112 – men vänta inte om barnets tillstånd kräver omedelbart ingripande."
+    },
+    {
+      "id": 20,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "modulquiz",
+      "numberInSection": 12,
+      "question": "Vid ett envarsgripande gör personen kraftigt motstånd. Vilket våld får du använda?",
+      "options": [
+        "Obegränsat våld tills personen ger upp",
+        "Inget våld alls – då måste du släppa personen",
+        "Det våld som med hänsyn till omständigheterna är försvarligt för att genomföra gripandet",
+        "Endast verbala tillsägelser"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Polislagen 29 § kopplar den som griper med laga stöd till våldsbefogenheten i 10 § första stycket 2. Behovs- och proportionalitetsprinciperna styr: minsta möjliga våld, kortast möjliga tid – och hellre släppa taget än att någon skadas allvarligt."
+    },
+    {
+      "id": 21,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "modulquiz",
+      "numberInSection": 13,
+      "question": "En 13-åring krossar en monter och tar varor, och du tar honom på bar gärning. Brottet har fängelse i straffskalan. Vad gäller?",
+      "options": [
+        "Gripande är möjligt enligt LUL 35 § – den unge ska skyndsamt överlämnas till polis, och extra varsamhet gäller",
+        "Barn under 15 år får aldrig gripas av någon",
+        "Gripande är möjligt, men du ska lämna barnet till dess föräldrar i stället för till polisen",
+        "Du ska hålla kvar barnet tills socialtjänsten kommer till platsen"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Lagen om unga lagöverträdare 35 § speglar envarsgripandets villkor även för den som är under 15. Överlämningen sker skyndsamt till polis – aldrig egna uppgörelser eller väntan på andra myndigheter – och proportionaliteten bedöms extra strängt när det gäller barn."
+    },
+    {
+      "id": 22,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "modulquiz",
+      "numberInSection": 14,
+      "question": "Vid vilken ålder blir man straffmyndig i Sverige?",
+      "options": [
+        "12 år",
+        "16 år",
+        "18 år",
+        "15 år"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Straffmyndighetsåldern är 15 år. Yngre personer kan inte dömas till påföljd, men gärningen är fortfarande ett brott – samhällets reaktion går då genom socialtjänsten."
+    },
+    {
+      "id": 23,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "modulquiz",
+      "numberInSection": 15,
+      "question": "Vad kräver kamerabevakningslagen och GDPR som huvudregel av den som kamerabevakar en butik?",
+      "options": [
+        "Tillstånd från Polismyndigheten",
+        "Att materialet raderas inom 24 timmar",
+        "Tydlig upplysning genom skyltning, en rättslig grund för bevakningen och skyddad hantering av materialet",
+        "Att endast attrappkameror används"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Privata företag behöver normalt inget tillstånd, men upplysningsplikten gäller – dold bevakning är som huvudregel förbjuden – och materialet ska hanteras med begränsad lagring, begränsad åtkomst och utan spridning. Tillsynsmyndighet är IMY."
+    },
+    {
+      "id": 24,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "modulquiz",
+      "numberInSection": 16,
+      "question": "En vecka efter ett ingripande upptäcker du att din rapport saknar en viktig uppgift. Vad gör du?",
+      "options": [
+        "Skriver om originalrapporten så att den blir komplett",
+        "Skriver en ny, daterad tilläggsanteckning – originalet lämnas orört",
+        "Raderar rapporten och skriver en helt ny",
+        "Ber en kollega intyga uppgiften muntligt vid behov"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Originalrapportens bevisvärde bygger på att den är orörd och tidsnära. Kompletteringar görs öppet i en ny, daterad anteckning – ändringar i efterhand förstör trovärdigheten, även när avsikten är god."
+    },
+    {
+      "id": 25,
+      "course": "VU1",
+      "module": 3,
+      "moduleLabel": "Arbetsmiljö",
+      "source": "modulquiz",
+      "numberInSection": 1,
+      "question": "Vem har huvudansvaret för arbetsmiljön på en arbetsplats?",
+      "options": [
+        "Skyddsombudet",
+        "Varje arbetstagare själv",
+        "Arbetsmiljöverket",
+        "Arbetsgivaren"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Arbetsmiljölagen lägger huvudansvaret på arbetsgivaren, som ska vidta alla åtgärder som behövs för att förebygga ohälsa och olycksfall. Skyddsombudet företräder arbetstagarna och Arbetsmiljöverket utövar tillsyn – men ansvaret är arbetsgivarens."
+    },
+    {
+      "id": 26,
+      "course": "VU1",
+      "module": 3,
+      "moduleLabel": "Arbetsmiljö",
+      "source": "modulquiz",
+      "numberInSection": 2,
+      "question": "Vad är ett tillbud?",
+      "options": [
+        "En skada som kräver sjukhusvård",
+        "En händelse som kunde ha lett till skada, men inte gjorde det – ett \"oj\"",
+        "Endast händelser som innehåller våld",
+        "En anmärkning från en kund"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Tillbudet är varningssignalen: samma händelse med lite otur hade blivit en olycka. Därför rapporteras tillbud med samma allvar som olyckor – de gör det möjligt att åtgärda risken innan någon skadas."
+    },
+    {
+      "id": 27,
+      "course": "VU1",
+      "module": 3,
+      "moduleLabel": "Arbetsmiljö",
+      "source": "modulquiz",
+      "numberInSection": 3,
+      "question": "Vart ska arbetsgivaren utan dröjsmål anmäla allvarliga olyckor och allvarliga tillbud?",
+      "options": [
+        "Till Arbetsmiljöverket",
+        "Till Polismyndigheten",
+        "Till Länsstyrelsen",
+        "Till kommunens miljökontor"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Arbetsmiljölagen kräver att dödsfall, allvarliga olyckor och allvarliga tillbud anmäls till Arbetsmiljöverket utan dröjsmål. Arbetsskador anmäls dessutom till Försäkringskassan."
+    },
+    {
+      "id": 28,
+      "course": "VU1",
+      "module": 3,
+      "moduleLabel": "Arbetsmiljö",
+      "source": "modulquiz",
+      "numberInSection": 4,
+      "question": "En arbetsuppgift innebär omedelbar och allvarlig fara för ditt liv. Vad ger arbetsmiljölagen dig rätt till?",
+      "options": [
+        "Ingenting – tilldelade uppgifter ska alltid utföras",
+        "Att byta arbetsgivare med omedelbar verkan",
+        "Att avbryta arbetet och genast kontakta arbetsgivaren",
+        "Att först begära skriftligt beslut från Arbetsmiljöverket"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Vid omedelbar och allvarlig fara för liv eller hälsa får du avbryta arbetet i väntan på besked – och du ska genast underrätta arbetsgivaren eller skyddsombudet. Säkerheten går före uppgiften."
+    },
+    {
+      "id": 29,
+      "course": "VU1",
+      "module": 3,
+      "moduleLabel": "Arbetsmiljö",
+      "source": "modulquiz",
+      "numberInSection": 5,
+      "question": "Vilket är det viktigaste skyddet vid ensamarbete nattetid?",
+      "options": [
+        "Att hålla högt tempo så att ronden blir kort",
+        "Fungerande larm- och kommunikationsutrustning och löpande kontakt med ledningscentralen",
+        "Att undvika att rapportera små avvikelser",
+        "Att alltid ingripa direkt så att situationer inte hinner växa"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Vid ensamarbete är möjligheten att snabbt kalla på hjälp det centrala skyddet: testad utrustning före passet och en ledningscentral som vet var du är. Ensamingripanden mot instruktion ökar risken i stället för att minska den."
+    },
+    {
+      "id": 30,
+      "course": "VU1",
+      "module": 3,
+      "moduleLabel": "Arbetsmiljö",
+      "source": "modulquiz",
+      "numberInSection": 6,
+      "question": "Du blir hotad vid ett ingripande men skadas inte fysiskt. Vad gäller?",
+      "options": [
+        "Inget behöver göras eftersom ingen skadades",
+        "Du rapporterar bara om hotet upprepas",
+        "Händelsen är en privatsak mellan dig och gärningsmannen",
+        "Händelsen rapporteras som tillbud, och du har rätt till krisstöd vid behov"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Hot och våld är arbetsmiljöhändelser oavsett fysisk skada. Tillbudsrapporten gör att arbetsgivaren kan förebygga nästa händelse – och den dokumenterar det du utsatts för, vilket skyddar dig om besvär kommer senare."
+    },
+    {
+      "id": 31,
+      "course": "VU1",
+      "module": 4,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "modulquiz",
+      "numberInSection": 1,
+      "question": "Vad styr i första hand hur du utför uppdraget på ett bevakningsobjekt?",
+      "options": [
+        "Din egen erfarenhet från liknande objekt",
+        "Objektsinstruktionen från bevakningsföretaget",
+        "Kundens muntliga önskemål för stunden",
+        "Kollegornas vanor på objektet"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Objektsinstruktionen omsätter avtalet mellan kund och bevakningsföretag i konkreta arbetsuppgifter. Den är också ditt skydd – agerar du enligt instruktionen står företaget bakom dig."
+    },
+    {
+      "id": 32,
+      "course": "VU1",
+      "module": 4,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "modulquiz",
+      "numberInSection": 2,
+      "question": "Kundens platschef ber dig mitt i passet att ta på dig en ny arbetsuppgift som inte finns i instruktionen. Vad gör du?",
+      "options": [
+        "Utför den direkt – kunden betalar ju för tjänsten",
+        "Vägrar blankt utan vidare åtgärd",
+        "Utför den om den verkar rimlig",
+        "Är tillmötesgående men stämmer av med ledningscentralen eller arbetsledningen – ändringar av uppdraget går via bevakningsföretaget"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Kunden kan inte ändra uppdraget över disk. Att vänligt hänvisa till att förändringar går via företaget skyddar både dig, kunden och avtalets gränser – och akuta nödsituationer hanteras förstås alltid enligt nöd- och nödvärnsreglerna."
+    },
+    {
+      "id": 33,
+      "course": "VU1",
+      "module": 4,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "modulquiz",
+      "numberInSection": 3,
+      "question": "Varför ska ronderingstider och rondvägar varieras?",
+      "options": [
+        "För att ett förutsägbart mönster kan kartläggas av den som planerar brott",
+        "För att väktaren inte ska tröttna på rutinen",
+        "För att minska bränsleförbrukningen",
+        "För att kunden inte ska kunna kontrollera ronden"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Rondens brottsförebyggande kraft ligger i oförutsägbarheten. En rond som alltid går klockan 23.00 samma väg talar om för gärningsmannen exakt när kusten är klar."
+    },
+    {
+      "id": 34,
+      "course": "VU1",
+      "module": 4,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "modulquiz",
+      "numberInSection": 4,
+      "question": "Under en rond ser du en uppbruten dörr och hör ljud inifrån lokalen. Vad gör du?",
+      "options": [
+        "Går in och ropar \"väktare!\"",
+        "Släcker belysningen och väntar tyst innanför dörren",
+        "Drar dig tillbaka, larmar polis via ledningscentralen och bevakar utgångarna på säkert avstånd",
+        "Låser dörren så att ingen kan ta sig ut"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Pågående brott möts med observation och larmning – aldrig med ensamingripande i en okänd lokal mot ett okänt antal gärningsmän. Att låsa in någon skapar dessutom både fara och rättsliga problem."
+    },
+    {
+      "id": 35,
+      "course": "VU1",
+      "module": 4,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "modulquiz",
+      "numberInSection": 5,
+      "question": "Vad är \"tailgating\" vid inpasseringskontroll?",
+      "options": [
+        "Att köra för nära framförvarande fordon vid grinden",
+        "Att någon obehörig följer med in på en behörig persons kortdragning",
+        "Att låna ut sitt passerkort till en kollega",
+        "Att gå in genom en branddörr"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Tailgating är det vanligaste sättet för obehöriga att ta sig in i kontrollerade lokaler – och motmedlet är en artig, konsekvent rutin: alla registreras, utan undantag."
+    },
+    {
+      "id": 36,
+      "course": "VU1",
+      "module": 4,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "modulquiz",
+      "numberInSection": 6,
+      "question": "Vad är den rättsliga grunden för utpasseringskontroll av anställdas väskor?",
+      "options": [
+        "Polislagen 19 §",
+        "Rättegångsbalken 27 kap.",
+        "Väktarens laga befogenhet",
+        "Avtal och frivillig medverkan – kontrollen får aldrig genomföras med tvång"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Utpasseringskontrollen bygger på anställningsvillkor och samtycke. Vägran hanteras med notering och rapport till arbetsledningen – tvång skulle kunna utgöra olaga tvång eller ofredande."
+    },
+    {
+      "id": 37,
+      "course": "VU1",
+      "module": 4,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "modulquiz",
+      "numberInSection": 7,
+      "question": "Vilka id-handlingar godtas normalt vid legitimationskontroll i Sverige?",
+      "options": [
+        "Svenskt pass, nationellt id-kort, svenskt körkort samt SIS-märkta och Skatteverkets id-kort",
+        "Alla handlingar med foto, till exempel gymkort",
+        "Endast svenskt pass",
+        "Busskort, betalkort och personbevis"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Det är de etablerade id-handlingarna. Utländska pass hanteras enligt objektets rutin – och en handling utan säkerhetsdetaljer och personnummer är ingen id-handling."
+    },
+    {
+      "id": 38,
+      "course": "VU1",
+      "module": 4,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "modulquiz",
+      "numberInSection": 8,
+      "question": "En besökares id-kort har bubblor i laminatet och ojämnt tryck – du misstänker förfalskning. Vad gör du?",
+      "options": [
+        "Klipper sönder handlingen på plats",
+        "Behåller handlingen men släpper in personen",
+        "Nekar det som kontrollen gällde, dokumenterar och kontaktar polis enligt instruktion – handlingen får tas i beslag först i samband med ett gripande",
+        "Ber personen hämta en annan handling och släpper in under tiden"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Att bruka falsk urkund är ett brott, men väktarens beslagsrätt gäller bara vid gripanden. Grundlinjen är: neka, dokumentera och lämna bedömningen till polisen."
+    },
+    {
+      "id": 39,
+      "course": "VU1",
+      "module": 4,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "modulquiz",
+      "numberInSection": 9,
+      "question": "Får en väktare kräva att en person på allmän plats visar legitimation?",
+      "options": [
+        "Ja, om personen uppträder misstänkt",
+        "Nej – väktare kan aldrig tvinga fram en id-kontroll; legitimationskontrollen är ett villkor för tillträde eller för att få del av en tjänst",
+        "Ja, efter klockan 22",
+        "Ja, om ledningscentralen godkänner det"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Ingen är skyldig att identifiera sig för en väktare. Den som vägrar visa id kan nekas inträde eller tjänsten – men aldrig tvingas eller kvarhållas för identifiering."
+    },
+    {
+      "id": 40,
+      "course": "VU1",
+      "module": 4,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "modulquiz",
+      "numberInSection": 10,
+      "question": "Vilken uppgift kommer först i ett signalement enligt den inarbetade ordningen?",
+      "options": [
+        "Kön och uppskattad ålder",
+        "Skornas färg",
+        "Flyktriktningen",
+        "Fordonets registreringsnummer"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Signalementet byggs uppifrån och ned: kön och ålder, längd och kroppsbyggnad, hår, klädsel, särskilda kännetecken – och sist färdriktning och fordon. En fast ordning gör att inget glöms när det är bråttom."
+    },
+    {
+      "id": 41,
+      "course": "VU1",
+      "module": 5,
+      "moduleLabel": "Tekniska hjälpmedel",
+      "source": "modulquiz",
+      "numberInSection": 1,
+      "question": "Vad är skillnaden mellan skalskydd och volymskydd i ett inbrottslarm?",
+      "options": [
+        "Skalskydd är mekaniskt, volymskydd är elektroniskt",
+        "Skalskydd används bara i butiker, volymskydd bara på kontor",
+        "Skalskyddet övervakar omslutningsytan – dörrar, fönster och portar – medan volymskyddet känner av rörelse inne i lokalerna",
+        "Det är två namn på samma sak"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Skalskyddet larmar när någon försöker ta sig in, volymskyddet när någon redan är inne. Sektionsindelningen berättar sedan var i byggnaden larmet utlösts."
+    },
+    {
+      "id": 42,
+      "course": "VU1",
+      "module": 5,
+      "moduleLabel": "Tekniska hjälpmedel",
+      "source": "modulquiz",
+      "numberInSection": 2,
+      "question": "Vad kännetecknar ett överfallslarm?",
+      "options": [
+        "Det är ett tyst larm som utlöses av en hotad person och som aldrig får röjas på platsen",
+        "Det låter kraftigt för att skrämma bort gärningsmannen",
+        "Det går alltid direkt till polisen, aldrig till larmcentralen",
+        "Det återställs av väktaren så snart platsen ser lugn ut"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Överfallslarmet är tyst just för att skydda den som utlöst det. Utryckningen hanteras som skarpt läge, och att röja larmet på platsen kan utsätta den hotade för allvarlig fara."
+    },
+    {
+      "id": 43,
+      "course": "VU1",
+      "module": 5,
+      "moduleLabel": "Tekniska hjälpmedel",
+      "source": "modulquiz",
+      "numberInSection": 3,
+      "question": "Vilka är de vanligaste orsakerna till onödiga larm?",
+      "options": [
+        "Sabotage från utomstående",
+        "Strömavbrott i området",
+        "Fel i larmcentralens datorer",
+        "Handhavandefel samt djur eller föremål som rör sig framför detektorerna"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Den mänskliga faktorn och enkla fysiska orsaker dominerar. Men slutsatsen dras först efter kontroll – varje larm behandlas som skarpt tills orsaken är verifierad."
+    },
+    {
+      "id": 44,
+      "course": "VU1",
+      "module": 5,
+      "moduleLabel": "Tekniska hjälpmedel",
+      "source": "modulquiz",
+      "numberInSection": 4,
+      "question": "Varför får känsliga uppgifter inte sändas i klartext över radio?",
+      "options": [
+        "Det tar för lång tid att uttala dem",
+        "Radiotrafik kan avlyssnas – och tystnadsplikten gäller även i etern",
+        "Radion har för dålig ljudkvalitet för långa meddelanden",
+        "Endast polisen får nämna namn i radiotrafik"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Den som lyssnar på kanalen ska inte kunna kartlägga objekt, personer eller rutiner. Namn, koder och känsliga uppgifter lämnas via telefon eller enligt rutin – inte i öppen radiotrafik."
+    },
+    {
+      "id": 45,
+      "course": "VU1",
+      "module": 5,
+      "moduleLabel": "Tekniska hjälpmedel",
+      "source": "modulquiz",
+      "numberInSection": 5,
+      "question": "Hur bokstaveras \"BIL\" enligt det svenska bokstaveringsalfabetet?",
+      "options": [
+        "Bertil, Ivar, Ludvig",
+        "Bertil, Ingrid, Lars",
+        "Boris, Ivan, Leo",
+        "Bravo, India, Lima"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Bravo–India–Lima är NATO-alfabetet – inom svensk bevakning och blåljusverksamhet används det svenska bokstaveringsalfabetet: Adam, Bertil, Cesar och så vidare."
+    },
+    {
+      "id": 46,
+      "course": "VU1",
+      "module": 5,
+      "moduleLabel": "Tekniska hjälpmedel",
+      "source": "modulquiz",
+      "numberInSection": 6,
+      "question": "Vad gäller för bevakningsfordon i trafiken vid en larmutryckning?",
+      "options": [
+        "De får köra mot rött om varningsblinkers används",
+        "De får överskrida hastighetsgränsen med 30 km/h",
+        "De räknas som utryckningsfordon nattetid",
+        "Trafikreglerna gäller fullt ut – bevakningsbilar är inte utryckningsfordon"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Väktare har inga undantag i trafiken. Målet är att komma fram säkert – en väktare som kör omkull hjälper ingen och skapar dessutom en ny olycksplats."
+    },
+    {
+      "id": 47,
+      "course": "VU1",
+      "module": 5,
+      "moduleLabel": "Tekniska hjälpmedel",
+      "source": "modulquiz",
+      "numberInSection": 7,
+      "question": "Du upptäcker att en huvudnyckel till ett objekt saknas. Vad gör du?",
+      "options": [
+        "Letar i några dagar innan du säger något",
+        "Rapporterar omedelbart till ledningscentralen och arbetsledningen – kunden kan behöva byta lås, och varje fördröjning ökar risken",
+        "Beställer tyst en kopia hos låssmeden",
+        "Lånar en kollegas nyckelknippa och fortsätter passet"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "En försvunnen huvudnyckel är en akut säkerhetsrisk för hela objektet. Snabb rapport ger kunden möjlighet att byta lås eller spärra – att dölja förlusten förvärrar både risken och förtroendeskadan."
+    },
+    {
+      "id": 48,
+      "course": "VU1",
+      "module": 5,
+      "moduleLabel": "Tekniska hjälpmedel",
+      "source": "modulquiz",
+      "numberInSection": 8,
+      "question": "Vid ett inbrottslarm visar kameraverifieringen ingenting onormalt. Vad gäller?",
+      "options": [
+        "Larmet kan avskrivas som falsklarm direkt",
+        "Väktaren behöver inte åka till objektet",
+        "Objektet kontrolleras ändå enligt instruktion – kameror har döda vinklar och ersätter aldrig den fysiska kontrollen",
+        "Kunden kontaktas och får själv avgöra"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Att inget syns i bild betyder bara att inget syns i bild. Något utlöste larmet, och först den fysiska kontrollen enligt instruktionen kan fastställa vad."
+    },
+    {
+      "id": 49,
+      "course": "VU1",
+      "module": 6,
+      "moduleLabel": "Brand",
+      "source": "modulquiz",
+      "numberInSection": 1,
+      "question": "Vilka tre delar består brandtriangeln av?",
+      "options": [
+        "Rök, lågor och glöd",
+        "El, gas och olja",
+        "Bränsle, gnista och vind",
+        "Syre, värme och brännbart ämne"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Alla tre krävs samtidigt för att en brand ska brinna – och all släckning bygger på att ta bort ett av benen: kväva bort syret, kyla bort värmen eller avlägsna bränslet."
+    },
+    {
+      "id": 50,
+      "course": "VU1",
+      "module": 6,
+      "moduleLabel": "Brand",
+      "source": "modulquiz",
+      "numberInSection": 2,
+      "question": "Vad orsakar flest dödsfall vid bränder?",
+      "options": [
+        "Lågorna",
+        "Röken och brandgaserna",
+        "Nedfallande byggnadsdelar",
+        "Explosioner"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Brandröken är giftig, het och skymmer sikten – de flesta som omkommer i bränder förgiftas av röken innan lågorna når dem. Därför: kryp under röken, och stäng dörrar för att hindra dess spridning."
+    },
+    {
+      "id": 51,
+      "course": "VU1",
+      "module": 6,
+      "moduleLabel": "Brand",
+      "source": "modulquiz",
+      "numberInSection": 3,
+      "question": "Varför ska branddörrar hållas stängda?",
+      "options": [
+        "De avgränsar brandceller och hindrar brand och rök från att sprida sig – en uppkilad branddörr sätter skyddet ur spel",
+        "De håller värmen inne i lokalerna på vintern",
+        "De är stöldskydd",
+        "De minskar bullret mellan avdelningar"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Byggnadens brandceller är dimensionerade att hålla branden instängd en viss tid – men bara om dörrarna är stängda. Uppkilade branddörrar är en av de vanligaste och allvarligaste bristerna på brandronden."
+    },
+    {
+      "id": 52,
+      "course": "VU1",
+      "module": 6,
+      "moduleLabel": "Brand",
+      "source": "modulquiz",
+      "numberInSection": 4,
+      "question": "Det börjar brinna i en fritös i ett kök. Vad gör du?",
+      "options": [
+        "Häller vatten över fritösen",
+        "Bär ut fritösen på gården",
+        "Kväver branden med lock eller brandfilt – aldrig vatten i brinnande fett",
+        "Blåser på lågorna för att kyla dem"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Vatten i brinnande fett förångas explosionsartat och kastar brinnande fett omkring sig. Fettbränder kvävs – med lock, brandfilt eller F-släckare – och att flytta ett brinnande kärl riskerar att sprida branden och skada dig."
+    },
+    {
+      "id": 53,
+      "course": "VU1",
+      "module": 6,
+      "moduleLabel": "Brand",
+      "source": "modulquiz",
+      "numberInSection": 5,
+      "question": "Vilken släckare är lämpligast mot brand i elektrisk utrustning, till exempel ett serverrack?",
+      "options": [
+        "Kolsyresläckare – den kväver branden utan att lämna rester eller leda ström",
+        "Vattensläckare",
+        "Pulversläckare, eftersom pulvret skyddar elektroniken",
+        "Inomhusbrandpost med slang"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Kolsyra kväver branden och lämnar inga restprodukter. Vatten leder ström, och pulver släcker visserligen effektivt men förstör elektronik i hela utrymmet. Tänk på kolsyrans risker: iskallt munstycke och syreundanträngning i små utrymmen."
+    },
+    {
+      "id": 54,
+      "course": "VU1",
+      "module": 6,
+      "moduleLabel": "Brand",
+      "source": "modulquiz",
+      "numberInSection": 6,
+      "question": "Vad är rätt grundteknik med en handbrandsläckare?",
+      "options": [
+        "Sikta högt upp i lågorna och töm släckaren i en punkt",
+        "Stå kvar tills släckaren är helt tom, oavsett vad som händer",
+        "Börja släcka längst in i lokalen och arbeta dig mot utgången",
+        "Rikta mot lågornas bas med svepande rörelser – och ha alltid reträttvägen bakom dig"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Branden släcks vid basen och glödbädden, inte i rökpelaren. En pulversläckare är tömd på 10–20 sekunder, så varje sekund ska träffa rätt – och du får aldrig hamna med branden mellan dig och utgången."
+    },
+    {
+      "id": 55,
+      "course": "VU1",
+      "module": 6,
+      "moduleLabel": "Brand",
+      "source": "modulquiz",
+      "numberInSection": 7,
+      "question": "Vad gäller för hissar vid brand?",
+      "options": [
+        "De får användas om de är nyare än tio år",
+        "De används aldrig vid utrymning",
+        "De får användas för att evakuera våningarna högst upp",
+        "De får användas om räddningstjänsten är på plats i byggnaden"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Hissen kan stanna av strömavbrott eller styras till brandvåningen – den som är i hissen är då fångad. Utrymning sker via trapphus och skyltade utrymningsvägar. Undantag hanteras endast av räddningstjänsten själv."
+    },
+    {
+      "id": 56,
+      "course": "VU1",
+      "module": 6,
+      "moduleLabel": "Brand",
+      "source": "modulquiz",
+      "numberInSection": 8,
+      "question": "Du bor i ett flerbostadshus. Det brinner hos en granne och trapphuset är rökfyllt. Vad är rätt?",
+      "options": [
+        "Spring genom röken – det går fort",
+        "Ta hissen ner",
+        "Stanna i lägenheten, stäng dörren och larma 112 – lägenheten är en egen brandcell som står emot brand i cirka en timme",
+        "Klättra ut genom fönstret oavsett våning"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Ett rökfyllt trapphus passeras aldrig – några andetag brandrök kan räcka för medvetslöshet. Lägenheten skyddar dig, och räddningstjänsten hjälper dig ut om det behövs."
+    },
+    {
+      "id": 57,
+      "course": "VU1",
+      "module": 6,
+      "moduleLabel": "Brand",
+      "source": "modulquiz",
+      "numberInSection": 9,
+      "question": "Vad står RVLS för?",
+      "options": [
+        "Rök, Värme, Ljus, Syre",
+        "Rädda, Varna, Larma, Släck",
+        "Rapportera, Vänta, Lyssna, Sök",
+        "Rädda, Vattna, Lämna, Spring"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "RVLS är prioritetsordningen vid brand: människor i omedelbar fara räddas först, andra varnas, hjälpen larmas – och först därefter görs släckförsök, om det kan ske utan risk. Går det inte att släcka: stäng in branden."
+    },
+    {
+      "id": 58,
+      "course": "VU1",
+      "module": 6,
+      "moduleLabel": "Brand",
+      "source": "modulquiz",
+      "numberInSection": 10,
+      "question": "Ett automatiskt brandlarm har löst ut men du ser ingen rök vid den angivna sektionen. Vad gör du?",
+      "options": [
+        "Undersöker orsaken enligt rutin, möter räddningstjänsten med nycklar och ritning – och återställer inte anläggningen förrän orsaken är klarlagd",
+        "Återställer larmet så att sirenerna tystnar",
+        "Ringer räddningstjänsten och avbeställer utryckningen",
+        "Väntar utanför tills larmet tystnar av sig självt"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Bränder kan pyra dolt i schakt och ovanför undertak. \"Ingen rök\" är inte \"ingen brand\" – och avbeställning är räddningsledarens beslut, aldrig väktarens. Samma princip som i scenariobanken: falsklarm är en slutsats, inte en gissning."
+    },
+    {
+      "id": 59,
+      "course": "VU1",
+      "module": 7,
+      "moduleLabel": "Yrkesetik och moral",
+      "source": "modulquiz",
+      "numberInSection": 1,
+      "question": "Varför är allmänhetens förtroende avgörande för väktaryrket?",
+      "options": [
+        "Människor samarbetar med väktare för att de litar på dem – utan förtroendet förlorar yrket sin legitimitet",
+        "Förtroende gör att väktare slipper skriva rapporter",
+        "Det är bara viktigt för företagets marknadsföring",
+        "Förtroende ger väktaren fler lagliga befogenheter"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Väktarens möjlighet att lösa situationer bygger nästan alltid på frivilligt samarbete, och hela auktorisationssystemet finns för att skydda förtroendet för branschen. Befogenheterna kommer från lagen – men legitimiteten kommer från människorna."
+    },
+    {
+      "id": 60,
+      "course": "VU1",
+      "module": 7,
+      "moduleLabel": "Yrkesetik och moral",
+      "source": "modulquiz",
+      "numberInSection": 2,
+      "question": "Under ett gripande skriker personen könsord och spottar mot dig. Hur påverkar det ditt bemötande?",
+      "options": [
+        "Du får svara med samma mynt – provokation ger den rätten",
+        "Du avbryter gripandet omedelbart",
+        "Inte alls i sak – du fortsätter lugnt och professionellt, dokumenterar beteendet och låter det aldrig styra ditt eget",
+        "Du höjer rösten tills personen tystnar"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Professionell människosyn innebär att beteendet bedöms och hanteras – men ditt eget uppträdande förblir konstant. Provokationer dokumenteras i rapporten; de besvaras aldrig. Den som styr ditt humör styr situationen."
+    },
+    {
+      "id": 61,
+      "course": "VU1",
+      "module": 7,
+      "moduleLabel": "Yrkesetik och moral",
+      "source": "modulquiz",
+      "numberInSection": 3,
+      "question": "En butiksägare på ditt objekt erbjuder dig gratis varor \"för att du gör ett så bra jobb\". Vad gör du?",
+      "options": [
+        "Tar emot – det vore oartigt att tacka nej",
+        "Tackar vänligt nej och rapporterar erbjudandet enligt företagets rutin",
+        "Tar emot men delar med kollegorna",
+        "Tackar nej men lovar att titta extra på butiken i fortsättningen"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Förmåner som kan påverka – eller se ut att kunna påverka – tjänsteutövningen tas aldrig emot. Även små gåvor bygger tysta förväntningar, och rapporteringen skyddar både dig och förtroendet för uppdraget."
+    },
+    {
+      "id": 62,
+      "course": "VU1",
+      "module": 7,
+      "moduleLabel": "Yrkesetik och moral",
+      "source": "modulquiz",
+      "numberInSection": 4,
+      "question": "Vad innebär \"dagsljustestet\" i beslutstrappan?",
+      "options": [
+        "Att svåra beslut bara ska fattas under dagtid",
+        "Att alltid vänta till nästa morgon med att agera",
+        "Att kontrollera belysningen innan ett ingripande",
+        "Att fråga dig om beslutet tål granskning – kan du stå för det inför arbetsledningen, den berörda, media och domstol?"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Det du inte skulle vilja läsa om i morgontidningen ska du inte göra i natt. Testet är snabbt, brutalt ärligt och fungerar i stunder när ingen instruktion ger svar."
+    },
+    {
+      "id": 63,
+      "course": "VU1",
+      "module": 7,
+      "moduleLabel": "Yrkesetik och moral",
+      "source": "modulquiz",
+      "numberInSection": 5,
+      "question": "Du ser en kollega stoppa en upphittad mobiltelefon i sin egen ficka. Vad är rätt?",
+      "options": [
+        "Ingenting – kollegor skyddar varandra",
+        "Du väntar och ser om det upprepas",
+        "Du säger ifrån direkt och rapporterar enligt rutin – falsk lojalitet skyddar beteendet, inte människan",
+        "Du tar själv en sak ur hittegodset så att ni är kvitt"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Äkta kollegialitet skyddar tredje man, yrket och i längden även kollegan. Tystnad gör dig dessutom delaktig – hittegods som försvinner är stöld, och förtroendeskadan drabbar hela branschen."
+    },
+    {
+      "id": 64,
+      "course": "VU1",
+      "module": 7,
+      "moduleLabel": "Yrkesetik och moral",
+      "source": "modulquiz",
+      "numberInSection": 6,
+      "question": "Kunden ber dig avvisa \"alla som ser hemlösa ut\" från trottoaren utanför entrén. Vad gör du?",
+      "options": [
+        "Förklarar vänligt att du saknar rätt att avvisa människor från allmän plats och att urval på utseende är diskriminering – och lyfter kundens önskemål till bevakningsföretaget",
+        "Utför det – kunden betalar för tjänsten",
+        "Avvisar bara dem som ser mest hemlösa ut",
+        "Säger ja men gör det bara när kunden ser på"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Kundens önskan upphäver aldrig lag eller likabehandling. Det professionella svaret är att förklara rollens gränser, erbjuda det som är möjligt – närvaro, dialog, dokumentation – och låta företaget hantera kunddialogen."
+    },
+    {
+      "id": 65,
+      "course": "VU1",
+      "module": 7,
+      "moduleLabel": "Yrkesetik och moral",
+      "source": "modulquiz",
+      "numberInSection": 7,
+      "question": "En kall vinternatt hittar du en hemlös person sovande i ett trapphus som enligt instruktionen ska hållas tomt. Vad är det professionella agerandet?",
+      "options": [
+        "Låter personen sova och skriver inget i rapporten",
+        "Ringer polisen och begär avlägsnande",
+        "Väcker personen med höjd röst och visar ut direkt",
+        "Väcker varsamt, bedömer hälsotillståndet först, hjälper personen vidare med värme och information – och larmar 112 vid tecken på hälsorisk"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Uppdrag och medmänsklighet går att förena: instruktionen utförs, men med omsorg. Kyla dödar – hälsobedömningen går alltid först, precis som i scenariot med den sovande mannen i vinterkylan."
+    },
+    {
+      "id": 66,
+      "course": "VU1",
+      "module": 7,
+      "moduleLabel": "Yrkesetik och moral",
+      "source": "modulquiz",
+      "numberInSection": 8,
+      "question": "Vad kännetecknar en professionell människosyn i väktaryrket?",
+      "options": [
+        "Att vara extra vaksam mot personer som ser avvikande ut",
+        "Att utgå från alla människors lika värde och ingripa mot beteenden – aldrig mot vem någon är",
+        "Att behandla kunder bättre än allmänheten",
+        "Att alltid hålla känslomässig distans genom att undvika ögonkontakt"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Lika värde är grunden för både etiken och juridiken: ingripanden riktas mot vad någon gör, aldrig mot vem någon är. Det är dessutom den inställning som gör nästa möte med samma person lättare – för er båda."
+    },
+    {
+      "id": 67,
+      "course": "VU1",
+      "module": 8,
+      "moduleLabel": "Olaga diskriminering och mänskliga beteenden",
+      "source": "modulquiz",
+      "numberInSection": 1,
+      "question": "Vem kan dömas för olaga diskriminering enligt brottsbalken?",
+      "options": [
+        "Endast företagets ägare",
+        "Näringsidkare och deras anställda – till exempel en väktare som i tjänsten nekar någon på diskriminerande grund",
+        "Endast myndigheter",
+        "Ingen – diskriminering är bara en civilrättslig fråga"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Straffansvaret träffar den som utför handlingen. En väktare eller entrévärd som diskriminerar kan dömas personligen till böter eller fängelse i högst ett år – och en order från chef eller kund är inget försvar."
+    },
+    {
+      "id": 68,
+      "course": "VU1",
+      "module": 8,
+      "moduleLabel": "Olaga diskriminering och mänskliga beteenden",
+      "source": "modulquiz",
+      "numberInSection": 2,
+      "question": "Vilka är diskrimineringslagens sju diskrimineringsgrunder?",
+      "options": [
+        "Kön, längd, vikt, ålder, språk, yrke och inkomst",
+        "Endast etnisk tillhörighet och religion",
+        "Medborgarskap, bostadsort, utbildning, kön, ålder, språk och klädsel",
+        "Kön, könsöverskridande identitet eller uttryck, etnisk tillhörighet, religion eller annan trosuppfattning, funktionsnedsättning, sexuell läggning och ålder"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "De sju grunderna är lagens kärna och värda att kunna utantill. Tillsynsmyndighet är Diskrimineringsombudsmannen, och lagen förbjuder även indirekt diskriminering, trakasserier och bristande tillgänglighet."
+    },
+    {
+      "id": 69,
+      "course": "VU1",
+      "module": 8,
+      "moduleLabel": "Olaga diskriminering och mänskliga beteenden",
+      "source": "modulquiz",
+      "numberInSection": 3,
+      "question": "Du nekar en synligt kraftigt berusad person inträde till ett evenemang. Är det diskriminering?",
+      "options": [
+        "Nej – beslutet vilar på personens beteende och tillämpas lika för alla, vilket är en saklig grund",
+        "Ja, berusning är en diskrimineringsgrund",
+        "Ja, om personen känner sig kränkt",
+        "Nej, men bara om en ordningsvakt fattar beslutet"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Diskriminering handlar om urval på grupptillhörighet. Att neka utifrån beteende – berusning, aggressivitet, brott mot sakliga villkor som gäller alla – är tillåtet och ofta nödvändigt. Regeln är: vad personen gör, inte vem personen är."
+    },
+    {
+      "id": 70,
+      "course": "VU1",
+      "module": 8,
+      "moduleLabel": "Olaga diskriminering och mänskliga beteenden",
+      "source": "modulquiz",
+      "numberInSection": 4,
+      "question": "Kundens platschef säger åt dig att inte släppa in personer av visst etniskt ursprung. Vad gör du?",
+      "options": [
+        "Följer ordern – kunden bestämmer på sitt objekt",
+        "Följer ordern men skriver i rapporten att du var emot den",
+        "Vägrar, förklarar att ordern är brottslig, dokumenterar vad som sagts och rapporterar till bevakningsföretaget",
+        "Släpper in alla utom just de personer chefen pekar ut"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Ordern är ett brott, och den som lyder kan dömas personligen för olaga diskriminering. Att vägra brottsliga uppdrag – och lyfta dem till företaget – är en del av yrkets kärna, inte en avvikelse från det."
+    },
+    {
+      "id": 71,
+      "course": "VU1",
+      "module": 8,
+      "moduleLabel": "Olaga diskriminering och mänskliga beteenden",
+      "source": "modulquiz",
+      "numberInSection": 5,
+      "question": "Vid en kontroll undviker en person ögonkontakt, står tyst och verkar spänd. Vad är rätt slutsats?",
+      "options": [
+        "Personen är sannolikt skyldig till något",
+        "Personen ska omedelbart visiteras",
+        "Beteendet ska ignoreras helt",
+        "Beteendet kan lika gärna bero på kultur, rädsla, språkbarriär eller funktionsnedsättning – bedöm faktiska handlingar och anpassa din kommunikation"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Undviken ögonkontakt är i delar av världen ett tecken på respekt, och nervositet är normalt hos den som kontrolleras. Misstanke byggs på vad någon gör – gömmer föremål, lämnar oriktiga uppgifter – aldrig på uttryckssätt."
+    },
+    {
+      "id": 72,
+      "course": "VU1",
+      "module": 8,
+      "moduleLabel": "Olaga diskriminering och mänskliga beteenden",
+      "source": "modulquiz",
+      "numberInSection": 6,
+      "question": "Vad är ditt bästa skydd om du anklagas för diskriminering efter ett ingripande?",
+      "options": [
+        "Att kollegor intygar att du \"inte är sån\"",
+        "En rapport skriven samma pass som visar den sakliga grunden – vilket beteende eller villkor som avgjorde beslutet",
+        "Att neka till att ingripandet ägt rum",
+        "Att radera kamerabevakningsmaterialet"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Dokumenterad saklig grund är det som skiljer ett korrekt beslut från ett godtyckligt i efterhandens ljus. Rapporten skyddar dig – och tvingar dig samtidigt att formulera grunden, vilket är den ärliga spegel som gör nästa bedömning bättre."
+    },
+    {
+      "id": 73,
+      "course": "VU1",
+      "module": 9,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "modulquiz",
+      "numberInSection": 1,
+      "question": "Varför är det viktigt att ingripa tidigt på konflikttrappan?",
+      "options": [
+        "För att hinna hem i tid",
+        "Tidiga ingripanden ser bättre ut på kamerorna",
+        "Ju tidigare i eskalationen du kliver in, desto enklare och mindre riskfylld är lösningen – det som löses med ord på steg ett kan kräva våld på steg fem",
+        "Sena ingripanden är förbjudna enligt polislagen"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Konflikter klättrar stegvis, och varje steg uppåt kostar mer att lösa. Den väktare som läser irritationen och frustrationen behöver sällan hantera raseriet."
+    },
+    {
+      "id": 74,
+      "course": "VU1",
+      "module": 9,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "modulquiz",
+      "numberInSection": 2,
+      "question": "Vilken av följande är en typisk fysisk varningssignal för nära förestående våld?",
+      "options": [
+        "Personen sätter sig ner",
+        "Knutna nävar, låst blick och viktförflyttning till främre foten",
+        "Personen ber om ett glas vatten",
+        "Personen tittar på klockan"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Kroppen laddar innan den slår: spända händer, låst eller flackande blick mot hakparti och utgångar, jackan som åker av. Var också vaksam på plötsligt lugn hos en uppjagad person – det kan betyda att beslutet redan är fattat."
+    },
+    {
+      "id": 75,
+      "course": "VU1",
+      "module": 9,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "modulquiz",
+      "numberInSection": 3,
+      "question": "En man skriker att han blivit orättvist behandlad i kassan. Vilket svar är mest deeskalerande?",
+      "options": [
+        "\"Lugna ner dig, annars får du gå.\"",
+        "\"Så där får man inte bete sig här.\"",
+        "\"Det där är inte mitt bord.\"",
+        "\"Jag hör att du är riktigt arg över det här. Berätta vad som hände, så tittar vi på hur vi kan lösa det.\""
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Att bekräfta känslan utan att ge efter i sak – och sedan erbjuda en väg framåt – tar bort konfliktens vanligaste bränsle: att inte bli hörd. Kommandon och avvisanden trycker personen uppåt på trappan i stället."
+    },
+    {
+      "id": 76,
+      "course": "VU1",
+      "module": 9,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "modulquiz",
+      "numberInSection": 4,
+      "question": "Varför fungerar uppmaningen \"Lugna ner dig!\" så dåligt?",
+      "options": [
+        "Den upplevs som en anklagelse förklädd till kommando och erbjuder ingen utväg – den eskalerar i stället för att lugna",
+        "Den är för lång att säga i en stressad situation",
+        "Den är förbjuden enligt diskrimineringslagen",
+        "Den fungerar bra – det är en rekommenderad teknik"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Ingen har någonsin lugnat sig på kommando. Sänk i stället din egen röst, ge tid, bekräfta känslan och erbjud val – ditt lugn smittar mer än dina order."
+    },
+    {
+      "id": 77,
+      "course": "VU1",
+      "module": 9,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "modulquiz",
+      "numberInSection": 5,
+      "question": "Varför är avstånd centralt i väktarens säkerhetstänkande?",
+      "options": [
+        "Det ser mer professionellt ut",
+        "Ett par meter köper dig den reaktionstid du behöver – den som står på armlängds avstånd hinner du inte läsa, bara ta emot",
+        "Ljudet bär bättre på håll",
+        "Avstånd krävs enligt arbetsmiljölagen"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Reaktion är alltid långsammare än aktion. Avståndet är den marginal som gör att varningssignaler hinner bli handlingar – att skapa och hålla det är din enklaste livförsäkring."
+    },
+    {
+      "id": 78,
+      "course": "VU1",
+      "module": 9,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "modulquiz",
+      "numberInSection": 6,
+      "question": "Hur positionerar du dig i samtal med en uppjagad person?",
+      "options": [
+        "Rakt framför personen med korslagda armar",
+        "Bakom personen så att du inte syns",
+        "Så nära som möjligt för att visa att du inte är rädd",
+        "Snett i en bladad ställning, med händerna synliga i beredskap, din reträttväg fri – och utan att blockera personens utväg i onödan"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Vinkeln gör dig mindre konfrontativ och snabbare, de synliga händerna lugnar utan att sänka din beredskap – och två fria utvägar minskar risken för att någon av er känner sig tvingad att slåss."
+    },
+    {
+      "id": 79,
+      "course": "VU1",
+      "module": 9,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "modulquiz",
+      "numberInSection": 7,
+      "question": "Vad händer med finmotoriken vid kraftigt adrenalinpåslag – och vad betyder det för självskyddstekniker?",
+      "options": [
+        "Den försämras kraftigt – därför måste teknikerna vara enkla, grovmotoriska och nötta i fysisk träning",
+        "Den förbättras – adrenalin skärper alla sinnen",
+        "Den påverkas inte alls",
+        "Den försämras, men bara hos otränade personer"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Under stress försvinner fingerfärdigheten och tunnelseendet smalnar av världen. Bara enkla, väl intränade rörelser finns kvar att tillgå – det är därför självskydd tränas fysiskt och repeteras, inte läses."
+    },
+    {
+      "id": 80,
+      "course": "VU1",
+      "module": 9,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "modulquiz",
+      "numberInSection": 8,
+      "question": "Efter ett ingripande där du använde våld – vad ska din rapport särskilt visa, utöver själva våldsanvändningen?",
+      "options": [
+        "Att motparten var en obehaglig person",
+        "Hur snabbt hela ingripandet gick",
+        "Vad du sa och gjorde för att deeskalera innan våldet – det är den beskrivningen som visar att våldet var sista utvägen och därmed försvarligt",
+        "Kollegornas åsikter om händelsen"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Försvarligheten bedöms i ljuset av alternativen. En rapport som visar kommunikationen, varningarna och valen du erbjöd innan du tog i – skriven samma pass – är ditt starkaste skydd vid varje granskning."
+    },
+    {
+      "id": 81,
+      "course": "VU1",
+      "module": 10,
+      "moduleLabel": "Handfängsel",
+      "source": "modulquiz",
+      "numberInSection": 1,
+      "question": "Vad är det rättsliga stödet för att en väktare använder handfängsel?",
+      "options": [
+        "Ett generellt tillstånd som följer med väktaruniformen",
+        "En särskild handfängselparagraf i lagen om bevakningsföretag",
+        "Laga befogenhet vid gripande – försvarligt våld vid motstånd – samt nödvärn; dessutom krävs genomförd utbildning",
+        "Kundens skriftliga instruktion för objektet"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Någon särskild fängsellag för väktare finns inte. Fängsel är våldsanvändning som vilar på samma grunder som allt annat våld – med samma krav på behov, proportionalitet och försvarlighet, varje minut de sitter på."
+    },
+    {
+      "id": 82,
+      "course": "VU1",
+      "module": 10,
+      "moduleLabel": "Handfängsel",
+      "source": "modulquiz",
+      "numberInSection": 2,
+      "question": "I vilket av följande fall får handfängsel INTE användas?",
+      "options": [
+        "Rutinmässigt \"för säkerhets skull\" på en lugn och samarbetsvillig person",
+        "När en gripen person gör våldsamt motstånd",
+        "När det finns konkret risk att den gripne skadar sig själv",
+        "När det finns konkret flyktrisk vid ett gripande"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Utan behov finns ingen rätt – fängsel på en samarbetsvillig person är oförsvarligt våld, oavsett hur smidigt det vore. Behovet ska dessutom omprövas löpande: när motståndet upphör ska frågan om avtagning ställas."
+    },
+    {
+      "id": 83,
+      "course": "VU1",
+      "module": 10,
+      "moduleLabel": "Handfängsel",
+      "source": "modulquiz",
+      "numberInSection": 3,
+      "question": "Vad är positionsasfyxi och hur förebyggs den?",
+      "options": [
+        "En allergisk reaktion mot metallen i fängslet",
+        "Ett tillstånd som bara drabbar äldre personer",
+        "Cirkulationsproblem i händerna av för hårda fängsel",
+        "Kvävning till följd av kroppsställning – särskilt bukläge med fängsel bak och tryck mot ryggen – som förebyggs genom att personen omedelbart sätts eller reses upp, alternativt läggs i sidoläge, och aldrig lämnas på mage"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Positionsasfyxi är den allvarligaste risken vid fängsling och kan döda på minuter. Utmattning, kraftig kroppshydda och drogpåverkan förstärker risken – alltså just de omständigheter som ofta råder efter en kamp."
+    },
+    {
+      "id": 84,
+      "course": "VU1",
+      "module": 10,
+      "moduleLabel": "Handfängsel",
+      "source": "modulquiz",
+      "numberInSection": 4,
+      "question": "En fängslad person säger \"jag kan inte andas\" – men kan uppenbarligen tala. Vad gäller?",
+      "options": [
+        "Kan man tala kan man andas – ingen åtgärd behövs",
+        "Klagomålet tas alltid på allvar: att kunna tala utesluter inte livshotande andningspåverkan – ändra position, övervaka noga och larma vid försämring",
+        "Personen försöker bara slippa fängslen och ska ignoreras",
+        "Vänta fem minuter och se om det går över"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Tal kräver bara små luftmängder – en person kan prata och samtidigt kvävas. \"Den som pratar kan andas\" är en myt som kostat liv. Positionsändring kostar ingenting; att ha fel åt andra hållet kan kosta allt."
+    },
+    {
+      "id": 85,
+      "course": "VU1",
+      "module": 10,
+      "moduleLabel": "Handfängsel",
+      "source": "modulquiz",
+      "numberInSection": 5,
+      "question": "Varför aktiveras låsspärren (dubbellåset) direkt efter påsättningen?",
+      "options": [
+        "Den hindrar fängslet från att dras åt hårdare av sig självt eller vid rörelse – och skyddar därmed mot nerv- och kärlskador",
+        "Den gör fängslet omöjligt att dyrka upp",
+        "Det är ett garantikrav från tillverkaren",
+        "Den låser personens armar i ett fast transportgrepp"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Utan spärr kan fängslet ratcha åt sig självt för varje rörelse och till slut skära in i handleden. Spärr och åtsittningskontroll är därför reflexer direkt efter påsättning – inte något som görs vid tillfälle."
+    },
+    {
+      "id": 86,
+      "course": "VU1",
+      "module": 10,
+      "moduleLabel": "Handfängsel",
+      "source": "modulquiz",
+      "numberInSection": 6,
+      "question": "Vad ska särskilt dokumenteras när handfängsel har använts?",
+      "options": [
+        "Endast klockslaget för gripandet",
+        "Fängslets fabrikat och serienummer",
+        "Varför fängsel behövdes, tid för på- och avtagning, gjorda kontroller, personens tillstånd samt eventuella klagomål på smärta eller andning",
+        "Vilken kollega som bar fängslet under passet"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Varje fängsling ska kunna motiveras i efterhand – behovet, tiderna, kontrollerna och tillståndet är det som visar att användningen var försvarlig. Samma uppgifter lämnas muntligt vid överlämningen till polisen."
+    },
+    {
+      "id": 87,
+      "course": "VU1",
+      "module": 11,
+      "moduleLabel": "Akutsjukvård",
+      "source": "modulquiz",
+      "numberInSection": 1,
+      "question": "Vad står L:et för i L-ABCDE?",
+      "options": [
+        "Larma – ring 112 före allt annat",
+        "Läget och din egen säkerhet – platsen säkras innan du hjälper: trafik, el, våld, smitta",
+        "Ljus – se till att arbetsområdet är upplyst",
+        "Luftväg – samma som A"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "En skadad hjälpare hjälper ingen och blir dessutom ytterligare en patient. Trafik, el, rasrisk, våld och smitta bedöms på sekunder – sedan börjar ABCDE."
+    },
+    {
+      "id": 88,
+      "course": "VU1",
+      "module": 11,
+      "moduleLabel": "Akutsjukvård",
+      "source": "modulquiz",
+      "numberInSection": 2,
+      "question": "Varför genomförs ABCDE-bedömningen alltid i samma ordning?",
+      "options": [
+        "Det är enklast att komma ihåg alfabetiskt",
+        "Ordningen är ett krav från försäkringsbolagen",
+        "För att dokumentationen ska bli enhetlig",
+        "Ordningen speglar vad som dödar snabbast – och varje funnet problem åtgärdas innan du går vidare till nästa steg"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "En blockerad luftväg dödar före en blödning, som dödar före det mesta annat. Systematiken gör också att du inte fastnar vid det som syns mest – det dramatiska är inte alltid det farligaste."
+    },
+    {
+      "id": 89,
+      "course": "VU1",
+      "module": 11,
+      "moduleLabel": "Akutsjukvård",
+      "source": "modulquiz",
+      "numberInSection": 3,
+      "question": "Du hittar en medvetslös person som andas normalt. Vad gör du?",
+      "options": [
+        "Lägger personen i stabilt sidoläge, larmar 112 och övervakar andningen kontinuerligt",
+        "Startar HLR för säkerhets skull",
+        "Sätter personen upp mot en vägg",
+        "Ger personen vatten för att väcka den"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Sidoläget håller luftvägen fri och hindrar tunga och kräkning från att kväva. Men bedömningen är färskvara: slutar andningen vara normal går du omedelbart över till HLR."
+    },
+    {
+      "id": 90,
+      "course": "VU1",
+      "module": 11,
+      "moduleLabel": "Akutsjukvård",
+      "source": "modulquiz",
+      "numberInSection": 4,
+      "question": "En livlös person reagerar inte på tilltal och drar bara enstaka djupa, suckande andetag. Vad gäller?",
+      "options": [
+        "Personen andas – lägg i stabilt sidoläge",
+        "Vänta och räkna andetagen i en minut",
+        "Detta är agonal andning och räknas som hjärtstopp – larma 112 och starta HLR omedelbart",
+        "Ge två inblåsningar och invänta ambulans"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "De suckande andetagen är ett vanligt tidigt tecken vid hjärtstopp och lurar många att vänta – med minuter som kostar liv. Ingen reaktion plus ingen normal andning är alltid HLR-läge."
+    },
+    {
+      "id": 91,
+      "course": "VU1",
+      "module": 11,
+      "moduleLabel": "Akutsjukvård",
+      "source": "modulquiz",
+      "numberInSection": 5,
+      "question": "Vilket alternativ beskriver korrekt HLR-teknik på vuxen?",
+      "options": [
+        "15 kompressioner och 5 inblåsningar, mjukt tryck",
+        "Kompressioner endast om ambulansen är mer än 20 minuter bort",
+        "Tryck på vänster sida av bröstet, takt 60 per minut",
+        "30 kompressioner och 2 inblåsningar – mitt på bröstkorgen, 5–6 cm djupt, i takten 100–120 per minut, med minimala avbrott"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Djup, takt och kontinuitet är det som håller hjärnan syresatt. Låt bröstkorgen häva sig helt mellan trycken, byt av varandra varannan minut – och kan du inte blåsa är enbart kompressioner mycket bättre än ingenting."
+    },
+    {
+      "id": 92,
+      "course": "VU1",
+      "module": 11,
+      "moduleLabel": "Akutsjukvård",
+      "source": "modulquiz",
+      "numberInSection": 6,
+      "question": "Kan en hjärtstartare skada en person som inte har hjärtstopp?",
+      "options": [
+        "Ja, därför får bara sjukvårdspersonal använda den",
+        "Nej – apparaten analyserar hjärtrytmen och ger endast stöt vid en rytm som ska defibrilleras; sätt på den och följ röstens instruktioner",
+        "Ja, om elektroderna sätts fel exploderar den",
+        "Nej, men den fungerar bara på personer under 50 år"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Hjärtstartaren är byggd för lekmän och fattar själv beslutet om stöt. Den enda regeln att hålla hårt på: ingen rör personen under analys och strömstöt. Tveka aldrig att hämta och starta den."
+    },
+    {
+      "id": 93,
+      "course": "VU1",
+      "module": 11,
+      "moduleLabel": "Akutsjukvård",
+      "source": "modulquiz",
+      "numberInSection": 7,
+      "question": "En vuxen har satt i halsen och kan varken hosta, tala eller andas. Vad gör du?",
+      "options": [
+        "Uppmuntrar personen att dricka vatten",
+        "Väntar på att hostreflexen ska ta över",
+        "Ger 5 kraftiga ryggslag växlat med 5 buktryck tills föremålet lossnar – och startar HLR om personen blir medvetslös",
+        "Sticker in fingrarna i halsen och letar efter föremålet"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Tystnaden är larmsignalen – kan personen inte hosta måste du hjälpa. Ryggslag och buktryck varvas 5 + 5, på gravida används brösttryck, och vid medvetslöshet kan HLR-kompressionerna pressa loss föremålet."
+    },
+    {
+      "id": 94,
+      "course": "VU1",
+      "module": 11,
+      "moduleLabel": "Akutsjukvård",
+      "source": "modulquiz",
+      "numberInSection": 8,
+      "question": "En man i entrén är förvirrad, kraftigt svettig och aggressiv – men luktar inte alkohol. Vad bör du misstänka och göra?",
+      "options": [
+        "Misstänk lågt blodsocker – ge något sött om han är vaken och kan svälja, och larma 112 om han blir medvetslös",
+        "Berusning – avvisa honom från platsen",
+        "Att han simulerar – dokumentera och gå vidare",
+        "Värmeslag – häll kallt vatten över honom"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Insulinkänning är den klassiska \"fyllan som inte luktar\": förvirring, svettning och aggressivitet med snabb försämring. Socker till den vakne kan vända förloppet på minuter – och felbedömningen \"bara full\" har kostat liv. Precis det modul 7 och 8 lär: det som ser ut som trots kan vara sjukdom."
+    },
+    {
+      "id": 95,
+      "course": "VU1",
+      "module": 1,
+      "moduleLabel": "Regler för bevakningsverksamheten",
+      "source": "sluttest",
+      "numberInSection": 1,
+      "question": "Vilken myndighet utfärdar föreskrifterna om väktarnas utbildning (PMFS 2017:10, FAP 573-1)?",
+      "options": [
+        "Länsstyrelsen",
+        "Polismyndigheten",
+        "Arbetsmiljöverket",
+        "BYA"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Polismyndigheten skriver föreskrifterna om utbildning och utrustning – Länsstyrelsen prövar auktorisation och godkännanden."
+    },
+    {
+      "id": 96,
+      "course": "VU1",
+      "module": 1,
+      "moduleLabel": "Regler för bevakningsverksamheten",
+      "source": "sluttest",
+      "numberInSection": 2,
+      "question": "Ett fastighetsbolag låter egna anställda vakta bolagets egna byggnader. Krävs auktorisation?",
+      "options": [
+        "Ja, all bevakning kräver auktorisation",
+        "Ja, om de bär uniform",
+        "Ja, om bevakningen sker nattetid",
+        "Nej – lagen gäller yrkesmässig bevakning för annans räkning, så egenbevakning omfattas inte"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Nyckelorden i lagen är \"yrkesmässigt\" och \"för annans räkning\" – den som vaktar sitt eget behöver ingen auktorisation."
+    },
+    {
+      "id": 97,
+      "course": "VU1",
+      "module": 1,
+      "moduleLabel": "Regler för bevakningsverksamheten",
+      "source": "sluttest",
+      "numberInSection": 3,
+      "question": "Vilken är den lägsta åldern för att bli godkänd som väktare?",
+      "options": [
+        "18 år",
+        "16 år",
+        "20 år",
+        "21 år"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Godkännande förutsätter att man fyllt 18 år – därtill prövas laglydnad, medborgerlig pålitlighet och lämplighet."
+    },
+    {
+      "id": 98,
+      "course": "VU1",
+      "module": 1,
+      "moduleLabel": "Regler för bevakningsverksamheten",
+      "source": "sluttest",
+      "numberInSection": 4,
+      "question": "Vem prövar om ett bevakningsföretags föreståndare är lämplig?",
+      "options": [
+        "Företagets styrelse",
+        "Polismyndigheten",
+        "Länsstyrelsen, som en del av auktorisationsprövningen",
+        "Branschorganisationen"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Auktorisationsprövningen omfattar även ledning och föreståndare – och godkännandet kan återkallas."
+    },
+    {
+      "id": 99,
+      "course": "VU1",
+      "module": 1,
+      "moduleLabel": "Regler för bevakningsverksamheten",
+      "source": "sluttest",
+      "numberInSection": 5,
+      "question": "Vilken bevakningsform utförs normalt i civila kläder?",
+      "options": [
+        "Butikskontroll",
+        "Stationär bevakning",
+        "Värdetransport",
+        "Ronderande bevakning"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Butikskontrollanten är undantaget från uniformskravet – arbetet bygger på att inte synas förrän ingripandet."
+    },
+    {
+      "id": 100,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 1,
+      "question": "Vilka två delar krävs för att en gärning ska vara ett brott?",
+      "options": [
+        "Vittnen och teknisk bevisning",
+        "Polisanmälan och åtal",
+        "Objektiva rekvisit (gärningen stämmer med lagens beskrivning) och subjektiva rekvisit (uppsåt, eller oaktsamhet där det räcker)",
+        "Skada och ekonomiskt motiv"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Det räcker inte att något hänt – gärningsmannen måste också ha haft uppsåt, vilket är därför den glömska kunden inte begår stöld."
+    },
+    {
+      "id": 101,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 2,
+      "question": "Vad skiljer stöld från egenmäktigt förfarande?",
+      "options": [
+        "Stöld sker inomhus, egenmäktigt förfarande utomhus",
+        "Egenmäktigt förfarande gäller bara fordon",
+        "Värdet på det tagna",
+        "Tillägnelseuppsåtet – stöld kräver avsikt att tillägna sig saken, egenmäktigt förfarande är olovligt tagande eller rubbande utan den avsikten"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Den som \"lånar\" en cykel utan lov för att åka hem begår egenmäktigt förfarande – den som tar den för att behålla den begår stöld."
+    },
+    {
+      "id": 102,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 3,
+      "question": "En man berättar stolt för dig att det var han som gjorde inbrottet på ditt objekt förra veckan. Får du gripa honom?",
+      "options": [
+        "Ja – erkännandet räcker",
+        "Nej – varken bar gärning, flyende fot eller efterlysning föreligger; du dokumenterar, larmar polis och lämnar signalement",
+        "Ja, om en kollega hör erkännandet",
+        "Ja, men bara inom en vecka från brottet"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Ett erkännande skapar ingen gripanderätt – informationen är däremot guld för polisen, så dokumentera ordagrant."
+    },
+    {
+      "id": 103,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 4,
+      "question": "En person säger: \"Nästa vecka kommer jag hit och slår ner dig.\" Ger det dig nödvärnsrätt?",
+      "options": [
+        "Nej – angreppet är varken påbörjat eller överhängande; hotet dokumenteras och polisanmäls (olaga hot)",
+        "Ja, nödvärn gäller alla hot",
+        "Ja, om personen ser farlig ut",
+        "Nej, men du får gripa personen i förebyggande syfte"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Nödvärn kräver ett påbörjat eller överhängande angrepp – hot om framtida våld möts med dokumentation, rapport och polisanmälan."
+    },
+    {
+      "id": 104,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 5,
+      "question": "Vilken av följande är en nödvärnssituation enligt brottsbalken 24 kap. 1 §?",
+      "options": [
+        "En kund vägrar lämna en butik vid stängningsdags",
+        "En person fotograferar ditt objekt från gatan",
+        "En kollega vägrar följa instruktionen",
+        "En person vägrar lämna en bostad efter tillsägelse"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Bostaden har särskilt skydd i nödvärnsrätten – butiken har det inte: kunden som dröjer vid stängning hanteras med uppmaning och i förlängningen ordningsvakt eller polis."
+    },
+    {
+      "id": 105,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 6,
+      "question": "Den du gripit gör passivt motstånd – sätter sig ner och vägrar flytta sig, utan våld. Vad gäller?",
+      "options": [
+        "Allt våld är förbjudet vid passivt motstånd",
+        "Du måste släppa personen",
+        "Försvarligt våld får användas även vid passivt motstånd för att genomföra gripandet – men proportionaliteten avgör, och ofta är rätt val att invänta polisen på plats",
+        "Du får bära bort personen hur som helst – motstånd är motstånd"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Laga befogenheten gäller vid motstånd, även passivt – men behovs- och proportionalitetsprinciperna gör att tålamod ofta slår muskler."
+    },
+    {
+      "id": 106,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 7,
+      "question": "Vid skyddsvisitationen efter ett gripande hittar du narkotika i den gripnes jackficka. Vad gäller?",
+      "options": [
+        "Du måste lägga tillbaka den – du letade ju efter vapen",
+        "Narkotikan får tas i beslag eftersom den påträffats i samband med gripandet, och överlämnas till polisen tillsammans med personen",
+        "Du kastar den i närmaste papperskorg",
+        "Du fotograferar den och lägger tillbaka den"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Visitationens syfte är vapen – men det som påträffas vid ett lagligt gripande får tas i beslag enligt rättegångsbalken 27 kap. 4 §."
+    },
+    {
+      "id": 107,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 8,
+      "question": "Polisen har hämtat 13-åringen du grep för butiksstöld. Vad händer sedan med den unge?",
+      "options": [
+        "Ärendet utreds enligt lagen om unga lagöverträdare och socialtjänsten kopplas in – någon påföljd kan inte dömas ut före 15 års ålder",
+        "Ingenting – barn under 15 kan inte utredas",
+        "Den unge döms till ungdomstjänst",
+        "Den unge sätts i häkte i väntan på rättegång"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Gärningen är fortfarande ett brott och samhället reagerar – men genom utredning och socialtjänst, inte genom straff."
+    },
+    {
+      "id": 108,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 9,
+      "question": "Butikschefen är nyfiken och ber dig visa nattens övervakningsfilm \"bara för skojs skull\". Vad gäller?",
+      "options": [
+        "Chefen har alltid rätt att se allt material",
+        "Du visar filmen men raderar den efteråt",
+        "Du visar bara de roligaste delarna",
+        "Materialet hanteras enligt rutin och behörighet – nyfikenhet är inget ändamål, och utlämning sker till polisen enligt rutin"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Kamerabevakningsmaterial har begränsad åtkomstkrets och bestämda ändamål – \"för skojs skull\" finns inte bland dem."
+    },
+    {
+      "id": 109,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 10,
+      "question": "Du kallas som vittne i domstol om ett ingripande. Hindrar din tystnadsplikt dig från att berätta?",
+      "options": [
+        "Ja – tystnadsplikten gäller alltid och överallt",
+        "Ja, om inte kunden ger sitt tillstånd",
+        "Nej – i domstol gäller vittnesplikten, och du ska berätta vad du sett",
+        "Nej, men bara om du vittnar anonymt"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Vittnesplikten är en medborgerlig skyldighet som väger tyngre – och din rapport får ofta användas som minnesstöd."
+    },
+    {
+      "id": 110,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 11,
+      "question": "En person spjärnar emot och klänger sig fast i ett räcke när du genomför ett gripande – utan att slå. Vilket brott kan det utgöra?",
+      "options": [
+        "Våldsamt motstånd (brottsbalken 17 kap. 4 §)",
+        "Misshandel",
+        "Olaga tvång",
+        "Inget brott alls"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Att sätta sig till motvärn utan direkt våld mot person är våldsamt motstånd – ett av brotten som skyddar väktarens tjänsteutövning."
+    },
+    {
+      "id": 111,
+      "course": "VU1",
+      "module": 2,
+      "moduleLabel": "Bevakningsjuridik",
+      "source": "sluttest",
+      "numberInSection": 12,
+      "question": "Vad innebär putativt nödvärn?",
+      "options": [
+        "Nödvärn som utövas av flera personer samtidigt",
+        "Att du bedöms utifrån situationen som du med fog uppfattade den – trodde du att attrappvapnet var riktigt, bedöms ditt handlande så",
+        "Nödvärn mot djur",
+        "Att nödvärnsrätten upphör när polisen anländer"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Ingen kan kräva facit i stunden – men rena slarvbedömningar skyddas inte."
+    },
+    {
+      "id": 112,
+      "course": "VU1",
+      "module": 3,
+      "moduleLabel": "Arbetsmiljö",
+      "source": "sluttest",
+      "numberInSection": 1,
+      "question": "Du upptäcker att belysningen i parkeringsgaraget är trasig – inget har hänt ännu. Vad kallas det du ska rapportera?",
+      "options": [
+        "Ett tillbud",
+        "En arbetsolycka",
+        "Ett skyddsstopp",
+        "En riskobservation"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Faran är upptäckt innan något hänt – riskobservationen är den billigaste rapporten av alla, för den förebygger både \"oj\" och \"aj\"."
+    },
+    {
+      "id": 113,
+      "course": "VU1",
+      "module": 3,
+      "moduleLabel": "Arbetsmiljö",
+      "source": "sluttest",
+      "numberInSection": 2,
+      "question": "Vem har rätt att stoppa ett arbete vid omedelbar och allvarlig fara för arbetstagares liv eller hälsa?",
+      "options": [
+        "Endast Arbetsmiljöverkets inspektörer",
+        "Skyddsombudet – i väntan på Arbetsmiljöverkets ställningstagande",
+        "Endast arbetsgivaren",
+        "Kunden på objektet"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Skyddsombudsstoppet är en av arbetsmiljölagens skarpaste rättigheter – och du själv får alltid avbryta eget arbete vid omedelbar allvarlig fara."
+    },
+    {
+      "id": 114,
+      "course": "VU1",
+      "module": 4,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "sluttest",
+      "numberInSection": 1,
+      "question": "Objektsinstruktionen täcker inte situationen du står i, och läget är inte akut. Vad gör du?",
+      "options": [
+        "Kontaktar ledningscentralen och stämmer av innan du agerar",
+        "Improviserar utifrån vad som känns rimligt",
+        "Frågar närmaste anställd hos kunden",
+        "Avvaktar till nästa pass"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Ledningscentralen är din väg när kartan tar slut – vid akut fara för liv och hälsa agerar du förstås först och rapporterar sedan."
+    },
+    {
+      "id": 115,
+      "course": "VU1",
+      "module": 4,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "sluttest",
+      "numberInSection": 2,
+      "question": "Vad ska en passöverlämning innehålla?",
+      "options": [
+        "Endast nycklarna",
+        "En hälsning och parkeringsplatsens nummer",
+        "Pågående ärenden, avvikelser, besked från ledningscentralen och utkvitterad utrustning – muntligt och i rapport",
+        "Bara det som gått fel under passet"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Det din avlösare inte vet blir nattens problem – överlämningen är ett säkerhetsmoment, inte en artighet."
+    },
+    {
+      "id": 116,
+      "course": "VU1",
+      "module": 4,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "sluttest",
+      "numberInSection": 3,
+      "question": "Vad kontrollerar den yttre ronden i första hand?",
+      "options": [
+        "Kaffebryggare och spisar",
+        "Skalskyddet – dörrar, fönster, portar, staket, belysning och sådant som kan användas för att ta sig in",
+        "Att personalen har gått hem",
+        "Larmcentralens svarstider"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Den yttre ronden bevakar omslutningsytan, den inre lokalerna – tillsammans täcker de både \"på väg in\" och \"redan inne\"."
+    },
+    {
+      "id": 117,
+      "course": "VU1",
+      "module": 4,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "sluttest",
+      "numberInSection": 4,
+      "question": "En besökare utan föranmälan vill träffa en anställd på kontoret du bevakar. Vad gör du?",
+      "options": [
+        "Släpper in besökaren med en karta till rätt våning",
+        "Avvisar besökaren direkt",
+        "Ber besökaren återkomma nästa dag",
+        "Registrerar besöket, kontaktar den anställde och låter besökaren vänta i receptionen tills värden hämtar"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Ingen rör sig oledsagad i lokalerna utan behörighet – rutinen är vänlig, konsekvent och gäller alla."
+    },
+    {
+      "id": 118,
+      "course": "VU1",
+      "module": 4,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "sluttest",
+      "numberInSection": 5,
+      "question": "Fredag kl. 16: en man vill ta ut en pall med varor och säger att \"chefen godkände det muntligt i morse\". Följesedel saknas. Vad gör du?",
+      "options": [
+        "Släpper ut godset – det är ju helg",
+        "Ringer polisen direkt",
+        "Verifierar med behörig person enligt rutin innan något lämnar objektet – utan godkänd handling eller bekräftelse går inget gods ut",
+        "Låter mannen skriva en egen lapp som kvitto"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "\"Chefen sa det\" är obekräftad information tills du verifierat den via egen kanal – tidspress är ett klassiskt påtryckningsmedel."
+    },
+    {
+      "id": 119,
+      "course": "VU1",
+      "module": 4,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "sluttest",
+      "numberInSection": 6,
+      "question": "Vilka fyra saker kontrolleras alltid på en id-handling?",
+      "options": [
+        "Giltighetstid, att fotot stämmer mot personen, personnummer och ålder samt handlingens säkerhetsdetaljer",
+        "Färg, storlek, vikt och utfärdandeort",
+        "Namnteckning, adress, längd och ögonfärg",
+        "Endast fotot"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Fyra snabba kontroller som görs varje gång – och handlingen hålls i din hand, i bra ljus."
+    },
+    {
+      "id": 120,
+      "course": "VU1",
+      "module": 4,
+      "moduleLabel": "Bevakningstjänst",
+      "source": "sluttest",
+      "numberInSection": 7,
+      "question": "Varför ska rapporten skrivas under samma arbetspass som händelsen?",
+      "options": [
+        "För att skrivaren är ledig då",
+        "Minnet försämras snabbt, och en tidsnära rapport har högre bevisvärde – för både åklagare och ditt eget skydd",
+        "För att arbetsledningen ska hinna läsa den till morgonen",
+        "Det är bara en tradition i branschen"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Detaljer som klockslag, ordval och ordningsföljd bleknar på timmar – tidsnärheten är halva trovärdigheten."
+    },
+    {
+      "id": 121,
+      "course": "VU1",
+      "module": 5,
+      "moduleLabel": "Tekniska hjälpmedel",
+      "source": "sluttest",
+      "numberInSection": 1,
+      "question": "Vad gör en magnetkontakt i ett inbrottslarm?",
+      "options": [
+        "Mäter temperaturen i lokalen",
+        "Känner av rörelse i rummet",
+        "Spelar in ljud vid larm",
+        "Larmar när en dörr eller ett fönster öppnas – den är en del av skalskyddet"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Magnetkontakten sitter på omslutningsytans öppningar och reagerar när kontakten bryts – rörelse inne i lokalen är volymskyddets jobb."
+    },
+    {
+      "id": 122,
+      "course": "VU1",
+      "module": 5,
+      "moduleLabel": "Tekniska hjälpmedel",
+      "source": "sluttest",
+      "numberInSection": 2,
+      "question": "Varför har många larmanläggningar en in- och utpasseringsväg med tidsfördröjning?",
+      "options": [
+        "För att spara batteri",
+        "För att behörig personal ska hinna till manöverpanelen och koppla från utan att utlösa larm",
+        "För att ge väktaren tid att åka dit",
+        "För att detektorerna behöver värmas upp"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Fördröjningen är byggd för den behöriga vägen in – går någon in en annan väg larmar systemet direkt."
+    },
+    {
+      "id": 123,
+      "course": "VU1",
+      "module": 5,
+      "moduleLabel": "Tekniska hjälpmedel",
+      "source": "sluttest",
+      "numberInSection": 3,
+      "question": "I vilken ordning görs ett korrekt radioanrop?",
+      "options": [
+        "Mottagarens anrop först, sedan ditt eget: \"Ledningscentralen – Väktare 12\"",
+        "Ditt eget anrop först, sedan mottagarens",
+        "Meddelandet först, anropen sist",
+        "Ordningen spelar ingen roll"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Den som ska lyssna väcks först – då är öronen på när avsändaren och meddelandet kommer."
+    },
+    {
+      "id": 124,
+      "course": "VU1",
+      "module": 5,
+      "moduleLabel": "Tekniska hjälpmedel",
+      "source": "sluttest",
+      "numberInSection": 4,
+      "question": "Hur bokstaveras \"GÅS\" enligt det svenska bokstaveringsalfabetet?",
+      "options": [
+        "Gustav, Åsa, Sven",
+        "Golf, Alfa, Sierra",
+        "Gustav, Åke, Sigurd",
+        "Göran, Åke, Stefan"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Gustav, Åke och Sigurd – Golf och Sierra tillhör NATO-alfabetet, som inte används i svensk bevakningsradio."
+    },
+    {
+      "id": 125,
+      "course": "VU1",
+      "module": 5,
+      "moduleLabel": "Tekniska hjälpmedel",
+      "source": "sluttest",
+      "numberInSection": 5,
+      "question": "Vad kontrolleras på bevakningsfordonet före passet?",
+      "options": [
+        "Skador, däck, belysning och att utrustningen är komplett – och kontrollen dokumenteras",
+        "Endast bränslenivån",
+        "Att radion har rätt kanal – bilen är verkstadens ansvar",
+        "Ingenting – föregående pass ansvarar"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Bilen är ditt rullande kontor och din utrustningsbärare – kontrollen skyddar både dig och den som hade bilen före dig."
+    },
+    {
+      "id": 126,
+      "course": "VU1",
+      "module": 6,
+      "moduleLabel": "Brand",
+      "source": "sluttest",
+      "numberInSection": 1,
+      "question": "Vilken släckmetod använder en brandfilt?",
+      "options": [
+        "Kylning",
+        "Avlägsnande av bränslet",
+        "Kvävning – filten stänger ute syret",
+        "Kemisk reaktion med lågorna"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Filten tar bort brandtriangelns syreben – därför fungerar den på fettbränder och brinnande kläder där vatten är fel svar."
+    },
+    {
+      "id": 127,
+      "course": "VU1",
+      "module": 6,
+      "moduleLabel": "Brand",
+      "source": "sluttest",
+      "numberInSection": 2,
+      "question": "Vad omfattar brandklass A?",
+      "options": [
+        "Bränder i fasta material som trä, papper och textil",
+        "Vätskebränder",
+        "Gasbränder",
+        "Bränder i matfett"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "A står för fasta, glödbildande material – B är vätskor, C gaser, D metaller och F matfetter."
+    },
+    {
+      "id": 128,
+      "course": "VU1",
+      "module": 6,
+      "moduleLabel": "Brand",
+      "source": "sluttest",
+      "numberInSection": 3,
+      "question": "En persons kläder har fattat eld. Vad gör du?",
+      "options": [
+        "Ber personen springa ut i friska luften",
+        "Häller på mer vatten oavsett vad som brinner intill",
+        "Fläktar med en jacka för att kyla lågorna",
+        "Lägger ner personen och kväver lågorna med brandfilt eller kraftigt tyg, från huvudet och nedåt"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Spring föder lågorna med syre – ner på marken, kväv uppifrån och ned så att elden inte drivs mot ansiktet, och kyl sedan brännskadorna."
+    },
+    {
+      "id": 129,
+      "course": "VU1",
+      "module": 6,
+      "moduleLabel": "Brand",
+      "source": "sluttest",
+      "numberInSection": 4,
+      "question": "Vid återsamlingsplatsen visar det sig att två personer saknas. Vad gör du?",
+      "options": [
+        "Går själv in i byggnaden och letar",
+        "Meddelar räddningstjänsten omedelbart – uppgiften om saknade och var de senast sågs styr rökdykarnas insats",
+        "Väntar tio minuter – de kommer nog",
+        "Ropar in i byggnaden från entrén"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Vem som saknas och var är den enskilt viktigaste informationen du kan ge räddningsledaren – och ingen utom rökdykare går in."
+    },
+    {
+      "id": 130,
+      "course": "VU1",
+      "module": 6,
+      "moduleLabel": "Brand",
+      "source": "sluttest",
+      "numberInSection": 5,
+      "question": "Varför får containrar och brännbart material inte stå intill fasaden?",
+      "options": [
+        "De skymmer kamerorna",
+        "De blockerar parkeringen",
+        "Anlagd brand är en av de vanligaste brandorsakerna – en brinnande container mot fasad sprider branden in i byggnaden",
+        "De drar till sig skadedjur"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Avstånd till fasad – ofta minst sex meter enligt rekommendationerna – gör att en anlagd containerbrand stannar vid containern."
+    },
+    {
+      "id": 131,
+      "course": "VU1",
+      "module": 6,
+      "moduleLabel": "Brand",
+      "source": "sluttest",
+      "numberInSection": 6,
+      "question": "Vem beslutar att en utrymd byggnad får beträdas igen?",
+      "options": [
+        "Räddningsledaren",
+        "Väktaren, när röken skingrats",
+        "Fastighetsägaren",
+        "Den som utlöste larmet"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Återinträde är räddningsledarens beslut – dolda glödbränder och rök gör att \"det ser lugnt ut\" inte räcker."
+    },
+    {
+      "id": 132,
+      "course": "VU1",
+      "module": 6,
+      "moduleLabel": "Brand",
+      "source": "sluttest",
+      "numberInSection": 7,
+      "question": "Ditt släckförsök misslyckas och branden växer. Vad gör du?",
+      "options": [
+        "Hämtar en större släckare två våningar ner",
+        "Öppnar fönstren för att vädra ut röken",
+        "Stänger dörren till brandrummet, utrymmer och säkerställer att larmet är gjort",
+        "Fortsätter släcka tills släckaren är tom"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Gränsen är nådd när släckningen inte biter snabbt och säkert – då stängs branden in bakom en dörr, och människor och larmning går före allt."
+    },
+    {
+      "id": 133,
+      "course": "VU1",
+      "module": 7,
+      "moduleLabel": "Yrkesetik och moral",
+      "source": "sluttest",
+      "numberInSection": 1,
+      "question": "Din nya rond visar sig omfatta din svågers företag, där ni har en pågående ekonomisk tvist. Vad gör du?",
+      "options": [
+        "Säger inget – du kan vara objektiv",
+        "Anmäler jävet till arbetsledningen så att någon annan kan ta objektet",
+        "Ronderar extra noga just där",
+        "Hoppar tyst över det objektet på ronden"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Jäv handlar inte om att du är opålitlig utan om att förtroendet kräver att intressekonflikter lyfts bort – öppenhet är lösningen."
+    },
+    {
+      "id": 134,
+      "course": "VU1",
+      "module": 7,
+      "moduleLabel": "Yrkesetik och moral",
+      "source": "sluttest",
+      "numberInSection": 2,
+      "question": "Vad betyder principen \"vinn situationen, inte diskussionen\"?",
+      "options": [
+        "Att alltid få sista ordet",
+        "Att undvika alla samtal med upprörda personer",
+        "Att ge motparten rätt i allt",
+        "Att målet är en lugn och säker lösning – inte att bevisa att du har rätt"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Prestige eskalerar konflikter; den som släpper behovet av att \"vinna\" ordväxlingen vinner nästan alltid situationen."
+    },
+    {
+      "id": 135,
+      "course": "VU1",
+      "module": 7,
+      "moduleLabel": "Yrkesetik och moral",
+      "source": "sluttest",
+      "numberInSection": 3,
+      "question": "Mitt under ett gripande ser du att din kollega tar i betydligt hårdare än situationen kräver. Vad är din första åtgärd?",
+      "options": [
+        "Väntar tills passet är slut och pratar med kollegan då",
+        "Filmar händelsen som bevis",
+        "Säger ifrån direkt på plats – \"lugnt, han gör inte motstånd\" – och tar vid behov över greppet",
+        "Låtsas inte se"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Ingripandet pågår nu och skadan sker nu – äkta kollegialitet bryter förloppet direkt, och rapporteringen kommer sedan."
+    },
+    {
+      "id": 136,
+      "course": "VU1",
+      "module": 7,
+      "moduleLabel": "Yrkesetik och moral",
+      "source": "sluttest",
+      "numberInSection": 4,
+      "question": "Får du publicera en \"avidentifierad\" berättelse om nattens dramatiska gripande i sociala medier?",
+      "options": [
+        "Nej – berättelser från tjänsten kan röja personer, objekt och rutiner även utan namn, och de skadar förtroendet för uniformen",
+        "Ja, om du inte nämner företaget",
+        "Ja, om ansikten är pixlade",
+        "Ja, efter 24 timmar"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Detaljer som tid, plats och förlopp identifierar mer än man tror – och tystnadsplikt plus diskretion gäller även på fritiden."
+    },
+    {
+      "id": 137,
+      "course": "VU1",
+      "module": 7,
+      "moduleLabel": "Yrkesetik och moral",
+      "source": "sluttest",
+      "numberInSection": 5,
+      "question": "Vilket är beslutstrappans första steg?",
+      "options": [
+        "Tål det dagsljus?",
+        "Följer det instruktionen?",
+        "Vad tycker kollegorna?",
+        "Är det lagligt?"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Lagligheten är golvet allt annat står på – är svaret nej där behöver du aldrig gå vidare uppåt i trappan."
+    },
+    {
+      "id": 138,
+      "course": "VU1",
+      "module": 8,
+      "moduleLabel": "Olaga diskriminering och mänskliga beteenden",
+      "source": "sluttest",
+      "numberInSection": 1,
+      "question": "Vilket är ett exempel på indirekt diskriminering?",
+      "options": [
+        "Ett till synes neutralt villkor – som ett förbud mot alla huvudbonader utan sakligt skäl – som i praktiken missgynnar personer som bär religiös huvudbonad",
+        "Att neka en berusad person inträde",
+        "Att kräva biljett av alla besökare",
+        "Att säga nej till en person som hotar personalen"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Indirekt diskriminering gömmer sig i neutrala regler – testet är om villkoret har ett sakligt syfte och står i proportion till det."
+    },
+    {
+      "id": 139,
+      "course": "VU1",
+      "module": 8,
+      "moduleLabel": "Olaga diskriminering och mänskliga beteenden",
+      "source": "sluttest",
+      "numberInSection": 2,
+      "question": "Vilken myndighet utövar tillsyn enligt diskrimineringslagen?",
+      "options": [
+        "Länsstyrelsen",
+        "Polismyndigheten",
+        "Diskrimineringsombudsmannen, DO",
+        "Justitiekanslern"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "DO tar emot anmälningar och utövar tillsyn – den straffrättsliga vägen (olaga diskriminering) går som andra brott via polis och åklagare."
+    },
+    {
+      "id": 140,
+      "course": "VU1",
+      "module": 8,
+      "moduleLabel": "Olaga diskriminering och mänskliga beteenden",
+      "source": "sluttest",
+      "numberInSection": 3,
+      "question": "Är det diskriminering att begära legitimation för ålderskontroll av en ung person som köper alkohol?",
+      "options": [
+        "Ja – ålder är en diskrimineringsgrund",
+        "Nej – kontrollen följer av lag och är en saklig grund som tillämpas lika",
+        "Ja, om personen känner sig utpekad",
+        "Nej, men bara på vardagar"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Åldersgränser som följer av lag eller sakliga skäl är tillåtna – diskrimineringsförbudet träffar osakligt urval, inte lagstadgade kontroller."
+    },
+    {
+      "id": 141,
+      "course": "VU1",
+      "module": 9,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "sluttest",
+      "numberInSection": 1,
+      "question": "Vad är en \"gyllene bro\" i konflikthantering?",
+      "options": [
+        "En teknik för att fysiskt leda bort någon",
+        "Att lova något du inte tänker hålla",
+        "Ett kodord för förstärkning",
+        "En utväg som låter motparten backa med värdigheten i behåll – till exempel \"vi tar det här avsides så löser vi det\""
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Den som kan backa utan att förlora ansiktet backar oftast – utan bro tvingar du fram valet mellan förnedring och fortsatt konflikt."
+    },
+    {
+      "id": 142,
+      "course": "VU1",
+      "module": 9,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "sluttest",
+      "numberInSection": 2,
+      "question": "En mycket uppjagad person blir plötsligt helt lugn och tyst. Hur tolkar du det?",
+      "options": [
+        "Faran är över och du kan slappna av",
+        "Som en möjlig varningssignal – lugnet kan betyda att beslutet om angrepp redan är fattat; höj beredskapen och håll avståndet",
+        "Personen har tröttnat och går snart",
+        "Deeskaleringen har lyckats och samtalet kan avslutas"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Verklig avspänning syns i hela kroppen – ett abrupt lugn hos en rasande person är ofta stiltjen före stormen."
+    },
+    {
+      "id": 143,
+      "course": "VU1",
+      "module": 9,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "sluttest",
+      "numberInSection": 3,
+      "question": "Hur genomförs taktisk andning?",
+      "options": [
+        "Andas in fyra sekunder, håll andan fyra sekunder, andas ut fyra sekunder – och upprepa",
+        "Hyperventilera för att syresätta kroppen",
+        "Håll andan tills pulsen sjunker",
+        "Andas bara genom munnen"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Den långsamma rytmen sänker pulsen mätbart och går att göra mitt i en pågående situation – det är ditt verktyg mot ditt eget adrenalin."
+    },
+    {
+      "id": 144,
+      "course": "VU1",
+      "module": 9,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "sluttest",
+      "numberInSection": 4,
+      "question": "Varför är det deeskalerande att minska publiken runt en konflikt?",
+      "options": [
+        "Vittnen stör rapportskrivningen",
+        "Färre personer kan bli skadade",
+        "Åskådare är ansikten att förlora inför – den som förnedras inför publik slåss hellre än backar",
+        "Kamerorna får bättre bildvinkel"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Publiken höjer insatserna för motparten – att flytta samtalet avsides är ofta halva lösningen, och det skyddar dessutom tredje man."
+    },
+    {
+      "id": 145,
+      "course": "VU1",
+      "module": 9,
+      "moduleLabel": "Konflikthantering och självskydd",
+      "source": "sluttest",
+      "numberInSection": 5,
+      "question": "En kraftigt drogpåverkad person går inte att nå med ord. Vad gäller?",
+      "options": [
+        "Höj rösten tills budskapet går fram",
+        "Fortsätt samtala på exakt samma sätt – alla kan lugnas",
+        "Ingrip fysiskt direkt för att få kontroll",
+        "Byt mål: avstånd, tid och förstärkning – vissa tillstånd går inte att prata ner i stunden, och att inse det är också konflikthantering"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Kraftig berusning, psykos och drogpåverkan kan stänga dörren för dialog – då köper du tid och yta i väntan på polis, i stället för att eskalera."
+    },
+    {
+      "id": 146,
+      "course": "VU1",
+      "module": 10,
+      "moduleLabel": "Handfängsel",
+      "source": "sluttest",
+      "numberInSection": 1,
+      "question": "Hur länge får handfängslen sitta kvar på en gripen person?",
+      "options": [
+        "Alltid tills polisen anländer, oavsett läge",
+        "Högst 15 minuter",
+        "Så länge behovet finns – behovet omprövas löpande, och när motståndet upphört ska frågan om avtagning ställas",
+        "Tills personen ber om ursäkt"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Fängsel är våldsanvändning varje minut de sitter på – proportionaliteten gäller fortlöpande, inte bara vid påsättningen."
+    },
+    {
+      "id": 147,
+      "course": "VU1",
+      "module": 10,
+      "moduleLabel": "Handfängsel",
+      "source": "sluttest",
+      "numberInSection": 2,
+      "question": "En person är inte gripen men du vill hindra honom från att gå innan polisen kommer. Får du använda handfängsel?",
+      "options": [
+        "Nej – fängsel utan gripande saknar lagstöd och kan utgöra olaga frihetsberövande och olaga tvång",
+        "Ja, om han verkar misstänkt",
+        "Ja, i högst tio minuter",
+        "Ja, om en kollega godkänner det"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Fängslets lagstöd hänger på gripandet – finns inget gripande finns ingen fängselrätt, hur praktiskt det än vore."
+    },
+    {
+      "id": 148,
+      "course": "VU1",
+      "module": 10,
+      "moduleLabel": "Handfängsel",
+      "source": "sluttest",
+      "numberInSection": 3,
+      "question": "Den fängslade klagar på domningar i händerna. Vad gör du?",
+      "options": [
+        "Förklarar att det är normalt och går över",
+        "Ignorerar det – klagomål är vanliga",
+        "Tar av fängslen och släpper personen",
+        "Kontrollerar åtsittningen direkt och lossar vid behov, dokumenterar klagomålet och kontrollen – för hårda fängsel kan ge nerv- och kärlskador"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Domningar är en varningssignal, inte ett förhandlingsknep – kontrollen tar sekunder och dokumentationen skyddar er båda."
+    },
+    {
+      "id": 149,
+      "course": "VU1",
+      "module": 11,
+      "moduleLabel": "Akutsjukvård",
+      "source": "sluttest",
+      "numberInSection": 1,
+      "question": "Ni är två väktare när ni hittar en person med hjärtstopp. Hur fördelar ni arbetet?",
+      "options": [
+        "Båda gör HLR samtidigt för dubbel effekt",
+        "En startar HLR omedelbart medan den andra larmar 112 och hämtar närmaste hjärtstartare",
+        "Båda letar efter hjärtstartaren",
+        "En gör HLR, den andra håller undan folksamlingen och inget mer"
+      ],
+      "correct": "B",
+      "correctIndex": 1,
+      "explanation": "Kedjan kräver parallellt arbete: kompressioner utan dröjsmål, larm och defibrillator på väg – och sedan avbyte varannan minut."
+    },
+    {
+      "id": 150,
+      "course": "VU1",
+      "module": 11,
+      "moduleLabel": "Akutsjukvård",
+      "source": "sluttest",
+      "numberInSection": 2,
+      "question": "När får du avbryta pågående HLR?",
+      "options": [
+        "Efter tio minuter utan resultat",
+        "När personen känns kall",
+        "När ambulansen hörs på avstånd",
+        "När hjärtstartaren eller ambulanspersonalen tar över, när personen visar tydliga livstecken – eller när du inte längre orkar fortsätta"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "HLR är en stafett som inte får tappa pinnen – bedömningen om att avsluta är sjukvårdens, inte din."
+    },
+    {
+      "id": 151,
+      "course": "VU1",
+      "module": 11,
+      "moduleLabel": "Akutsjukvård",
+      "source": "sluttest",
+      "numberInSection": 3,
+      "question": "Vad står bokstäverna i strokelarmets AKUT-test för?",
+      "options": [
+        "Ansikte, Kroppsdel, Uttal, Tid",
+        "Andning, Kramp, Uppkastning, Trötthet",
+        "Akut, Kontroll, Undersökning, Transport",
+        "Arm, Käke, Ögon, Tal"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "Hängande ansikte, arm som inte kan hållas uppe, sluddrigt uttal – och Tid: ring 112 direkt, för varje minut kostar hjärnceller."
+    },
+    {
+      "id": 152,
+      "course": "VU1",
+      "module": 11,
+      "moduleLabel": "Akutsjukvård",
+      "source": "sluttest",
+      "numberInSection": 4,
+      "question": "En gäst har satt i halsen men kan fortfarande hosta kraftigt och säga enstaka ord. Vad gör du?",
+      "options": [
+        "Ger omedelbart fem buktryck",
+        "Slår hårt mellan skulderbladen direkt",
+        "Uppmuntrar fortsatt hostande, stör inte och övervakar – hostan är kroppens eget bästa verktyg vid milt hinder",
+        "Ger vatten att skölja ner föremålet med"
+      ],
+      "correct": "C",
+      "correctIndex": 2,
+      "explanation": "Så länge luft passerar arbetar kroppen själv – ryggslag och buktryck är för det allvarliga hindret, när hosta och tal tystnar."
+    },
+    {
+      "id": 153,
+      "course": "VU1",
+      "module": 11,
+      "moduleLabel": "Akutsjukvård",
+      "source": "sluttest",
+      "numberInSection": 5,
+      "question": "Varför får en svårt skadad person inte något att dricka?",
+      "options": [
+        "Risken för kräkning och kvävning vid medvetandepåverkan – och personen kan behöva sövas för operation",
+        "Vätska späder ut blodet",
+        "Det är slöseri med tid",
+        "Kallt vatten sänker kroppstemperaturen"
+      ],
+      "correct": "A",
+      "correctIndex": 0,
+      "explanation": "En fylld mage är en risk både vid sjunkande medvetande och vid narkos – törsten lindras av sjukvården på säkert sätt."
+    },
+    {
+      "id": 154,
+      "course": "VU1",
+      "module": 11,
+      "moduleLabel": "Akutsjukvård",
+      "source": "sluttest",
+      "numberInSection": 6,
+      "question": "Varför byter man av varandra ungefär varannan minut vid HLR?",
+      "options": [
+        "För att båda ska få öva",
+        "För att hjärtstartaren kräver det",
+        "För att undvika belastningsskador hos hjälparen",
+        "Kompressionskvaliteten sjunker snabbt av utmattning – ofta innan man själv märker det – och djup och takt är det som håller hjärnan syresatt"
+      ],
+      "correct": "D",
+      "correctIndex": 3,
+      "explanation": "Trötta kompressioner blir grunda kompressioner – regelbundna byten med minimala avbrott håller kvaliteten uppe hela vägen till ambulansen."
+    }
+  ]
+}
