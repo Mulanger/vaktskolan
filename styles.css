@@ -1441,7 +1441,7 @@ body.app-booting .app-boot-screen {
   border-bottom: 1px solid #eef2f7;
 }
 
-.brand-block > div {
+.brand-block > div:not(.brand-mark) {
   display: flex;
   min-width: 0;
   align-items: baseline;
