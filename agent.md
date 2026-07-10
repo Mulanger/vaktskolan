@@ -703,6 +703,8 @@ Följande beteenden är avsiktliga och kommer från användarens senaste beslut:
 
 ## CSS Och Responsivitet
 
+Status 2026-07-10: Modulkorten i vänsterspalten reserverar en konsekvent två-raders titel- och korthöjd, så progressringarna ligger kvar på samma lodräta rutnät när användaren växlar mellan VU1 och VU2. Progressringen behåller alltid geometrin `42x42px` vid `top/right: 10px`; färdig status byter bara till grön fyllning och checkmark, inte storlek eller position.
+
 Viktiga CSS-kopplingar:
 
 - `body.home-mode`: gör appen tvåspaltig och döljer högerpanelen.

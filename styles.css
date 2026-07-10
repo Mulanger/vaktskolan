@@ -1646,6 +1646,8 @@ body.app-booting .app-boot-screen {
 .module-card {
   position: relative;
   width: 100%;
+  min-height: 108px;
+  overflow: hidden;
   border: 1px solid transparent;
   border-radius: 12px;
   background: transparent;
@@ -1746,10 +1748,10 @@ body.app-booting .app-boot-screen {
 }
 
 .module-card.is-complete .module-progress-ring {
-  top: 14px;
-  right: 14px;
-  width: 34px;
-  height: 34px;
+  top: 10px;
+  right: 10px;
+  width: 42px;
+  height: 42px;
   background: var(--teal);
   box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
 }
@@ -1765,11 +1767,17 @@ body.app-booting .app-boot-screen {
 }
 
 .module-card h3 {
+  display: -webkit-box;
+  min-height: 2.6em;
   margin: 0 0 6px;
+  overflow: hidden;
   color: #475569;
   font-size: 14px;
   font-weight: 700;
   line-height: 1.3;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .module-card.is-active h3 {
@@ -1778,8 +1786,11 @@ body.app-booting .app-boot-screen {
 
 .module-card p {
   margin: 0;
+  overflow: hidden;
   color: #94a3b8;
   font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .profile-block {
@@ -6390,7 +6401,7 @@ body.course-hub-modern-mode .module-list {
 }
 
 body.course-hub-modern-mode .module-card {
-  min-height: auto;
+  min-height: 108px;
   border-color: transparent;
   border-radius: 12px;
   background: transparent;
