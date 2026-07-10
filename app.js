@@ -1468,44 +1468,6 @@ function renderHome() {
 
   els.homePanel.innerHTML = `
     <section class="home-dashboard" aria-labelledby="homeDashboardTitle">
-      <aside class="home-shell-sidebar" aria-label="Hemnavigation">
-        <div class="home-shell-sidebar-main">
-          <div class="home-shell-brand">
-            <span class="home-shell-mark">VS</span>
-            <strong>Vaktskolan <span>· Lärplattform</span></strong>
-          </div>
-          <nav class="home-shell-tabs" aria-label="Huvudmeny">
-            <button class="home-shell-tab is-active" type="button" data-open-home>
-              <i data-lucide="home"></i>
-              <span>Hem</span>
-            </button>
-            <button class="home-shell-tab" type="button" data-open-course>
-              <i data-lucide="book-open"></i>
-              <span>VU1</span>
-            </button>
-            <button class="home-shell-tab ${vu2Overview?.locked ? "is-disabled" : ""}" type="button" ${vu2NavAttributes}>
-              <i data-lucide="shield-check"></i>
-              <span>VU2</span>
-            </button>
-            <button class="home-shell-tab" type="button" data-show-quiz>
-              <i data-lucide="target"></i>
-              <span>Quiz Portal</span>
-            </button>
-            <button class="home-shell-tab" type="button" data-open-final-exam-portal>
-              <i data-lucide="clipboard-check"></i>
-              <span>Slutprov</span>
-            </button>
-          </nav>
-        </div>
-        <div class="home-shell-user">
-          <span>${escapeHtml(initials)}</span>
-          <div>
-            <strong>${escapeHtml(displayName)}</strong>
-            <small>Elev</small>
-          </div>
-        </div>
-      </aside>
-
       <div class="home-dashboard-body">
         <div class="home-mobile-head">
           <div class="home-shell-brand">
