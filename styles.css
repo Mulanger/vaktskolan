@@ -4838,6 +4838,18 @@ body.quiz-overview-mode .content-inner {
   border-top: 1px solid var(--border);
 }
 
+.reader-home-action {
+  display: none;
+}
+
+.reader-page-actions {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .context-sidebar {
   display: flex;
   flex-direction: column;
@@ -6203,6 +6215,10 @@ body.modal-open {
   .reader-footer {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .reader-page-actions {
+    width: 100%;
   }
 
   .reader-footer button {
@@ -10186,9 +10202,9 @@ body.final-exam-result-mode .final-exam-question {
     left: 0;
     z-index: 45;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(68px, 0.62fr) minmax(0, 1.38fr);
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     margin: 0;
     border-top: 1px solid #e2e8f0;
     background: rgba(255, 255, 255, 0.96);
@@ -10197,17 +10213,33 @@ body.final-exam-result-mode .final-exam-question {
     backdrop-filter: blur(12px);
   }
 
+  body.lesson-mobile-mode .reader-page-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 8px;
+    width: 100%;
+    max-width: 242px;
+    justify-self: end;
+  }
+
   body.lesson-mobile-mode .reader-footer button {
     width: 100%;
-    min-height: 46px;
+    min-height: 42px;
     border-radius: 9px;
-    font-size: 13px;
+    gap: 5px;
+    padding: 0 9px;
+    font-size: 12px;
     font-weight: 800;
   }
 
-  body.lesson-mobile-mode .reader-footer .ghost-action {
-    justify-content: flex-start;
-    padding-left: 0;
+  body.lesson-mobile-mode .reader-home-action {
+    display: inline-flex;
+    justify-content: center;
+    padding: 0 10px;
+  }
+
+  body.lesson-mobile-mode .reader-footer .ghost-action:not(.reader-home-action) {
+    justify-content: center;
   }
 
   body.lesson-mobile-mode .reader-footer .dark-action {

@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="styles.css?v=20260710-shared-step-progress">
+  <link rel="stylesheet" href="styles.css?v=20260711-mobile-reader-nav">
 </head>
 <body class="app-booting">
   <div class="shell">
@@ -245,14 +245,20 @@
             <div class="page-tabs" id="pageTabs"></div>
             <article class="lesson-article" id="article"></article>
             <div class="reader-footer">
-              <button class="ghost-action" id="prevButton" type="button">
-                <i data-lucide="arrow-left"></i>
-                <span>Föregående</span>
+              <button class="ghost-action reader-home-action" type="button" data-open-home>
+                <i data-lucide="home"></i>
+                <span>Hem</span>
               </button>
-              <button class="dark-action" id="nextButton" type="button">
-                <span>Nästa sida</span>
-                <i data-lucide="arrow-right"></i>
-              </button>
+              <div class="reader-page-actions">
+                <button class="ghost-action" id="prevButton" type="button">
+                  <i data-lucide="arrow-left"></i>
+                  <span>Föregående</span>
+                </button>
+                <button class="dark-action" id="nextButton" type="button">
+                  <span>Nästa sida</span>
+                  <i data-lucide="arrow-right"></i>
+                </button>
+              </div>
             </div>
           </section>
 
@@ -386,6 +392,6 @@
 
   <script src="authProvider.js?v=20260706-light-auth"></script>
   <script src="supabaseApi.js?v=20260705-supabase"></script>
-  <script src="app.js?v=20260710-shared-step-progress"></script>
+  <script src="app.js?v=20260711-mobile-reader-nav"></script>
 </body>
 </html>
