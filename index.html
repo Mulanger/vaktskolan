@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="styles.css?v=20260713-mobile-profile-menu">
+  <link rel="stylesheet" href="styles.css?v=20260713-milestone-home">
 </head>
 <body class="app-booting">
   <div class="shell">
@@ -235,10 +235,16 @@
                 <strong id="moduleMilestoneQuiz">--</strong>
               </div>
             </div>
-            <button class="module-milestone-start" id="moduleMilestoneStartButton" type="button">
-              <span>Starta modul</span>
-              <i data-lucide="arrow-right"></i>
-            </button>
+            <div class="module-milestone-actions">
+              <button class="module-milestone-home" type="button" data-open-home>
+                <i data-lucide="home"></i>
+                <span>Hem</span>
+              </button>
+              <button class="module-milestone-start" id="moduleMilestoneStartButton" type="button">
+                <span>Starta modul</span>
+                <i data-lucide="arrow-right"></i>
+              </button>
+            </div>
           </section>
 
           <section class="reader-panel" id="readerPanel">
