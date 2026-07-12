@@ -2161,6 +2161,35 @@ body.module-milestone-mode .content-inner {
   font-weight: 900;
 }
 
+.mobile-auth-user-button {
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+}
+
+.mobile-auth-user-button .cl-userButtonTrigger,
+.mobile-auth-user-button .cl-userButtonBox,
+.mobile-auth-user-button .cl-avatarBox {
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  min-height: 30px !important;
+}
+
+.mobile-auth-user-button .cl-userButtonTrigger {
+  border-radius: 999px;
+  outline-offset: 3px;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.mobile-auth-user-button .cl-userButtonTrigger:active {
+  transform: scale(0.94);
+}
+
+.mobile-auth-user-button .cl-userButtonTrigger:focus-visible {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
 .home-dashboard-body {
   width: min(100%, 1120px);
   min-width: 0;

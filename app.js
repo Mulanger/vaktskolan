@@ -148,6 +148,7 @@ const state = {
     displayName: "Sven Svensson",
     firstName: "Sven",
   },
+  authClient: null,
   quizPortal: {
     view: "home",
     currentIndex: 0,
@@ -589,6 +590,7 @@ function renderAuthenticatedProfile(authClient) {
     displayName,
     firstName: user.firstName || displayName.split(/\s+/)[0] || "Elev",
   };
+  state.authClient = authClient;
 
   els.profileName.textContent = displayName;
   els.profileRole.textContent = "Elev";
@@ -1487,7 +1489,7 @@ function renderHome() {
             <img class="app-brand-icon" src="/assets/logo/vaktskolan-icon-512.png" alt="" aria-hidden="true">
             <img class="app-brand-wordmark" src="/assets/logo/vaktskolan-wordmark.png" alt="vaktskolan.">
           </div>
-          <span class="home-mobile-avatar">${escapeHtml(initials)}</span>
+          <div class="home-mobile-avatar mobile-auth-user-button" data-mobile-auth-user-button aria-label="Öppna profilmeny">${escapeHtml(initials)}</div>
         </div>
 
         <div class="home-dashboard-head">
@@ -1831,7 +1833,7 @@ function renderFinalPortalMobileHead() {
         <img class="app-brand-icon" src="/assets/logo/vaktskolan-icon-512.png" alt="" aria-hidden="true">
         <img class="app-brand-wordmark" src="/assets/logo/vaktskolan-wordmark.png" alt="vaktskolan.">
       </div>
-      <span class="final-portal-mobile-avatar">${escapeHtml(initials)}</span>
+      <div class="final-portal-mobile-avatar mobile-auth-user-button" data-mobile-auth-user-button aria-label="Öppna profilmeny">${escapeHtml(initials)}</div>
     </div>
   `;
 }
@@ -2312,7 +2314,7 @@ function renderCourseHub() {
   els.courseHubMeta.textContent = `${moduleStats.total} moduler${hasFinalExam ? " · slutprov" : ""} · lektionssidor och quiz`;
   els.courseHubPercent.textContent = `${courseProgress.percent}%`;
   els.courseHubRing.style.setProperty("--ring-progress", `${courseProgress.percent * 3.6}deg`);
-  if (els.vu1HubMobileAvatar) {
+  if (els.vu1HubMobileAvatar && !state.authClient?.user) {
     els.vu1HubMobileAvatar.textContent = userInitials(state.user.displayName || state.user.firstName || "Sven", "");
   }
   if (els.vu1HubMobileProgress) {
@@ -2623,7 +2625,7 @@ function renderQuizPortalMobileHead() {
         <img class="app-brand-icon" src="/assets/logo/vaktskolan-icon-512.png" alt="" aria-hidden="true">
         <img class="app-brand-wordmark" src="/assets/logo/vaktskolan-wordmark.png" alt="vaktskolan.">
       </div>
-      <span class="quiz-portal-mobile-avatar">${escapeHtml(initials)}</span>
+      <div class="quiz-portal-mobile-avatar mobile-auth-user-button" data-mobile-auth-user-button aria-label="Öppna profilmeny">${escapeHtml(initials)}</div>
     </div>
   `;
 }
@@ -3485,6 +3487,18 @@ function refreshIcons() {
   if (window.lucide) {
     window.lucide.createIcons();
   }
+  mountMobileUserButtons();
+}
+
+function mountMobileUserButtons() {
+  if (!state.authClient?.user) return;
+
+  document.querySelectorAll("[data-mobile-auth-user-button]").forEach((container) => {
+    if (container.dataset.authMounted === "true") return;
+    container.dataset.authMounted = "true";
+    container.textContent = "";
+    state.authClient.mountUserButton(container);
+  });
 }
 
 function closeDrawers() {
