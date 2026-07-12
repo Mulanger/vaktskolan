@@ -3329,7 +3329,7 @@ function renderQuiz() {
   const correctCount = module.quiz.filter((question) => answers[question.number] === question.correct).length;
   const nextModule = state.modules[state.moduleIndex + 1];
   const nextIsFinalExam = isFinalExamModule(nextModule);
-  const nextModuleLabel = nextIsFinalExam ? "Till slutprov" : "Nästa modul";
+  const nextModuleLabel = nextIsFinalExam ? "Till slutprov" : "Starta nästa modul";
   const nextActionText = nextModule ? (nextIsFinalExam ? "gå vidare till slutprovet" : "fortsätta till nästa modul") : "gå tillbaka till lektionen";
 
   els.quizTitle.textContent = `Testa Modul ${moduleNumber(module)}: ${module.title}`;
@@ -3372,22 +3372,28 @@ function renderQuiz() {
         .join("")
     : `<p>Det finns inget quiz för den här modulen ännu.</p>`;
 
-  els.quizFooter.innerHTML =
-    answeredCount === module.quiz.length && module.quiz.length
-      ? `
-        <div class="quiz-complete">
-          <div>
-            <h4>Quiz klart</h4>
-            <p>Du fick ${correctCount} av ${module.quiz.length} rätt. Du kan nollställa svaren eller ${nextActionText}.</p>
-          </div>
-          ${
-            state.moduleIndex < state.modules.length - 1 && isModuleComplete(state.moduleIndex)
-              ? `<button class="dark-action" type="button" data-next-module><span>${nextModuleLabel}</span><i data-lucide="arrow-right"></i></button>`
-              : `<button class="dark-action" type="button" data-return-lesson><span>Till lektion</span><i data-lucide="book-open"></i></button>`
-          }
-        </div>
-      `
-      : "";
+  const quizIsComplete = answeredCount === module.quiz.length && module.quiz.length > 0;
+  const canContinue = state.moduleIndex < state.modules.length - 1 && isModuleComplete(state.moduleIndex);
+  const primaryAction = canContinue
+    ? `<button class="dark-action" type="button" data-next-module><span>${nextModuleLabel}</span><i data-lucide="arrow-right"></i></button>`
+    : `<button class="dark-action" type="button" data-return-lesson><span>Till lektion</span><i data-lucide="book-open"></i></button>`;
+
+  els.quizFooter.innerHTML = `
+    <div class="quiz-complete ${quizIsComplete ? "is-complete" : "is-navigation"}">
+      <div class="quiz-complete-copy">
+        <h4>${quizIsComplete ? "Quiz klart" : "Redo för nästa steg?"}</h4>
+        <p>${
+          quizIsComplete
+            ? `Du fick ${correctCount} av ${module.quiz.length} rätt. Du kan nollställa svaren eller ${nextActionText}.`
+            : "Du kan fortsätta med quizet, läsa modulen igen eller gå vidare."
+        }</p>
+      </div>
+      <div class="quiz-complete-actions">
+        <button class="quiz-home-action" type="button" data-open-home><i data-lucide="home"></i><span>Hem</span></button>
+        ${primaryAction}
+      </div>
+    </div>
+  `;
 }
 
 function goTo(moduleIndex, lessonIndex = 0, pageIndex = 0, mode = "lesson", options = {}) {

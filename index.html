@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="styles.css?v=20260713-milestone-home">
+  <link rel="stylesheet" href="styles.css?v=20260713-quiz-navigation">
 </head>
 <body class="app-booting">
   <div class="shell">
@@ -276,14 +276,16 @@
               </div>
               <div class="quiz-actions">
                 <strong id="quizScore">0/0</strong>
-                <button class="compact-action" id="backToLessonButton" type="button">
-                  <i data-lucide="book-open"></i>
-                  <span>Läs modul</span>
-                </button>
-                <button class="compact-action" id="resetQuizButton" type="button">
-                  <i data-lucide="rotate-ccw"></i>
-                  <span>Nollställ</span>
-                </button>
+                <div class="quiz-tool-actions">
+                  <button class="compact-action" id="backToLessonButton" type="button">
+                    <i data-lucide="book-open"></i>
+                    <span>Läs modul</span>
+                  </button>
+                  <button class="compact-action" id="resetQuizButton" type="button">
+                    <i data-lucide="rotate-ccw"></i>
+                    <span>Nollställ</span>
+                  </button>
+                </div>
               </div>
             </div>
             <div id="quizQuestions" class="quiz-questions"></div>
@@ -398,6 +400,6 @@
 
   <script src="authProvider.js?v=20260706-light-auth"></script>
   <script src="supabaseApi.js?v=20260705-supabase"></script>
-  <script src="app.js?v=20260713-mobile-profile-menu"></script>
+  <script src="app.js?v=20260713-quiz-navigation"></script>
 </body>
 </html>
