@@ -3406,12 +3406,12 @@ function renderQuiz() {
   els.quizFooter.innerHTML = `
     <div class="quiz-complete ${isSubmitted ? "is-complete" : "is-navigation"}">
       <div class="quiz-complete-copy">
-        <h4>${isSubmitted ? "Quiz klart" : "Redo för nästa steg?"}</h4>
+        <h4>${isSubmitted ? "Quiz klart" : "Quiz"}</h4>
         <p>${
           isSubmitted
             ? `Du fick ${correctCount} av ${module.quiz.length} rätt. Du kan nollställa svaren eller ${nextActionText}.`
             : allQuestionsAnswered
-              ? "Alla frågor är besvarade. Skicka in när du är redo att se ditt resultat."
+              ? "Skicka in dina svar när du känner dig redo."
               : `Besvara alla frågor för att skicka in. ${answeredCount} av ${module.quiz.length} är klara.`
         }</p>
       </div>
