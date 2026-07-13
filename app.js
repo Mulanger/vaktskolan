@@ -2,6 +2,7 @@ const STORAGE_KEYS = {
   version: "vakt-storage-version",
   visited: "vakt-visited-pages",
   answers: "vakt-quiz-answers",
+  quizSubmissions: "vakt-quiz-submissions",
   scenarioProgress: "vakt-scenario-progress",
   finalExam: "vakt-final-exam",
   location: "vakt-current-location",
@@ -51,6 +52,7 @@ function resetStoredProgressIfNeeded() {
 
     localStorage.removeItem(STORAGE_KEYS.visited);
     localStorage.removeItem(STORAGE_KEYS.answers);
+    localStorage.removeItem(STORAGE_KEYS.quizSubmissions);
     localStorage.removeItem(STORAGE_KEYS.scenarioProgress);
     localStorage.removeItem(STORAGE_KEYS.finalExam);
     localStorage.removeItem(STORAGE_KEYS.location);
@@ -138,6 +140,7 @@ const state = {
   pageIndex: 0,
   mode: "home",
   answers: readObjectStorage(STORAGE_KEYS.answers),
+  quizSubmissions: readObjectStorage(STORAGE_KEYS.quizSubmissions),
   scenarioProgress: readObjectStorage(STORAGE_KEYS.scenarioProgress),
   finalExams: readFinalExamStorage(),
   finalExam: null,
@@ -516,6 +519,10 @@ function saveVisited() {
 
 function saveAnswers() {
   writeStorage(STORAGE_KEYS.answers, state.answers);
+}
+
+function saveQuizSubmissions() {
+  writeStorage(STORAGE_KEYS.quizSubmissions, state.quizSubmissions);
 }
 
 function saveScenarioProgress() {
@@ -1279,7 +1286,9 @@ function getQuizSummary() {
   let correct = 0;
 
   state.modules.forEach((module, moduleIndex) => {
-    const answers = isPlainObject(state.answers[answerKey(moduleIndex)]) ? state.answers[answerKey(moduleIndex)] : {};
+    const key = answerKey(moduleIndex);
+    if (!state.quizSubmissions[key]) return;
+    const answers = isPlainObject(state.answers[key]) ? state.answers[key] : {};
     module.quiz.forEach((question) => {
       if (answers[question.number]) {
         answered += 1;
@@ -3324,7 +3333,9 @@ function submitFinalExam(options = {}) {
 
 function renderQuiz() {
   const module = getCurrentModule();
-  const answers = isPlainObject(state.answers[answerKey()]) ? state.answers[answerKey()] : {};
+  const key = answerKey();
+  const answers = isPlainObject(state.answers[key]) ? state.answers[key] : {};
+  const isSubmitted = Boolean(state.quizSubmissions[key]);
   const answeredCount = Object.keys(answers).length;
   const correctCount = module.quiz.filter((question) => answers[question.number] === question.correct).length;
   const nextModule = state.modules[state.moduleIndex + 1];
@@ -3333,13 +3344,27 @@ function renderQuiz() {
   const nextActionText = nextModule ? (nextIsFinalExam ? "gå vidare till slutprovet" : "fortsätta till nästa modul") : "gå tillbaka till lektionen";
 
   els.quizTitle.textContent = `Testa Modul ${moduleNumber(module)}: ${module.title}`;
-  els.quizScore.textContent = `${correctCount}/${module.quiz.length}`;
+  els.quizScore.textContent = `${isSubmitted ? correctCount : answeredCount}/${module.quiz.length}`;
+  els.quizScore.setAttribute(
+    "aria-label",
+    isSubmitted
+      ? `${correctCount} av ${module.quiz.length} rätt`
+      : `${answeredCount} av ${module.quiz.length} frågor besvarade`
+  );
   els.resetQuizButton.disabled = answeredCount === 0;
+  const resultSummary = isSubmitted
+    ? `<section class="quiz-submission-result" role="status" aria-live="polite">
+        <span>Resultat</span>
+        <strong>${correctCount} av ${module.quiz.length} rätt</strong>
+        <p>Gå igenom frågorna nedan för att se rätt svar och förklaringar.</p>
+      </section>`
+    : "";
+
   els.quizQuestions.innerHTML = module.quiz.length
-    ? module.quiz
+    ? resultSummary + module.quiz
         .map((question) => {
           const selected = answers[question.number];
-          const explanation = selected
+          const explanation = isSubmitted && selected
             ? `<p class="answer-explanation">${inlineMarkdown(question.explanation)}</p>`
             : "";
           return `
@@ -3348,8 +3373,8 @@ function renderQuiz() {
               <div class="answer-list">
                 ${question.options
                   .map((option) => {
-                    const isCorrect = selected && option.letter === question.correct;
-                    const isWrong = selected === option.letter && option.letter !== question.correct;
+                    const isCorrect = isSubmitted && selected && option.letter === question.correct;
+                    const isWrong = isSubmitted && selected === option.letter && option.letter !== question.correct;
                     const classes = [
                       "answer-option",
                       selected === option.letter ? "is-selected" : "",
@@ -3357,7 +3382,7 @@ function renderQuiz() {
                       isWrong ? "is-wrong" : "",
                     ].join(" ");
                     return `
-                      <button class="${classes}" type="button" data-question="${question.number}" data-answer="${option.letter}">
+                      <button class="${classes}" type="button" data-question="${question.number}" data-answer="${option.letter}" ${isSubmitted ? 'disabled aria-disabled="true"' : ""}>
                         <span class="answer-letter">${option.letter}</span>
                         <span>${inlineMarkdown(option.text)}</span>
                       </button>
@@ -3372,25 +3397,31 @@ function renderQuiz() {
         .join("")
     : `<p>Det finns inget quiz för den här modulen ännu.</p>`;
 
-  const quizIsComplete = answeredCount === module.quiz.length && module.quiz.length > 0;
+  const allQuestionsAnswered = answeredCount === module.quiz.length && module.quiz.length > 0;
   const canContinue = state.moduleIndex < state.modules.length - 1 && isModuleComplete(state.moduleIndex);
   const primaryAction = canContinue
     ? `<button class="dark-action" type="button" data-next-module><span>${nextModuleLabel}</span><i data-lucide="arrow-right"></i></button>`
     : `<button class="dark-action" type="button" data-return-lesson><span>Till lektion</span><i data-lucide="book-open"></i></button>`;
 
   els.quizFooter.innerHTML = `
-    <div class="quiz-complete ${quizIsComplete ? "is-complete" : "is-navigation"}">
+    <div class="quiz-complete ${isSubmitted ? "is-complete" : "is-navigation"}">
       <div class="quiz-complete-copy">
-        <h4>${quizIsComplete ? "Quiz klart" : "Redo för nästa steg?"}</h4>
+        <h4>${isSubmitted ? "Quiz klart" : "Redo för nästa steg?"}</h4>
         <p>${
-          quizIsComplete
+          isSubmitted
             ? `Du fick ${correctCount} av ${module.quiz.length} rätt. Du kan nollställa svaren eller ${nextActionText}.`
-            : "Du kan fortsätta med quizet, läsa modulen igen eller gå vidare."
+            : allQuestionsAnswered
+              ? "Alla frågor är besvarade. Skicka in när du är redo att se ditt resultat."
+              : `Besvara alla frågor för att skicka in. ${answeredCount} av ${module.quiz.length} är klara.`
         }</p>
       </div>
       <div class="quiz-complete-actions">
         <button class="quiz-home-action" type="button" data-open-home><i data-lucide="home"></i><span>Hem</span></button>
-        ${primaryAction}
+        ${
+          isSubmitted
+            ? primaryAction
+            : `<button class="quiz-submit-action" type="button" data-submit-module-quiz ${allQuestionsAnswered ? "" : 'disabled aria-disabled="true"'}><span>Skicka in</span><i data-lucide="send"></i></button>`
+        }
       </div>
     </div>
   `;
@@ -3533,10 +3564,12 @@ function closeQuizResetModal() {
 
 function resetQuizHistory() {
   state.answers = {};
+  state.quizSubmissions = {};
   state.scenarioProgress = {};
   state.finalExams = {};
   state.finalExam = null;
   saveAnswers();
+  saveQuizSubmissions();
   saveScenarioProgress();
   saveFinalExam();
   resetQuizPortalSession("home");
@@ -3951,12 +3984,27 @@ function bindEvents() {
     const answerButton = event.target.closest("[data-question][data-answer]");
     if (answerButton) {
       const key = answerKey();
+      if (state.quizSubmissions[key]) return;
       const moduleAnswers = isPlainObject(state.answers[key]) ? state.answers[key] : {};
       moduleAnswers[answerButton.dataset.question] = answerButton.dataset.answer;
       state.answers[key] = moduleAnswers;
       saveAnswers();
       renderQuiz();
       refreshIcons();
+      return;
+    }
+
+    const submitQuizButton = event.target.closest("[data-submit-module-quiz]");
+    if (submitQuizButton) {
+      const module = getCurrentModule();
+      const key = answerKey();
+      const moduleAnswers = isPlainObject(state.answers[key]) ? state.answers[key] : {};
+      if (!module?.quiz.length || Object.keys(moduleAnswers).length !== module.quiz.length) return;
+      state.quizSubmissions[key] = Date.now();
+      saveQuizSubmissions();
+      renderQuiz();
+      refreshIcons();
+      els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
   });
@@ -3969,8 +4017,11 @@ function bindEvents() {
   els.finalExamNextButton.addEventListener("click", goFinalExamNext);
   els.finalExamSubmitButton.addEventListener("click", submitFinalExam);
   els.resetQuizButton.addEventListener("click", () => {
-    delete state.answers[answerKey()];
+    const key = answerKey();
+    delete state.answers[key];
+    delete state.quizSubmissions[key];
     saveAnswers();
+    saveQuizSubmissions();
     renderQuiz();
     refreshIcons();
   });

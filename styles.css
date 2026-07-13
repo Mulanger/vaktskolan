@@ -5200,6 +5200,36 @@ body.quiz-overview-mode .content-inner {
   gap: 18px;
 }
 
+.quiz-submission-result {
+  display: grid;
+  gap: 5px;
+  border: 1px solid rgba(37, 99, 235, 0.22);
+  border-radius: 14px;
+  background: #eff6ff;
+  padding: 18px 20px;
+}
+
+.quiz-submission-result span {
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.quiz-submission-result strong {
+  color: #0f172a;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.quiz-submission-result p {
+  margin: 0;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
 .question-card {
   border: 1px solid var(--border);
   border-radius: 14px;
@@ -5260,6 +5290,11 @@ body.quiz-overview-mode .content-inner {
 .answer-option.is-wrong {
   border-color: rgba(220, 38, 38, 0.45);
   background: #fef2f2;
+}
+
+.answer-option:disabled {
+  cursor: default;
+  opacity: 1;
 }
 
 .answer-explanation {
@@ -5327,10 +5362,17 @@ body.quiz-overview-mode .content-inner {
   transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
 }
 
-.quiz-complete-actions .dark-action {
+.quiz-complete-actions .dark-action,
+.quiz-submit-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   min-height: 48px;
+  border: 0;
   border-radius: 12px;
   background: var(--primary);
+  color: #ffffff;
   padding: 12px 24px;
   font-size: 15px;
   font-weight: 800;
@@ -5338,10 +5380,22 @@ body.quiz-overview-mode .content-inner {
   transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
 }
 
-.quiz-complete-actions .dark-action:hover {
+.quiz-complete-actions .dark-action:hover,
+.quiz-submit-action:not(:disabled):hover {
   background: #1d4ed8;
   box-shadow: 0 20px 40px rgba(37, 99, 235, 0.34);
   transform: translateY(-2px);
+}
+
+.quiz-submit-action:disabled {
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.45;
+}
+
+.quiz-submit-action svg {
+  width: 17px;
+  height: 17px;
 }
 
 .quiz-home-action:hover {
@@ -6392,6 +6446,7 @@ body.modal-open {
   }
 
   .quiz-complete-actions .dark-action,
+  .quiz-submit-action,
   .quiz-home-action {
     width: 100%;
     padding-inline: 12px;
