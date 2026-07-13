@@ -3863,8 +3863,7 @@ body.quiz-overview-mode .content-inner {
   height: 30px;
 }
 
-.quiz-portal-card-demo,
-.quiz-portal-demo-label {
+.quiz-portal-card-status {
   display: inline-flex;
   width: fit-content;
   align-items: center;
@@ -3878,10 +3877,73 @@ body.quiz-overview-mode .content-inner {
   text-transform: uppercase;
 }
 
-.quiz-portal-card-demo {
+.quiz-portal-card-status {
   position: absolute;
   top: 18px;
   right: 18px;
+}
+
+.quiz-portal-card.is-coming-soon {
+  cursor: default;
+}
+
+.quiz-portal-card.is-coming-soon .quiz-portal-card-icon {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.quiz-portal-data-state {
+  display: grid;
+  place-items: center;
+  width: min(100%, 620px);
+  min-height: 360px;
+  margin: 40px auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background: #ffffff;
+  padding: 44px 28px;
+  text-align: center;
+  box-shadow: 0 18px 46px rgba(15, 23, 42, 0.07);
+}
+
+.quiz-portal-data-state-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 18px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.quiz-portal-data-state-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.quiz-portal-data-state[role="status"] .quiz-portal-data-state-icon svg {
+  animation: quiz-portal-spin 900ms linear infinite;
+}
+
+.quiz-portal-data-state h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 26px;
+}
+
+.quiz-portal-data-state p {
+  max-width: 460px;
+  margin: 10px 0 22px;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+@keyframes quiz-portal-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .quiz-portal-card strong {
@@ -7673,7 +7735,7 @@ body.quiz-overview-mode .quiz-portal-card-icon svg {
   height: 22px;
 }
 
-body.quiz-overview-mode .quiz-portal-card-demo {
+body.quiz-overview-mode .quiz-portal-card-status {
   position: absolute;
   top: 24px;
   right: 24px;
@@ -8333,7 +8395,7 @@ body.quiz-overview-mode .quiz-portal-flashcard-controls svg {
     height: 42px;
   }
 
-  body.quiz-overview-mode .quiz-portal-card-demo {
+  body.quiz-overview-mode .quiz-portal-card-status {
     top: 20px;
     right: 20px;
   }
@@ -8518,7 +8580,7 @@ body.quiz-overview-mode .quiz-portal-flashcard-controls svg {
     height: 18px;
   }
 
-  body.quiz-overview-mode .quiz-portal-card-demo {
+  body.quiz-overview-mode .quiz-portal-card-status {
     position: static;
     align-self: start;
     justify-self: end;

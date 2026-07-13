@@ -154,6 +154,10 @@ const state = {
   authClient: null,
   quizPortal: {
     view: "home",
+    dataStatus: "idle",
+    dataError: "",
+    quizzes: {},
+    flashcards: [],
     currentIndex: 0,
     selectedOption: null,
     answers: [],
@@ -181,154 +185,6 @@ const quizScenarios = [
   { id: 11, title: "Brand och nödläge", completed: 0, total: 4, icon: "flame" },
 ];
 
-// Demo-only Quiz Portal content from D:\v_ktarquiz_portalen.tsx.
-// These questions and flashcards are placeholders and must not be treated as the real course question bank.
-const quizPortalDemoQuizzes = {
-  vu1: {
-    title: "Väktarutbildning 1 (VU1)",
-    questions: [
-      {
-        question: "Vad är det huvudsakliga syftet med en bevakningsinstruktion?",
-        options: [
-          "Att ange väktarens lönegrad och arbetstider.",
-          "Att detaljerat beskriva vad som ska bevakas och hur uppdraget ska utföras.",
-          "Att ge väktaren polisiära befogenheter på ett specifikt objekt.",
-        ],
-        answer: 1,
-        explanation: "Bevakningsinstruktionen är det dokument som styr väktarens arbete på det specifika objektet.",
-      },
-      {
-        question: "Vilka förutsättningar krävs för att ett envarsgripande (RB 24:7) ska vara lagligt?",
-        options: [
-          "Brottet måste ha fängelse i straffskalan och personen ska tas på bar gärning eller flyende fot.",
-          "Det räcker med stark misstanke om stöld, oavsett straffskala.",
-          "Brottet måste ha anmälts till polis inom de senaste 24 timmarna.",
-        ],
-        answer: 0,
-        explanation:
-          "Envarsgripande kräver att brottet har fängelse i straffskalan samt att gripandet sker på bar gärning eller flyende fot.",
-      },
-      {
-        question: "Vad innebär nödvärn i svensk lag?",
-        options: [
-          "Rätten att försvara sig själv eller annan mot ett påbörjat eller överhängande brottsligt angrepp.",
-          "Rätten att gripa personer för alla typer av brott.",
-          "Rätten att bryta mot trafikregler vid brådskande utryckning.",
-        ],
-        answer: 0,
-        explanation:
-          "Nödvärnsrätten (BrB 24:1) ger rätt att bruka visst våld för att avvärja ett angrepp på person eller egendom.",
-      },
-    ],
-  },
-  vu2: {
-    title: "Väktarutbildning 2 (VU2)",
-    questions: [
-      {
-        question: "Vilken myndighet utövar tillsyn och kontroll över auktoriserade bevakningsföretag?",
-        options: ["Polismyndigheten", "Länsstyrelsen", "Säkerhetspolisen"],
-        answer: 1,
-        explanation:
-          "Det är Länsstyrelsen som prövar frågor om auktorisation och utövar tillsyn över bevakningsföretagen.",
-      },
-      {
-        question: "Vad innebär proportionalitetsprincipen vid en makttillämpning, till exempel våldsanvändning?",
-        options: [
-          "Att man alltid får använda så mycket våld man anser behövs för att vinna situationen.",
-          "Att skadan eller faran man orsakar inte får stå i missförhållande till syftet med ingripandet.",
-          "Att våldet alltid måste vara av samma grad som det våld man utsätts för.",
-        ],
-        answer: 1,
-        explanation:
-          "Proportionalitetsprincipen innebär att en åtgärd inte får vara mer ingripande än vad som är försvarligt med hänsyn till ändamålet.",
-      },
-      {
-        question: "Får en väktare tillämpa Polislagens 13 § för att avvisa eller avlägsna en störande person?",
-        options: ["Ja, om väktaren anser det nödvändigt.", "Nej, det är endast en befogenhet för polismän och ordningsvakter.", "Ja, men endast nattetid."],
-        answer: 1,
-        explanation:
-          "Väktare har inte befogenhet enligt PL 13 §. Denna befogenhet är förbehållen polis och förordnade ordningsvakter.",
-      },
-    ],
-  },
-  general: {
-    title: "Vanlig Quiz (Allmänt)",
-    questions: [
-      {
-        question: "Vilken typ av släckare är oftast bäst lämpad för bränder i elektrisk utrustning?",
-        options: ["Vattensläckare", "Koldioxidsläckare (CO2)", "Skumsläckare"],
-        answer: 1,
-        explanation: "Koldioxid leder inte ström och lämnar inga rester, vilket gör den idealisk för elbränder.",
-      },
-      {
-        question: "Vilket av följande är inte en av de fyra grundstenarna i Rädda, Varna, Larma, Släck?",
-        options: ["Rädda", "Förhöra", "Släck"],
-        answer: 1,
-        explanation: "Förhöra är inte en del av den allmänna handlingsplanen vid brand.",
-      },
-    ],
-  },
-  scenario: {
-    title: "Scenario Quiz",
-    questions: [
-      {
-        question:
-          "Du ronderar i ett köpcentrum och observerar tydligt hur en person stoppar in obetalda varor, värde cirka 2000 kr, innanför jackan och passerar kassalinjen. Vad gör du?",
-        options: [
-          "Skriker åt personen att stanna och kastar mig över personen.",
-          "Genomför ett envarsgripande då stöld har fängelse i straffskalan och personen tas på bar gärning.",
-          "Låter personen gå men skriver en avvikelserapport när jag kommer tillbaka till kontoret.",
-        ],
-        answer: 1,
-        explanation:
-          "Stöld ger fängelse i straffskalan. Då brottet ses på bar gärning har du rätt att göra ett envarsgripande i väntan på polis.",
-      },
-      {
-        question:
-          "Du arbetar i en reception. En mycket berusad och aggressiv person kommer in och drar plötsligt fram ett knivliknande föremål. Vad bör vara din primära åtgärd?",
-        options: [
-          "Backa, sätt dig omedelbart i säkerhet och larma 112.",
-          "Dra din batong, om du bär sådan, och beordra personen att släppa vapnet.",
-          "Försöka tala personen tillrätta och erbjuda en kopp kaffe för att lugna ner situationen.",
-        ],
-        answer: 0,
-        explanation:
-          "Din egen säkerhet går först. Vid väpnat hot är det oftast säkrast att sätta sig i säkerhet och tillkalla polis.",
-      },
-    ],
-  },
-};
-
-const quizPortalDemoFlashcards = [
-  {
-    term: "Envarsgripande (RB 24:7)",
-    definition:
-      "Rätt för var och en att gripa den som har begått ett brott på vilket fängelse kan följa, om personen tas på bar gärning eller flyende fot.",
-  },
-  {
-    term: "Nödvärn (BrB 24:1)",
-    definition: "Rätten att bruka våld för att avvärja ett påbörjat eller överhängande brottsligt angrepp på person eller egendom.",
-  },
-  {
-    term: "Nöd (BrB 24:4)",
-    definition: "Rätt att begå en annars straffbar handling för att avvärja omedelbar fara för liv, hälsa eller värdefull egendom.",
-  },
-  {
-    term: "Proportionalitetsprincipen",
-    definition:
-      "En maktbefogenhet, till exempel våld, får inte användas om den skada som kan orsakas är oproportionerlig i förhållande till syftet.",
-  },
-  {
-    term: "Bevakningsinstruktion",
-    definition: "Dokumentet som i detalj beskriver hur bevakningen av ett specifikt objekt ska utföras och vilka regler som gäller.",
-  },
-  {
-    term: "Ordningsvakt vs Väktare",
-    definition:
-      "Ordningsvakter har begränsade polisiära befogenheter. Väktare bevakar egendom och har medborgerliga rättigheter som nödvärn och envarsgripande.",
-  },
-];
-
 const quizPortalModules = [
   {
     view: "vu1",
@@ -353,6 +209,7 @@ const quizPortalModules = [
     title: "Vanlig Quiz",
     description: "En mix av allmänna säkerhetsfrågor relaterade till bevakningsyrket, brand och sjukvård.",
     icon: "brain-circuit",
+    comingSoon: true,
   },
   {
     view: "scenario",
@@ -2609,13 +2466,119 @@ function resetQuizPortalSession(view = state.quizPortal.view) {
   state.quizPortal.flashcardFlipped = false;
 }
 
+let quizPortalDataPromise = null;
+
+const QUIZ_PORTAL_BANK_CONFIG = {
+  vu1: { collectionId: "vu1_quiz", title: "Väktarutbildning 1 (VU1)", expectedCount: 154 },
+  vu2: { collectionId: "vu2_quiz", title: "Väktarutbildning 2 (VU2)", expectedCount: 74 },
+  scenario: { collectionId: "scenario_quiz", title: "Scenario Quiz", expectedCount: 300 },
+};
+
+function shuffledQuizOptions(rows) {
+  const options = [...rows]
+    .sort((left, right) => Number(left.sort_order || 0) - Number(right.sort_order || 0))
+    .map((option) => ({ text: option.option_text, correct: Boolean(option.is_correct) }));
+
+  for (let index = options.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [options[index], options[swapIndex]] = [options[swapIndex], options[index]];
+  }
+  return options;
+}
+
+function buildQuizPortalQuiz(rows, config) {
+  if (rows.length !== config.expectedCount) {
+    throw new Error(`${config.title} innehåller ${rows.length} av förväntade ${config.expectedCount} frågor.`);
+  }
+
+  return {
+    title: config.title,
+    questions: rows
+      .sort((left, right) => Number(left.sort_order || 0) - Number(right.sort_order || 0))
+      .map((row) => {
+        const options = shuffledQuizOptions(row.quiz_answer_options || []);
+        if (options.length !== 4 || options.filter((option) => option.correct).length !== 1) {
+          throw new Error(`Frågan ${row.id} har ogiltiga svarsalternativ.`);
+        }
+        return {
+          id: row.id,
+          question: row.prompt,
+          options: options.map((option) => option.text),
+          answer: options.findIndex((option) => option.correct),
+          explanation: row.explanation || "Rätt svar framgår av det markerade alternativet.",
+        };
+      }),
+  };
+}
+
+function buildQuizPortalFlashcards(rows) {
+  if (rows.length !== 200) {
+    throw new Error(`Flashcards innehåller ${rows.length} av förväntade 200 kort.`);
+  }
+  return rows
+    .sort((left, right) => Number(left.sort_order || 0) - Number(right.sort_order || 0))
+    .map((row) => ({
+      id: row.id,
+      term: row.prompt,
+      definition: row.answer_text,
+      category: row.metadata?.category_label || "Väktarkunskap",
+      level: row.metadata?.level || "grund",
+    }));
+}
+
+function loadQuizPortalData() {
+  if (state.quizPortal.dataStatus === "ready") return Promise.resolve();
+  if (quizPortalDataPromise) return quizPortalDataPromise;
+
+  state.quizPortal.dataStatus = "loading";
+  state.quizPortal.dataError = "";
+  quizPortalDataPromise = (async () => {
+    try {
+      const api = window.vaktskolanSupabase;
+      if (!api?.select) throw new Error("Supabase-anslutningen är inte tillgänglig.");
+      const collectionIds = [...Object.values(QUIZ_PORTAL_BANK_CONFIG).map((config) => config.collectionId), "flashcards"];
+      const rows = await api.select("quiz_questions", {
+        select:
+          "id,collection_id,prompt,answer_text,explanation,sort_order,metadata,quiz_answer_options(label,option_text,is_correct,sort_order)",
+        collection_id: `in.(${collectionIds.join(",")})`,
+        status: "eq.published",
+        order: "sort_order.asc",
+        limit: 1000,
+      });
+
+      state.quizPortal.quizzes = Object.fromEntries(
+        Object.entries(QUIZ_PORTAL_BANK_CONFIG).map(([view, config]) => [
+          view,
+          buildQuizPortalQuiz(rows.filter((row) => row.collection_id === config.collectionId), config),
+        ])
+      );
+      state.quizPortal.flashcards = buildQuizPortalFlashcards(rows.filter((row) => row.collection_id === "flashcards"));
+      state.quizPortal.dataStatus = "ready";
+    } catch (error) {
+      console.error("Quiz Portal-data kunde inte laddas.", error);
+      state.quizPortal.dataStatus = "error";
+      state.quizPortal.dataError = error?.message || "Frågebankerna kunde inte laddas.";
+    } finally {
+      quizPortalDataPromise = null;
+      if (state.mode === "quiz-overview") {
+        renderQuizOverview();
+        refreshIcons();
+      }
+    }
+  })();
+  return quizPortalDataPromise;
+}
+
 function getQuizPortalQuiz(view = state.quizPortal.view) {
-  return quizPortalDemoQuizzes[view] || null;
+  return state.quizPortal.quizzes[view] || null;
 }
 
 function quizPortalModuleMeta(module) {
+  if (module.comingSoon) return "Kommer snart";
+  if (state.quizPortal.dataStatus === "loading" || state.quizPortal.dataStatus === "idle") return "Laddar innehåll…";
+  if (state.quizPortal.dataStatus === "error") return "Kunde inte laddas";
   if (module.view === "flashcards") {
-    return `${quizPortalDemoFlashcards.length} kort · vänd & lär`;
+    return `${state.quizPortal.flashcards.length} kort · vänd & lär`;
   }
 
   const questionCount = getQuizPortalQuiz(module.view)?.questions.length || 0;
@@ -2669,12 +2632,14 @@ function renderQuizPortalMobileTabbar() {
 function renderQuizPortalSidebar() {
   els.moduleListWrap.hidden = false;
   els.moduleListTitle.textContent = "Quizmoduler";
-  els.moduleCount.textContent = "4 quiz + kort";
+  els.moduleCount.textContent = "3 quiz + kort";
   els.moduleList.innerHTML = quizPortalModules
     .map((module) => {
       const isActive = state.quizPortal.view === module.view;
       return `
-        <button class="quiz-sidebar-card ${isActive ? "is-active" : ""}" type="button" data-quiz-portal-view="${module.view}">
+        <button class="quiz-sidebar-card ${isActive ? "is-active" : ""}" type="button" ${
+          module.comingSoon ? `data-coming-soon="${escapeHtml(module.title)}"` : `data-quiz-portal-view="${module.view}"`
+        }>
           <span class="quiz-sidebar-icon"><i data-lucide="${module.icon}"></i></span>
           <span class="quiz-sidebar-copy">
             <strong>${escapeHtml(module.title)}</strong>
@@ -2715,14 +2680,16 @@ function renderQuizPortalHome() {
         ${quizPortalModules
           .map(
             (module) => `
-              <button class="quiz-portal-card" type="button" data-quiz-portal-view="${module.view}">
+              <button class="quiz-portal-card ${module.comingSoon ? "is-coming-soon" : ""}" type="button" ${
+                module.comingSoon ? `data-coming-soon="${escapeHtml(module.title)}"` : `data-quiz-portal-view="${module.view}"`
+              }>
                 <span class="quiz-portal-card-icon"><i data-lucide="${module.icon}"></i></span>
-                <span class="quiz-portal-card-demo">Demo</span>
+                ${module.comingSoon ? '<span class="quiz-portal-card-status">Kommer snart</span>' : ""}
                 <strong>${escapeHtml(module.title)}</strong>
                 <span class="quiz-portal-card-copy">${escapeHtml(module.description)}</span>
                 <span class="quiz-portal-card-foot">
                   <small>${escapeHtml(quizPortalModuleMeta(module))}</small>
-                  <span class="quiz-portal-card-action">Starta <i data-lucide="arrow-right"></i></span>
+                  <span class="quiz-portal-card-action">${module.comingSoon ? "Inte tillgänglig" : 'Starta <i data-lucide="arrow-right"></i>'}</span>
                 </span>
               </button>
             `
@@ -2771,7 +2738,7 @@ function renderQuizPortalResults(quiz) {
           <h2 id="quizPortalResultTitle">${feedbackTitle}</h2>
           <p>Du fick ${state.quizPortal.score} av ${quiz.questions.length} rätt. ${feedbackText}</p>
           <div class="quiz-portal-result-actions">
-            <button class="quiz-portal-button quiz-portal-button-primary" type="button" data-demo-quiz-reset>
+            <button class="quiz-portal-button quiz-portal-button-primary" type="button" data-quiz-portal-reset>
               <i data-lucide="refresh-cw"></i>
               <span>Repetera quizet</span>
             </button>
@@ -2824,7 +2791,7 @@ function renderQuizPortalQuiz() {
               const muted = state.quizPortal.isAnswered && !correct && !wrong;
               return `
                 <button class="quiz-portal-option ${selected ? "is-selected" : ""} ${correct ? "is-correct" : ""} ${wrong ? "is-wrong" : ""} ${muted ? "is-muted" : ""}"
-                  type="button" data-demo-quiz-option="${index}" ${state.quizPortal.isAnswered ? "disabled" : ""}>
+                  type="button" data-quiz-portal-option="${index}" ${state.quizPortal.isAnswered ? "disabled" : ""}>
                   <span class="quiz-portal-option-letter">${quizOptionLetter(index)}</span>
                   <span>${escapeHtml(option)}</span>
                   <strong class="quiz-portal-option-mark">${correct ? "✓" : wrong ? "!" : ""}</strong>
@@ -2852,7 +2819,7 @@ function renderQuizPortalQuiz() {
           ${
             state.quizPortal.isAnswered
               ? `
-                <button class="quiz-portal-button quiz-portal-button-primary" type="button" data-demo-quiz-next>
+                <button class="quiz-portal-button quiz-portal-button-primary" type="button" data-quiz-portal-next>
                   <span>${state.quizPortal.currentIndex + 1 < quiz.questions.length ? "Nästa fråga" : "Visa resultat"}</span>
                   <i data-lucide="arrow-right"></i>
                 </button>
@@ -2866,7 +2833,9 @@ function renderQuizPortalQuiz() {
 }
 
 function renderQuizPortalFlashcards() {
-  const card = quizPortalDemoFlashcards[state.quizPortal.flashcardIndex];
+  const cards = state.quizPortal.flashcards;
+  const card = cards[state.quizPortal.flashcardIndex];
+  if (!card) return renderQuizPortalDataState();
   return `
     <section class="quiz-portal-flashcards" aria-labelledby="quizPortalFlashcardsTitle">
       <button class="quiz-portal-back" type="button" data-quiz-portal-home>
@@ -2877,11 +2846,11 @@ function renderQuizPortalFlashcards() {
       <div class="quiz-portal-engine-head">
         <div>
           <h2 id="quizPortalFlashcardsTitle">Flashcards</h2>
-          <p>Kort ${state.quizPortal.flashcardIndex + 1} av ${quizPortalDemoFlashcards.length}</p>
+          <p>Kort ${state.quizPortal.flashcardIndex + 1} av ${cards.length} · ${escapeHtml(card.category)}</p>
         </div>
       </div>
 
-      <button class="quiz-portal-flashcard ${state.quizPortal.flashcardFlipped ? "is-flipped" : ""}" type="button" data-demo-flashcard-toggle aria-label="Vänd flashcard">
+      <button class="quiz-portal-flashcard ${state.quizPortal.flashcardFlipped ? "is-flipped" : ""}" type="button" data-flashcard-toggle aria-label="Vänd flashcard">
         <span class="quiz-portal-flashcard-inner">
           <span class="quiz-portal-flashcard-face quiz-portal-flashcard-front">
             <small>Begrepp</small>
@@ -2897,18 +2866,30 @@ function renderQuizPortalFlashcards() {
       </button>
 
       <div class="quiz-portal-flashcard-controls" aria-label="Flashcard-kontroller">
-        <button type="button" data-demo-flashcard-prev>
+        <button type="button" data-flashcard-prev>
           <i data-lucide="arrow-left"></i>
           <span>Föregående</span>
         </button>
-        <button type="button" class="is-primary" data-demo-flashcard-toggle>
+        <button type="button" class="is-primary" data-flashcard-toggle>
           <span>Vänd kortet</span>
         </button>
-        <button type="button" data-demo-flashcard-next>
+        <button type="button" data-flashcard-next>
           <span>Nästa kort</span>
           <i data-lucide="arrow-right"></i>
         </button>
       </div>
+    </section>
+  `;
+}
+
+function renderQuizPortalDataState() {
+  const failed = state.quizPortal.dataStatus === "error";
+  return `
+    <section class="quiz-portal-data-state" role="${failed ? "alert" : "status"}">
+      <span class="quiz-portal-data-state-icon"><i data-lucide="${failed ? "circle-alert" : "loader-circle"}"></i></span>
+      <h2>${failed ? "Innehållet kunde inte laddas" : "Laddar frågebankerna"}</h2>
+      <p>${failed ? escapeHtml(state.quizPortal.dataError || "Försök igen om en liten stund.") : "VU1, VU2, flashcards och scenariofrågor hämtas från Supabase."}</p>
+      ${failed ? '<button class="quiz-portal-button quiz-portal-button-primary" type="button" data-retry-quiz-portal-data><i data-lucide="refresh-cw"></i><span>Försök igen</span></button>' : ""}
     </section>
   `;
 }
@@ -2919,7 +2900,10 @@ function renderQuizOverview() {
   renderQuizPortalSidebar();
 
   let content = "";
-  if (state.quizPortal.view === "flashcards") {
+  const requiresData = ["vu1", "vu2", "scenario", "flashcards"].includes(state.quizPortal.view);
+  if (requiresData && state.quizPortal.dataStatus !== "ready") {
+    content = renderQuizPortalDataState();
+  } else if (state.quizPortal.view === "flashcards") {
     content = renderQuizPortalFlashcards();
   } else if (getQuizPortalQuiz()) {
     content = renderQuizPortalQuiz();
@@ -3134,6 +3118,7 @@ function showQuizOverview() {
   renderQuizOverview();
   renderActiveNav();
   refreshIcons();
+  void loadQuizPortalData();
   els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -3810,13 +3795,23 @@ function bindEvents() {
       return;
     }
 
-    const demoQuizOptionButton = event.target.closest("[data-demo-quiz-option]");
-    if (demoQuizOptionButton && state.mode === "quiz-overview" && !state.quizPortal.isAnswered) {
+    const retryQuizPortalDataButton = event.target.closest("[data-retry-quiz-portal-data]");
+    if (retryQuizPortalDataButton) {
+      state.quizPortal.dataStatus = "idle";
+      state.quizPortal.dataError = "";
+      renderQuizOverview();
+      refreshIcons();
+      void loadQuizPortalData();
+      return;
+    }
+
+    const quizPortalOptionButton = event.target.closest("[data-quiz-portal-option]");
+    if (quizPortalOptionButton && state.mode === "quiz-overview" && !state.quizPortal.isAnswered) {
       const quiz = getQuizPortalQuiz();
       const question = quiz?.questions[state.quizPortal.currentIndex];
       if (!quiz || !question) return;
 
-      state.quizPortal.selectedOption = Number(demoQuizOptionButton.dataset.demoQuizOption);
+      state.quizPortal.selectedOption = Number(quizPortalOptionButton.dataset.quizPortalOption);
       state.quizPortal.answers[state.quizPortal.currentIndex] = state.quizPortal.selectedOption;
       state.quizPortal.isAnswered = true;
       if (state.quizPortal.selectedOption === question.answer) {
@@ -3827,23 +3822,8 @@ function bindEvents() {
       return;
     }
 
-    const demoQuizSubmitButton = event.target.closest("[data-demo-quiz-submit]");
-    if (demoQuizSubmitButton && state.mode === "quiz-overview") {
-      const quiz = getQuizPortalQuiz();
-      const question = quiz?.questions[state.quizPortal.currentIndex];
-      if (!quiz || !question || state.quizPortal.isAnswered || state.quizPortal.selectedOption === null) return;
-
-      state.quizPortal.isAnswered = true;
-      if (state.quizPortal.selectedOption === question.answer) {
-        state.quizPortal.score += 1;
-      }
-      renderQuizOverview();
-      refreshIcons();
-      return;
-    }
-
-    const demoQuizNextButton = event.target.closest("[data-demo-quiz-next]");
-    if (demoQuizNextButton && state.mode === "quiz-overview") {
+    const quizPortalNextButton = event.target.closest("[data-quiz-portal-next]");
+    if (quizPortalNextButton && state.mode === "quiz-overview") {
       const quiz = getQuizPortalQuiz();
       if (!quiz) return;
 
@@ -3860,8 +3840,8 @@ function bindEvents() {
       return;
     }
 
-    const demoQuizResetButton = event.target.closest("[data-demo-quiz-reset]");
-    if (demoQuizResetButton && state.mode === "quiz-overview") {
+    const quizPortalResetButton = event.target.closest("[data-quiz-portal-reset]");
+    if (quizPortalResetButton && state.mode === "quiz-overview") {
       resetQuizPortalSession(state.quizPortal.view);
       renderQuizOverview();
       refreshIcons();
@@ -3869,28 +3849,31 @@ function bindEvents() {
       return;
     }
 
-    const demoFlashcardToggle = event.target.closest("[data-demo-flashcard-toggle]");
-    if (demoFlashcardToggle && state.mode === "quiz-overview") {
+    const flashcardToggle = event.target.closest("[data-flashcard-toggle]");
+    if (flashcardToggle && state.mode === "quiz-overview") {
       state.quizPortal.flashcardFlipped = !state.quizPortal.flashcardFlipped;
       renderQuizOverview();
       refreshIcons();
       return;
     }
 
-    const demoFlashcardPrev = event.target.closest("[data-demo-flashcard-prev]");
-    if (demoFlashcardPrev && state.mode === "quiz-overview") {
+    const flashcardPrev = event.target.closest("[data-flashcard-prev]");
+    if (flashcardPrev && state.mode === "quiz-overview") {
+      const cards = state.quizPortal.flashcards;
+      if (!cards.length) return;
       state.quizPortal.flashcardFlipped = false;
-      state.quizPortal.flashcardIndex =
-        (state.quizPortal.flashcardIndex - 1 + quizPortalDemoFlashcards.length) % quizPortalDemoFlashcards.length;
+      state.quizPortal.flashcardIndex = (state.quizPortal.flashcardIndex - 1 + cards.length) % cards.length;
       renderQuizOverview();
       refreshIcons();
       return;
     }
 
-    const demoFlashcardNext = event.target.closest("[data-demo-flashcard-next]");
-    if (demoFlashcardNext && state.mode === "quiz-overview") {
+    const flashcardNext = event.target.closest("[data-flashcard-next]");
+    if (flashcardNext && state.mode === "quiz-overview") {
+      const cards = state.quizPortal.flashcards;
+      if (!cards.length) return;
       state.quizPortal.flashcardFlipped = false;
-      state.quizPortal.flashcardIndex = (state.quizPortal.flashcardIndex + 1) % quizPortalDemoFlashcards.length;
+      state.quizPortal.flashcardIndex = (state.quizPortal.flashcardIndex + 1) % cards.length;
       renderQuizOverview();
       refreshIcons();
       return;

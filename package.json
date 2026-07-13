@@ -14,6 +14,7 @@
     "typecheck": "tsc --noEmit",
     "validate:content": "tsx scripts/validate-content.ts",
     "validate:legacy": "node --check app.js && node --check authProvider.js && node --check auth.js && node --check supabaseApi.js",
+    "import:quiz-portal": "node scripts/import-quiz-portal-banks.mjs",
     "test:seo": "tsx scripts/test-seo.ts",
     "test": "npm run typecheck && npm run lint && npm run validate:content"
   },

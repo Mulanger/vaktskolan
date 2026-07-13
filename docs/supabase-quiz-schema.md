@@ -27,7 +27,16 @@ Seedade collection-rader:
 - `scenario_quiz`
 - `slutprovet`
 
-Collections finns, men `quiz_questions` och `quiz_answer_options` startar tomma.
+Collections skapas tomma av migrationen och fylls därefter av projektets importskript.
+
+Status 2026-07-13 i Supabase:
+
+- `vu1_quiz`: 154 publicerade frågor och 616 svarsalternativ.
+- `vu2_quiz`: 74 publicerade frågor och 296 svarsalternativ.
+- `flashcards`: 200 publicerade kort.
+- `scenario_quiz`: 300 publicerade frågor och 1200 svarsalternativ.
+- `vanlig_quiz`: avsiktligt tom tills den riktiga frågebanken är klar.
+- `slutprovet`: avsiktligt inte kopplad till Quiz Portalens träningsläge.
 
 ## Säkerhet
 
@@ -52,7 +61,7 @@ Det ska returnera de sex collection-raderna.
 
 Scenariofrågorna från `D:/vaktarskolan_scenariobank_300.json` är förberedda för `scenario_quiz`.
 
-Status 2026-07-05: seed/import är körd i Supabase-molndatabasen.
+Status 2026-07-13: seed/import är körd och scenariofrågorna är publicerade i Supabase-molndatabasen.
 
 Kör först schema-migrationen:
 
@@ -92,3 +101,19 @@ Vill du importera direkt som publicerat material:
 ```powershell
 node scripts/import-scenario-quiz.mjs --status published
 ```
+
+## Import Av VU1, VU2 Och Flashcards
+
+Det idempotenta importskriptet validerar och importerar `vu1quiz.json`, `vu2quiz.json` och `vaktarskolan_flashcards_200.json`. Det kompletterar VU-frågorna med svarsalternativ och publicerar även den befintliga scenariobanken som standard:
+
+```powershell
+npm run import:quiz-portal
+```
+
+Validera mappningen utan att skriva till Supabase:
+
+```powershell
+npm run import:quiz-portal -- --dry-run
+```
+
+Skriptet kräver `SUPABASE_URL` och server-only `SUPABASE_SECRET_KEY`. Secret key skickas aldrig till frontend.
