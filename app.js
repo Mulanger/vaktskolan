@@ -2203,7 +2203,7 @@ function renderCourseHub() {
   els.courseHubTitle.textContent = courseTitle;
   els.courseHubMeta.textContent = `${moduleStats.total} moduler${hasFinalExam ? " · slutprov" : ""} · lektionssidor och quiz`;
   els.courseHubPercent.textContent = `${courseProgress.percent}%`;
-  els.courseHubRing.style.setProperty("--ring-progress", `${courseProgress.percent * 3.6}deg`);
+  els.courseHubRing.style.setProperty("--ring-progress", String(courseProgress.percent));
   if (els.vu1HubMobileAvatar && !state.authClient?.user) {
     els.vu1HubMobileAvatar.textContent = userInitials(state.user.displayName || state.user.firstName || "Sven", "");
   }
@@ -2647,36 +2647,46 @@ function isQuizPortalCountdownCurrent(view, token) {
 function renderQuizPortalCountdown(view, token) {
   const module = getQuizPortalModule(view);
   renderQuizPortalSidebar();
-  els.quizPortal.innerHTML = `
-    ${renderQuizPortalMobileHead()}
-    <section class="quiz-portal-countdown quiz-theme-${module.theme}" data-quiz-portal-countdown="${token}" role="status" aria-labelledby="quizPortalCountdownTitle">
-      <div class="quiz-portal-countdown-orbits" aria-hidden="true"><span></span><span></span><span></span></div>
-      <div class="quiz-portal-countdown-stage">
-        <span class="quiz-portal-countdown-kicker">Gör dig redo</span>
-        <strong class="quiz-portal-countdown-number is-entering" aria-live="assertive" aria-atomic="true">3</strong>
-        <h2 id="quizPortalCountdownTitle">${escapeHtml(module.title)}</h2>
-        <p>Quizet börjar strax</p>
-        <span class="quiz-portal-countdown-steps" aria-hidden="true">
-          <i class="is-active" data-countdown-step="3"></i>
-          <i data-countdown-step="2"></i>
-          <i data-countdown-step="1"></i>
+  let cards = els.quizPortal.querySelectorAll(`.quiz-portal-card[data-quiz-portal-view="${view}"]`);
+  if (!cards.length) {
+    els.quizPortal.innerHTML = `${renderQuizPortalMobileHead()}${renderQuizPortalHome()}${renderQuizPortalMobileTabbar()}`;
+    cards = els.quizPortal.querySelectorAll(`.quiz-portal-card[data-quiz-portal-view="${view}"]`);
+  }
+
+  cards.forEach((card) => {
+    card.classList.add("is-countdown");
+    card.disabled = true;
+    card.setAttribute("aria-busy", "true");
+    card.innerHTML = `
+      <span class="quiz-portal-countdown" data-quiz-portal-countdown="${token}" role="status" aria-label="Gör dig redo. ${escapeHtml(module.title)} börjar strax.">
+        <span class="quiz-portal-countdown-orbits" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="quiz-portal-countdown-stage">
+          <span class="quiz-portal-countdown-kicker">Gör dig redo</span>
+          <strong class="quiz-portal-countdown-number is-entering" aria-live="assertive" aria-atomic="true">3</strong>
+          <span class="quiz-portal-countdown-title">${escapeHtml(module.title)}</span>
+          <span class="quiz-portal-countdown-copy">Quizet börjar strax</span>
+          <span class="quiz-portal-countdown-steps" aria-hidden="true">
+            <i class="is-active" data-countdown-step="3"></i>
+            <i data-countdown-step="2"></i>
+            <i data-countdown-step="1"></i>
+          </span>
         </span>
-      </div>
-    </section>
-    ${renderQuizPortalMobileTabbar()}
-  `;
+      </span>
+    `;
+  });
 }
 
 function updateQuizPortalCountdown(view, token, value) {
   if (!isQuizPortalCountdownCurrent(view, token)) return;
-  const countdown = els.quizPortal.querySelector(`[data-quiz-portal-countdown="${token}"]`);
-  const number = countdown.querySelector(".quiz-portal-countdown-number");
-  number.classList.remove("is-entering");
-  number.textContent = String(value);
-  void number.offsetWidth;
-  number.classList.add("is-entering");
-  countdown.querySelectorAll("[data-countdown-step]").forEach((step) => {
-    step.classList.toggle("is-active", Number(step.dataset.countdownStep) === value);
+  els.quizPortal.querySelectorAll(`[data-quiz-portal-countdown="${token}"]`).forEach((countdown) => {
+    const number = countdown.querySelector(".quiz-portal-countdown-number");
+    number.classList.remove("is-entering");
+    number.textContent = String(value);
+    void number.offsetWidth;
+    number.classList.add("is-entering");
+    countdown.querySelectorAll("[data-countdown-step]").forEach((step) => {
+      step.classList.toggle("is-active", Number(step.dataset.countdownStep) === value);
+    });
   });
 }
 
@@ -2692,6 +2702,7 @@ async function finishQuizPortalCountdown(view, token) {
   const module = getQuizPortalModule(view);
   const question = els.quizPortal.querySelector(".quiz-portal-question");
   if (question) question.classList.add(`quiz-theme-${module.theme}`, "is-countdown-entry");
+  els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function startQuizPortalCountdown(view) {
@@ -2703,7 +2714,6 @@ function startQuizPortalCountdown(view) {
   resetQuizPortalSession(view);
   renderQuizPortalCountdown(view, token);
   refreshIcons();
-  els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
 
   [2, 1].forEach((value, index) => {
     quizPortalCountdownTimers.push(
