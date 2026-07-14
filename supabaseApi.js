@@ -76,7 +76,12 @@
     const method = options.method || "GET";
     const hasBody = Object.prototype.hasOwnProperty.call(options, "body");
     const apiKey = apiState.config.publishableKey;
-    const resolvedAccessToken = typeof accessToken === "function" ? await accessToken() : accessToken;
+    const useAccountToken = options.auth !== "public";
+    const resolvedAccessToken = useAccountToken
+      ? typeof accessToken === "function"
+        ? await accessToken()
+        : accessToken
+      : null;
     const response = await fetch(buildRestUrl(path, options.query), {
       method,
       headers: {
@@ -112,10 +117,11 @@
     };
   }
 
-  function select(table, query = {}) {
+  function select(table, query = {}, options = {}) {
     return request(table, {
       method: "GET",
       query: { select: "*", ...query },
+      auth: options.auth,
     });
   }
 

@@ -3052,7 +3052,7 @@ function loadQuizPortalData() {
         status: "eq.published",
         order: "sort_order.asc",
         limit: 1000,
-      });
+      }, { auth: "public" });
 
       state.quizPortal.quizzes = Object.fromEntries(
         Object.entries(QUIZ_PORTAL_BANK_CONFIG).map(([view, config]) => [
