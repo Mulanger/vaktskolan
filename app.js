@@ -2491,6 +2491,8 @@ function resetQuizPortalSession(view = state.quizPortal.view) {
 }
 
 let quizPortalDataPromise = null;
+let quizPortalCountdownToken = 0;
+let quizPortalCountdownTimers = [];
 
 const QUIZ_PORTAL_BANK_CONFIG = {
   vu1: { collectionId: "vu1_quiz", title: "Väktarutbildning 1 (VU1)", expectedCount: 154 },
@@ -2585,7 +2587,9 @@ function loadQuizPortalData() {
     } finally {
       quizPortalDataPromise = null;
       if (state.mode === "quiz-overview") {
-        if (state.quizPortal.view === "home") {
+        if (els.quizPortal?.querySelector("[data-quiz-portal-countdown]")) {
+          renderQuizPortalSidebar();
+        } else if (state.quizPortal.view === "home") {
           updateQuizPortalModuleMeta();
         } else {
           renderQuizOverview();
@@ -2619,6 +2623,96 @@ function updateQuizPortalModuleMeta() {
       element.textContent = quizPortalModuleMeta(module);
     });
   });
+}
+
+function getQuizPortalModule(view) {
+  return quizPortalModules.find((module) => module.view === view) || quizPortalModules[0];
+}
+
+function cancelQuizPortalCountdown() {
+  quizPortalCountdownTimers.forEach((timer) => window.clearTimeout(timer));
+  quizPortalCountdownTimers = [];
+  quizPortalCountdownToken += 1;
+}
+
+function isQuizPortalCountdownCurrent(view, token) {
+  return Boolean(
+    state.mode === "quiz-overview" &&
+      state.quizPortal.view === view &&
+      !els.quizOverviewPanel.hidden &&
+      els.quizPortal?.querySelector(`[data-quiz-portal-countdown="${token}"]`)
+  );
+}
+
+function renderQuizPortalCountdown(view, token) {
+  const module = getQuizPortalModule(view);
+  renderQuizPortalSidebar();
+  els.quizPortal.innerHTML = `
+    ${renderQuizPortalMobileHead()}
+    <section class="quiz-portal-countdown quiz-theme-${module.theme}" data-quiz-portal-countdown="${token}" role="status" aria-labelledby="quizPortalCountdownTitle">
+      <div class="quiz-portal-countdown-orbits" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="quiz-portal-countdown-stage">
+        <span class="quiz-portal-countdown-kicker">Gör dig redo</span>
+        <strong class="quiz-portal-countdown-number is-entering" aria-live="assertive" aria-atomic="true">3</strong>
+        <h2 id="quizPortalCountdownTitle">${escapeHtml(module.title)}</h2>
+        <p>Quizet börjar strax</p>
+        <span class="quiz-portal-countdown-steps" aria-hidden="true">
+          <i class="is-active" data-countdown-step="3"></i>
+          <i data-countdown-step="2"></i>
+          <i data-countdown-step="1"></i>
+        </span>
+      </div>
+    </section>
+    ${renderQuizPortalMobileTabbar()}
+  `;
+}
+
+function updateQuizPortalCountdown(view, token, value) {
+  if (!isQuizPortalCountdownCurrent(view, token)) return;
+  const countdown = els.quizPortal.querySelector(`[data-quiz-portal-countdown="${token}"]`);
+  const number = countdown.querySelector(".quiz-portal-countdown-number");
+  number.classList.remove("is-entering");
+  number.textContent = String(value);
+  void number.offsetWidth;
+  number.classList.add("is-entering");
+  countdown.querySelectorAll("[data-countdown-step]").forEach((step) => {
+    step.classList.toggle("is-active", Number(step.dataset.countdownStep) === value);
+  });
+}
+
+async function finishQuizPortalCountdown(view, token) {
+  if (!isQuizPortalCountdownCurrent(view, token)) return;
+  if (state.quizPortal.dataStatus !== "ready") await loadQuizPortalData();
+  if (!isQuizPortalCountdownCurrent(view, token)) return;
+
+  quizPortalCountdownTimers = [];
+  renderQuizOverview();
+  refreshIcons();
+
+  const module = getQuizPortalModule(view);
+  const question = els.quizPortal.querySelector(".quiz-portal-question");
+  if (question) question.classList.add(`quiz-theme-${module.theme}`, "is-countdown-entry");
+}
+
+function startQuizPortalCountdown(view) {
+  cancelQuizPortalCountdown();
+  const token = quizPortalCountdownToken;
+  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  const stepDuration = reducedMotion ? 360 : 650;
+
+  resetQuizPortalSession(view);
+  renderQuizPortalCountdown(view, token);
+  refreshIcons();
+  els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
+
+  [2, 1].forEach((value, index) => {
+    quizPortalCountdownTimers.push(
+      window.setTimeout(() => updateQuizPortalCountdown(view, token, value), stepDuration * (index + 1))
+    );
+  });
+  quizPortalCountdownTimers.push(
+    window.setTimeout(() => void finishQuizPortalCountdown(view, token), stepDuration * 3)
+  );
 }
 
 function quizOptionLetter(index) {
@@ -3872,6 +3966,7 @@ function bindEvents() {
 
     const quizTrigger = event.target.closest("[data-show-quiz]");
     if (quizTrigger) {
+      cancelQuizPortalCountdown();
       resetQuizPortalSession("home");
       showQuizOverview();
       return;
@@ -3879,6 +3974,7 @@ function bindEvents() {
 
     const quizPortalHomeButton = event.target.closest("[data-quiz-portal-home]");
     if (quizPortalHomeButton) {
+      cancelQuizPortalCountdown();
       resetQuizPortalSession("home");
       renderQuizOverview();
       refreshIcons();
@@ -3888,7 +3984,14 @@ function bindEvents() {
 
     const quizPortalViewButton = event.target.closest("[data-quiz-portal-view]");
     if (quizPortalViewButton) {
-      resetQuizPortalSession(quizPortalViewButton.dataset.quizPortalView);
+      const view = quizPortalViewButton.dataset.quizPortalView;
+      if (Object.prototype.hasOwnProperty.call(QUIZ_PORTAL_BANK_CONFIG, view)) {
+        startQuizPortalCountdown(view);
+        return;
+      }
+
+      cancelQuizPortalCountdown();
+      resetQuizPortalSession(view);
       renderQuizOverview();
       refreshIcons();
       els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
