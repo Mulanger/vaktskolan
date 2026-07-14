@@ -467,15 +467,86 @@ function portalHistoryState(location) {
   return { ...current, [PORTAL_HISTORY_STATE_KEY]: location };
 }
 
+function portalHashForLocation(location) {
+  const courseId = COURSE_CONFIG[location.courseId] ? location.courseId : "vu1";
+  const moduleNumber = Math.max(0, Number(location.moduleIndex) || 0) + 1;
+  const lessonNumber = Math.max(0, Number(location.lessonIndex) || 0) + 1;
+  const pageNumber = Math.max(0, Number(location.pageIndex) || 0) + 1;
+
+  if (location.mode === "home") return "#home";
+  if (location.mode === "hub") return "#vu1";
+  if (location.mode === "vu2") return "#vu2";
+  if (location.mode === "quiz-overview") return "#quiz";
+  if (location.mode === "final-exam-portal") return "#slutprov";
+  if (location.mode === "final-exam") return `#slutprov/${courseId}/prov`;
+  if (location.mode === "module-milestone") return `#${courseId}/modul/${moduleNumber}/start`;
+  if (location.mode === "quiz") return `#${courseId}/modul/${moduleNumber}/quiz`;
+  return `#${courseId}/modul/${moduleNumber}/lektion/${lessonNumber}/sida/${pageNumber}`;
+}
+
+function portalUrlForLocation(location) {
+  return `${window.location.pathname}${window.location.search}${portalHashForLocation(location)}`;
+}
+
+function portalLocationFromHash(hash = window.location.hash, fallback = null) {
+  let route = "";
+  try {
+    route = decodeURIComponent(String(hash || "").replace(/^#\/?/, "")).replace(/\/+$/, "").toLowerCase();
+  } catch {
+    return null;
+  }
+  if (!route) return null;
+
+  const base = normalizePortalLocationSnapshot(fallback) || getPortalLocationSnapshot();
+  if (route === "home") return { ...base, mode: "home" };
+  if (route === "vu1") return { ...base, courseId: "vu1", mode: "hub" };
+  if (route === "vu2") return { ...base, courseId: "vu2", mode: "vu2" };
+  if (route === "quiz") return { ...base, mode: "quiz-overview" };
+  if (route === "slutprov") return { ...base, mode: "final-exam-portal" };
+
+  const finalExamMatch = route.match(/^slutprov\/(vu1|vu2)\/prov$/);
+  if (finalExamMatch) {
+    return { ...base, courseId: finalExamMatch[1], mode: "final-exam" };
+  }
+
+  const moduleMatch = route.match(/^(vu1|vu2)\/modul\/(\d+)\/(start|quiz)$/);
+  if (moduleMatch) {
+    return {
+      courseId: moduleMatch[1],
+      moduleIndex: Math.max(0, Number(moduleMatch[2]) - 1),
+      lessonIndex: 0,
+      pageIndex: 0,
+      mode: moduleMatch[3] === "quiz" ? "quiz" : "module-milestone",
+    };
+  }
+
+  const lessonMatch = route.match(/^(vu1|vu2)\/modul\/(\d+)\/lektion\/(\d+)\/sida\/(\d+)$/);
+  if (lessonMatch) {
+    return {
+      courseId: lessonMatch[1],
+      moduleIndex: Math.max(0, Number(lessonMatch[2]) - 1),
+      lessonIndex: Math.max(0, Number(lessonMatch[3]) - 1),
+      pageIndex: Math.max(0, Number(lessonMatch[4]) - 1),
+      mode: "lesson",
+    };
+  }
+  return null;
+}
+
 function recordPortalHistory(mode = state.mode, action = "push") {
   if (!state.portalHistory.ready || state.portalHistory.restoring || action === "none") return;
 
   const location = getPortalLocationSnapshot(mode);
   const current = normalizePortalLocationSnapshot(window.history.state?.[PORTAL_HISTORY_STATE_KEY]);
-  if (portalLocationsMatch(current, location)) return;
+  const url = portalUrlForLocation(location);
+  if (portalLocationsMatch(current, location)) {
+    if (window.location.hash !== portalHashForLocation(location)) {
+      window.history.replaceState(portalHistoryState(location), "", url);
+    }
+    return;
+  }
 
   const method = action === "replace" ? "replaceState" : "pushState";
-  const url = `${window.location.pathname}${window.location.search}${window.location.hash}`;
   window.history[method](portalHistoryState(location), "", url);
 }
 
@@ -489,11 +560,11 @@ function initializePortalHistory() {
   if (state.portalHistory.ready) return;
 
   const initialLocation = getPortalLocationSnapshot();
-  const homeLocation = { ...initialLocation, mode: "home" };
-  const url = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-
-  window.history.replaceState(portalHistoryState(homeLocation), "", url);
-  window.history.pushState(portalHistoryState(initialLocation), "", url);
+  window.history.replaceState(
+    portalHistoryState(initialLocation),
+    "",
+    portalUrlForLocation(initialLocation)
+  );
   state.portalHistory.ready = true;
 }
 
@@ -1620,6 +1691,8 @@ function getQuizSummary() {
 
 function readSavedLocation() {
   const saved = readStorage(STORAGE_KEYS.location, null);
+  const hashLocation = portalLocationFromHash(window.location.hash, saved);
+  if (hashLocation) return hashLocation;
   if (!isPlainObject(saved)) return null;
 
   const mode = RESTORABLE_MODES.has(saved.mode) ? saved.mode : "home";
@@ -4345,7 +4418,8 @@ function bindEvents() {
     if (event.persisted) returnHomeOnResume();
   });
   window.addEventListener("popstate", (event) => {
-    restorePortalHistory(event.state?.[PORTAL_HISTORY_STATE_KEY]);
+    const historyLocation = event.state?.[PORTAL_HISTORY_STATE_KEY];
+    restorePortalHistory(historyLocation || portalLocationFromHash(window.location.hash));
   });
 
   document.addEventListener("click", (event) => {
