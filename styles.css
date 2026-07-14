@@ -2423,6 +2423,154 @@ body.module-milestone-mode .content-inner {
   gap: 16px;
 }
 
+@keyframes home-emblem-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.home-emblems {
+  margin-top: 20px;
+  overflow: hidden;
+  border: 1px solid #e7ecf2;
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 20px 24px 22px;
+}
+
+.home-emblems-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.home-emblems-head h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 17.5px;
+  font-weight: 800;
+}
+
+.home-emblems-head > span {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.home-emblem-list {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(82px, 1fr));
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.home-emblem-item {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  flex-direction: column;
+  gap: 11px;
+  padding: 5px 4px 2px;
+  text-align: center;
+  animation: home-emblem-enter 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--home-emblem-index) * 55ms + 90ms);
+}
+
+.home-emblem-medallion {
+  --home-emblem-ring: #e2e7ed;
+  --home-emblem-shadow: transparent;
+  position: relative;
+  display: grid;
+  width: 72px;
+  height: 72px;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #e9edf2;
+  color: #a6adba;
+  box-shadow:
+    0 0 0 3px #ffffff,
+    0 0 0 5px var(--home-emblem-ring),
+    0 10px 20px var(--home-emblem-shadow);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.home-emblem-medallion::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1.5px dashed #c6cdd6;
+  border-radius: inherit;
+}
+
+.home-emblem-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+}
+
+.home-emblem-inner svg {
+  width: 25px;
+  height: 25px;
+  stroke-width: 1.8;
+}
+
+.home-emblem-item:hover .home-emblem-medallion {
+  transform: translateY(-3px);
+}
+
+.home-emblem-vu1 .home-emblem-medallion {
+  --home-emblem-ring: #bfdbfe;
+  --home-emblem-shadow: rgba(29, 78, 216, 0.24);
+  background: linear-gradient(160deg, #3b82f6, #1d4ed8);
+  color: #ffffff;
+}
+
+.home-emblem-vu1 .home-emblem-medallion::before {
+  border-color: rgba(255, 255, 255, 0.48);
+}
+
+.home-emblem-lock {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  z-index: 2;
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #6b7280;
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.08);
+}
+
+.home-emblem-lock svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2.2;
+}
+
+.home-emblem-item strong {
+  color: #9ca3af;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+.home-emblem-item.is-unlocked strong {
+  color: #111827;
+}
+
 .home-course-card {
   display: flex;
   flex-direction: column;
@@ -2834,6 +2982,77 @@ body.module-milestone-mode .content-inner {
     gap: 12px;
   }
 
+  .home-emblems {
+    margin-top: 14px;
+    padding: 14px 14px 16px;
+  }
+
+  .home-emblems-head h2 {
+    font-size: 15px;
+  }
+
+  .home-emblems-head > span {
+    font-size: 10px;
+  }
+
+  .home-emblem-list {
+    display: flex;
+    overflow-x: auto;
+    gap: 18px;
+    margin: 16px -14px -4px;
+    padding: 4px 16px 12px;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline proximity;
+    scrollbar-width: none;
+  }
+
+  .home-emblem-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .home-emblem-item {
+    width: 62px;
+    flex: 0 0 62px;
+    gap: 8px;
+    padding-inline: 2px;
+    scroll-snap-align: start;
+  }
+
+  .home-emblem-medallion {
+    width: 52px;
+    height: 52px;
+    box-shadow:
+      0 0 0 2.5px #ffffff,
+      0 0 0 4px var(--home-emblem-ring),
+      0 7px 14px var(--home-emblem-shadow);
+  }
+
+  .home-emblem-medallion::before {
+    inset: 5px;
+    border-width: 1.25px;
+  }
+
+  .home-emblem-inner svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .home-emblem-lock {
+    right: -3px;
+    bottom: -3px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .home-emblem-lock svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  .home-emblem-item strong {
+    font-size: 9.5px;
+  }
+
   .home-course-card {
     padding: 16px;
   }
@@ -2964,6 +3183,16 @@ body.module-milestone-mode .content-inner {
   .home-mobile-tab:disabled {
     color: #c2cad7;
     cursor: not-allowed;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-emblem-item {
+    animation: none;
+  }
+
+  .home-emblem-medallion {
+    transition: none;
   }
 }
 

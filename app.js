@@ -1440,6 +1440,49 @@ function renderHome() {
           </div>
         </section>
 
+        <section class="home-emblems" aria-labelledby="homeEmblemsTitle">
+          <div class="home-emblems-head">
+            <h2 id="homeEmblemsTitle">Dina emblem</h2>
+            <span>1 av 5 upplåsta</span>
+          </div>
+          <div class="home-emblem-list" role="list" aria-label="Emblem">
+            <div class="home-emblem-item home-emblem-vu1 is-unlocked" role="listitem" style="--home-emblem-index: 0">
+              <span class="home-emblem-medallion" aria-hidden="true">
+                <span class="home-emblem-inner"><i data-lucide="book-open"></i></span>
+              </span>
+              <strong>VU1</strong>
+            </div>
+            <div class="home-emblem-item is-locked" role="listitem" style="--home-emblem-index: 1">
+              <span class="home-emblem-medallion" aria-hidden="true">
+                <span class="home-emblem-inner"><i data-lucide="shield"></i></span>
+                <span class="home-emblem-lock"><i data-lucide="lock"></i></span>
+              </span>
+              <strong>VU2</strong>
+            </div>
+            <div class="home-emblem-item is-locked" role="listitem" style="--home-emblem-index: 2">
+              <span class="home-emblem-medallion" aria-hidden="true">
+                <span class="home-emblem-inner"><i data-lucide="badge-check"></i></span>
+                <span class="home-emblem-lock"><i data-lucide="lock"></i></span>
+              </span>
+              <strong>Prov 1</strong>
+            </div>
+            <div class="home-emblem-item is-locked" role="listitem" style="--home-emblem-index: 3">
+              <span class="home-emblem-medallion" aria-hidden="true">
+                <span class="home-emblem-inner"><i data-lucide="star"></i></span>
+                <span class="home-emblem-lock"><i data-lucide="lock"></i></span>
+              </span>
+              <strong>Prov 2</strong>
+            </div>
+            <div class="home-emblem-item is-locked" role="listitem" style="--home-emblem-index: 4">
+              <span class="home-emblem-medallion" aria-hidden="true">
+                <span class="home-emblem-inner"><i data-lucide="target"></i></span>
+                <span class="home-emblem-lock"><i data-lucide="lock"></i></span>
+              </span>
+              <strong>Quiz</strong>
+            </div>
+          </div>
+        </section>
+
         <button class="home-quick-links" type="button" data-show-quiz aria-label="Gå till Quiz Portal">
           <span class="home-quick-icon"><i data-lucide="target"></i></span>
           <span class="home-quick-copy">
