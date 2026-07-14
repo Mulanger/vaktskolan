@@ -405,14 +405,28 @@ function saveFinalExam() {
   writeStorage(STORAGE_KEYS.finalExam, state.finalExams);
 }
 
-function saveLocation() {
+function saveLocation(mode = state.mode) {
   writeStorage(STORAGE_KEYS.location, {
     courseId: state.courseId,
     moduleIndex: state.moduleIndex,
     lessonIndex: state.lessonIndex,
     pageIndex: state.pageIndex,
-    mode: state.mode,
+    mode,
   });
+}
+
+let shouldReturnHomeOnResume = false;
+
+function prepareHomeReturn() {
+  shouldReturnHomeOnResume = true;
+  saveLocation("home");
+}
+
+function returnHomeOnResume() {
+  if (!shouldReturnHomeOnResume) return;
+  shouldReturnHomeOnResume = false;
+  if (document.body.classList.contains("app-booting") || state.mode === "home") return;
+  showHome();
 }
 
 function initializeSupabaseConnection() {
@@ -3715,6 +3729,19 @@ function restoreSavedLocation() {
 }
 
 function bindEvents() {
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      prepareHomeReturn();
+      return;
+    }
+    returnHomeOnResume();
+  });
+
+  window.addEventListener("pagehide", prepareHomeReturn);
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) returnHomeOnResume();
+  });
+
   document.addEventListener("click", (event) => {
     const comingSoon = event.target.closest("[data-coming-soon]");
     if (comingSoon) {
