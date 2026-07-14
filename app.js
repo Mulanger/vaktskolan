@@ -191,24 +191,32 @@ const quizPortalModules = [
     title: "VU1 Quiz",
     description: "Repetera grunderna från Väktarutbildning 1. Frågor om instruktioner, etik och juridiska grunder.",
     icon: "shield",
+    theme: "blue",
+    badge: "Flervalsquiz",
   },
   {
     view: "vu2",
     title: "VU2 Quiz",
     description: "Fördjupande frågor från Väktarutbildning 2. Tillsyn, arbetsmiljö och mer avancerad juridik.",
-    icon: "shield",
+    icon: "shield-check",
+    theme: "violet",
+    badge: "Flervalsquiz",
   },
   {
     view: "flashcards",
     title: "Flashcards",
     description: "Vänd på korten för att träna in och memorera viktiga lagrum, paragrafer och facktermer.",
     icon: "book-open",
+    theme: "teal",
+    badge: "Kortlek",
   },
   {
     view: "general",
     title: "Vanlig Quiz",
     description: "En mix av allmänna säkerhetsfrågor relaterade till bevakningsyrket, brand och sjukvård.",
     icon: "brain-circuit",
+    theme: "amber",
+    badge: "Flervalsquiz",
     comingSoon: true,
   },
   {
@@ -216,6 +224,8 @@ const quizPortalModules = [
     title: "Scenario Quiz",
     description: "Sätts på prov i realistiska och svåra situationer du kan stöta på ute på fältet.",
     icon: "triangle-alert",
+    theme: "rose",
+    badge: "Scenario",
   },
 ];
 
@@ -2632,12 +2642,12 @@ function renderQuizPortalMobileTabbar() {
 function renderQuizPortalSidebar() {
   els.moduleListWrap.hidden = false;
   els.moduleListTitle.textContent = "Quizmoduler";
-  els.moduleCount.textContent = "3 quiz + kort";
+  els.moduleCount.textContent = "4 quiz · 1 kortlek";
   els.moduleList.innerHTML = quizPortalModules
     .map((module) => {
       const isActive = state.quizPortal.view === module.view;
       return `
-        <button class="quiz-sidebar-card ${isActive ? "is-active" : ""}" type="button" ${
+        <button class="quiz-sidebar-card quiz-theme-${module.theme} ${isActive ? "is-active" : ""}" type="button" ${
           module.comingSoon ? `data-coming-soon="${escapeHtml(module.title)}"` : `data-quiz-portal-view="${module.view}"`
         }>
           <span class="quiz-sidebar-icon"><i data-lucide="${module.icon}"></i></span>
@@ -2653,50 +2663,101 @@ function renderQuizPortalSidebar() {
 
 function renderQuizPortalHome() {
   return `
-    <div class="quiz-portal-page-head">
-      <span>Väktarutbildning</span>
-      <h1>Quiz Portal</h1>
-      <p>Träningsläge · resultat sparas inte · repetera så ofta du vill</p>
+    <div class="quiz-portal-home-desktop">
+      <header class="quiz-portal-desktop-head">
+        <div class="quiz-portal-page-head">
+          <span>Väktarutbildning</span>
+          <h1>Quiz Portal</h1>
+        </div>
+        <div class="quiz-portal-training-mode" role="status">
+          <span aria-hidden="true"></span>
+          <strong>Träningsläge</strong>
+          <small>resultat sparas inte — repetera fritt</small>
+        </div>
+      </header>
+
+      <section class="quiz-portal-hero-desktop" aria-labelledby="quizOverviewTitleDesktop">
+        <div>
+          <h2 id="quizOverviewTitleDesktop">Välkommen till QuizPortalen</h2>
+          <p>Håll kunskaperna skarpa — testa dig själv, repetera viktiga juridiska begrepp och öva på scenarier från verkligheten.</p>
+        </div>
+        <span class="quiz-portal-repeat-pill"><i data-lucide="clock-3"></i>Repetera så ofta du vill</span>
+      </section>
+
+      <section class="quiz-portal-modules quiz-portal-modules-desktop" aria-labelledby="quizPortalModulesTitleDesktop">
+        <div class="quiz-portal-section-head">
+          <h2 id="quizPortalModulesTitleDesktop">Välj en modul</h2>
+          <span>5 sätt att träna</span>
+        </div>
+        <div class="quiz-portal-grid quiz-portal-grid-desktop">
+          ${quizPortalModules
+            .map(
+              (module, index) => `
+                <button class="quiz-portal-card quiz-portal-card-desktop quiz-theme-${module.theme} ${module.comingSoon ? "is-coming-soon" : ""}" style="--quiz-card-index:${index}" type="button" ${
+                  module.comingSoon ? `data-coming-soon="${escapeHtml(module.title)}"` : `data-quiz-portal-view="${module.view}"`
+                }>
+                  <span class="quiz-portal-card-top">
+                    <span class="quiz-portal-card-icon"><i data-lucide="${module.icon}"></i></span>
+                    <span class="quiz-portal-card-badge">${escapeHtml(module.comingSoon ? "Kommer snart" : module.badge)}</span>
+                  </span>
+                  <span class="quiz-portal-card-body">
+                    <strong>${escapeHtml(module.title)}</strong>
+                    <span class="quiz-portal-card-copy">${escapeHtml(module.description)}</span>
+                    <span class="quiz-portal-card-foot">
+                      <small>${escapeHtml(quizPortalModuleMeta(module))}</small>
+                      <span class="quiz-portal-card-action">${module.comingSoon ? "Inte tillgänglig" : 'Starta <i data-lucide="arrow-right"></i>'}</span>
+                    </span>
+                  </span>
+                </button>
+              `
+            )
+            .join("")}
+        </div>
+      </section>
     </div>
 
-    <section class="quiz-portal-hero" aria-labelledby="quizOverviewTitle">
-      <div class="quiz-portal-hero-copy">
-        <h2 id="quizOverviewTitle">Välkommen till <span>QuizPortalen</span></h2>
-        <p>
-          <span class="quiz-portal-copy-desktop">Denna plattform är skapad för dig som redan genomgått din väktarutbildning och vill hålla kunskaperna skarpa. Här kan du testa dig själv, repetera viktiga juridiska begrepp och öva på komplexa scenarier från verkligheten.</span>
-          <span class="quiz-portal-copy-mobile">Testa dig själv, repetera viktiga juridiska begrepp och öva på scenarier från verkligheten.</span>
-        </p>
-        <div class="quiz-portal-alert" role="note">
-          <i data-lucide="triangle-alert"></i>
-          <span class="quiz-portal-copy-desktop">Välj en av modulerna nedan för att börja träna. Dina framsteg sparas ej ännu, så fokusera på att lära dig!</span>
-          <span class="quiz-portal-copy-mobile">Välj en modul nedan för att börja träna. Dina framsteg sparas ej ännu!</span>
+    <div class="quiz-portal-home-mobile">
+      <section class="quiz-portal-mobile-intro" aria-labelledby="quizOverviewTitleMobile">
+        <span class="quiz-portal-mobile-kicker">Väktarutbildning</span>
+        <h1 id="quizOverviewTitleMobile">Quiz Portal</h1>
+        <p>Testa dig själv, repetera juridik och öva på verkliga scenarier — så ofta du vill.</p>
+        <div class="quiz-portal-mobile-mode" role="status">
+          <span aria-hidden="true"></span>
+          <strong>Träningsläge — resultat sparas inte</strong>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="quiz-portal-modules" aria-labelledby="quizPortalModulesTitle">
-      <h2 id="quizPortalModulesTitle"><i data-lucide="layers"></i><span>Välj en modul</span></h2>
-      <div class="quiz-portal-grid">
-        ${quizPortalModules
-          .map(
-            (module) => `
-              <button class="quiz-portal-card ${module.comingSoon ? "is-coming-soon" : ""}" type="button" ${
-                module.comingSoon ? `data-coming-soon="${escapeHtml(module.title)}"` : `data-quiz-portal-view="${module.view}"`
-              }>
-                <span class="quiz-portal-card-icon"><i data-lucide="${module.icon}"></i></span>
-                ${module.comingSoon ? '<span class="quiz-portal-card-status">Kommer snart</span>' : ""}
-                <strong>${escapeHtml(module.title)}</strong>
-                <span class="quiz-portal-card-copy">${escapeHtml(module.description)}</span>
-                <span class="quiz-portal-card-foot">
-                  <small>${escapeHtml(quizPortalModuleMeta(module))}</small>
-                  <span class="quiz-portal-card-action">${module.comingSoon ? "Inte tillgänglig" : 'Starta <i data-lucide="arrow-right"></i>'}</span>
-                </span>
-              </button>
-            `
-          )
-          .join("")}
-      </div>
-    </section>
+      <section class="quiz-portal-modules quiz-portal-modules-mobile" aria-labelledby="quizPortalModulesTitleMobile">
+        <div class="quiz-portal-section-head quiz-portal-section-head-mobile">
+          <h2 id="quizPortalModulesTitleMobile">Välj en modul</h2>
+          <span>4 quiz · 1 kortlek</span>
+        </div>
+        <div class="quiz-portal-grid quiz-portal-grid-mobile">
+          ${quizPortalModules
+            .map(
+              (module, index) => `
+                <button class="quiz-portal-card quiz-portal-card-mobile quiz-theme-${module.theme} ${module.comingSoon ? "is-coming-soon" : ""}" style="--quiz-card-index:${index}" type="button" ${
+                  module.comingSoon ? `data-coming-soon="${escapeHtml(module.title)}"` : `data-quiz-portal-view="${module.view}"`
+                }>
+                  <span class="quiz-portal-card-top">
+                    <span class="quiz-portal-card-icon"><i data-lucide="${module.icon}"></i></span>
+                    <span class="quiz-portal-card-badge">${escapeHtml(module.comingSoon ? "Kommer snart" : module.badge)}</span>
+                  </span>
+                  <span class="quiz-portal-card-body">
+                    <strong>${escapeHtml(module.title)}</strong>
+                    <span class="quiz-portal-card-copy">${escapeHtml(module.description)}</span>
+                    <span class="quiz-portal-card-foot">
+                      <small>${escapeHtml(quizPortalModuleMeta(module))}</small>
+                      <span class="quiz-portal-card-action">${module.comingSoon ? "Inte tillgänglig" : 'Starta <i data-lucide="arrow-right"></i>'}</span>
+                    </span>
+                  </span>
+                </button>
+              `
+            )
+            .join("")}
+        </div>
+      </section>
+    </div>
   `;
 }
 
