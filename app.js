@@ -2571,8 +2571,12 @@ function loadQuizPortalData() {
     } finally {
       quizPortalDataPromise = null;
       if (state.mode === "quiz-overview") {
-        renderQuizOverview();
-        refreshIcons();
+        if (state.quizPortal.view === "home") {
+          updateQuizPortalModuleMeta();
+        } else {
+          renderQuizOverview();
+          refreshIcons();
+        }
       }
     }
   })();
@@ -2593,6 +2597,14 @@ function quizPortalModuleMeta(module) {
 
   const questionCount = getQuizPortalQuiz(module.view)?.questions.length || 0;
   return `${questionCount} frågor · flerval`;
+}
+
+function updateQuizPortalModuleMeta() {
+  quizPortalModules.forEach((module) => {
+    document.querySelectorAll(`[data-quiz-portal-meta="${module.view}"]`).forEach((element) => {
+      element.textContent = quizPortalModuleMeta(module);
+    });
+  });
 }
 
 function quizOptionLetter(index) {
@@ -2653,7 +2665,7 @@ function renderQuizPortalSidebar() {
           <span class="quiz-sidebar-icon"><i data-lucide="${module.icon}"></i></span>
           <span class="quiz-sidebar-copy">
             <strong>${escapeHtml(module.title)}</strong>
-            <small>${escapeHtml(quizPortalModuleMeta(module))}</small>
+            <small data-quiz-portal-meta="${module.view}">${escapeHtml(quizPortalModuleMeta(module))}</small>
           </span>
         </button>
       `;
@@ -2704,7 +2716,7 @@ function renderQuizPortalHome() {
                     <strong>${escapeHtml(module.title)}</strong>
                     <span class="quiz-portal-card-copy">${escapeHtml(module.description)}</span>
                     <span class="quiz-portal-card-foot">
-                      <small>${escapeHtml(quizPortalModuleMeta(module))}</small>
+                      <small data-quiz-portal-meta="${module.view}">${escapeHtml(quizPortalModuleMeta(module))}</small>
                       <span class="quiz-portal-card-action">${module.comingSoon ? "Inte tillgänglig" : 'Starta <i data-lucide="arrow-right"></i>'}</span>
                     </span>
                   </span>
@@ -2747,7 +2759,7 @@ function renderQuizPortalHome() {
                     <strong>${escapeHtml(module.title)}</strong>
                     <span class="quiz-portal-card-copy">${escapeHtml(module.description)}</span>
                     <span class="quiz-portal-card-foot">
-                      <small>${escapeHtml(quizPortalModuleMeta(module))}</small>
+                      <small data-quiz-portal-meta="${module.view}">${escapeHtml(quizPortalModuleMeta(module))}</small>
                       <span class="quiz-portal-card-action">${module.comingSoon ? "Inte tillgänglig" : 'Starta <i data-lucide="arrow-right"></i>'}</span>
                     </span>
                   </span>

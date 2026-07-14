@@ -8327,6 +8327,10 @@ body.quiz-overview-mode .quiz-portal-flashcard-controls button.is-primary {
   color: #ffffff;
 }
 
+body.quiz-overview-mode .quiz-portal-flashcard-controls button.is-primary span {
+  color: #ffffff;
+}
+
 body.quiz-overview-mode .quiz-portal-flashcard-controls svg {
   width: 15px;
   height: 15px;
