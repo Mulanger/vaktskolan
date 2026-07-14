@@ -76,12 +76,13 @@
     const method = options.method || "GET";
     const hasBody = Object.prototype.hasOwnProperty.call(options, "body");
     const apiKey = apiState.config.publishableKey;
+    const resolvedAccessToken = typeof accessToken === "function" ? await accessToken() : accessToken;
     const response = await fetch(buildRestUrl(path, options.query), {
       method,
       headers: {
         Accept: "application/json",
         apikey: apiKey,
-        Authorization: `Bearer ${accessToken || apiKey}`,
+        Authorization: `Bearer ${resolvedAccessToken || apiKey}`,
         ...(hasBody ? { "Content-Type": "application/json", Prefer: "return=representation" } : {}),
         ...(options.headers || {}),
       },

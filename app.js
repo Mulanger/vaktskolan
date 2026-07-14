@@ -1,11 +1,13 @@
 const STORAGE_KEYS = {
   version: "vakt-storage-version",
-  visited: "vakt-visited-pages",
+  legacyVisited: "vakt-visited-pages",
+  completedPages: "vakt-completed-pages-v2",
   answers: "vakt-quiz-answers",
   quizSubmissions: "vakt-quiz-submissions",
   scenarioProgress: "vakt-scenario-progress",
   finalExam: "vakt-final-exam",
   location: "vakt-current-location",
+  progressOwner: "vakt-progress-owner",
 };
 
 const STORAGE_VERSION = "vu2-course-split-2026-07-04";
@@ -15,6 +17,9 @@ const FINAL_EXAM_SIZE = 30;
 const FINAL_EXAM_DURATION_MS = 15 * 60 * 1000;
 const FINAL_EXAM_LOCK_MS = 24 * 60 * 60 * 1000;
 const FINAL_EXAM_PASS_PERCENT = 80;
+const MODULE_QUIZ_PASS_PERCENT = 80;
+const PROGRESS_SCHEMA_VERSION = 1;
+const PROGRESS_TABLE = "student_learning_progress";
 const RESTORABLE_MODES = new Set([
   "home",
   "hub",
@@ -50,12 +55,14 @@ function resetStoredProgressIfNeeded() {
   try {
     if (localStorage.getItem(STORAGE_KEYS.version) === STORAGE_VERSION) return;
 
-    localStorage.removeItem(STORAGE_KEYS.visited);
+    localStorage.removeItem(STORAGE_KEYS.legacyVisited);
+    localStorage.removeItem(STORAGE_KEYS.completedPages);
     localStorage.removeItem(STORAGE_KEYS.answers);
     localStorage.removeItem(STORAGE_KEYS.quizSubmissions);
     localStorage.removeItem(STORAGE_KEYS.scenarioProgress);
     localStorage.removeItem(STORAGE_KEYS.finalExam);
     localStorage.removeItem(STORAGE_KEYS.location);
+    localStorage.removeItem(STORAGE_KEYS.progressOwner);
     localStorage.setItem(STORAGE_KEYS.version, STORAGE_VERSION);
   } catch {
     // The app remains usable if storage is blocked.
@@ -146,12 +153,20 @@ const state = {
   finalExam: null,
   finalExamPools: { vu1: [], vu2: [] },
   finalExamPool: [],
-  visited: new Set(readArrayStorage(STORAGE_KEYS.visited).filter((id) => typeof id === "string")),
+  visited: new Set(readArrayStorage(STORAGE_KEYS.completedPages).filter((id) => typeof id === "string")),
   user: {
     displayName: "Sven Svensson",
     firstName: "Sven",
   },
   authClient: null,
+  progressSync: {
+    userId: "",
+    ready: false,
+    syncing: false,
+    queued: false,
+    timer: null,
+    error: null,
+  },
   quizPortal: {
     view: "home",
     dataStatus: "idle",
@@ -381,15 +396,18 @@ function pageId(moduleIndex, lessonIndex, pageIndex, courseId = state.courseId) 
 }
 
 function saveVisited() {
-  writeStorage(STORAGE_KEYS.visited, [...state.visited]);
+  writeStorage(STORAGE_KEYS.completedPages, [...state.visited]);
+  queueProgressSync();
 }
 
 function saveAnswers() {
   writeStorage(STORAGE_KEYS.answers, state.answers);
+  queueProgressSync();
 }
 
 function saveQuizSubmissions() {
   writeStorage(STORAGE_KEYS.quizSubmissions, state.quizSubmissions);
+  queueProgressSync();
 }
 
 function saveScenarioProgress() {
@@ -403,6 +421,7 @@ function saveFinalExam() {
     delete state.finalExams[state.courseId];
   }
   writeStorage(STORAGE_KEYS.finalExam, state.finalExams);
+  queueProgressSync();
 }
 
 function saveLocation(mode = state.mode) {
@@ -413,6 +432,244 @@ function saveLocation(mode = state.mode) {
     pageIndex: state.pageIndex,
     mode,
   });
+}
+
+function sanitizeCompletedPages(value) {
+  if (!Array.isArray(value)) return [];
+  return [...new Set(value.filter((id) => typeof id === "string" && /^(vu1|vu2):\d+:\d+:\d+$/.test(id)))];
+}
+
+function sanitizeQuizAnswers(value) {
+  if (!isPlainObject(value)) return {};
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter(([key, answers]) => /^(vu1|vu2):\d+$/.test(key) && isPlainObject(answers))
+      .map(([key, answers]) => [
+        key,
+        Object.fromEntries(
+          Object.entries(answers).filter(
+            ([questionNumber, answer]) => /^\d+$/.test(questionNumber) && typeof answer === "string"
+          )
+        ),
+      ])
+  );
+}
+
+function sanitizeQuizSubmissions(value) {
+  if (!isPlainObject(value)) return {};
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter(([key, timestamp]) => /^(vu1|vu2):\d+$/.test(key) && Number(timestamp) > 0)
+      .map(([key, timestamp]) => [key, Number(timestamp)])
+  );
+}
+
+function sanitizeFinalExams(value) {
+  if (!isPlainObject(value)) return {};
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter(([courseId]) => Boolean(COURSE_CONFIG[courseId]))
+      .map(([courseId, session]) => [courseId, sanitizeFinalExamSession(session)])
+      .filter(([, session]) => Boolean(session))
+  );
+}
+
+function getProgressSnapshot() {
+  return {
+    completedPages: sanitizeCompletedPages([...state.visited]),
+    quizAnswers: sanitizeQuizAnswers(state.answers),
+    quizSubmissions: sanitizeQuizSubmissions(state.quizSubmissions),
+    finalExams: sanitizeFinalExams(state.finalExams),
+  };
+}
+
+function mergeQuizAnswers(remote, local, remoteSubmissions, localSubmissions) {
+  const merged = {};
+  const keys = new Set([...Object.keys(remote), ...Object.keys(local)]);
+  keys.forEach((key) => {
+    const remoteSubmittedAt = Number(remoteSubmissions[key] || 0);
+    const localSubmittedAt = Number(localSubmissions[key] || 0);
+    if (remoteSubmittedAt > localSubmittedAt) {
+      merged[key] = { ...(remote[key] || {}) };
+    } else if (localSubmittedAt > remoteSubmittedAt) {
+      merged[key] = { ...(local[key] || {}) };
+    } else {
+      merged[key] = { ...(remote[key] || {}), ...(local[key] || {}) };
+    }
+  });
+  return merged;
+}
+
+function mergeFinalExamSession(remoteSession, localSession) {
+  if (!remoteSession) return localSession || null;
+  if (!localSession) return remoteSession;
+
+  if (remoteSession.id === localSession.id) {
+    const remoteCompletedAt = Number(remoteSession.completedAt || 0);
+    const localCompletedAt = Number(localSession.completedAt || 0);
+    const latest = localCompletedAt >= remoteCompletedAt ? localSession : remoteSession;
+    return sanitizeFinalExamSession({
+      ...remoteSession,
+      ...latest,
+      completedAt: Math.max(remoteCompletedAt, localCompletedAt) || null,
+      answers: { ...(remoteSession.answers || {}), ...(localSession.answers || {}) },
+    });
+  }
+
+  const remoteTimestamp = Number(remoteSession.completedAt || remoteSession.createdAt || 0);
+  const localTimestamp = Number(localSession.completedAt || localSession.createdAt || 0);
+  return localTimestamp >= remoteTimestamp ? localSession : remoteSession;
+}
+
+function mergeProgressSnapshots(remoteSnapshot, localSnapshot) {
+  const remoteSubmissions = sanitizeQuizSubmissions(remoteSnapshot.quizSubmissions);
+  const localSubmissions = sanitizeQuizSubmissions(localSnapshot.quizSubmissions);
+  const quizSubmissions = Object.fromEntries(
+    [...new Set([...Object.keys(remoteSubmissions), ...Object.keys(localSubmissions)])].map((key) => [
+      key,
+      Math.max(Number(remoteSubmissions[key] || 0), Number(localSubmissions[key] || 0)),
+    ])
+  );
+  const remoteAnswers = sanitizeQuizAnswers(remoteSnapshot.quizAnswers);
+  const localAnswers = sanitizeQuizAnswers(localSnapshot.quizAnswers);
+  const remoteFinalExams = sanitizeFinalExams(remoteSnapshot.finalExams);
+  const localFinalExams = sanitizeFinalExams(localSnapshot.finalExams);
+  const finalExams = {};
+
+  new Set([...Object.keys(remoteFinalExams), ...Object.keys(localFinalExams)]).forEach((courseId) => {
+    const session = mergeFinalExamSession(remoteFinalExams[courseId], localFinalExams[courseId]);
+    if (session) finalExams[courseId] = session;
+  });
+
+  return {
+    completedPages: sanitizeCompletedPages([
+      ...sanitizeCompletedPages(remoteSnapshot.completedPages),
+      ...sanitizeCompletedPages(localSnapshot.completedPages),
+    ]),
+    quizAnswers: mergeQuizAnswers(remoteAnswers, localAnswers, remoteSubmissions, localSubmissions),
+    quizSubmissions,
+    finalExams,
+  };
+}
+
+function applyProgressSnapshot(snapshot) {
+  const clean = mergeProgressSnapshots(snapshot, {
+    completedPages: [],
+    quizAnswers: {},
+    quizSubmissions: {},
+    finalExams: {},
+  });
+  state.visited = new Set(clean.completedPages);
+  state.answers = clean.quizAnswers;
+  state.quizSubmissions = clean.quizSubmissions;
+  state.finalExams = clean.finalExams;
+  state.finalExam = state.finalExams[state.courseId] || null;
+
+  writeStorage(STORAGE_KEYS.completedPages, clean.completedPages);
+  writeStorage(STORAGE_KEYS.answers, clean.quizAnswers);
+  writeStorage(STORAGE_KEYS.quizSubmissions, clean.quizSubmissions);
+  writeStorage(STORAGE_KEYS.finalExam, clean.finalExams);
+}
+
+async function getProgressAccessToken() {
+  const session = state.authClient?.session;
+  return typeof session?.getToken === "function" ? session.getToken() : null;
+}
+
+async function syncProgressToSupabase() {
+  const sync = state.progressSync;
+  const supabaseApi = window.vaktskolanSupabase;
+  if (!sync.ready || !sync.userId || !supabaseApi?.upsert || sync.syncing) {
+    if (sync.syncing) sync.queued = true;
+    return;
+  }
+
+  sync.syncing = true;
+  sync.queued = false;
+  const snapshot = getProgressSnapshot();
+  try {
+    await supabaseApi.upsert(
+      PROGRESS_TABLE,
+      {
+        user_id: sync.userId,
+        completed_pages: snapshot.completedPages,
+        quiz_answers: snapshot.quizAnswers,
+        quiz_submissions: snapshot.quizSubmissions,
+        final_exams: snapshot.finalExams,
+        schema_version: PROGRESS_SCHEMA_VERSION,
+      },
+      { onConflict: "user_id", returning: "minimal" }
+    );
+    sync.error = null;
+  } catch (error) {
+    sync.error = error;
+    console.warn("Progression kunde inte synkas till Supabase. Den finns kvar lokalt.", error);
+  } finally {
+    sync.syncing = false;
+    if (sync.queued) queueProgressSync(0);
+  }
+}
+
+function queueProgressSync(delay = 250) {
+  const sync = state.progressSync;
+  if (!sync.ready || !sync.userId) return;
+  if (sync.syncing) {
+    sync.queued = true;
+    return;
+  }
+
+  window.clearTimeout(sync.timer);
+  sync.timer = window.setTimeout(() => {
+    sync.timer = null;
+    void syncProgressToSupabase();
+  }, delay);
+}
+
+async function initializeProgressSync() {
+  const sync = state.progressSync;
+  const supabaseApi = window.vaktskolanSupabase;
+  const userId = state.authClient?.user?.id || "";
+  if (!userId || !supabaseApi?.ready || !supabaseApi?.select) return;
+
+  try {
+    const storedOwner = readStorage(STORAGE_KEYS.progressOwner, "");
+    if (storedOwner && storedOwner !== userId) {
+      applyProgressSnapshot({ completedPages: [], quizAnswers: {}, quizSubmissions: {}, finalExams: {} });
+      try {
+        localStorage.removeItem(STORAGE_KEYS.location);
+      } catch {
+        // The app remains usable if storage is blocked.
+      }
+    }
+    writeStorage(STORAGE_KEYS.progressOwner, userId);
+
+    supabaseApi.setAccessToken(getProgressAccessToken);
+    await supabaseApi.ready;
+    const rows = await supabaseApi.select(PROGRESS_TABLE, {
+      select: "completed_pages,quiz_answers,quiz_submissions,final_exams,schema_version",
+      user_id: `eq.${userId}`,
+      limit: 1,
+    });
+    const remote = Array.isArray(rows) && rows[0]
+      ? {
+          completedPages: rows[0].completed_pages,
+          quizAnswers: rows[0].quiz_answers,
+          quizSubmissions: rows[0].quiz_submissions,
+          finalExams: rows[0].final_exams,
+        }
+      : { completedPages: [], quizAnswers: {}, quizSubmissions: {}, finalExams: {} };
+    const merged = mergeProgressSnapshots(remote, getProgressSnapshot());
+    applyProgressSnapshot(merged);
+    sync.userId = userId;
+    sync.ready = true;
+    sync.error = null;
+    await syncProgressToSupabase();
+    if (!sync.error) console.info("Elevens progression är synkad med Supabase.");
+  } catch (error) {
+    sync.error = error;
+    sync.ready = false;
+    console.warn("Kontosynkning av progression är inte tillgänglig. Lokal progression används.", error);
+  }
 }
 
 let shouldReturnHomeOnResume = false;
@@ -592,13 +849,44 @@ function hasVisitedAnyPage(moduleIndex) {
   return !!module && allPages(module).some((item) => isPageVisited(moduleIndex, item.lessonIndex, item.pageIndex));
 }
 
+function getModuleQuizResult(moduleIndex) {
+  const module = state.modules[moduleIndex];
+  const questions = Array.isArray(module?.quiz) ? module.quiz : [];
+  if (!questions.length) {
+    return { submitted: true, correct: 0, total: 0, percent: 100, passed: true, requiredCorrect: 0 };
+  }
+
+  const key = answerKey(moduleIndex);
+  const answers = isPlainObject(state.answers[key]) ? state.answers[key] : {};
+  const submitted = Boolean(state.quizSubmissions[key]);
+  const correct = questions.filter((question) => answers[question.number] === question.correct).length;
+  const percent = Math.round((correct / questions.length) * 100);
+  const requiredCorrect = Math.ceil((questions.length * MODULE_QUIZ_PASS_PERCENT) / 100);
+  return {
+    submitted,
+    correct,
+    total: questions.length,
+    percent,
+    passed: submitted && percent >= MODULE_QUIZ_PASS_PERCENT,
+    requiredCorrect,
+  };
+}
+
+function isFinalExamPassed() {
+  return Boolean(state.finalExam?.completedAt && getFinalExamResult().passed);
+}
+
 function isModuleComplete(moduleIndex) {
   const module = state.modules[moduleIndex];
   if (!module) return false;
-  if (isFinalExamModule(module)) return Boolean(state.finalExam?.completedAt);
+  if (isFinalExamModule(module)) return isFinalExamPassed();
 
   const pages = allPages(module);
-  return pages.length > 0 && pages.every((item) => isPageVisited(moduleIndex, item.lessonIndex, item.pageIndex));
+  return (
+    pages.length > 0 &&
+    pages.every((item) => isPageVisited(moduleIndex, item.lessonIndex, item.pageIndex)) &&
+    getModuleQuizResult(moduleIndex).passed
+  );
 }
 
 function isModuleUnlocked(moduleIndex) {
@@ -1091,7 +1379,7 @@ function setQuizButtonLabel(label) {
 
 function getModuleProgress(module, moduleIndex) {
   if (isFinalExamModule(module)) {
-    if (state.finalExam?.completedAt) return 100;
+    if (state.finalExam?.completedAt) return isFinalExamPassed() ? 100 : getFinalExamResult().percent;
     const total = state.finalExam?.questionIds?.length || FINAL_EXAM_SIZE;
     return Math.round((getFinalExamAnsweredCount() / total) * 100);
   }
@@ -1099,18 +1387,40 @@ function getModuleProgress(module, moduleIndex) {
   const pages = allPages(module);
   if (!pages.length) return 0;
   const visited = pages.filter((item) => state.visited.has(pageId(moduleIndex, item.lessonIndex, item.pageIndex))).length;
-  return Math.round((visited / pages.length) * 100);
+  const hasQuiz = Array.isArray(module.quiz) && module.quiz.length > 0;
+  const quizStep = hasQuiz && getModuleQuizResult(moduleIndex).passed ? 1 : 0;
+  const totalSteps = pages.length + (hasQuiz ? 1 : 0);
+  return Math.round(((visited + quizStep) / totalSteps) * 100);
 }
 
 function getCourseProgress() {
-  const pages = state.modules
+  const contentModules = state.modules
     .map((module, moduleIndex) => ({ module, moduleIndex }))
-    .filter((item) => !isFinalExamModule(item.module))
+    .filter((item) => !isFinalExamModule(item.module));
+  const pages = contentModules
     .flatMap((item) => allPages(item.module).map((pageItem) => ({ ...pageItem, moduleIndex: item.moduleIndex })));
-  if (!pages.length) return { total: 0, visited: 0, percent: 0 };
+  if (!pages.length) {
+    return { total: 0, visited: 0, completedSteps: 0, totalSteps: 0, percent: 0, finalExamPassed: false };
+  }
 
   const visited = pages.filter((item) => isPageVisited(item.moduleIndex, item.lessonIndex, item.pageIndex)).length;
-  return { total: pages.length, visited, percent: Math.round((visited / pages.length) * 100) };
+  const quizRequirements = contentModules.filter(
+    (item) => Array.isArray(item.module.quiz) && item.module.quiz.length > 0
+  );
+  const passedQuizzes = quizRequirements.filter((item) => getModuleQuizResult(item.moduleIndex).passed).length;
+  const hasFinalExam = state.modules.some((module) => isFinalExamModule(module));
+  const finalExamPassed = hasFinalExam && isFinalExamPassed();
+  const completedSteps = visited + passedQuizzes + (finalExamPassed ? 1 : 0);
+  const totalSteps = pages.length + quizRequirements.length + (hasFinalExam ? 1 : 0);
+
+  return {
+    total: pages.length,
+    visited,
+    completedSteps,
+    totalSteps,
+    percent: totalSteps ? Math.round((completedSteps / totalSteps) * 100) : 0,
+    finalExamPassed,
+  };
 }
 
 function getLastAccessiblePosition() {
@@ -1234,8 +1544,11 @@ function getCourseHomeOverview(courseId) {
     const continueLesson = continueModule?.lessons[continuePosition.lessonIndex];
     const continuePage = continueLesson?.pages[continuePosition.pageIndex];
     const moduleProgress = continueModule ? getModuleProgress(continueModule, continuePosition.moduleIndex) : 0;
-    const started = progress.visited > 0 || Object.keys(state.answers).some((key) => key.startsWith(`${courseId}:`));
-    const complete = progress.total > 0 && progress.visited === progress.total;
+    const started =
+      progress.completedSteps > 0 ||
+      Object.keys(state.answers).some((key) => key.startsWith(`${courseId}:`)) ||
+      Boolean(state.finalExams[courseId]);
+    const complete = progress.totalSteps > 0 && progress.completedSteps === progress.totalSteps;
 
     return {
       course,
@@ -1259,6 +1572,8 @@ function getHomeData() {
   const vu1Overview = courses.find((item) => item.courseId === "vu1");
   const totalPages = courses.reduce((sum, item) => sum + item.progress.total, 0);
   const visitedPages = courses.reduce((sum, item) => sum + item.progress.visited, 0);
+  const totalProgressSteps = courses.reduce((sum, item) => sum + item.progress.totalSteps, 0);
+  const completedProgressSteps = courses.reduce((sum, item) => sum + item.progress.completedSteps, 0);
   const totalModules = courses.reduce((sum, item) => sum + item.moduleStats.total, 0);
   const completedModules = courses.reduce((sum, item) => sum + item.moduleStats.completed, 0);
   const quizAnswered = courses.reduce((sum, item) => sum + item.quizSummary.answered, 0);
@@ -1270,7 +1585,7 @@ function getHomeData() {
   const savedCourseId = COURSE_CONFIG[saved?.courseId] && !courses.find((item) => item.courseId === saved.courseId)?.locked ? saved.courseId : null;
   const preferredCourse =
     courses.find((item) => item.courseId === savedCourseId) ||
-    courses.find((item) => !item.locked && item.progress.visited > 0 && item.progress.percent < 100) ||
+    courses.find((item) => !item.locked && item.started && item.progress.percent < 100) ||
     courses.find((item) => !item.locked) ||
     courses[0];
 
@@ -1280,7 +1595,7 @@ function getHomeData() {
     totals: {
       pages: totalPages,
       visitedPages,
-      percent: totalPages ? Math.round((visitedPages / totalPages) * 100) : 0,
+      percent: totalProgressSteps ? Math.round((completedProgressSteps / totalProgressSteps) * 100) : 0,
       modules: totalModules,
       completedModules,
       quizAnswered,
@@ -2391,9 +2706,6 @@ function renderReader() {
   const page = getCurrentPage();
 
   if (!module || !lesson || !page) return;
-
-  state.visited.add(pageId(state.moduleIndex, state.lessonIndex, state.pageIndex));
-  saveVisited();
 
   els.homePanel.hidden = true;
   els.courseHub.hidden = true;
@@ -3556,7 +3868,9 @@ function renderQuiz() {
   const answers = isPlainObject(state.answers[key]) ? state.answers[key] : {};
   const isSubmitted = Boolean(state.quizSubmissions[key]);
   const answeredCount = Object.keys(answers).length;
-  const correctCount = module.quiz.filter((question) => answers[question.number] === question.correct).length;
+  const quizResult = getModuleQuizResult(state.moduleIndex);
+  const correctCount = quizResult.correct;
+  const quizPassed = quizResult.passed;
   const nextModule = state.modules[state.moduleIndex + 1];
   const nextIsFinalExam = isFinalExamModule(nextModule);
   const nextModuleLabel = nextIsFinalExam ? "Till slutprov" : "Starta nästa modul";
@@ -3572,10 +3886,14 @@ function renderQuiz() {
   );
   els.resetQuizButton.disabled = answeredCount === 0;
   const resultSummary = isSubmitted
-    ? `<section class="quiz-submission-result" role="status" aria-live="polite">
-        <span>Resultat</span>
+    ? `<section class="quiz-submission-result ${quizPassed ? "is-passed" : "is-failed"}" role="status" aria-live="polite">
+        <span>${quizPassed ? "Godkänd" : "Inte godkänd"}</span>
         <strong>${correctCount} av ${module.quiz.length} rätt</strong>
-        <p>Gå igenom frågorna nedan för att se rätt svar och förklaringar.</p>
+        <p>${
+          quizPassed
+            ? "Gå igenom frågorna nedan för att se rätt svar och förklaringar."
+            : `Det krävs minst ${quizResult.requiredCorrect} rätt för godkänt. Nollställ svaren och försök igen.`
+        }</p>
       </section>`
     : "";
 
@@ -3625,10 +3943,12 @@ function renderQuiz() {
   els.quizFooter.innerHTML = `
     <div class="quiz-complete ${isSubmitted ? "is-complete" : "is-navigation"}">
       <div class="quiz-complete-copy">
-        <h4>${isSubmitted ? "Quiz klart" : "Quiz"}</h4>
+        <h4>${isSubmitted ? (quizPassed ? "Quiz godkänt" : "Quiz behöver göras om") : "Quiz"}</h4>
         <p>${
           isSubmitted
-            ? `Du fick ${correctCount} av ${module.quiz.length} rätt. Du kan nollställa svaren eller ${nextActionText}.`
+            ? quizPassed
+              ? `Du fick ${correctCount} av ${module.quiz.length} rätt. Du kan nollställa svaren eller ${nextActionText}.`
+              : `Du fick ${correctCount} av ${module.quiz.length} rätt. Det krävs ${quizResult.requiredCorrect} rätt för godkänt.`
             : allQuestionsAnswered
               ? "Skicka in dina svar när du känner dig redo."
               : `Besvara alla frågor för att skicka in. ${answeredCount} av ${module.quiz.length} är klara.`
@@ -3690,6 +4010,15 @@ function goRelative(direction) {
     (item) => item.lessonIndex === state.lessonIndex && item.pageIndex === state.pageIndex
   );
   const next = flatPages[index + direction];
+
+  if (direction > 0 && index >= 0 && !isFinalExamModule(module)) {
+    const currentPage = flatPages[index];
+    const id = pageId(state.moduleIndex, currentPage.lessonIndex, currentPage.pageIndex);
+    if (!state.visited.has(id)) {
+      state.visited.add(id);
+      saveVisited();
+    }
+  }
 
   if (next) {
     goTo(state.moduleIndex, next.lessonIndex, next.pageIndex);
@@ -4306,6 +4635,8 @@ async function init() {
   state.finalExamPools = Object.fromEntries(
     Object.entries(state.courses).map(([courseId, modules]) => [courseId, buildFinalExamPool(modules)])
   );
+  activateCourse("vu1");
+  await initializeProgressSync();
   activateCourse("vu1");
   ensureFinalExamIntegrity();
   activateCourse("vu2");
