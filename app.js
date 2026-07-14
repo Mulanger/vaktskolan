@@ -20,6 +20,7 @@ const FINAL_EXAM_PASS_PERCENT = 80;
 const MODULE_QUIZ_PASS_PERCENT = 80;
 const PROGRESS_SCHEMA_VERSION = 1;
 const PROGRESS_TABLE = "student_learning_progress";
+const PORTAL_HISTORY_STATE_KEY = "vaktskolanPortalLocation";
 const RESTORABLE_MODES = new Set([
   "home",
   "hub",
@@ -166,6 +167,10 @@ const state = {
     queued: false,
     timer: null,
     error: null,
+  },
+  portalHistory: {
+    ready: false,
+    restoring: false,
   },
   quizPortal: {
     view: "home",
@@ -424,14 +429,136 @@ function saveFinalExam() {
   queueProgressSync();
 }
 
-function saveLocation(mode = state.mode) {
-  writeStorage(STORAGE_KEYS.location, {
+function getPortalLocationSnapshot(mode = state.mode) {
+  return {
     courseId: state.courseId,
     moduleIndex: state.moduleIndex,
     lessonIndex: state.lessonIndex,
     pageIndex: state.pageIndex,
-    mode,
-  });
+    mode: RESTORABLE_MODES.has(mode) ? mode : "home",
+  };
+}
+
+function normalizePortalLocationSnapshot(value) {
+  if (!isPlainObject(value) || !COURSE_CONFIG[value.courseId] || !RESTORABLE_MODES.has(value.mode)) return null;
+  return {
+    courseId: value.courseId,
+    moduleIndex: Math.max(0, Number.parseInt(value.moduleIndex, 10) || 0),
+    lessonIndex: Math.max(0, Number.parseInt(value.lessonIndex, 10) || 0),
+    pageIndex: Math.max(0, Number.parseInt(value.pageIndex, 10) || 0),
+    mode: value.mode,
+  };
+}
+
+function portalLocationsMatch(left, right) {
+  return Boolean(
+    left &&
+      right &&
+      left.courseId === right.courseId &&
+      left.moduleIndex === right.moduleIndex &&
+      left.lessonIndex === right.lessonIndex &&
+      left.pageIndex === right.pageIndex &&
+      left.mode === right.mode
+  );
+}
+
+function portalHistoryState(location) {
+  const current = isPlainObject(window.history.state) ? window.history.state : {};
+  return { ...current, [PORTAL_HISTORY_STATE_KEY]: location };
+}
+
+function recordPortalHistory(mode = state.mode, action = "push") {
+  if (!state.portalHistory.ready || state.portalHistory.restoring || action === "none") return;
+
+  const location = getPortalLocationSnapshot(mode);
+  const current = normalizePortalLocationSnapshot(window.history.state?.[PORTAL_HISTORY_STATE_KEY]);
+  if (portalLocationsMatch(current, location)) return;
+
+  const method = action === "replace" ? "replaceState" : "pushState";
+  const url = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  window.history[method](portalHistoryState(location), "", url);
+}
+
+function saveLocation(mode = state.mode, options = {}) {
+  const location = getPortalLocationSnapshot(mode);
+  writeStorage(STORAGE_KEYS.location, location);
+  recordPortalHistory(mode, options.historyAction || "push");
+}
+
+function initializePortalHistory() {
+  if (state.portalHistory.ready) return;
+
+  const initialLocation = getPortalLocationSnapshot();
+  const homeLocation = { ...initialLocation, mode: "home" };
+  const url = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+
+  window.history.replaceState(portalHistoryState(homeLocation), "", url);
+  window.history.pushState(portalHistoryState(initialLocation), "", url);
+  state.portalHistory.ready = true;
+}
+
+function restorePortalHistory(value) {
+  const location = normalizePortalLocationSnapshot(value);
+  if (!location || state.portalHistory.restoring) return false;
+
+  state.portalHistory.restoring = true;
+  try {
+    const courseId = isCourseUnlocked(location.courseId) ? location.courseId : "vu1";
+    activateCourse(courseId);
+
+    if (location.mode === "home") {
+      showHome();
+      return true;
+    }
+    if (location.mode === "hub") {
+      showCourseHub();
+      return true;
+    }
+    if (location.mode === "vu2") {
+      showVu2();
+      return true;
+    }
+    if (location.mode === "quiz-overview") {
+      cancelQuizPortalCountdown();
+      resetQuizPortalSession("home");
+      showQuizOverview();
+      return true;
+    }
+    if (location.mode === "final-exam-portal") {
+      showFinalExamPortal();
+      return true;
+    }
+    if (location.mode === "final-exam") {
+      if (state.finalExam) showFinalExam();
+      else showFinalExamPortal();
+      return true;
+    }
+
+    const moduleIndex = Math.min(location.moduleIndex, Math.max(0, state.modules.length - 1));
+    const module = state.modules[moduleIndex];
+    if (!module || !isModuleUnlocked(moduleIndex)) {
+      showHome();
+      return true;
+    }
+
+    const lessonIndex = Math.min(location.lessonIndex, Math.max(0, module.lessons.length - 1));
+    const lesson = module.lessons[lessonIndex];
+    const pageIndex = Math.min(location.pageIndex, Math.max(0, (lesson?.pages.length || 1) - 1));
+    state.moduleIndex = moduleIndex;
+    state.lessonIndex = lessonIndex;
+    state.pageIndex = pageIndex;
+
+    if (location.mode === "module-milestone") {
+      showModuleMilestone(moduleIndex, lessonIndex, pageIndex);
+    } else if (location.mode === "quiz") {
+      showQuiz();
+    } else {
+      goTo(moduleIndex, lessonIndex, pageIndex, "lesson", { skipMilestone: true });
+    }
+    return true;
+  } finally {
+    state.portalHistory.restoring = false;
+  }
 }
 
 function sanitizeCompletedPages(value) {
@@ -676,7 +803,7 @@ let shouldReturnHomeOnResume = false;
 
 function prepareHomeReturn() {
   shouldReturnHomeOnResume = true;
-  saveLocation("home");
+  saveLocation("home", { historyAction: "none" });
 }
 
 function returnHomeOnResume() {
@@ -4217,6 +4344,9 @@ function bindEvents() {
   window.addEventListener("pageshow", (event) => {
     if (event.persisted) returnHomeOnResume();
   });
+  window.addEventListener("popstate", (event) => {
+    restorePortalHistory(event.state?.[PORTAL_HISTORY_STATE_KEY]);
+  });
 
   document.addEventListener("click", (event) => {
     const comingSoon = event.target.closest("[data-coming-soon]");
@@ -4673,6 +4803,7 @@ async function init() {
     showHome();
   }
 
+  initializePortalHistory();
   revealPlatform();
 }
 
