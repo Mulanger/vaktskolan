@@ -178,10 +178,14 @@ const state = {
     dataError: "",
     quizzes: {},
     flashcards: [],
+    sessionQuestions: [],
     currentIndex: 0,
     selectedOption: null,
     answers: [],
     isAnswered: false,
+    timedOut: false,
+    questionTimeRemaining: 15,
+    questionDeadline: 0,
     score: 0,
     showResults: false,
     flashcardIndex: 0,
@@ -551,6 +555,7 @@ function recordPortalHistory(mode = state.mode, action = "push") {
 }
 
 function saveLocation(mode = state.mode, options = {}) {
+  if (mode !== "quiz-overview") stopQuizPortalQuestionTimer();
   const location = getPortalLocationSnapshot(mode);
   writeStorage(STORAGE_KEYS.location, location);
   recordPortalHistory(mode, options.historyAction || "push");
@@ -3034,11 +3039,16 @@ function renderContext() {
 }
 
 function resetQuizPortalSession(view = state.quizPortal.view) {
+  stopQuizPortalQuestionTimer();
   state.quizPortal.view = view;
+  state.quizPortal.sessionQuestions = [];
   state.quizPortal.currentIndex = 0;
   state.quizPortal.selectedOption = null;
   state.quizPortal.answers = [];
   state.quizPortal.isAnswered = false;
+  state.quizPortal.timedOut = false;
+  state.quizPortal.questionTimeRemaining = QUIZ_PORTAL_QUESTION_TIME_SECONDS;
+  state.quizPortal.questionDeadline = 0;
   state.quizPortal.score = 0;
   state.quizPortal.showResults = false;
   state.quizPortal.flashcardIndex = 0;
@@ -3048,6 +3058,11 @@ function resetQuizPortalSession(view = state.quizPortal.view) {
 let quizPortalDataPromise = null;
 let quizPortalCountdownToken = 0;
 let quizPortalCountdownTimers = [];
+let quizPortalQuestionTimer = null;
+
+const QUIZ_PORTAL_SESSION_SIZE = 15;
+const QUIZ_PORTAL_QUESTION_TIME_SECONDS = 15;
+const QUIZ_PORTAL_QUESTION_TIME_MS = QUIZ_PORTAL_QUESTION_TIME_SECONDS * 1000;
 
 const QUIZ_PORTAL_BANK_CONFIG = {
   vu1: { collectionId: "vu1_quiz", title: "Väktarutbildning 1 (VU1)", expectedCount: 154 },
@@ -3160,6 +3175,87 @@ function getQuizPortalQuiz(view = state.quizPortal.view) {
   return state.quizPortal.quizzes[view] || null;
 }
 
+function getQuizPortalSessionQuiz(view = state.quizPortal.view) {
+  const quiz = getQuizPortalQuiz(view);
+  if (!quiz) return null;
+
+  if (view === state.quizPortal.view && !state.quizPortal.sessionQuestions.length) {
+    state.quizPortal.sessionQuestions = shuffleItems(quiz.questions).slice(0, QUIZ_PORTAL_SESSION_SIZE);
+  }
+
+  return {
+    title: quiz.title,
+    questions: view === state.quizPortal.view ? state.quizPortal.sessionQuestions : [],
+  };
+}
+
+function stopQuizPortalQuestionTimer() {
+  if (quizPortalQuestionTimer) window.clearInterval(quizPortalQuestionTimer);
+  quizPortalQuestionTimer = null;
+  state.quizPortal.questionDeadline = 0;
+}
+
+function updateQuizPortalQuestionTimerUi() {
+  const timer = els.quizPortal?.querySelector("[data-quiz-portal-question-timer]");
+  if (!timer || !state.quizPortal.questionDeadline) return;
+
+  const remainingMs = Math.max(0, state.quizPortal.questionDeadline - Date.now());
+  const remainingSeconds = Math.max(0, Math.ceil(remainingMs / 1000));
+  state.quizPortal.questionTimeRemaining = remainingSeconds;
+  timer.style.setProperty("--quiz-time-progress", String(remainingMs / QUIZ_PORTAL_QUESTION_TIME_MS));
+  timer.classList.toggle("is-warning", remainingSeconds <= 5 && remainingSeconds > 0);
+  timer.classList.toggle("is-expired", remainingSeconds === 0);
+  timer.setAttribute("aria-label", `${remainingSeconds} sekunder kvar`);
+
+  const value = timer.querySelector("[data-quiz-portal-question-time]");
+  if (value) value.textContent = String(remainingSeconds);
+}
+
+function handleQuizPortalQuestionTimeout() {
+  if (
+    state.mode !== "quiz-overview" ||
+    !Object.prototype.hasOwnProperty.call(QUIZ_PORTAL_BANK_CONFIG, state.quizPortal.view) ||
+    state.quizPortal.isAnswered ||
+    state.quizPortal.showResults
+  ) {
+    stopQuizPortalQuestionTimer();
+    return;
+  }
+
+  stopQuizPortalQuestionTimer();
+  state.quizPortal.questionTimeRemaining = 0;
+  state.quizPortal.answers[state.quizPortal.currentIndex] = null;
+  state.quizPortal.selectedOption = null;
+  state.quizPortal.isAnswered = true;
+  state.quizPortal.timedOut = true;
+  renderQuizOverview();
+  refreshIcons();
+}
+
+function startQuizPortalQuestionTimer() {
+  stopQuizPortalQuestionTimer();
+  if (
+    state.mode !== "quiz-overview" ||
+    !Object.prototype.hasOwnProperty.call(QUIZ_PORTAL_BANK_CONFIG, state.quizPortal.view) ||
+    state.quizPortal.isAnswered ||
+    state.quizPortal.showResults ||
+    !getQuizPortalSessionQuiz()?.questions[state.quizPortal.currentIndex]
+  ) {
+    return;
+  }
+
+  state.quizPortal.questionTimeRemaining = QUIZ_PORTAL_QUESTION_TIME_SECONDS;
+  state.quizPortal.questionDeadline = Date.now() + QUIZ_PORTAL_QUESTION_TIME_MS;
+  updateQuizPortalQuestionTimerUi();
+  quizPortalQuestionTimer = window.setInterval(() => {
+    if (Date.now() >= state.quizPortal.questionDeadline) {
+      handleQuizPortalQuestionTimeout();
+      return;
+    }
+    updateQuizPortalQuestionTimerUi();
+  }, 200);
+}
+
 function quizPortalModuleMeta(module) {
   if (module.comingSoon) return "Kommer snart";
   if (state.quizPortal.dataStatus === "loading" || state.quizPortal.dataStatus === "idle") return "Laddar innehåll…";
@@ -3253,6 +3349,7 @@ async function finishQuizPortalCountdown(view, token) {
   quizPortalCountdownTimers = [];
   renderQuizOverview();
   refreshIcons();
+  startQuizPortalQuestionTimer();
 
   const module = getQuizPortalModule(view);
   const question = els.quizPortal.querySelector(".quiz-portal-question");
@@ -3504,7 +3601,7 @@ function renderQuizPortalResults(quiz) {
 }
 
 function renderQuizPortalQuiz() {
-  const quiz = getQuizPortalQuiz();
+  const quiz = getQuizPortalSessionQuiz();
   if (!quiz) return renderQuizPortalHome();
   if (state.quizPortal.showResults) return renderQuizPortalResults(quiz);
 
@@ -3522,6 +3619,14 @@ function renderQuizPortalQuiz() {
         <div>
           <h2 id="quizPortalEngineTitle">${escapeHtml(quiz.title)}</h2>
           <p>Fråga ${state.quizPortal.currentIndex + 1} av ${quiz.questions.length}</p>
+        </div>
+        <div class="quiz-portal-question-timer ${state.quizPortal.questionTimeRemaining === 0 ? "is-expired" : state.quizPortal.questionTimeRemaining <= 5 ? "is-warning" : ""}" style="--quiz-time-progress: ${state.quizPortal.questionTimeRemaining / QUIZ_PORTAL_QUESTION_TIME_SECONDS}" data-quiz-portal-question-timer role="timer" aria-label="${state.quizPortal.questionTimeRemaining} sekunder kvar">
+          <span class="quiz-portal-question-timer-copy">
+            <i data-lucide="timer"></i>
+            <strong data-quiz-portal-question-time>${state.quizPortal.questionTimeRemaining}</strong>
+            <small>sek</small>
+          </span>
+          <span class="quiz-portal-question-timer-track" aria-hidden="true"><span></span></span>
         </div>
       </div>
       <div class="quiz-portal-progress" aria-hidden="true"><span style="width: ${progress}%"></span></div>
@@ -3550,10 +3655,11 @@ function renderQuizPortalQuiz() {
         ${
           state.quizPortal.isAnswered
             ? `
-              <div class="quiz-portal-explanation ${state.quizPortal.selectedOption === question.answer ? "is-correct" : ""}">
-                <i data-lucide="triangle-alert"></i>
+              <div class="quiz-portal-explanation ${state.quizPortal.selectedOption === question.answer ? "is-correct" : ""} ${state.quizPortal.timedOut ? "is-timeout" : ""}">
+                <i data-lucide="${state.quizPortal.selectedOption === question.answer ? "circle-check-big" : state.quizPortal.timedOut ? "timer-off" : "triangle-alert"}"></i>
                 <div>
-                  <strong>${state.quizPortal.selectedOption === question.answer ? "Rätt svar!" : "Faktainfo"}</strong>
+                  <strong>${state.quizPortal.selectedOption === question.answer ? "Rätt svar!" : state.quizPortal.timedOut ? "Tiden är slut" : "Faktainfo"}</strong>
+                  ${state.quizPortal.timedOut ? `<p class="quiz-portal-timeout-answer">Rätt svar: ${escapeHtml(question.options[question.answer])}</p>` : ""}
                   <p>${escapeHtml(question.explanation)}</p>
                 </div>
               </div>
@@ -4590,19 +4696,23 @@ function bindEvents() {
       state.quizPortal.dataError = "";
       renderQuizOverview();
       refreshIcons();
-      void loadQuizPortalData();
+      void loadQuizPortalData().then(() => {
+        if (state.quizPortal.dataStatus === "ready") startQuizPortalQuestionTimer();
+      });
       return;
     }
 
     const quizPortalOptionButton = event.target.closest("[data-quiz-portal-option]");
     if (quizPortalOptionButton && state.mode === "quiz-overview" && !state.quizPortal.isAnswered) {
-      const quiz = getQuizPortalQuiz();
+      const quiz = getQuizPortalSessionQuiz();
       const question = quiz?.questions[state.quizPortal.currentIndex];
       if (!quiz || !question) return;
 
+      stopQuizPortalQuestionTimer();
       state.quizPortal.selectedOption = Number(quizPortalOptionButton.dataset.quizPortalOption);
       state.quizPortal.answers[state.quizPortal.currentIndex] = state.quizPortal.selectedOption;
       state.quizPortal.isAnswered = true;
+      state.quizPortal.timedOut = false;
       if (state.quizPortal.selectedOption === question.answer) {
         state.quizPortal.score += 1;
       }
@@ -4613,18 +4723,22 @@ function bindEvents() {
 
     const quizPortalNextButton = event.target.closest("[data-quiz-portal-next]");
     if (quizPortalNextButton && state.mode === "quiz-overview") {
-      const quiz = getQuizPortalQuiz();
+      const quiz = getQuizPortalSessionQuiz();
       if (!quiz) return;
 
+      stopQuizPortalQuestionTimer();
       if (state.quizPortal.currentIndex + 1 < quiz.questions.length) {
         state.quizPortal.currentIndex += 1;
         state.quizPortal.selectedOption = null;
         state.quizPortal.isAnswered = false;
+        state.quizPortal.timedOut = false;
+        state.quizPortal.questionTimeRemaining = QUIZ_PORTAL_QUESTION_TIME_SECONDS;
       } else {
         state.quizPortal.showResults = true;
       }
       renderQuizOverview();
       refreshIcons();
+      if (!state.quizPortal.showResults) startQuizPortalQuestionTimer();
       els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
@@ -4634,6 +4748,7 @@ function bindEvents() {
       resetQuizPortalSession(state.quizPortal.view);
       renderQuizOverview();
       refreshIcons();
+      startQuizPortalQuestionTimer();
       els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
