@@ -107,6 +107,7 @@ assert.equal(evaluate("isModuleUnlocked(0)"), true);
 assert.equal(evaluate("isModuleUnlocked(1)"), false, "Module 2 must start locked.");
 assert.equal(evaluate("isPageUnlocked(0, 0, 0)"), true);
 assert.equal(evaluate("isPageUnlocked(0, 0, 1)"), false, "A later page must start locked.");
+assert.equal(evaluate("isFinalExamNavigationUnlocked()"), false, "The final exam navigation must start locked.");
 
 evaluate('state.visited.add("vu1:0:0:0")');
 assert.equal(evaluate("isPageUnlocked(0, 0, 1)"), true, "Next unlocks after the previous page is completed.");
@@ -120,6 +121,7 @@ assert.equal(evaluate("isModuleUnlocked(1)"), true, "A passed module unlocks the
 evaluate('state.visited.add("vu1:1:0:0"); state.visited.add("vu1:1:0:1")');
 evaluate('state.answers["vu1:1"] = { "1": "A" }; state.quizSubmissions["vu1:1"] = { submittedAt: 2 }');
 assert.equal(evaluate("canStartFinalExam()"), true, "All passed modules unlock the course final exam.");
+assert.equal(evaluate("isFinalExamNavigationUnlocked()"), true, "The sidebar final exam lock must follow course completion.");
 assert.equal(evaluate('isCourseUnlocked("vu2")'), false, "VU2 must remain locked before the VU1 final exam is passed.");
 
 evaluate(`

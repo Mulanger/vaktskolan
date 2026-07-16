@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Schibsted+Grotesk:wght@500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="styles.css?v=20260716-emblems">
+  <link rel="stylesheet" href="styles.css?v=20260716-sidebar-locks">
 </head>
 <body class="app-booting">
   <div class="shell">
@@ -42,9 +42,9 @@
       <nav class="main-nav" aria-label="Huvudmeny">
         <button class="nav-item is-active" type="button" data-open-home><i data-lucide="home"></i><span>Hem</span></button>
         <button class="nav-item" type="button" data-open-course><i data-lucide="book-open"></i><span>VU1</span></button>
-        <button class="nav-item" type="button" data-open-vu2><i data-lucide="shield-check"></i><span>VU2</span></button>
+        <button class="nav-item" type="button" data-open-vu2><i data-lucide="shield-check"></i><span>VU2</span><span class="nav-lock" data-nav-lock="vu2" aria-hidden="true" hidden><i data-lucide="lock"></i></span></button>
         <button class="nav-item" type="button" data-show-quiz><i data-lucide="target"></i><span>Quiz Portal</span></button>
-        <button class="nav-item" type="button" data-open-final-exam-portal><i data-lucide="clipboard-check"></i><span>Slutprov</span></button>
+        <button class="nav-item" type="button" data-open-final-exam-portal><i data-lucide="clipboard-check"></i><span>Slutprov</span><span class="nav-lock" data-nav-lock="final-exam" aria-hidden="true" hidden><i data-lucide="lock"></i></span></button>
       </nav>
 
       <section class="module-list-wrap" id="moduleListWrap">
@@ -441,6 +441,6 @@
   <script src="authProvider.js?v=20260716-fail-closed"></script>
   <script src="supabaseApi.js?v=20260714-public-quiz-auth"></script>
   <script src="emblemSystem.js?v=20260716-emblems"></script>
-  <script src="app.js?v=20260716-emblems"></script>
+  <script src="app.js?v=20260716-sidebar-locks"></script>
 </body>
 </html>

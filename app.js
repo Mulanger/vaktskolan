@@ -2586,6 +2586,40 @@ function renderBreadcrumbs() {
   `;
 }
 
+function isFinalExamNavigationUnlocked() {
+  return Object.keys(COURSE_CONFIG).some((courseId) => {
+    if (!isCourseUnlocked(courseId)) return false;
+    return withCourseContext(courseId, () => canStartFinalExam() || Boolean(state.finalExam));
+  });
+}
+
+function updateNavigationLock(selector, lockId, locked, label, reason) {
+  const button = document.querySelector(`.main-nav ${selector}`);
+  const lock = button?.querySelector(`[data-nav-lock="${lockId}"]`);
+  if (!button || !lock) return;
+
+  lock.hidden = !locked;
+  button.classList.toggle("is-locked", locked);
+  button.setAttribute("aria-label", locked ? `${label}, låst. ${reason}` : label);
+}
+
+function renderNavigationLocks() {
+  updateNavigationLock(
+    "[data-open-vu2]",
+    "vu2",
+    !isCourseUnlocked("vu2"),
+    "VU2",
+    "Slutför och klara VU1 för att låsa upp."
+  );
+  updateNavigationLock(
+    "[data-open-final-exam-portal]",
+    "final-exam",
+    !isFinalExamNavigationUnlocked(),
+    "Slutprov",
+    "Slutför kursens moduler för att låsa upp."
+  );
+}
+
 function renderActiveNav() {
   document.querySelectorAll(".main-nav .nav-item").forEach((item) => item.classList.remove("is-active"));
   document.querySelectorAll(".vu1-hub-mobile-tabbar .vu1-hub-mobile-tab").forEach((item) => item.classList.remove("is-active"));
@@ -2610,6 +2644,7 @@ function renderActiveNav() {
   document.querySelector(`.vu1-hub-mobile-tabbar ${selector}`)?.classList.add("is-active");
   document.querySelector(`.quiz-portal-mobile-tabbar ${selector}`)?.classList.add("is-active");
   document.querySelector(`.final-portal-mobile-tabbar ${selector}`)?.classList.add("is-active");
+  renderNavigationLocks();
 }
 
 function renderModuleContext() {
