@@ -8,6 +8,7 @@ const STORAGE_KEYS = {
   finalExam: "vakt-final-exam",
   location: "vakt-current-location",
   progressOwner: "vakt-progress-owner",
+  knownEmblems: "vakt-known-emblems",
 };
 
 const STORAGE_VERSION = "vu2-course-split-2026-07-04";
@@ -174,6 +175,8 @@ const state = {
     ready: false,
     restoring: false,
   },
+  emblems: [],
+  emblemDialogTrigger: null,
   quizPortal: {
     view: "home",
     dataStatus: "idle",
@@ -343,6 +346,15 @@ const els = {
   contextSidebar: $("#contextSidebar"),
   navOverlay: $("#navOverlay"),
   quizResetModal: $("#quizResetModal"),
+  emblemModal: $("#emblemModal"),
+  emblemModalMedallion: $("#emblemModalMedallion"),
+  emblemModalIcon: $("#emblemModalIcon"),
+  emblemModalStatus: $("#emblemModalStatus"),
+  emblemModalTitle: $("#emblemModalTitle"),
+  emblemModalDescription: $("#emblemModalDescription"),
+  emblemModalCriterion: $("#emblemModalCriterion"),
+  emblemModalProgress: $("#emblemModalProgress"),
+  emblemModalProgressBar: $("#emblemModalProgressBar"),
   toast: $("#toast"),
   profileAvatar: $("#profileAvatar"),
   profileName: $("#profileName"),
@@ -843,6 +855,7 @@ async function initializeProgressSync() {
       applyProgressSnapshot({ completedPages: [], quizAnswers: {}, quizSubmissions: {}, finalExams: {} });
       try {
         localStorage.removeItem(STORAGE_KEYS.location);
+        localStorage.removeItem(STORAGE_KEYS.knownEmblems);
       } catch {
         // The app remains usable if storage is blocked.
       }
@@ -1778,6 +1791,9 @@ function getCourseHomeOverview(courseId) {
     const course = getCourseConfig(courseId);
     const progress = getCourseProgress();
     const moduleStats = getContentModuleStats();
+    const passedModuleQuizzes = getContentModuleItems().filter(
+      (item) => Array.isArray(item.module.quiz) && item.module.quiz.length > 0 && getModuleQuizResult(item.index).passed
+    ).length;
     const quizSummary = getQuizSummary();
     const continuePosition = getLastAccessiblePosition();
     const continueModule = state.modules[continuePosition.moduleIndex];
@@ -1795,6 +1811,7 @@ function getCourseHomeOverview(courseId) {
       courseId,
       progress,
       moduleStats,
+      passedModuleQuizzes,
       quizSummary,
       continuePosition,
       continueModule,
@@ -1805,6 +1822,49 @@ function getCourseHomeOverview(courseId) {
       complete,
     };
   });
+}
+
+function getEmblemOverview(homeData) {
+  const builder = window.vaktskolanEmblems?.buildOverview;
+  if (typeof builder !== "function") return { emblems: [], unlockedCount: 0, totalCount: 0 };
+
+  return builder({
+    courses: homeData.courses.map((overview) => ({
+      courseId: overview.courseId,
+      completedModules: overview.moduleStats.completed,
+      totalModules: overview.moduleStats.total,
+      finalExamPassed: overview.progress.finalExamPassed,
+      passedModuleQuizzes: overview.passedModuleQuizzes,
+    })),
+  });
+}
+
+function registerEmblemPresentation(emblemOverview) {
+  const earnedIds = emblemOverview.emblems.filter((emblem) => emblem.unlocked).map((emblem) => emblem.id);
+  const knownIds = new Set(readArrayStorage(STORAGE_KEYS.knownEmblems));
+  const newlyUnlocked = emblemOverview.emblems.filter(
+    (emblem) => emblem.unlocked && !knownIds.has(emblem.id)
+  );
+  writeStorage(STORAGE_KEYS.knownEmblems, earnedIds);
+  return new Set(newlyUnlocked.map((emblem) => emblem.id));
+}
+
+function renderHomeEmblem(emblem, index, isNew) {
+  const status = emblem.unlocked ? "Upplåst" : emblem.progressLabel;
+  return `
+    <button class="home-emblem-item home-emblem-theme-${emblem.theme} ${emblem.unlocked ? "is-unlocked" : "is-locked"} ${isNew ? "is-new" : ""}"
+      type="button" data-emblem-id="${emblem.id}" style="--home-emblem-index: ${index}"
+      aria-label="${escapeHtml(`${emblem.label}: ${status}. Visa information.`)}">
+      <span class="home-emblem-medallion" aria-hidden="true">
+        <span class="home-emblem-inner"><i data-lucide="${emblem.icon}"></i></span>
+        ${emblem.unlocked ? '<span class="home-emblem-check"><i data-lucide="check"></i></span>' : '<span class="home-emblem-lock"><i data-lucide="lock"></i></span>'}
+      </span>
+      <span class="home-emblem-copy">
+        <strong>${escapeHtml(emblem.label)}</strong>
+        <small>${emblem.unlocked ? (isNew ? "Nytt" : "Upplåst") : `${emblem.percent}%`}</small>
+      </span>
+    </button>
+  `;
 }
 
 function getHomeData() {
@@ -1909,6 +1969,9 @@ function renderHomeCourseCard(overview) {
 
 function renderHome() {
   const homeData = getHomeData();
+  const emblemOverview = getEmblemOverview(homeData);
+  const newlyUnlockedEmblems = registerEmblemPresentation(emblemOverview);
+  state.emblems = emblemOverview.emblems;
   const continueOverview = homeData.continueCourse;
   const vu2Overview = homeData.courses.find((overview) => overview.courseId === "vu2");
   const continueModule = continueOverview?.continueModule;
@@ -1997,44 +2060,14 @@ function renderHome() {
 
         <section class="home-emblems" aria-labelledby="homeEmblemsTitle">
           <div class="home-emblems-head">
-            <h2 id="homeEmblemsTitle">Dina emblem</h2>
-            <span>1 av 5 upplåsta</span>
+            <div>
+              <h2 id="homeEmblemsTitle">Dina emblem</h2>
+              <p>Små milstolpar från din faktiska kursprogression.</p>
+            </div>
+            <span>${emblemOverview.unlockedCount} av ${emblemOverview.totalCount} upplåsta</span>
           </div>
-          <div class="home-emblem-list" role="list" aria-label="Emblem">
-            <div class="home-emblem-item home-emblem-vu1 is-unlocked" role="listitem" style="--home-emblem-index: 0">
-              <span class="home-emblem-medallion" aria-hidden="true">
-                <span class="home-emblem-inner"><i data-lucide="book-open"></i></span>
-              </span>
-              <strong>VU1</strong>
-            </div>
-            <div class="home-emblem-item is-locked" role="listitem" style="--home-emblem-index: 1">
-              <span class="home-emblem-medallion" aria-hidden="true">
-                <span class="home-emblem-inner"><i data-lucide="shield"></i></span>
-                <span class="home-emblem-lock"><i data-lucide="lock"></i></span>
-              </span>
-              <strong>VU2</strong>
-            </div>
-            <div class="home-emblem-item is-locked" role="listitem" style="--home-emblem-index: 2">
-              <span class="home-emblem-medallion" aria-hidden="true">
-                <span class="home-emblem-inner"><i data-lucide="badge-check"></i></span>
-                <span class="home-emblem-lock"><i data-lucide="lock"></i></span>
-              </span>
-              <strong>Prov 1</strong>
-            </div>
-            <div class="home-emblem-item is-locked" role="listitem" style="--home-emblem-index: 3">
-              <span class="home-emblem-medallion" aria-hidden="true">
-                <span class="home-emblem-inner"><i data-lucide="star"></i></span>
-                <span class="home-emblem-lock"><i data-lucide="lock"></i></span>
-              </span>
-              <strong>Prov 2</strong>
-            </div>
-            <div class="home-emblem-item is-locked" role="listitem" style="--home-emblem-index: 4">
-              <span class="home-emblem-medallion" aria-hidden="true">
-                <span class="home-emblem-inner"><i data-lucide="target"></i></span>
-                <span class="home-emblem-lock"><i data-lucide="lock"></i></span>
-              </span>
-              <strong>Quiz</strong>
-            </div>
+          <div class="home-emblem-list" role="group" aria-label="Emblem">
+            ${emblemOverview.emblems.map((emblem, index) => renderHomeEmblem(emblem, index, newlyUnlockedEmblems.has(emblem.id))).join("")}
           </div>
         </section>
 
@@ -2075,6 +2108,16 @@ function renderHome() {
       </nav>
     </section>
   `;
+
+  const newNames = emblemOverview.emblems
+    .filter((emblem) => newlyUnlockedEmblems.has(emblem.id))
+    .map((emblem) => emblem.label);
+  if (newNames.length) {
+    window.setTimeout(
+      () => showToast(`${newNames.length > 1 ? "Nya emblem" : "Nytt emblem"}: ${newNames.join(", ")}`),
+      0
+    );
+  }
 }
 
 function getFinalExamQuestions() {
@@ -4449,15 +4492,50 @@ function openDrawer(which) {
   els.navOverlay.classList.add("is-open");
 }
 
+function syncModalOpenState() {
+  const hasOpenModal = !els.quizResetModal.hidden || !els.emblemModal.hidden;
+  document.body.classList.toggle("modal-open", hasOpenModal);
+}
+
+function openEmblemModal(emblemId, trigger) {
+  const emblem = state.emblems.find((item) => item.id === emblemId);
+  if (!emblem) return;
+
+  state.emblemDialogTrigger = trigger || null;
+  els.emblemModal.className = `emblem-modal home-emblem-theme-${emblem.theme}`;
+  els.emblemModalMedallion.className = `emblem-modal-medallion home-emblem-theme-${emblem.theme} ${emblem.unlocked ? "is-unlocked" : "is-locked"}`;
+  els.emblemModalIcon.innerHTML = `<i data-lucide="${emblem.icon}"></i>`;
+  els.emblemModalStatus.textContent = emblem.unlocked ? "Upplåst emblem" : "Låst emblem";
+  els.emblemModalStatus.classList.toggle("is-unlocked", emblem.unlocked);
+  els.emblemModalTitle.textContent = emblem.title;
+  els.emblemModalDescription.textContent = emblem.description;
+  els.emblemModalCriterion.textContent = emblem.criterion;
+  els.emblemModalProgress.textContent = emblem.progressLabel;
+  els.emblemModalProgressBar.style.width = `${emblem.percent}%`;
+  els.emblemModalProgressBar.parentElement.setAttribute("aria-valuenow", String(emblem.percent));
+  els.emblemModal.hidden = false;
+  syncModalOpenState();
+  refreshIcons();
+  els.emblemModal.querySelector("[data-close-emblem]")?.focus();
+}
+
+function closeEmblemModal() {
+  if (els.emblemModal.hidden) return;
+  els.emblemModal.hidden = true;
+  syncModalOpenState();
+  state.emblemDialogTrigger?.focus?.();
+  state.emblemDialogTrigger = null;
+}
+
 function openQuizResetModal() {
   els.quizResetModal.hidden = false;
-  document.body.classList.add("modal-open");
+  syncModalOpenState();
   refreshIcons();
 }
 
 function closeQuizResetModal() {
   els.quizResetModal.hidden = true;
-  document.body.classList.remove("modal-open");
+  syncModalOpenState();
 }
 
 function resetQuizHistory() {
@@ -4586,6 +4664,17 @@ function bindEvents() {
       els.moduleInfoPanel.hidden = isOpen;
       els.moduleInfoButton.setAttribute("aria-expanded", String(!isOpen));
       els.moduleInfoButton.setAttribute("aria-label", isOpen ? "Visa modulinformation" : "Dölj modulinformation");
+      return;
+    }
+
+    if (event.target === els.emblemModal || event.target.closest("[data-close-emblem]")) {
+      closeEmblemModal();
+      return;
+    }
+
+    const emblemButton = event.target.closest("[data-emblem-id]");
+    if (emblemButton) {
+      openEmblemModal(emblemButton.dataset.emblemId, emblemButton);
       return;
     }
 
@@ -4963,7 +5052,20 @@ function bindEvents() {
   els.navOverlay.addEventListener("click", closeDrawers);
   document.addEventListener("keydown", (event) => {
     const isTyping = event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement;
+    if (event.key === "Tab" && !els.emblemModal.hidden) {
+      const focusable = Array.from(els.emblemModal.querySelectorAll("button:not([disabled])"));
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    }
     if (event.key === "Escape") {
+      closeEmblemModal();
       closeQuizResetModal();
       closeDrawers();
     }

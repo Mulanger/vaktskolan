@@ -40,6 +40,7 @@ transformText("index.html", "index.html", [
   ['href="styles.css', 'href="/legacy-platform/styles.css'],
   ['src="authProvider.js', 'src="/legacy-platform/authProvider.js'],
   ['src="supabaseApi.js', 'src="/legacy-platform/supabaseApi.js'],
+  ['src="emblemSystem.js', 'src="/legacy-platform/emblemSystem.js'],
   ['src="app.js', 'src="/legacy-platform/app.js'],
 ]);
 transformText("login.html", "login.html", [
@@ -67,6 +68,7 @@ transformText("auth.css", "auth.css", sharedAssetReplacements);
 for (const file of [
   "authProvider.js",
   "clerkAuth.js",
+  "emblemSystem.js",
   "supabaseApi.js",
   "utbildning.md",
   "vu1quiz.json",

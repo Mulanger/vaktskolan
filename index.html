@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Schibsted+Grotesk:wght@500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="styles.css?v=20260716-launch-blockers">
+  <link rel="stylesheet" href="styles.css?v=20260716-emblems">
 </head>
 <body class="app-booting">
   <div class="shell">
@@ -408,10 +408,39 @@
     </div>
   </div>
 
+  <div class="emblem-modal" id="emblemModal" role="dialog" aria-modal="true" aria-labelledby="emblemModalTitle" aria-describedby="emblemModalDescription" hidden>
+    <div class="emblem-modal-dialog">
+      <button class="emblem-modal-close" type="button" data-close-emblem aria-label="Stäng emblemets information">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="emblem-modal-hero">
+        <span class="emblem-modal-medallion" id="emblemModalMedallion" aria-hidden="true">
+          <span id="emblemModalIcon"></span>
+        </span>
+        <span class="emblem-modal-status" id="emblemModalStatus"></span>
+        <h2 id="emblemModalTitle"></h2>
+        <p id="emblemModalDescription"></p>
+      </div>
+      <div class="emblem-modal-requirement">
+        <span>Så låser du upp emblemet</span>
+        <p id="emblemModalCriterion"></p>
+      </div>
+      <div class="emblem-modal-progress-copy">
+        <span>Din progress</span>
+        <strong id="emblemModalProgress"></strong>
+      </div>
+      <div class="emblem-modal-progress-track" role="progressbar" aria-label="Progress mot emblemet" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <span id="emblemModalProgressBar"></span>
+      </div>
+      <button class="emblem-modal-done" type="button" data-close-emblem>Stäng</button>
+    </div>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
   <script src="authProvider.js?v=20260716-fail-closed"></script>
   <script src="supabaseApi.js?v=20260714-public-quiz-auth"></script>
-  <script src="app.js?v=20260716-launch-blockers"></script>
+  <script src="emblemSystem.js?v=20260716-emblems"></script>
+  <script src="app.js?v=20260716-emblems"></script>
 </body>
 </html>
