@@ -3174,7 +3174,7 @@ let quizPortalCountdownTimers = [];
 let quizPortalQuestionTimer = null;
 
 const QUIZ_PORTAL_SESSION_SIZE = 15;
-const QUIZ_PORTAL_QUESTION_TIME_SECONDS = 15;
+const QUIZ_PORTAL_QUESTION_TIME_SECONDS = 30;
 const QUIZ_PORTAL_QUESTION_TIME_MS = QUIZ_PORTAL_QUESTION_TIME_SECONDS * 1000;
 
 const QUIZ_PORTAL_BANK_CONFIG = {
@@ -3308,6 +3308,33 @@ function stopQuizPortalQuestionTimer() {
   state.quizPortal.questionDeadline = 0;
 }
 
+function scrollQuizPortalToTop() {
+  const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  const isMobileViewport = window.matchMedia?.("(max-width: 940px)").matches;
+  els.contentScroll.scrollTo({
+    top: 0,
+    behavior: prefersReducedMotion || isMobileViewport ? "auto" : "smooth",
+  });
+}
+
+function renderQuizPortalPreservingAnchor(selector) {
+  const scrollTop = els.contentScroll.scrollTop;
+  const anchor = els.quizPortal?.querySelector(selector);
+  const anchorTop = anchor?.getBoundingClientRect().top;
+
+  renderQuizOverview();
+  refreshIcons();
+
+  const nextAnchor = els.quizPortal?.querySelector(selector);
+  if (Number.isFinite(anchorTop) && nextAnchor) {
+    const anchorOffset = nextAnchor.getBoundingClientRect().top - anchorTop;
+    els.contentScroll.scrollTop = scrollTop + anchorOffset;
+    return;
+  }
+
+  els.contentScroll.scrollTop = scrollTop;
+}
+
 function updateQuizPortalQuestionTimerUi() {
   const timer = els.quizPortal?.querySelector("[data-quiz-portal-question-timer]");
   if (!timer || !state.quizPortal.questionDeadline) return;
@@ -3341,8 +3368,7 @@ function handleQuizPortalQuestionTimeout() {
   state.quizPortal.selectedOption = null;
   state.quizPortal.isAnswered = true;
   state.quizPortal.timedOut = true;
-  renderQuizOverview();
-  refreshIcons();
+  renderQuizPortalPreservingAnchor(".quiz-portal-question h3");
 }
 
 function startQuizPortalQuestionTimer() {
@@ -3467,7 +3493,7 @@ async function finishQuizPortalCountdown(view, token) {
   const module = getQuizPortalModule(view);
   const question = els.quizPortal.querySelector(".quiz-portal-question");
   if (question) question.classList.add(`quiz-theme-${module.theme}`, "is-countdown-entry");
-  els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
+  scrollQuizPortalToTop();
 }
 
 function startQuizPortalCountdown(view) {
@@ -4084,7 +4110,7 @@ function showQuizOverview() {
   renderActiveNav();
   refreshIcons();
   void loadQuizPortalData();
-  els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
+  scrollQuizPortalToTop();
 }
 
 function showFinalExam() {
@@ -4838,7 +4864,7 @@ function bindEvents() {
       resetQuizPortalSession("home");
       renderQuizOverview();
       refreshIcons();
-      els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
+      scrollQuizPortalToTop();
       return;
     }
 
@@ -4854,7 +4880,7 @@ function bindEvents() {
       resetQuizPortalSession(view);
       renderQuizOverview();
       refreshIcons();
-      els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
+      scrollQuizPortalToTop();
       return;
     }
 
@@ -4884,8 +4910,9 @@ function bindEvents() {
       if (state.quizPortal.selectedOption === question.answer) {
         state.quizPortal.score += 1;
       }
-      renderQuizOverview();
-      refreshIcons();
+      renderQuizPortalPreservingAnchor(
+        `[data-quiz-portal-option="${state.quizPortal.selectedOption}"]`
+      );
       return;
     }
 
@@ -4907,7 +4934,7 @@ function bindEvents() {
       renderQuizOverview();
       refreshIcons();
       if (!state.quizPortal.showResults) startQuizPortalQuestionTimer();
-      els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
+      scrollQuizPortalToTop();
       return;
     }
 
@@ -4917,7 +4944,7 @@ function bindEvents() {
       renderQuizOverview();
       refreshIcons();
       startQuizPortalQuestionTimer();
-      els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
+      scrollQuizPortalToTop();
       return;
     }
 

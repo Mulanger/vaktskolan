@@ -9979,7 +9979,9 @@ body.quiz-overview-mode .quiz-portal-question.is-countdown-entry {
   body.quiz-overview-mode .shell {
     display: block;
     height: 100vh;
+    height: 100dvh;
     min-height: 100vh;
+    min-height: 100dvh;
     overflow: hidden;
   }
 
@@ -9992,6 +9994,17 @@ body.quiz-overview-mode .quiz-portal-question.is-countdown-entry {
   body.quiz-overview-mode .workspace,
   body.quiz-overview-mode .content-scroll {
     height: 100vh;
+    height: 100dvh;
+  }
+
+  body.quiz-overview-mode .content-scroll {
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    scroll-behavior: auto;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+    overflow-anchor: none;
   }
 
   body.quiz-overview-mode .content-inner {
