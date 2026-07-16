@@ -18,7 +18,7 @@
   --blue: #075fea;
   --blue-dark: #064fca;
   --blue-soft: #eaf3ff;
-  --header-height: 72px;
+  --header-height: 80px;
 }
 
 * {
@@ -71,22 +71,29 @@ a {
 }
 
 .site-header {
-  position: sticky;
+  position: fixed;
   z-index: 50;
   top: 0;
-  height: var(--header-height);
-  border-bottom: 1px solid color-mix(in srgb, var(--line) 76%, transparent);
-  background: color-mix(in srgb, white 90%, transparent);
-  backdrop-filter: blur(16px);
+  left: 0;
+  width: 100%;
+  height: calc(var(--header-height) + 1px);
+  border-bottom: 1px solid #f3f4f6;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  transition: background-color 300ms ease, border-color 300ms ease;
 }
 
 .site-header__inner {
   display: flex;
-  width: min(1240px, calc(100% - 40px));
-  height: 100%;
+  width: 100%;
+  max-width: 1280px;
+  height: var(--header-height);
   margin: 0 auto;
+  padding: 0 32px;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
 }
 
 .brand,
@@ -97,32 +104,37 @@ a {
 }
 
 .brand {
-  font-size: 24px;
+  color: #141414;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .brand span,
 .hero-brand span {
-  color: var(--blue);
+  color: #1c64d6;
 }
 
 .desktop-nav {
   display: flex;
   align-items: center;
-  gap: 30px;
-  color: #424a56;
+  gap: 20px;
+  color: #666666;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
+  line-height: 20px;
+  white-space: nowrap;
 }
 
 .desktop-nav a,
 .login-link {
-  transition: color 160ms ease;
+  transition: color 160ms ease, background-color 160ms ease;
 }
 
-.desktop-nav a:hover,
-.login-link:hover {
-  color: var(--blue);
+.desktop-nav a:hover {
+  color: #111111;
 }
 
 .header-actions {
@@ -132,11 +144,20 @@ a {
 }
 
 .login-link {
-  border: 1px solid var(--line);
+  border: 0;
   border-radius: 999px;
-  padding: 10px 18px;
+  background: #111111;
+  color: #ffffff;
+  padding: 8px 16px;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 500;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+.login-link:hover {
+  background: var(--blue);
+  color: #ffffff;
 }
 
 .mobile-menu {
@@ -641,7 +662,7 @@ a {
   width: min(1200px, calc(100% - 48px));
   min-height: 70vh;
   margin: 0 auto;
-  padding: 48px 0 120px;
+  padding: calc(var(--header-height) + 48px) 0 120px;
 }
 
 .guide-layout {
@@ -1053,9 +1074,16 @@ a {
   }
 }
 
-@media (max-width: 900px) {
+@media (min-width: 1280px) {
+  .desktop-nav { gap: 32px; }
+}
+
+@media (max-width: 1023px) {
   .desktop-nav { display: none; }
   .mobile-menu { display: block; }
+}
+
+@media (max-width: 900px) {
   .home-hero__inner { grid-template-columns: 1fr .7fr; }
   .section-heading,
   .quiz-section,
@@ -1124,7 +1152,13 @@ a {
 
 @media (max-width: 639px) {
   :root { --header-height: 64px; }
-  .site-header__inner { width: calc(100% - 28px); }
+  .site-header {
+    position: relative;
+    border-bottom: 0;
+    background: #ffffff;
+    backdrop-filter: none;
+  }
+  .site-header__inner { padding: 0 16px; }
   .login-link { display: none; }
   .home-hero {
     min-height: calc(100svh - var(--header-height));

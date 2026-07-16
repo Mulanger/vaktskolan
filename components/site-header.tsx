@@ -18,7 +18,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="header-actions">
-          <Link className="login-link" href="/login">
+          <Link className="login-link" href="/login?mode=sign-in&redirect_url=/plattform">
             Logga in
           </Link>
           <details className="mobile-menu">
@@ -33,7 +33,7 @@ export function SiteHeader() {
                   {item.label}
                 </Link>
               ))}
-              <Link href="/login">Logga in</Link>
+              <Link href="/login?mode=sign-in&redirect_url=/plattform">Logga in</Link>
             </nav>
           </details>
         </div>
