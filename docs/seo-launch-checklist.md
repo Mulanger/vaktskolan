@@ -28,6 +28,11 @@
 3. Inspektera startsidan, `/vaktarprov`, `/vaktarutbildning/vu1` och `/lagstod/envarsgripande`.
 4. Bekräfta att Google väljer samma canonical som sidan deklarerar.
 5. Kontrollera att `/plattform`, `/login`, `/integritet` och `/anvandarvillkor` inte indexeras.
+6. Kör Rich Results Test på minst en guide och bekräfta giltig `Article` samt `BreadcrumbList`.
+7. Kontrollera startsidans `WebSite`- och `Organization`-data i Schema Markup Validator.
+8. Bekräfta att guidebilderna i 16:9, 4:3 och 1:1 är åtkomliga för Googlebot.
+
+Sitemap ska bara innehålla indexerbara canonical-URL:er, sanningsenliga `lastmod`-datum och relevanta guidebilder. `priority` och `changefreq` används inte eftersom Google ignorerar dessa fält.
 
 ## Kvalitetsgrind
 

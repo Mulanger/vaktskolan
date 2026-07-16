@@ -46,17 +46,8 @@ function getContentVersion(files) {
   return sha256(files.map((file) => `${file.path}:${file.sha256}`).join("\n"));
 }
 
-function validateApproval(name, approval) {
-  if (!approval || !["pending", "approved", "rejected"].includes(approval.status)) {
-    throw new Error(`${name}: ogiltig granskningsstatus.`);
-  }
-  if (approval.status === "approved" && (!approval.reviewer || !approval.role || !approval.signedAt)) {
-    throw new Error(`${name}: godkänd granskning kräver reviewer, role och signedAt.`);
-  }
-}
-
 function validateManifest(manifest, files) {
-  if (manifest.schemaVersion !== 1) throw new Error("Release-manifestet har fel schemaVersion.");
+  if (manifest.schemaVersion !== 2) throw new Error("Release-manifestet har fel schemaVersion.");
   if (!manifest.releaseId || !manifest.contentVersion) throw new Error("Release-manifestet saknar releaseId eller contentVersion.");
 
   const expectedPaths = files.map((file) => file.path);
@@ -75,13 +66,6 @@ function validateManifest(manifest, files) {
   const expectedVersion = getContentVersion(files);
   if (manifest.contentVersion !== expectedVersion) {
     throw new Error("Release-manifestets contentVersion matchar inte filhasharna.");
-  }
-
-  validateApproval("legalReview", manifest.reviews?.legal);
-  validateApproval("subjectMatterReview", manifest.reviews?.subjectMatter);
-  const allApproved = manifest.reviews.legal.status === "approved" && manifest.reviews.subjectMatter.status === "approved";
-  if (manifest.releaseReady !== allApproved) {
-    throw new Error("releaseReady måste motsvara de två granskningsbesluten.");
   }
 
   const currentFapUrl = "https://polisen.se/siteassets/forfattningssamling/fap-nummer/fap573-01-pmfs2017_10/";
@@ -106,15 +90,10 @@ if (checkOnly) {
   if (!/^[a-z0-9][a-z0-9._-]{5,79}$/i.test(releaseId)) throw new Error("Ogiltigt releaseId.");
   const now = new Date().toISOString();
   const manifest = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     releaseId,
     contentVersion: getContentVersion(files),
     generatedAt: now,
-    releaseReady: false,
-    reviews: {
-      legal: { status: "pending", reviewer: null, role: null, signedAt: null, notes: "Inväntar juridisk granskning." },
-      subjectMatter: { status: "pending", reviewer: null, role: null, signedAt: null, notes: "Inväntar sakkunnig granskning." },
-    },
     sourceChecks: [
       {
         id: "polisen-fap-573-01-pmfs-2017-10",

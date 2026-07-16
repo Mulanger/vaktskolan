@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import matter from "gray-matter";
 import { contentFrontmatterSchema, type ContentEntry } from "../lib/content-schema";
+import { GUIDE_NAVIGATION_SLUGS } from "../lib/guide-navigation";
 
 const contentDirectory = join(process.cwd(), "content", "guides");
 const requiredCoreSlugs = new Set([
@@ -46,6 +47,10 @@ for (const field of ["slug", "title", "description"] as const) {
 const allSlugs = new Set(entries.map((entry) => entry.slug));
 for (const slug of requiredCoreSlugs) {
   if (!allSlugs.has(slug)) throw new Error(`Missing required core page: ${slug}`);
+}
+
+for (const slug of GUIDE_NAVIGATION_SLUGS) {
+  if (!allSlugs.has(slug)) throw new Error(`Guide navigation points to a missing page: ${slug}`);
 }
 
 for (const entry of entries) {

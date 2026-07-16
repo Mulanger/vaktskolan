@@ -14,8 +14,7 @@ export function absoluteUrl(path = "/"): string {
 export const EDITORIAL_AUTHOR = "Vaktskolans redaktion";
 
 export const PRIMARY_NAVIGATION = [
-  { href: "/vaktarprov", label: "Väktarprovet" },
-  { href: "/vaktarutbildning", label: "VU1 & VU2" },
-  { href: "/bli-vaktare", label: "Bli väktare" },
+  { href: "/#utbildningar", label: "Utbildningsmaterial" },
   { href: "/studieteknik", label: "Studieteknik" },
+  { href: "/?study=yrket#utbildningar", label: "Väktaryrket" },
 ] as const;

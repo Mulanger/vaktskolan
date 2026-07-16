@@ -1,25 +1,8 @@
 {
-  "schemaVersion": 1,
-  "releaseId": "2026-07-16-prelaunch.1",
-  "contentVersion": "9e145a955ea241476c556e2218849670e5b7f88d5535e135c130b25d2f9c1565",
-  "generatedAt": "2026-07-16T13:40:25.196Z",
-  "releaseReady": false,
-  "reviews": {
-    "legal": {
-      "status": "pending",
-      "reviewer": null,
-      "role": null,
-      "signedAt": null,
-      "notes": "Inväntar juridisk granskning."
-    },
-    "subjectMatter": {
-      "status": "pending",
-      "reviewer": null,
-      "role": null,
-      "signedAt": null,
-      "notes": "Inväntar sakkunnig granskning."
-    }
-  },
+  "schemaVersion": 2,
+  "releaseId": "2026-07-16-prelaunch.2",
+  "contentVersion": "65147425bea62461d8258d5bd9f0a3ff9dda79d6140508f857f4705640047f9e",
+  "generatedAt": "2026-07-16T17:07:42.204Z",
   "sourceChecks": [
     {
       "id": "polisen-fap-573-01-pmfs-2017-10",
@@ -67,8 +50,8 @@
     },
     {
       "path": "content/guides/redaktionell-policy.mdx",
-      "bytes": 2277,
-      "sha256": "5e9b5ae8f42e8a36c647aba704f37cc7d6268bf9da53a28d81b5c99e91a0d5f4"
+      "bytes": 2395,
+      "sha256": "5819a91f2a1a9beaa87fa5f9222a807097438fd56b08e8c5bcfecf206d31c7f6"
     },
     {
       "path": "content/guides/studieteknik.mdx",

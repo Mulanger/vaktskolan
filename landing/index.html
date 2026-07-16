@@ -2195,7 +2195,6 @@
             <!-- Middle Navigation Links -->
             <nav class="hidden lg:flex items-center gap-5 xl:gap-8 text-sm font-medium text-vaktarGray whitespace-nowrap">
                 <a href="#utbildningar" class="hover:text-vaktarDark transition">Utbildningsmaterial</a>
-                <a href="/quiz-demo" class="hover:text-vaktarDark transition" data-open-hero-quiz>Testa gratis quiz</a>
                 <a href="/studieteknik" class="hover:text-vaktarDark transition">Studieteknik</a>
                 <a href="#utbildningar" onclick="switchStudyTab('yrket')" class="hover:text-vaktarDark transition">Väktaryrket</a>
             </nav>
@@ -2217,7 +2216,6 @@
         </div>
         <div id="mobileMenu" class="mobile-menu-panel hidden lg:hidden absolute right-4 top-[4.5rem] w-[min(22rem,calc(100vw-2rem))] rounded-3xl border border-gray-100 bg-white shadow-2xl shadow-slate-900/10 p-3">
             <a href="#utbildningar" class="block rounded-2xl px-4 py-3 text-sm font-bold text-vaktarDark hover:bg-gray-50">Utbildningsmaterial</a>
-            <a href="/quiz-demo" class="block rounded-2xl px-4 py-3 text-sm font-bold text-vaktarDark hover:bg-gray-50" data-open-hero-quiz>Prova gratis quiz</a>
             <a href="/studieteknik" class="block rounded-2xl px-4 py-3 text-sm font-bold text-vaktarDark hover:bg-gray-50">Studieteknik</a>
             <a href="/login.html?mode=sign-in&redirect_url=/platform" class="block rounded-2xl px-4 py-3 text-sm font-bold text-vaktarBlue hover:bg-blue-50">Logga in</a>
         </div>
@@ -3164,6 +3162,11 @@
         document.querySelectorAll('[data-study-tab]').forEach((button) => {
             button.addEventListener('click', () => switchStudyTab(button.dataset.studyTab));
         });
+
+        const requestedStudyTab = new URLSearchParams(window.location.search).get('study');
+        if (requestedStudyTab && document.querySelector(`[data-study-tab="${requestedStudyTab}"]`)) {
+            switchStudyTab(requestedStudyTab);
+        }
 
         const studyTabList = document.querySelector('.study-tabs');
         if (studyTabList) {

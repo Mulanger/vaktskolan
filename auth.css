@@ -551,26 +551,81 @@ a {
   }
 }
 
-@media (min-width: 981px) and (max-height: 880px) {
+@media (min-width: 981px) {
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    overflow: hidden;
+  }
+
+  .auth-shell {
+    height: 100svh;
+    min-height: 0;
+    padding-block: clamp(12px, 2.4vh, 28px);
+  }
+
+  .auth-main {
+    height: min(900px, calc(100svh - clamp(24px, 4.8vh, 56px)));
+    min-height: 0;
+  }
+
+  .auth-visual,
+  .auth-panel {
+    min-height: 0;
+  }
+
+  .auth-visual {
+    height: 100%;
+  }
+
+  .auth-figure-stage {
+    width: min(310px, 88%);
+    height: clamp(300px, 42vh, 420px);
+    min-height: 0;
+  }
+
+  .auth-figure-image {
+    width: auto;
+    max-width: 92%;
+    height: inherit;
+    max-height: none;
+    object-fit: contain;
+  }
+
+  .auth-panel {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .auth-card {
+    height: 100%;
+    min-height: 0;
+  }
+}
+
+@media (min-width: 981px) and (max-height: 1050px) {
   .auth-shell {
     padding-block: 12px;
   }
 
   .auth-main {
-    min-height: calc(100svh - 24px);
+    height: calc(100svh - 24px);
   }
 
   .auth-visual,
   .auth-panel {
-    padding-block: 28px;
+    padding-block: clamp(20px, 2.8vh, 28px);
   }
 
   .auth-visual {
-    gap: 22px;
+    gap: 18px;
   }
 
   .auth-visual h1 {
-    margin: 18px 0 12px;
+    margin: 16px 0 10px;
     font-size: clamp(38px, 4.2vw, 48px);
     line-height: 1.02;
   }
@@ -581,12 +636,17 @@ a {
 
   .auth-figure-stage {
     width: min(258px, 82%);
-    min-height: 252px;
-    margin-top: 12px;
+    height: clamp(250px, 38vh, 360px);
+    min-height: 0;
+    margin: 10px auto 0;
   }
 
   .auth-figure-image {
-    width: min(230px, 88%);
+    width: auto;
+    max-width: 88%;
+    height: inherit;
+    max-height: none;
+    object-fit: contain;
   }
 
   .auth-proof {
@@ -598,7 +658,7 @@ a {
   }
 
   .auth-card {
-    gap: 16px;
+    gap: 12px;
   }
 
   .auth-heading {
@@ -610,11 +670,11 @@ a {
   }
 
   .auth-switch {
-    margin: 18px 0 20px;
+    margin: 14px 0;
   }
 
   .auth-meta {
-    padding-top: 14px;
+    padding-top: 10px;
     line-height: 1.42;
   }
 
@@ -622,6 +682,117 @@ a {
     width: 30px;
     height: 30px;
     border-radius: 10px;
+  }
+}
+
+@media (min-width: 981px) and (max-height: 820px) {
+  .auth-visual,
+  .auth-panel {
+    padding: 16px 26px;
+  }
+
+  .auth-visual {
+    gap: 10px;
+  }
+
+  .auth-kicker {
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+
+  .auth-visual h1 {
+    margin: 12px 0 8px;
+    font-size: 36px;
+  }
+
+  .auth-visual p {
+    font-size: 13px;
+    line-height: 1.42;
+  }
+
+  .auth-figure-stage {
+    width: min(220px, 76%);
+    height: clamp(190px, 31vh, 250px);
+    margin-top: 6px;
+  }
+
+  .auth-proof {
+    gap: 7px;
+  }
+
+  .auth-proof div {
+    padding: 8px;
+  }
+
+  .auth-proof span {
+    margin-top: 3px;
+    font-size: 10px;
+  }
+
+  .auth-card {
+    gap: 8px;
+  }
+
+  .auth-card-top {
+    gap: 10px;
+  }
+
+  .auth-panel-back {
+    min-height: 36px;
+  }
+
+  .auth-heading {
+    margin-top: 8px;
+  }
+
+  .auth-heading h2 {
+    font-size: 25px;
+  }
+
+  .auth-heading p {
+    margin-top: 4px;
+    font-size: 12px;
+  }
+
+  .auth-switch {
+    margin: 8px 0;
+  }
+
+  .auth-switch a {
+    min-height: 34px;
+    font-size: 12px;
+  }
+
+  .auth-clerk-root {
+    min-height: 0;
+    zoom: 0.86;
+  }
+
+  .auth-status {
+    min-height: 220px;
+    padding: 20px;
+  }
+
+  .auth-meta {
+    gap: 8px;
+    padding-top: 6px;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+
+  .auth-meta-icon {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (min-width: 981px) and (max-height: 720px) {
+  .auth-clerk-root {
+    zoom: 0.78;
+  }
+
+  .auth-figure-stage {
+    height: clamp(170px, 28vh, 205px);
   }
 }
 
