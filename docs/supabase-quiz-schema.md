@@ -44,6 +44,24 @@ RLS är aktiverat på alla tre tabeller.
 
 Anonyma och autentiserade klienter kan bara läsa aktiva collections och publicerade frågor/svarsalternativ. Det finns inga client-side write policies. Inserts och updates ska göras via Supabase Dashboard, SQL Editor eller ett framtida server-side adminflöde som använder secret key.
 
+## Kontobunden Kursprogression
+
+Kursprogressionen har en separat, idempotent migration:
+
+```text
+supabase/migrations/20260714143000_create_student_learning_progress.sql
+```
+
+Tabellen lagrar slutförda sidor, modulsvar, inlämnade modulquiz och slutprov per Clerk-användar-id. RLS tillåter endast en autentiserad elev att läsa och ändra raden där JWT-tokenens `sub` matchar `user_id`. Clerk måste därför vara aktiverat som Supabase Third-Party Auth provider.
+
+Produktionsportalen öppnas inte om autentiseringen eller den första kontosynkningen misslyckas. Lokal förhandsvisning utan konto kan aktiveras explicit med `ALLOW_UNAUTHENTICATED_PLATFORM_PREVIEW=true` när `APP_ENV` inte är `production`.
+
+Efter migrationen verifieras live-tabellen med:
+
+```powershell
+npm run verify:supabase-progress
+```
+
 ## Snabb Verifiering
 
 Efter att migrationen har körts, öppna appen via `node server.mjs` och kör detta i webbläsarens console:

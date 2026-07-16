@@ -1359,6 +1359,12 @@ body.app-booting .app-boot-screen {
   display: grid;
 }
 
+body.app-unavailable .app-boot-screen {
+  background:
+    radial-gradient(circle at 50% 20%, rgba(37, 99, 235, 0.08), transparent 34%),
+    var(--bg);
+}
+
 .app-boot-card {
   width: min(100%, 320px);
   display: grid;
@@ -1409,6 +1415,58 @@ body.app-booting .app-boot-screen {
   color: var(--muted);
   font-size: 13px;
   line-height: 1.55;
+}
+
+.app-boot-card.is-unavailable {
+  width: min(100%, 390px);
+  gap: 14px;
+  padding: 34px 30px;
+  animation: bootCardIn 220ms ease-out both;
+}
+
+.app-boot-card.is-unavailable .app-boot-mark {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 2px;
+}
+
+.app-boot-card.is-unavailable strong {
+  font-size: 20px;
+  line-height: 1.25;
+}
+
+.app-boot-card.is-unavailable p {
+  max-width: 310px;
+  font-size: 14px;
+}
+
+.app-boot-retry {
+  min-height: 44px;
+  margin-top: 4px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  background: var(--primary);
+  font-weight: 700;
+  transition: transform 160ms ease, background 160ms ease;
+}
+
+.app-boot-retry:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.app-boot-retry:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.24);
+  outline-offset: 3px;
+}
+
+@keyframes bootCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
 }
 
 @keyframes bootSpin {

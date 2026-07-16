@@ -24,6 +24,8 @@ export function GET() {
   const frontendApiUrl = process.env.CLERK_FRONTEND_API_URL || getDefaultFrontendApiUrl();
   const jwksUrl = process.env.CLERK_JWKS_URL || (frontendApiUrl ? `${frontendApiUrl}/.well-known/jwks.json` : "");
   const ok = Boolean(publishableKey && (!isProduction || isLiveKey));
+  const allowUnauthenticatedPreview =
+    !isProduction && process.env.ALLOW_UNAUTHENTICATED_PLATFORM_PREVIEW?.toLowerCase() === "true";
 
   return NextResponse.json(
     {
@@ -31,6 +33,7 @@ export function GET() {
       publishableKey: ok ? publishableKey : "",
       frontendApiUrl: ok ? frontendApiUrl : "",
       jwksUrl: ok ? jwksUrl : "",
+      allowUnauthenticatedPreview,
       error: publishableKey && isProduction && !isLiveKey ? "Clerk production publishable key is required." : undefined,
       signInUrl: "/login?mode=sign-in",
       signUpUrl: "/login?mode=sign-up",

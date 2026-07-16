@@ -11,8 +11,9 @@ const STORAGE_KEYS = {
 };
 
 const STORAGE_VERSION = "vu2-course-split-2026-07-04";
-const UNLOCK_MODULE_NAVIGATION = true;
-const ENFORCE_COURSE_LOCKS = false;
+const IS_LOCAL_DEVELOPMENT = ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+const UNLOCK_MODULE_NAVIGATION = IS_LOCAL_DEVELOPMENT;
+const ENFORCE_COURSE_LOCKS = !IS_LOCAL_DEVELOPMENT;
 const FINAL_EXAM_SIZE = 30;
 const FINAL_EXAM_DURATION_MS = 15 * 60 * 1000;
 const FINAL_EXAM_LOCK_MS = 24 * 60 * 60 * 1000;
@@ -160,6 +161,7 @@ const state = {
     firstName: "Sven",
   },
   authClient: null,
+  authPreview: false,
   progressSync: {
     userId: "",
     ready: false,
@@ -832,7 +834,8 @@ async function initializeProgressSync() {
   const sync = state.progressSync;
   const supabaseApi = window.vaktskolanSupabase;
   const userId = state.authClient?.user?.id || "";
-  if (!userId || !supabaseApi?.ready || !supabaseApi?.select) return;
+  if (state.authPreview) return true;
+  if (!userId || !supabaseApi?.ready || !supabaseApi?.select) return false;
 
   try {
     const storedOwner = readStorage(STORAGE_KEYS.progressOwner, "");
@@ -868,10 +871,12 @@ async function initializeProgressSync() {
     sync.error = null;
     await syncProgressToSupabase();
     if (!sync.error) console.info("Elevens progression är synkad med Supabase.");
+    return !sync.error;
   } catch (error) {
     sync.error = error;
     sync.ready = false;
-    console.warn("Kontosynkning av progression är inte tillgänglig. Lokal progression används.", error);
+    console.warn("Kontosynkning av progression är inte tillgänglig. Plattformen öppnas inte.", error);
+    return false;
   }
 }
 
@@ -952,9 +957,25 @@ function renderAuthenticatedProfile(authClient) {
   }
 }
 
-function renderAuthError(error) {
-  console.error(error);
-  console.warn("Auth kunde inte kontrolleras. Dashboarden laddas utan auth-gate.");
+function renderPlatformUnavailable(title, message) {
+  const bootScreen = document.querySelector("#appBootScreen");
+  document.body.classList.add("app-booting", "app-unavailable");
+  if (!bootScreen) return;
+
+  bootScreen.setAttribute("role", "alert");
+  bootScreen.innerHTML = `
+    <div class="app-boot-card is-unavailable">
+      <span class="app-boot-mark" aria-hidden="true">
+        <img src="/assets/logo/vaktskolan-icon-512.png?v=20260710-zoom-icon" alt="">
+      </span>
+      <strong>${escapeHtml(title)}</strong>
+      <p>${escapeHtml(message)}</p>
+      <button class="app-boot-retry" type="button">Försök igen</button>
+    </div>
+  `;
+  const retryButton = bootScreen.querySelector(".app-boot-retry");
+  retryButton?.addEventListener("click", () => window.location.reload());
+  retryButton?.focus();
 }
 
 function revealPlatform() {
@@ -965,11 +986,25 @@ function revealPlatform() {
 
 async function requireAuthenticatedUser() {
   const auth = window.vaktskolanAuthProvider;
-  if (!auth?.ready) return true;
+  if (!auth?.ready) {
+    renderPlatformUnavailable(
+      "Inloggningen är tillfälligt otillgänglig",
+      "Vi kunde inte starta den säkra inloggningen. Ingen kursdata har laddats. Försök igen om en stund."
+    );
+    return false;
+  }
 
   try {
     const authClient = await auth.ready;
-    if (!authClient) return true;
+    if (!authClient) {
+      if (auth.getConfig?.()?.allowUnauthenticatedPreview === true && IS_LOCAL_DEVELOPMENT) {
+        state.authPreview = true;
+        console.info("Lokal plattformsförhandsvisning körs utan autentisering.");
+        return true;
+      }
+
+      throw auth.getError?.() || new Error("Auth kunde inte initieras.");
+    }
 
     if (!authClient.isSignedIn) {
       window.location.replace(getLoginUrl());
@@ -984,8 +1019,12 @@ async function requireAuthenticatedUser() {
     }
     return true;
   } catch (error) {
-    renderAuthError(error);
-    return true;
+    console.error(error);
+    renderPlatformUnavailable(
+      "Inloggningen är tillfälligt otillgänglig",
+      "Vi kunde inte verifiera din session. Ingen kursdata har laddats. Försök igen om en stund."
+    );
+    return false;
   }
 }
 
@@ -1095,7 +1134,7 @@ function isModuleComplete(moduleIndex) {
 function isModuleUnlocked(moduleIndex) {
   if (UNLOCK_MODULE_NAVIGATION) return true;
   if (moduleIndex <= 0) return true;
-  return hasVisitedAnyPage(moduleIndex) || isModuleComplete(moduleIndex - 1);
+  return isModuleComplete(moduleIndex - 1);
 }
 
 function getFlatPageIndex(module, lessonIndex, pageIndex) {
@@ -1105,10 +1144,6 @@ function getFlatPageIndex(module, lessonIndex, pageIndex) {
 function isPageUnlocked(moduleIndex, lessonIndex, pageIndex) {
   const module = state.modules[moduleIndex];
   if (!module || !isModuleUnlocked(moduleIndex)) return false;
-
-  if (moduleIndex === state.moduleIndex && lessonIndex === state.lessonIndex && pageIndex === state.pageIndex) {
-    return true;
-  }
 
   if (isPageVisited(moduleIndex, lessonIndex, pageIndex)) {
     return true;
@@ -1514,7 +1549,7 @@ function isCourseUnlocked(courseId) {
   if (!COURSE_CONFIG[courseId]) return false;
   if (!ENFORCE_COURSE_LOCKS || courseId === "vu1") return true;
   if (courseId === "vu2") {
-    return withCourseContext("vu1", () => areContentModulesComplete());
+    return withCourseContext("vu1", () => isFinalExamPassed());
   }
   return true;
 }
@@ -4343,6 +4378,15 @@ function showQuiz() {
     return;
   }
 
+  const module = getCurrentModule();
+  const pagesComplete = allPages(module).every((item) =>
+    isPageVisited(state.moduleIndex, item.lessonIndex, item.pageIndex)
+  );
+  if (!UNLOCK_MODULE_NAVIGATION && !pagesComplete) {
+    showToast("Quizet låses upp när du har gått igenom alla sidor i modulen.");
+    return;
+  }
+
   state.mode = "quiz";
   saveLocation();
   closeDrawers();
@@ -4955,7 +4999,14 @@ async function init() {
     Object.entries(state.courses).map(([courseId, modules]) => [courseId, buildFinalExamPool(modules)])
   );
   activateCourse("vu1");
-  await initializeProgressSync();
+  const progressReady = await initializeProgressSync();
+  if (!progressReady) {
+    renderPlatformUnavailable(
+      "Din progression kunde inte synkas",
+      "Vi öppnar inte kursen förrän din kontosparning är ansluten. Dina framsteg ska följa med mellan dina enheter."
+    );
+    return;
+  }
   activateCourse("vu1");
   ensureFinalExamIntegrity();
   activateCourse("vu2");
@@ -4998,6 +5049,8 @@ async function init() {
 
 init().catch((error) => {
   console.error(error);
-  els.article.innerHTML = "<p>Ett fel uppstod när kursen laddades.</p>";
-  revealPlatform();
+  renderPlatformUnavailable(
+    "Lärplattformen kunde inte laddas",
+    "Ett oväntat fel uppstod innan kursen var redo. Försök igen om en stund."
+  );
 });

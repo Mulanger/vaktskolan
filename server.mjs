@@ -103,12 +103,15 @@ function handleClerkConfig(response) {
   const isProduction = process.env.APP_ENV?.toLowerCase() === "production";
   const isLiveKey = config.publishableKey.startsWith("pk_live_");
   const ok = Boolean(config.publishableKey && (!isProduction || isLiveKey));
+  const allowUnauthenticatedPreview =
+    !isProduction && process.env.ALLOW_UNAUTHENTICATED_PLATFORM_PREVIEW?.toLowerCase() === "true";
 
   sendJson(response, 200, {
     ok,
     publishableKey: ok ? config.publishableKey : "",
     frontendApiUrl: ok ? config.frontendApiUrl : "",
     jwksUrl: ok ? config.jwksUrl : "",
+    allowUnauthenticatedPreview,
     error: config.publishableKey && isProduction && !isLiveKey ? "Clerk production publishable key is required." : undefined,
     signInUrl: "/login.html?mode=sign-in",
     signUpUrl: "/login.html?mode=sign-up",

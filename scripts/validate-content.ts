@@ -18,6 +18,7 @@ const requiredCoreSlugs = new Set([
   "studieteknik",
 ]);
 const trustedPrimaryHosts = ["riksdagen.se", "polisen.se", "bya.se", "arbetsformedlingen.se", "lansstyrelsen.se"];
+const currentFap573Url = "https://polisen.se/siteassets/forfattningssamling/fap-nummer/fap573-01-pmfs2017_10/";
 
 if (!existsSync(contentDirectory)) throw new Error(`Missing content directory: ${contentDirectory}`);
 
@@ -50,6 +51,11 @@ for (const slug of requiredCoreSlugs) {
 for (const entry of entries) {
   for (const related of entry.relatedSlugs) {
     if (!allSlugs.has(related)) throw new Error(`${entry.slug}: unknown related slug ${related}`);
+  }
+  for (const source of entry.sources) {
+    if (source.publisher === "Polismyndigheten" && /FAP 573-1/i.test(source.title) && source.url !== currentFap573Url) {
+      throw new Error(`${entry.slug}: FAP 573-1 must use the current Polismyndigheten URL.`);
+    }
   }
   if (["law", "education"].includes(entry.primaryTopic)) {
     for (const source of entry.sources) {

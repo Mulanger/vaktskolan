@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "releaseId": "2026-07-16-prelaunch.1",
+  "contentVersion": "9e145a955ea241476c556e2218849670e5b7f88d5535e135c130b25d2f9c1565",
+  "generatedAt": "2026-07-16T13:40:25.196Z",
+  "releaseReady": false,
+  "reviews": {
+    "legal": {
+      "status": "pending",
+      "reviewer": null,
+      "role": null,
+      "signedAt": null,
+      "notes": "Inväntar juridisk granskning."
+    },
+    "subjectMatter": {
+      "status": "pending",
+      "reviewer": null,
+      "role": null,
+      "signedAt": null,
+      "notes": "Inväntar sakkunnig granskning."
+    }
+  },
+  "sourceChecks": [
+    {
+      "id": "polisen-fap-573-01-pmfs-2017-10",
+      "publisher": "Polismyndigheten",
+      "title": "PMFS 2017:10, FAP 573-01",
+      "url": "https://polisen.se/siteassets/forfattningssamling/fap-nummer/fap573-01-pmfs2017_10/",
+      "verifiedAt": "2026-07-16"
+    }
+  ],
+  "files": [
+    {
+      "path": "content/guides/anvandarvillkor.mdx",
+      "bytes": 1946,
+      "sha256": "7a4b1b068bfa30e0cd0ec82fb39da6fac677ef9683569220d51c4aa01d57c8b8"
+    },
+    {
+      "path": "content/guides/bli-vaktare.mdx",
+      "bytes": 2727,
+      "sha256": "82968f9e2cf5184648753caffe5232c687190a4ac0190398e77f455f7dc081bd"
+    },
+    {
+      "path": "content/guides/envarsgripande.mdx",
+      "bytes": 2572,
+      "sha256": "f40b6d53665853a5ab6bc14b3ecdd54982d9b328353127f7f11f3b6f1c37b158"
+    },
+    {
+      "path": "content/guides/integritet.mdx",
+      "bytes": 2064,
+      "sha256": "43b51b1376a456a4c8d27aa56093c3f14045f01349cb29b6e4f175f47be6e56b"
+    },
+    {
+      "path": "content/guides/kontakt.mdx",
+      "bytes": 1433,
+      "sha256": "5febf8a526025e99fc9dd12eee02a26e5e06cc7b3bb43aea61bd827e6f5d9156"
+    },
+    {
+      "path": "content/guides/nodvarn-och-nod.mdx",
+      "bytes": 2501,
+      "sha256": "c4fc2434216267e203ccf458b1645cd50e7571bff4ca014095a59c14bcd459fb"
+    },
+    {
+      "path": "content/guides/om-vaktskolan.mdx",
+      "bytes": 1667,
+      "sha256": "054290154e4ec1ea1423d12d67b130ea9eaab1e8dd45339d04e8b4256dc61db8"
+    },
+    {
+      "path": "content/guides/redaktionell-policy.mdx",
+      "bytes": 2277,
+      "sha256": "5e9b5ae8f42e8a36c647aba704f37cc7d6268bf9da53a28d81b5c99e91a0d5f4"
+    },
+    {
+      "path": "content/guides/studieteknik.mdx",
+      "bytes": 2282,
+      "sha256": "c3e40f75a0ca7e3ce48dc0737ae5b87a27f8dc9e151e7a0981692f7269867f6e"
+    },
+    {
+      "path": "content/guides/vaktare-eller-ordningsvakt.mdx",
+      "bytes": 2603,
+      "sha256": "d690dedce05a4836a67aafdca69ec422b10bf53d4e91d357a715283fac07bae1"
+    },
+    {
+      "path": "content/guides/vaktarprov.mdx",
+      "bytes": 2868,
+      "sha256": "a9dac542a5e938b3692584ac412e0fba9102e70273d38c7cafdc2e62ac3483bf"
+    },
+    {
+      "path": "content/guides/vaktarutbildning.mdx",
+      "bytes": 2730,
+      "sha256": "ab027bdb86a938a1f660a6dd4506d25f0d8ba2c831e25acd983af5fad26af170"
+    },
+    {
+      "path": "content/guides/vu1-ovningsfragor.mdx",
+      "bytes": 2880,
+      "sha256": "bf7e25165ab6ee8176fdc9cb0a71cf8a4cdbd252ede0c21ea920349f0b5acdf7"
+    },
+    {
+      "path": "content/guides/vu1.mdx",
+      "bytes": 2641,
+      "sha256": "f0fabbaa9aeb395b294609f041f021a9b6865011460227982e1188c27b309a84"
+    },
+    {
+      "path": "content/guides/vu2-ovningsfragor.mdx",
+      "bytes": 2846,
+      "sha256": "6a86dfe4e36ce250a0aafed76af9f742b9eec1a4c44e78ba2f23533afc23508d"
+    },
+    {
+      "path": "content/guides/vu2.mdx",
+      "bytes": 2372,
+      "sha256": "36074315095ca47acfbfc8ee981e601ec4fcc0c75fd279a89d0ac4bcc55c270b"
+    },
+    {
+      "path": "supabase/seeds/20260705143000_seed_scenario_quiz_300.sql",
+      "bytes": 358185,
+      "sha256": "c605eab9bb1098293b76d50d83d631bb0fb5c3536c3506d957a948d63fc02860"
+    },
+    {
+      "path": "utbildning.md",
+      "bytes": 299177,
+      "sha256": "0584ec7bcb80f663e9991695286b81541d12d131eda0c88ed1ef1c390e4c2ba5"
+    },
+    {
+      "path": "vaktarskolan_flashcards_200.json",
+      "bytes": 124204,
+      "sha256": "ac6a418a82e8c1aadd34cdd1aafe20bf35cba79faec5f349c4fa67af2daed419"
+    },
+    {
+      "path": "vu1quiz.json",
+      "bytes": 125671,
+      "sha256": "acae4369ca58b25a174674949409ef6cdf3c284828125db8168622e60e419718"
+    },
+    {
+      "path": "vu2quiz.json",
+      "bytes": 67558,
+      "sha256": "548136c22a60d1e610f224555b33fb616b68a016a04e36a640aa687dc2eb37fc"
+    }
+  ]
+}

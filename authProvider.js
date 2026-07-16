@@ -74,6 +74,7 @@
       publishableKey: "",
       frontendApiUrl: "",
       jwksUrl: "",
+      allowUnauthenticatedPreview: false,
     };
 
     try {
@@ -83,9 +84,10 @@
       const contentType = response.headers.get("content-type") || "";
       if (response.ok && contentType.includes("application/json")) {
         const serverConfig = await response.json();
-        if (serverConfig?.publishableKey) {
-          config = serverConfig;
-        }
+        config = { ...config, ...serverConfig };
+        if (!serverConfig?.ok && serverConfig?.error) apiState.error = new Error(serverConfig.error);
+      } else {
+        apiState.error = new Error(`Auth-konfigurationen svarade med status ${response.status}.`);
       }
     } catch (error) {
       apiState.error = error;
@@ -137,7 +139,7 @@
       return window.Clerk;
     } catch (error) {
       apiState.error = error;
-      console.warn("Auth kunde inte initieras. Dashboarden fortsätter utan auth-gate.", error);
+      console.warn("Auth kunde inte initieras.", error);
       return null;
     }
   }
