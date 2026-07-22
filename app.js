@@ -186,6 +186,18 @@ const state = {
   },
   authClient: null,
   authPreview: false,
+  membership: {
+    tier: "basic",
+    ready: false,
+    error: null,
+    usage: {
+      vu1Question: { used: 0, limit: 10, remaining: 10 },
+      scenarioQuestion: { used: 0, limit: 10, remaining: 10 },
+      flashcardFlip: { used: 0, limit: 10, remaining: 10 },
+    },
+    dialogTrigger: null,
+    usagePending: false,
+  },
   progressSync: {
     userId: "",
     ready: false,
@@ -392,6 +404,9 @@ const els = {
   contextSidebar: $("#contextSidebar"),
   navOverlay: $("#navOverlay"),
   quizResetModal: $("#quizResetModal"),
+  premiumModal: $("#premiumModal"),
+  premiumModalDescription: $("#premiumModalDescription"),
+  premiumCheckoutButton: $("#premiumCheckoutButton"),
   emblemModal: $("#emblemModal"),
   emblemModalMedallion: $("#emblemModalMedallion"),
   emblemModalIcon: $("#emblemModalIcon"),
@@ -846,6 +861,175 @@ async function getProgressAccessToken() {
   const session = state.authClient?.session;
   return typeof session?.getToken === "function" ? session.getToken() : null;
 }
+
+async function requestAuthenticatedJson(endpoint, options = {}) {
+  const token = await getProgressAccessToken();
+  if (!token) throw new Error("En giltig inloggning krävs för att använda medlemskapet.");
+
+  const response = await fetch(endpoint, {
+    method: options.method || "GET",
+    credentials: "same-origin",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      ...(options.idempotent ? { "X-Idempotency-Key": options.idempotent } : {}),
+    },
+    ...(options.body ? { body: JSON.stringify(options.body) } : {}),
+  });
+  const payload = await response.json().catch(() => ({}));
+  return { response, payload };
+}
+
+async function startPremiumCheckout() {
+  const idempotencyKey = globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random()}`;
+  const { response, payload } = await requestAuthenticatedJson("/api/stripe/checkout", {
+    method: "POST",
+    body: {},
+    idempotent: idempotencyKey,
+  });
+  if ((!response.ok && payload.code !== "already_premium") || !payload.url) {
+    throw new Error(payload.error || "Betalningstjänsten kunde inte startas.");
+  }
+  window.location.assign(payload.url);
+  return true;
+}
+
+function applyMembershipPayload(payload) {
+  if (payload?.membership === "premium" || payload?.membership === "basic") {
+    state.membership.tier = payload.membership;
+  }
+  if (payload?.usage && typeof payload.usage === "object") {
+    ["vu1Question", "scenarioQuestion", "flashcardFlip"].forEach((key) => {
+      const value = payload.usage[key];
+      if (value && Number.isFinite(Number(value.used))) {
+        state.membership.usage[key] = {
+          used: Number(value.used),
+          limit: Number(value.limit ?? 10),
+          remaining: Math.max(0, Number(value.remaining ?? 0)),
+        };
+      }
+    });
+  }
+  state.membership.ready = true;
+  state.membership.error = null;
+}
+
+async function getMembershipStatus() {
+  const { response, payload } = await requestAuthenticatedJson("/api/membership/status");
+  if (!response.ok) throw new Error(payload.error || "Medlemskapet kunde inte läsas.");
+  applyMembershipPayload(payload);
+  return payload;
+}
+
+async function initializeMembership() {
+  if (state.authPreview) {
+    state.membership.ready = true;
+    return true;
+  }
+  try {
+    await getMembershipStatus();
+    return true;
+  } catch (error) {
+    state.membership.tier = "basic";
+    state.membership.ready = false;
+    state.membership.error = error;
+    console.warn("Medlemskapet kunde inte synkas. Premiuminnehåll hålls låst.", error);
+    return false;
+  }
+}
+
+function membershipUsageStateKey(kind) {
+  return {
+    vu1_question: "vu1Question",
+    scenario_question: "scenarioQuestion",
+    flashcard_flip: "flashcardFlip",
+  }[kind];
+}
+
+async function consumeMembershipAllowance(kind, eventKey) {
+  if (state.membership.tier === "premium") return true;
+  if (state.authPreview) {
+    const previewStateKey = membershipUsageStateKey(kind);
+    const previewUsage = previewStateKey ? state.membership.usage[previewStateKey] : null;
+    if (!previewUsage || previewUsage.remaining <= 0) {
+      openPremiumModal(kind);
+      return false;
+    }
+    previewUsage.used += 1;
+    previewUsage.remaining = Math.max(0, previewUsage.limit - previewUsage.used);
+    return true;
+  }
+  const { response, payload } = await requestAuthenticatedJson("/api/membership/consume", {
+    method: "POST",
+    body: { kind, eventKey },
+  });
+  const stateKey = membershipUsageStateKey(kind);
+  if (stateKey && payload?.usage) {
+    state.membership.usage[stateKey] = {
+      used: Number(payload.usage.used || 0),
+      limit: Number(payload.usage.limit || 10),
+      remaining: Math.max(0, Number(payload.usage.remaining || 0)),
+    };
+  }
+  if (payload?.membership === "premium") state.membership.tier = "premium";
+  if (response.status === 403) {
+    openPremiumModal(kind);
+    return false;
+  }
+  if (!response.ok) throw new Error(payload.error || "Användningen kunde inte registreras.");
+  return true;
+}
+
+async function maybeStartPremiumCheckout() {
+  const url = new URL(window.location.href);
+  if (url.searchParams.get("upgrade") !== "premium") return false;
+
+  url.searchParams.delete("upgrade");
+  window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+  try {
+    return await startPremiumCheckout();
+  } catch (error) {
+    console.error("Stripe Checkout kunde inte startas.", error);
+    window.alert("Betalningen kunde inte startas just nu. Försök igen om en stund.");
+    return false;
+  }
+}
+
+function clearBillingReturnParameters() {
+  const url = new URL(window.location.href);
+  url.searchParams.delete("billing");
+  url.searchParams.delete("session_id");
+  window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+}
+
+async function confirmPremiumAfterCheckout() {
+  const url = new URL(window.location.href);
+  if (url.searchParams.get("billing") !== "success") return;
+
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    if (state.membership.tier === "premium") {
+      clearBillingReturnParameters();
+      closePremiumModal();
+      rerenderAfterMembershipChange();
+      showToast("Premium är aktivt – välkommen till hela Vaktskolan!");
+      return;
+    }
+    if (attempt > 0) await new Promise((resolve) => window.setTimeout(resolve, 750));
+    try {
+      await getMembershipStatus();
+    } catch (error) {
+      console.warn("Väntar på att Premium-köpet ska bekräftas.", error);
+    }
+  }
+  showToast("Betalningen behandlas. Premium aktiveras automatiskt så snart den är bekräftad.");
+}
+
+window.vaktskolanMembership = {
+  consume: consumeMembershipAllowance,
+  getStatus: getMembershipStatus,
+  startPremiumCheckout,
+};
 
 async function syncProgressToSupabase() {
   const sync = state.progressSync;
@@ -1785,7 +1969,21 @@ function isModuleComplete(moduleIndex) {
   );
 }
 
+function isPremiumMember() {
+  return state.membership.tier === "premium";
+}
+
+function isModuleIncludedInMembership(courseId, moduleIndex) {
+  if (isPremiumMember()) return true;
+  return courseId === "vu1" && moduleIndex === 0 && !isFinalExamModule(state.courses[courseId]?.[moduleIndex]);
+}
+
+function isModuleMembershipLocked(moduleIndex, courseId = state.courseId) {
+  return !isModuleIncludedInMembership(courseId, moduleIndex);
+}
+
 function isModuleUnlocked(moduleIndex) {
+  if (isModuleMembershipLocked(moduleIndex)) return false;
   if (UNLOCK_MODULE_NAVIGATION) return true;
   if (moduleIndex <= 0) return true;
   return isModuleComplete(moduleIndex - 1);
@@ -2126,13 +2324,17 @@ function renderModuleList() {
     .map((module, index) => {
       const progress = getModuleProgress(module, index);
       const complete = isModuleComplete(index);
-      const locked = isFinalExamModule(module) ? !canAccessFinalExam() : !isModuleUnlocked(index);
-      const progressContent = complete
+      const membershipLocked = isModuleMembershipLocked(index);
+      const progressionLocked = !membershipLocked && (isFinalExamModule(module) ? !canAccessFinalExam() : !isModuleUnlocked(index));
+      const locked = membershipLocked || progressionLocked;
+      const progressContent = membershipLocked
+        ? '<i data-lucide="lock" aria-hidden="true"></i>'
+        : complete
         ? '<i data-lucide="check" aria-hidden="true"></i>'
         : `<span class="module-progress-value">${progress}%</span>`;
       return `
-        <button class="module-card ${index === state.moduleIndex ? "is-active" : ""} ${complete ? "is-complete" : ""} ${locked ? "is-locked" : ""}"
-          type="button" data-module="${index}" ${locked ? 'disabled aria-disabled="true" title="Låses upp när föregående modul är klar"' : ""}>
+        <button class="module-card ${index === state.moduleIndex ? "is-active" : ""} ${complete ? "is-complete" : ""} ${locked ? "is-locked" : ""} ${membershipLocked ? "is-premium-lock" : ""}"
+          type="button" data-module="${index}" ${membershipLocked ? 'data-premium-lock="content" aria-label="Låst Premium-modul. Visa Premium."' : progressionLocked ? 'disabled aria-disabled="true" title="Låses upp när föregående modul är klar"' : ""}>
           <div class="module-card-top">
             <span class="module-number">${moduleNumber(module)}</span>
           </div>
@@ -2534,7 +2736,7 @@ function areContentModulesComplete() {
 }
 
 function canStartFinalExam() {
-  return UNLOCK_MODULE_NAVIGATION || areContentModulesComplete();
+  return isPremiumMember() && (UNLOCK_MODULE_NAVIGATION || areContentModulesComplete());
 }
 
 function canAccessFinalExam() {
@@ -2543,8 +2745,10 @@ function canAccessFinalExam() {
 
 function isCourseUnlocked(courseId) {
   if (!COURSE_CONFIG[courseId]) return false;
-  if (!ENFORCE_COURSE_LOCKS || courseId === "vu1") return true;
+  if (courseId === "vu1") return true;
   if (courseId === "vu2") {
+    if (!isPremiumMember()) return false;
+    if (!ENFORCE_COURSE_LOCKS) return true;
     return withCourseContext("vu1", () => isFinalExamPassed());
   }
   return true;
@@ -2966,6 +3170,7 @@ function getHomeData() {
   const quizAnswered = courses.reduce((sum, item) => sum + item.quizSummary.answered, 0);
   const quizCorrect = courses.reduce((sum, item) => sum + item.quizSummary.correct, 0);
   courses.forEach((item) => {
+    item.membershipLocked = item.courseId === "vu2" && !isPremiumMember();
     item.locked = !isCourseUnlocked(item.courseId);
   });
   const saved = readSavedLocation();
@@ -3021,7 +3226,7 @@ function renderHomeCourseCard(overview) {
     overview.courseId === "vu2"
       ? "Fördjupning som bygger vidare på VU1 med praktiska situationer, arbetsmiljö och avancerad juridik."
       : "Första delen av väktarutbildningen med grunderna i juridik, arbetsmiljö och yrkesetik.";
-  const actionLabel = overview.locked ? "Slutför VU1 först" : "Öppna kurs";
+  const actionLabel = overview.membershipLocked ? "Lås upp med Premium" : overview.locked ? "Slutför VU1 först" : "Öppna kurs";
   const actionAttribute = overview.courseId === "vu2" ? "data-open-vu2" : "data-open-course";
 
   return `
@@ -3044,9 +3249,9 @@ function renderHomeCourseCard(overview) {
           <span style="width: ${overview.progress.percent}%"></span>
         </div>
         <small>${overview.moduleStats.completed} av ${overview.moduleStats.total} moduler klara</small>
-        ${overview.locked ? '<small class="home-course-lock-note"><i data-lucide="circle-alert"></i> Slutför VU1 för att låsa upp</small>' : ""}
+        ${overview.membershipLocked ? '<small class="home-course-lock-note"><i data-lucide="lock"></i> Ingår i Premium</small>' : overview.locked ? '<small class="home-course-lock-note"><i data-lucide="circle-alert"></i> Slutför VU1 för att låsa upp</small>' : ""}
       </div>
-      <button class="home-course-action" type="button" ${overview.locked ? 'disabled aria-disabled="true" title="Slutför VU1 för att låsa upp VU2"' : actionAttribute}>
+      <button class="home-course-action" type="button" ${overview.membershipLocked ? 'data-premium-lock="vu2"' : overview.locked ? 'disabled aria-disabled="true" title="Slutför VU1 för att låsa upp VU2"' : actionAttribute}>
         <span>${actionLabel}</span>
         <i data-lucide="${overview.locked ? "lock" : "arrow-right"}"></i>
       </button>
@@ -3084,7 +3289,11 @@ function renderHome() {
   const welcomeCopy = homeData.hasAnyProgress
     ? "Här är en överblick över dina framsteg och nästa steg i väktarutbildningen."
     : "Här startar din väktarutbildning. Börja med VU1 och lås upp VU2 när första delen är klar.";
-  const vu2NavAttributes = vu2Overview?.locked ? 'disabled aria-disabled="true" title="Slutför VU1 för att låsa upp VU2"' : "data-open-vu2";
+  const vu2NavAttributes = vu2Overview?.membershipLocked
+    ? 'data-premium-lock="vu2"'
+    : vu2Overview?.locked
+      ? 'disabled aria-disabled="true" title="Slutför VU1 för att låsa upp VU2"'
+      : "data-open-vu2";
 
   els.homePanel.innerHTML = `
     <section class="home-dashboard" aria-labelledby="homeDashboardTitle">
@@ -3606,6 +3815,11 @@ function pickFinalExamQuestions() {
 }
 
 function startFinalExam() {
+  if (!isPremiumMember()) {
+    openPremiumModal("final_exam");
+    return;
+  }
+
   if (state.finalExam && !state.finalExam.completedAt) {
     showFinalExam();
     return;
@@ -3826,6 +4040,11 @@ function showHome() {
 }
 
 function showFinalExamPortal() {
+  if (!isPremiumMember()) {
+    openPremiumModal("final_exam");
+    return;
+  }
+
   state.mode = "final-exam-portal";
   saveLocation();
   closeDrawers();
@@ -4021,7 +4240,9 @@ function renderCourseHub() {
     .map((module, moduleIndex) => {
       const progress = getModuleProgress(module, moduleIndex);
       const complete = isModuleComplete(moduleIndex);
-      const locked = isFinalExamModule(module) ? !canAccessFinalExam() : !isModuleUnlocked(moduleIndex);
+      const membershipLocked = isModuleMembershipLocked(moduleIndex);
+      const progressionLocked = !membershipLocked && (isFinalExamModule(module) ? !canAccessFinalExam() : !isModuleUnlocked(moduleIndex));
+      const locked = membershipLocked || progressionLocked;
       const pages = allPages(module);
       const quizCount = module.quiz.length;
       const detailText = isFinalExamModule(module)
@@ -4045,9 +4266,9 @@ function renderCourseHub() {
               ? `${progress}%`
               : "Ej påbörjad";
       return `
-        <button class="hub-module-row ${complete ? "is-complete" : ""} ${moduleIndex === state.moduleIndex && state.mode !== "home" ? "is-current" : ""} ${locked ? "is-locked" : ""}"
-          type="button" data-hub-module="${moduleIndex}" ${locked ? 'disabled aria-disabled="true"' : ""}>
-          <span class="hub-module-index">${complete ? '<i data-lucide="check"></i>' : moduleNumber(module)}</span>
+        <button class="hub-module-row ${complete ? "is-complete" : ""} ${moduleIndex === state.moduleIndex && state.mode !== "home" ? "is-current" : ""} ${locked ? "is-locked" : ""} ${membershipLocked ? "is-premium-lock" : ""}"
+          type="button" data-hub-module="${moduleIndex}" ${membershipLocked ? 'data-premium-lock="content" aria-label="Låst Premium-modul. Visa Premium."' : progressionLocked ? 'disabled aria-disabled="true"' : ""}>
+          <span class="hub-module-index">${membershipLocked ? '<i data-lucide="lock"></i>' : complete ? '<i data-lucide="check"></i>' : moduleNumber(module)}</span>
           <span class="hub-module-copy">
             <strong>${escapeHtml(moduleDisplayTitle(module))}</strong>
             <small>${escapeHtml(detailText)}</small>
@@ -4091,6 +4312,11 @@ function showCourseHub() {
 }
 
 function showVu2() {
+  if (!isPremiumMember()) {
+    openPremiumModal("vu2");
+    return;
+  }
+
   if (!isCourseUnlocked("vu2")) {
     showToast("VU2 låses upp när VU1 är klar.");
     showHome();
@@ -4703,7 +4929,72 @@ function updateQuizPortalQuestionTimerUi() {
   if (value) value.textContent = String(remainingSeconds);
 }
 
-function handleQuizPortalQuestionTimeout() {
+function quizPortalUsageKindForView(view) {
+  if (view === "vu1") return "vu1_question";
+  if (view === "scenario") return "scenario_question";
+  return "";
+}
+
+async function answerQuizPortalQuestion(selectedOption, timedOut = false) {
+  if (state.membership.usagePending || state.quizPortal.isAnswered) return;
+  const quiz = getQuizPortalSessionQuiz();
+  const question = quiz?.questions[state.quizPortal.currentIndex];
+  if (!quiz || !question) return;
+
+  if (!isPremiumMember() && ["review", "vu2", "general"].includes(state.quizPortal.view)) {
+    openPremiumModal("content");
+    return;
+  }
+
+  stopQuizPortalQuestionTimer();
+  state.membership.usagePending = true;
+  try {
+    const usageKind = quizPortalUsageKindForView(state.quizPortal.view);
+    if (usageKind && !(await consumeMembershipAllowance(usageKind, createClientUuid()))) return;
+
+    state.quizPortal.questionTimeRemaining = timedOut ? 0 : state.quizPortal.questionTimeRemaining;
+    state.quizPortal.answers[state.quizPortal.currentIndex] = Number.isInteger(selectedOption) ? selectedOption : null;
+    state.quizPortal.selectedOption = Number.isInteger(selectedOption) ? selectedOption : null;
+    state.quizPortal.isAnswered = true;
+    state.quizPortal.timedOut = timedOut;
+    if (Number.isInteger(selectedOption) && selectedOption === question.answer) state.quizPortal.score += 1;
+    recordQuizPortalAnswer(question, selectedOption, timedOut);
+    renderQuizPortalPreservingAnchor(
+      Number.isInteger(selectedOption) ? `[data-quiz-portal-option="${selectedOption}"]` : ".quiz-portal-question h3"
+    );
+  } catch (error) {
+    console.error("Quizsvaret kunde inte registreras mot medlemskapet.", error);
+    showToast("Svaret kunde inte registreras. Försök igen.");
+    if (!timedOut) startQuizPortalQuestionTimer();
+  } finally {
+    state.membership.usagePending = false;
+  }
+}
+
+async function toggleQuizPortalFlashcard() {
+  if (state.membership.usagePending) return;
+  if (state.quizPortal.flashcardFlipped) {
+    state.quizPortal.flashcardFlipped = false;
+    renderQuizOverview();
+    refreshIcons();
+    return;
+  }
+
+  state.membership.usagePending = true;
+  try {
+    if (!(await consumeMembershipAllowance("flashcard_flip", createClientUuid()))) return;
+    state.quizPortal.flashcardFlipped = true;
+    renderQuizOverview();
+    refreshIcons();
+  } catch (error) {
+    console.error("Flashcard-vändningen kunde inte registreras mot medlemskapet.", error);
+    showToast("Kortet kunde inte vändas. Försök igen.");
+  } finally {
+    state.membership.usagePending = false;
+  }
+}
+
+async function handleQuizPortalQuestionTimeout() {
   if (
     state.mode !== "quiz-overview" ||
     !Object.prototype.hasOwnProperty.call(QUIZ_PORTAL_BANK_CONFIG, state.quizPortal.view) ||
@@ -4713,15 +5004,7 @@ function handleQuizPortalQuestionTimeout() {
     stopQuizPortalQuestionTimer();
     return;
   }
-
-  stopQuizPortalQuestionTimer();
-  state.quizPortal.questionTimeRemaining = 0;
-  state.quizPortal.answers[state.quizPortal.currentIndex] = null;
-  state.quizPortal.selectedOption = null;
-  state.quizPortal.isAnswered = true;
-  state.quizPortal.timedOut = true;
-  recordQuizPortalAnswer(getQuizPortalSessionQuiz()?.questions[state.quizPortal.currentIndex], null, true);
-  renderQuizPortalPreservingAnchor(".quiz-portal-question h3");
+  await answerQuizPortalQuestion(null, true);
 }
 
 function startQuizPortalQuestionTimer() {
@@ -4741,7 +5024,7 @@ function startQuizPortalQuestionTimer() {
   updateQuizPortalQuestionTimerUi();
   quizPortalQuestionTimer = window.setInterval(() => {
     if (Date.now() >= state.quizPortal.questionDeadline) {
-      handleQuizPortalQuestionTimeout();
+      void handleQuizPortalQuestionTimeout();
       return;
     }
     updateQuizPortalQuestionTimerUi();
@@ -4750,6 +5033,12 @@ function startQuizPortalQuestionTimer() {
 
 function quizPortalModuleMeta(module) {
   if (module.comingSoon) return "Kommer snart";
+  const lockReason = quizPortalLockReason(module);
+  if (lockReason && ["review", "vu2", "general"].includes(module.view)) return "Ingår i Premium";
+  if (!isPremiumMember()) {
+    const usage = quizPortalUsageForView(module.view);
+    if (usage) return `${usage.remaining} av ${usage.limit} kostnadsfria kvar`;
+  }
   if (module.view === "review") {
     const queue = getQuizReviewQueue();
     if (queue.due.length) return `${queue.due.length} ${queue.due.length === 1 ? "fråga" : "frågor"} · redo nu`;
@@ -4768,10 +5057,26 @@ function quizPortalModuleMeta(module) {
 
 function quizPortalModuleAction(module) {
   if (module.comingSoon) return "Inte tillgänglig";
+  if (quizPortalLockReason(module)) return "Bli Premium";
   if (module.view === "review") {
     return getQuizReviewQueue().due.length ? "Börja repetera" : "Visa status";
   }
   return "Starta";
+}
+
+function quizPortalUsageForView(view) {
+  if (view === "vu1") return state.membership.usage.vu1Question;
+  if (view === "scenario") return state.membership.usage.scenarioQuestion;
+  if (view === "flashcards") return state.membership.usage.flashcardFlip;
+  return null;
+}
+
+function quizPortalLockReason(module) {
+  if (isPremiumMember() || module.comingSoon) return "";
+  if (["review", "vu2", "general"].includes(module.view)) return "content";
+  const usage = quizPortalUsageForView(module.view);
+  if (!usage || usage.remaining > 0) return "";
+  return module.view === "vu1" ? "vu1_question" : module.view === "scenario" ? "scenario_question" : "flashcard_flip";
 }
 
 function updateQuizPortalModuleMeta() {
@@ -4935,11 +5240,12 @@ function renderQuizPortalSidebar() {
   els.moduleList.innerHTML = quizPortalModules
     .map((module) => {
       const isActive = state.quizPortal.view === module.view;
+      const lockReason = quizPortalLockReason(module);
       return `
-        <button class="quiz-sidebar-card quiz-theme-${module.theme} ${isActive ? "is-active" : ""}" type="button" ${
-          module.comingSoon ? `data-coming-soon="${escapeHtml(module.title)}"` : `data-quiz-portal-view="${module.view}"`
+        <button class="quiz-sidebar-card quiz-theme-${module.theme} ${isActive ? "is-active" : ""} ${lockReason ? "is-premium-lock" : ""}" type="button" ${
+          module.comingSoon ? `data-coming-soon="${escapeHtml(module.title)}"` : lockReason ? `data-premium-lock="${lockReason}"` : `data-quiz-portal-view="${module.view}"`
         }>
-          <span class="quiz-sidebar-icon"><i data-lucide="${module.icon}"></i></span>
+          <span class="quiz-sidebar-icon"><i data-lucide="${lockReason ? "lock" : module.icon}"></i></span>
           <span class="quiz-sidebar-copy">
             <strong>${escapeHtml(module.title)}</strong>
             <small data-quiz-portal-meta="${module.view}">${escapeHtml(quizPortalModuleMeta(module))}</small>
@@ -4982,19 +5288,19 @@ function renderQuizPortalHome() {
           ${quizPortalModules
             .map(
               (module, index) => `
-                <button class="quiz-portal-card quiz-portal-card-desktop quiz-theme-${module.theme} ${module.comingSoon ? "is-coming-soon" : ""}" style="--quiz-card-index:${index}" type="button" ${
-                  module.comingSoon ? `data-coming-soon="${escapeHtml(module.title)}"` : `data-quiz-portal-view="${module.view}"`
+                <button class="quiz-portal-card quiz-portal-card-desktop quiz-theme-${module.theme} ${module.comingSoon ? "is-coming-soon" : ""} ${quizPortalLockReason(module) ? "is-premium-lock" : ""}" style="--quiz-card-index:${index}" type="button" ${
+                  module.comingSoon ? `data-coming-soon="${escapeHtml(module.title)}"` : quizPortalLockReason(module) ? `data-premium-lock="${quizPortalLockReason(module)}"` : `data-quiz-portal-view="${module.view}"`
                 }>
                   <span class="quiz-portal-card-top">
-                    <span class="quiz-portal-card-icon"><i data-lucide="${module.icon}"></i></span>
-                    <span class="quiz-portal-card-badge">${escapeHtml(module.comingSoon ? "Kommer snart" : module.badge)}</span>
+                    <span class="quiz-portal-card-icon"><i data-lucide="${quizPortalLockReason(module) ? "lock" : module.icon}"></i></span>
+                    <span class="quiz-portal-card-badge">${escapeHtml(module.comingSoon ? "Kommer snart" : quizPortalLockReason(module) ? "Premium" : module.badge)}</span>
                   </span>
                   <span class="quiz-portal-card-body">
                     <strong>${escapeHtml(module.title)}</strong>
                     <span class="quiz-portal-card-copy">${escapeHtml(module.description)}</span>
                     <span class="quiz-portal-card-foot">
                       <small data-quiz-portal-meta="${module.view}">${escapeHtml(quizPortalModuleMeta(module))}</small>
-                      <span class="quiz-portal-card-action">${escapeHtml(quizPortalModuleAction(module))}${module.comingSoon ? "" : ' <i data-lucide="arrow-right"></i>'}</span>
+                      <span class="quiz-portal-card-action">${escapeHtml(quizPortalModuleAction(module))}${module.comingSoon ? "" : ` <i data-lucide="${quizPortalLockReason(module) ? "lock" : "arrow-right"}"></i>`}</span>
                     </span>
                   </span>
                 </button>
@@ -5025,19 +5331,19 @@ function renderQuizPortalHome() {
           ${quizPortalModules
             .map(
               (module, index) => `
-                <button class="quiz-portal-card quiz-portal-card-mobile quiz-theme-${module.theme} ${module.comingSoon ? "is-coming-soon" : ""}" style="--quiz-card-index:${index}" type="button" ${
-                  module.comingSoon ? `data-coming-soon="${escapeHtml(module.title)}"` : `data-quiz-portal-view="${module.view}"`
+                <button class="quiz-portal-card quiz-portal-card-mobile quiz-theme-${module.theme} ${module.comingSoon ? "is-coming-soon" : ""} ${quizPortalLockReason(module) ? "is-premium-lock" : ""}" style="--quiz-card-index:${index}" type="button" ${
+                  module.comingSoon ? `data-coming-soon="${escapeHtml(module.title)}"` : quizPortalLockReason(module) ? `data-premium-lock="${quizPortalLockReason(module)}"` : `data-quiz-portal-view="${module.view}"`
                 }>
                   <span class="quiz-portal-card-top">
-                    <span class="quiz-portal-card-icon"><i data-lucide="${module.icon}"></i></span>
-                    <span class="quiz-portal-card-badge">${escapeHtml(module.comingSoon ? "Kommer snart" : module.badge)}</span>
+                    <span class="quiz-portal-card-icon"><i data-lucide="${quizPortalLockReason(module) ? "lock" : module.icon}"></i></span>
+                    <span class="quiz-portal-card-badge">${escapeHtml(module.comingSoon ? "Kommer snart" : quizPortalLockReason(module) ? "Premium" : module.badge)}</span>
                   </span>
                   <span class="quiz-portal-card-body">
                     <strong>${escapeHtml(module.title)}</strong>
                     <span class="quiz-portal-card-copy">${escapeHtml(module.description)}</span>
                     <span class="quiz-portal-card-foot">
                       <small data-quiz-portal-meta="${module.view}">${escapeHtml(quizPortalModuleMeta(module))}</small>
-                      <span class="quiz-portal-card-action">${escapeHtml(quizPortalModuleAction(module))}${module.comingSoon ? "" : ' <i data-lucide="arrow-right"></i>'}</span>
+                      <span class="quiz-portal-card-action">${escapeHtml(quizPortalModuleAction(module))}${module.comingSoon ? "" : ` <i data-lucide="${quizPortalLockReason(module) ? "lock" : "arrow-right"}"></i>`}</span>
                     </span>
                   </span>
                 </button>
@@ -5085,6 +5391,7 @@ function renderQuizPortalResults(quiz) {
   const passed = percentage >= 80;
   const isReview = state.quizPortal.view === "review";
   const remainingReviewCount = isReview ? getQuizReviewQueue().due.length : 0;
+  const retryLockReason = quizPortalLockReason(getQuizPortalModule(state.quizPortal.view));
   const feedbackTitle = isReview
     ? remainingReviewCount
       ? "Några frågor behöver en omgång till"
@@ -5139,9 +5446,9 @@ function renderQuizPortalResults(quiz) {
                   </button>
                 `
                 : `
-                  <button class="quiz-portal-button quiz-portal-button-primary" type="button" data-quiz-portal-reset>
-                    <i data-lucide="refresh-cw"></i>
-                    <span>${isReview ? "Repetera kvarvarande" : "Repetera quizet"}</span>
+                  <button class="quiz-portal-button quiz-portal-button-primary" type="button" ${retryLockReason ? `data-premium-lock="${retryLockReason}"` : "data-quiz-portal-reset"}>
+                    <i data-lucide="${retryLockReason ? "lock" : "refresh-cw"}"></i>
+                    <span>${retryLockReason ? "Fortsätt med Premium" : isReview ? "Repetera kvarvarande" : "Repetera quizet"}</span>
                   </button>
                   <button class="quiz-portal-button quiz-portal-button-secondary" type="button" data-quiz-portal-home>
                     <span>Till portalen</span>
@@ -5856,6 +6163,10 @@ function renderQuiz() {
 
 function goTo(moduleIndex, lessonIndex = 0, pageIndex = 0, mode = "lesson", options = {}) {
   const requestedModule = state.modules[moduleIndex];
+  if (isModuleMembershipLocked(moduleIndex)) {
+    openPremiumModal(isFinalExamModule(requestedModule) ? "final_exam" : "content");
+    return;
+  }
   if (isFinalExamModule(requestedModule)) {
     if (!canAccessFinalExam()) {
       showToast("Slutprovet låses upp när alla moduler är klara.");
@@ -5997,8 +6308,54 @@ function openDrawer(which) {
 }
 
 function syncModalOpenState() {
-  const hasOpenModal = !els.quizResetModal.hidden || !els.emblemModal.hidden;
+  const hasOpenModal = !els.quizResetModal.hidden || !els.emblemModal.hidden || !els.premiumModal.hidden;
   document.body.classList.toggle("modal-open", hasOpenModal);
+}
+
+const PREMIUM_MODAL_REASONS = {
+  content: "Den här delen av utbildningen ingår i Premium. Lås upp hela Vaktskolan och fortsätt utan begränsningar.",
+  vu2: "VU2 ingår i Premium. Du får hela fördjupningsutbildningen, alla övningar och slutprovet.",
+  final_exam: "Slutproven ingår i Premium och låses upp när kursens moduler är slutförda.",
+  vu1_question: "Du har använt dina 10 kostnadsfria VU1-frågor. Med Premium kan du fortsätta träna obegränsat.",
+  scenario_question: "Du har använt dina 10 kostnadsfria scenariofrågor. Med Premium får du hela scenariobanken.",
+  flashcard_flip: "Du har använt dina 10 kostnadsfria flashcard-vändningar. Med Premium kan du repetera alla kort obegränsat.",
+};
+
+function openPremiumModal(reason = "content", trigger = null) {
+  if (isPremiumMember()) {
+    showToast("Premium är redan aktivt på ditt konto.");
+    return;
+  }
+  state.membership.dialogTrigger = trigger || document.activeElement;
+  els.premiumModalDescription.textContent = PREMIUM_MODAL_REASONS[reason] || PREMIUM_MODAL_REASONS.content;
+  els.premiumCheckoutButton.disabled = false;
+  els.premiumCheckoutButton.classList.remove("is-loading");
+  els.premiumModal.hidden = false;
+  syncModalOpenState();
+  refreshIcons();
+  els.premiumModal.querySelector("[data-close-premium]")?.focus();
+}
+
+function closePremiumModal() {
+  if (els.premiumModal.hidden) return;
+  els.premiumModal.hidden = true;
+  syncModalOpenState();
+  state.membership.dialogTrigger?.focus?.();
+  state.membership.dialogTrigger = null;
+}
+
+async function handlePremiumCheckout() {
+  if (els.premiumCheckoutButton.disabled) return;
+  els.premiumCheckoutButton.disabled = true;
+  els.premiumCheckoutButton.classList.add("is-loading");
+  try {
+    await startPremiumCheckout();
+  } catch (error) {
+    console.error("Stripe Checkout kunde inte startas.", error);
+    els.premiumCheckoutButton.disabled = false;
+    els.premiumCheckoutButton.classList.remove("is-loading");
+    showToast("Betalningen kunde inte startas. Försök igen om en stund.");
+  }
 }
 
 function openEmblemModal(emblemId, trigger) {
@@ -6082,6 +6439,11 @@ function rerenderAfterQuizReset() {
   }
 }
 
+function rerenderAfterMembershipChange() {
+  rerenderAfterQuizReset();
+  renderNavigationLocks();
+}
+
 function showToast(message) {
   window.clearTimeout(state.toastTimer);
   els.toast.textContent = message;
@@ -6156,6 +6518,23 @@ function bindEvents() {
   });
 
   document.addEventListener("click", (event) => {
+    const premiumLock = event.target.closest("[data-premium-lock]");
+    if (premiumLock) {
+      openPremiumModal(premiumLock.dataset.premiumLock || "content", premiumLock);
+      closeDrawers();
+      return;
+    }
+
+    if (event.target === els.premiumModal || event.target.closest("[data-close-premium]")) {
+      closePremiumModal();
+      return;
+    }
+
+    if (event.target.closest("[data-start-premium-checkout]")) {
+      void handlePremiumCheckout();
+      return;
+    }
+
     const comingSoon = event.target.closest("[data-coming-soon]");
     if (comingSoon) {
       showToast(`${comingSoon.dataset.comingSoon} är inte aktiverat ännu.`);
@@ -6347,6 +6726,12 @@ function bindEvents() {
     const quizPortalViewButton = event.target.closest("[data-quiz-portal-view]");
     if (quizPortalViewButton) {
       const view = quizPortalViewButton.dataset.quizPortalView;
+      const module = getQuizPortalModule(view);
+      const lockReason = quizPortalLockReason(module);
+      if (lockReason) {
+        openPremiumModal(lockReason, quizPortalViewButton);
+        return;
+      }
       if (view === "review") {
         void startQuizPortalReviewSession();
         return;
@@ -6385,22 +6770,7 @@ function bindEvents() {
 
     const quizPortalOptionButton = event.target.closest("[data-quiz-portal-option]");
     if (quizPortalOptionButton && state.mode === "quiz-overview" && !state.quizPortal.isAnswered) {
-      const quiz = getQuizPortalSessionQuiz();
-      const question = quiz?.questions[state.quizPortal.currentIndex];
-      if (!quiz || !question) return;
-
-      stopQuizPortalQuestionTimer();
-      state.quizPortal.selectedOption = Number(quizPortalOptionButton.dataset.quizPortalOption);
-      state.quizPortal.answers[state.quizPortal.currentIndex] = state.quizPortal.selectedOption;
-      state.quizPortal.isAnswered = true;
-      state.quizPortal.timedOut = false;
-      if (state.quizPortal.selectedOption === question.answer) {
-        state.quizPortal.score += 1;
-      }
-      recordQuizPortalAnswer(question, state.quizPortal.selectedOption);
-      renderQuizPortalPreservingAnchor(
-        `[data-quiz-portal-option="${state.quizPortal.selectedOption}"]`
-      );
+      void answerQuizPortalQuestion(Number(quizPortalOptionButton.dataset.quizPortalOption));
       return;
     }
 
@@ -6429,6 +6799,11 @@ function bindEvents() {
 
     const quizPortalResetButton = event.target.closest("[data-quiz-portal-reset]");
     if (quizPortalResetButton && state.mode === "quiz-overview") {
+      const lockReason = quizPortalLockReason(getQuizPortalModule(state.quizPortal.view));
+      if (lockReason) {
+        openPremiumModal(lockReason, quizPortalResetButton);
+        return;
+      }
       if (state.quizPortal.view === "review") {
         void startQuizPortalReviewSession();
         return;
@@ -6444,9 +6819,7 @@ function bindEvents() {
 
     const flashcardToggle = event.target.closest("[data-flashcard-toggle]");
     if (flashcardToggle && state.mode === "quiz-overview") {
-      state.quizPortal.flashcardFlipped = !state.quizPortal.flashcardFlipped;
-      renderQuizOverview();
-      refreshIcons();
+      void toggleQuizPortalFlashcard();
       return;
     }
 
@@ -6617,8 +6990,9 @@ function bindEvents() {
   els.navOverlay.addEventListener("click", closeDrawers);
   document.addEventListener("keydown", (event) => {
     const isTyping = event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement;
-    if (event.key === "Tab" && !els.emblemModal.hidden) {
-      const focusable = Array.from(els.emblemModal.querySelectorAll("button:not([disabled])"));
+    const openDialog = !els.premiumModal.hidden ? els.premiumModal : !els.emblemModal.hidden ? els.emblemModal : null;
+    if (event.key === "Tab" && openDialog) {
+      const focusable = Array.from(openDialog.querySelectorAll("button:not([disabled]), a[href]"));
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
       if (event.shiftKey && document.activeElement === first) {
@@ -6630,6 +7004,7 @@ function bindEvents() {
       }
     }
     if (event.key === "Escape") {
+      closePremiumModal();
       closeEmblemModal();
       closeQuizResetModal();
       closeDrawers();
@@ -6656,9 +7031,11 @@ function bindEvents() {
 async function init() {
   const canLoadPlatform = await requireAuthenticatedUser();
   if (!canLoadPlatform) return;
+  if (await maybeStartPremiumCheckout()) return;
 
   bindEvents();
   initializeSupabaseConnection();
+  await initializeMembership();
   const response = await fetch("utbildning.md?v=20260704-vu2");
   const markdown = await response.text();
   state.courses = parseCourses(markdown);
@@ -6715,6 +7092,7 @@ async function init() {
 
   initializePortalHistory();
   revealPlatform();
+  void confirmPremiumAfterCheckout();
 }
 
 init().catch((error) => {

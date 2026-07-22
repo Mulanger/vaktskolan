@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Schibsted+Grotesk:wght@500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="styles.css?v=20260722-final-portal-shell">
+  <link rel="stylesheet" href="styles.css?v=20260722-premium-lifetime">
 </head>
 <body class="app-booting">
   <div class="shell">
@@ -395,6 +395,44 @@
     </div>
   </div>
 
+  <div class="premium-modal" id="premiumModal" role="dialog" aria-modal="true" aria-labelledby="premiumModalTitle" aria-describedby="premiumModalDescription" hidden>
+    <div class="premium-dialog">
+      <button class="premium-dialog-close" type="button" data-close-premium aria-label="Stäng Premium-informationen">
+        <i data-lucide="x"></i>
+      </button>
+
+      <div class="premium-dialog-heading">
+        <span class="premium-dialog-eyebrow"><i data-lucide="sparkles"></i> Vaktskolan Premium</span>
+        <h2 id="premiumModalTitle">Fortsätt hela vägen till provet</h2>
+        <p id="premiumModalDescription">Lås upp hela Vaktskolan och fortsätt utan begränsningar.</p>
+      </div>
+
+      <div class="premium-dialog-price" aria-label="399 kronor som engångsbetalning">
+        <strong>399 kr</strong>
+        <span>Engångsbetalning</span>
+        <small>Permanent tillgång</small>
+      </div>
+
+      <div class="premium-dialog-includes">
+        <span>Allt det här ingår</span>
+        <ul>
+          <li><i data-lucide="check"></i><span>Alla moduler i VU1 och VU2</span></li>
+          <li><i data-lucide="check"></i><span>Obegränsade quiz, scenarier och flashcards</span></li>
+          <li><i data-lucide="check"></i><span>Personlig repetition och realistiska slutprov</span></li>
+          <li><i data-lucide="check"></i><span>Alla framtida innehållsuppdateringar</span></li>
+        </ul>
+      </div>
+
+      <button class="premium-dialog-primary" id="premiumCheckoutButton" type="button" data-start-premium-checkout>
+        <span class="premium-dialog-primary-label">Bli Premium – 399 kr</span>
+        <span class="premium-dialog-primary-loading"><i data-lucide="loader-circle"></i> Öppnar säker betalning</span>
+        <i class="premium-dialog-primary-arrow" data-lucide="arrow-right"></i>
+      </button>
+      <button class="premium-dialog-secondary" type="button" data-close-premium>Fortsätt med Basic</button>
+      <p class="premium-dialog-assurance"><i data-lucide="shield-check"></i> Säker betalning hos Stripe · inga återkommande avgifter</p>
+    </div>
+  </div>
+
   <div class="quiz-reset-modal" id="quizResetModal" role="dialog" aria-modal="true" aria-labelledby="quizResetTitle" hidden>
     <div class="quiz-reset-dialog">
       <div class="quiz-reset-icon">
@@ -444,6 +482,6 @@
   <script src="authProvider.js?v=20260716-fail-closed"></script>
   <script src="supabaseApi.js?v=20260714-public-quiz-auth"></script>
   <script src="emblemSystem.js?v=20260716-emblems"></script>
-  <script src="app.js?v=20260722-final-portal-shell"></script>
+  <script src="app.js?v=20260722-premium-lifetime"></script>
 </body>
 </html>

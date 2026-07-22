@@ -7,7 +7,7 @@
     "prepare:assets": "node scripts/prepare-public-assets.mjs",
     "predev": "npm run prepare:assets",
     "dev": "next dev",
-    "prebuild": "npm run prepare:assets && npm run validate:content && npm run validate:release && npm run validate:legacy && npm run test:platform-guards && npm run test:emblems",
+    "prebuild": "npm run prepare:assets && npm run validate:content && npm run validate:release && npm run validate:legacy && npm run test:platform-guards && npm run test:emblems && npm run test:billing",
     "build": "next build",
     "start": "next start -H 0.0.0.0",
     "lint": "eslint .",
@@ -18,18 +18,23 @@
     "validate:legacy": "node --check app.js && node --check authProvider.js && node --check auth.js && node --check supabaseApi.js && node --check emblemSystem.js",
     "test:platform-guards": "node scripts/test-platform-guards.mjs",
     "test:emblems": "node scripts/test-emblem-system.mjs",
+    "test:billing": "tsx scripts/test-stripe-billing.ts",
     "verify:supabase-progress": "node scripts/verify-supabase-progress.mjs",
+    "stripe:setup": "node --env-file=.env scripts/create-stripe-premium-product.mjs",
     "import:quiz-portal": "node scripts/import-quiz-portal-banks.mjs",
     "test:seo": "tsx scripts/test-seo.ts",
-    "test": "npm run typecheck && npm run lint && npm run validate:content && npm run validate:release && npm run test:platform-guards && npm run test:emblems"
+    "test": "npm run typecheck && npm run lint && npm run validate:content && npm run validate:release && npm run test:platform-guards && npm run test:emblems && npm run test:billing"
   },
   "dependencies": {
+    "@clerk/backend": "^3.12.0",
     "gray-matter": "4.0.3",
+    "jose": "^6.2.4",
     "next": "16.2.10",
     "next-mdx-remote": "6.0.0",
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "schema-dts": "1.1.5",
+    "stripe": "^22.3.2",
     "zod": "4.1.12"
   },
   "devDependencies": {

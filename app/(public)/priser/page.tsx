@@ -3,39 +3,44 @@ import Link from "next/link";
 import { JsonLd } from "@/components/json-ld";
 import { absoluteUrl } from "@/lib/site";
 
-const SIGN_UP_URL = "/login?mode=sign-up&redirect_url=%2Fplattform";
+const BASIC_SIGN_UP_URL = "/login?mode=sign-up&redirect_url=%2Fplattform";
+const PREMIUM_SIGN_UP_URL = "/login?mode=sign-up&redirect_url=%2Fplattform%3Fupgrade%3Dpremium";
 
 const plans = [
   {
     id: "basic",
     name: "Basic",
-    description: "För dig som vill testa Vaktskolan och få en känsla för hur plattformen fungerar.",
+    description: "För dig som vill prova Vaktskolan och bygga en stabil grund innan du låser upp hela utbildningen.",
     price: "0 kr",
-    priceNote: "Kostnadsfritt",
-    cta: "Välj Basic",
+    priceUnit: "",
+    priceNote: "Kostnadsfritt – inget betalkort krävs",
+    cta: "Börja med Basic",
+    href: BASIC_SIGN_UP_URL,
     featured: false,
     features: [
-      "Utvalda lektioner från VU1",
-      "Ett urval av quizfrågor",
-      "Prova scenariofrågor och flashcards",
-      "Se resultat efter genomförda quiz",
-      "Grundläggande översikt över dina framsteg",
-      "Dina framsteg sparas",
+      "Hela modul 1 i VU1",
+      "10 VU1-frågor",
+      "10 realistiska scenariofrågor",
+      "10 flashcard-vändningar",
+      "Resultat och förklaringar på dina svar",
+      "Dina framsteg sparas på kontot",
     ],
   },
   {
     id: "premium",
     name: "Premium",
-    description: "För dig som vill träna strukturerat och känna dig helt förberedd inför väktarprovet.",
-    price: "99 kr",
-    priceNote: "Ingen bindningstid",
-    cta: "Skaffa Premium",
+    description: "För dig som vill träna strukturerat, obegränsat och känna dig helt förberedd inför väktarprovet.",
+    price: "399 kr",
+    priceUnit: "engångsbelopp",
+    priceNote: "Permanent tillgång – inga återkommande avgifter",
+    cta: "Lås upp Premium",
+    href: PREMIUM_SIGN_UP_URL,
     featured: true,
     features: [
-      "Samtliga lektioner i VU1 och VU2",
-      "Full tillgång till alla quiz och frågebanker",
-      "Hundratals realistiska scenariofrågor",
-      "Komplett samling flashcards",
+      "Samtliga lektioner och moduler i VU1 och VU2",
+      "Obegränsad tillgång till alla quiz och frågebanker",
+      "Hela banken med realistiska scenariofrågor",
+      "Komplett samling flashcards utan vändningsgräns",
       "Personlig repetition av frågor du svarat fel på",
       "Realistiska slutprov med tidtagning",
       "Resultat, förklaringar och detaljerad statistik",
@@ -49,7 +54,7 @@ const plans = [
 export const metadata: Metadata = {
   title: "Priser – Basic och Premium",
   description:
-    "Jämför Vaktskolans medlemskap Basic och Premium för VU1, VU2, quiz, scenarioträning, flashcards och slutprov.",
+    "Jämför Vaktskolans medlemskap Basic och Premium. Premium kostar 399 kr som engångsbelopp och ger permanent tillgång.",
   alternates: { canonical: "/priser" },
   robots: {
     index: true,
@@ -62,7 +67,7 @@ export const metadata: Metadata = {
     url: "/priser",
     siteName: "Vaktskolan",
     title: "Basic eller Premium – välj ditt medlemskap",
-    description: "Börja med Basic och uppgradera till hela Vaktskolan när du vill.",
+    description: "Börja kostnadsfritt med Basic eller lås upp hela Vaktskolan permanent för 399 kr.",
   },
 };
 
@@ -79,7 +84,7 @@ export default function PricingPage() {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: "Vaktskolans priser",
-    description: "Jämför medlemskapen Basic och Premium för Vaktskolans digitala lärplattform.",
+    description: "Jämför Basic med permanent Premium för Vaktskolans digitala lärplattform.",
     url: absoluteUrl("/priser"),
     isPartOf: { "@type": "WebSite", name: "Vaktskolan", url: absoluteUrl("/") },
   };
@@ -93,7 +98,7 @@ export default function PricingPage() {
             <div className="pricing-heading">
               <p>Medlemskap</p>
               <h1 id="pricing-title">Välj ditt medlemskap</h1>
-              <span>Träna smartare inför väktarprovet – börja med Basic och uppgradera när du vill.</span>
+              <span>Prova grunderna kostnadsfritt eller få permanent tillgång till hela Vaktskolan.</span>
             </div>
 
             <div className="pricing-grid">
@@ -102,14 +107,14 @@ export default function PricingPage() {
                   className={`pricing-plan${plan.featured ? " pricing-plan--featured" : ""}`}
                   key={plan.id}
                 >
-                  {plan.featured ? <div className="pricing-plan__recommendation">Rekommenderas för dig</div> : null}
+                  {plan.featured ? <div className="pricing-plan__recommendation">Mest komplett</div> : null}
                   <div className="pricing-plan__inner">
                     <div className="pricing-plan__orb" aria-hidden="true" />
                     <h2>{plan.name}</h2>
                     <p className="pricing-plan__description">{plan.description}</p>
                     <div className="pricing-plan__price">
                       <strong>{plan.price}</strong>
-                      <span>/mån</span>
+                      {plan.priceUnit ? <span>{plan.priceUnit}</span> : null}
                     </div>
                     <p className="pricing-plan__price-note">{plan.priceNote}</p>
                     <div className="pricing-plan__divider" />
@@ -125,7 +130,7 @@ export default function PricingPage() {
                     <Link
                       className={`pricing-plan__cta${plan.featured ? " pricing-plan__cta--featured" : ""}`}
                       data-pricing-plan={plan.id}
-                      href={SIGN_UP_URL}
+                      href={plan.href}
                     >
                       {plan.cta} <span aria-hidden="true">→</span>
                     </Link>
@@ -134,7 +139,7 @@ export default function PricingPage() {
               ))}
             </div>
 
-            <p className="pricing-assurance">Ingen bindningstid <span aria-hidden="true">·</span> Avsluta när du vill</p>
+            <p className="pricing-assurance">En betalning <span aria-hidden="true">·</span> Permanent Premium <span aria-hidden="true">·</span> Inga återkommande avgifter</p>
           </div>
         </section>
 

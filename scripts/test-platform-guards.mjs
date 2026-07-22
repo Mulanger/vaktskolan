@@ -111,6 +111,7 @@ assert.match(
 );
 assert.equal(evaluate("isModuleUnlocked(0)"), true);
 assert.equal(evaluate("isModuleUnlocked(1)"), false, "Module 2 must start locked.");
+assert.equal(evaluate("isModuleMembershipLocked(1)"), true, "Basic must membership-lock VU1 module 2.");
 assert.equal(evaluate("isPageUnlocked(0, 0, 0)"), true);
 assert.equal(evaluate("isPageUnlocked(0, 0, 1)"), false, "A later page must start locked.");
 assert.equal(evaluate("isFinalExamNavigationUnlocked()"), false, "The final exam navigation must start locked.");
@@ -122,6 +123,9 @@ evaluate('state.answers["vu1:0"] = { "1": "A" }');
 assert.equal(evaluate("isModuleComplete(0)"), false, "Answers without submission must not complete a module.");
 evaluate('state.quizSubmissions["vu1:0"] = { submittedAt: 1 }');
 assert.equal(evaluate("isModuleComplete(0)"), true, "Completed pages and a passed submitted quiz complete the module.");
+assert.equal(evaluate("isModuleUnlocked(1)"), false, "Basic must remain limited to VU1 module 1 after completing it.");
+evaluate('state.membership.tier = "premium"');
+assert.equal(evaluate("isModuleMembershipLocked(1)"), false, "Premium must remove the membership lock.");
 assert.equal(evaluate("isModuleUnlocked(1)"), true, "A passed module unlocks the next module.");
 
 evaluate('state.visited.add("vu1:1:0:0"); state.visited.add("vu1:1:0:1")');
