@@ -103,6 +103,12 @@ function evaluate(expression) {
 
 assert.equal(evaluate("UNLOCK_MODULE_NAVIGATION"), false, "Production host must enforce module navigation.");
 assert.equal(evaluate("ENFORCE_COURSE_LOCKS"), true, "Production host must enforce course locks.");
+assert.doesNotMatch(source, /renderFinalExamSidebar|final-sidebar-card/, "The final exam must not create a designer-specific sidebar.");
+assert.match(
+  source,
+  /function showFinalExamPortal\(\)[\s\S]{0,2000}hideModuleList\(\);/,
+  "The final exam portal must keep the platform sidebar and hide its contextual module list.",
+);
 assert.equal(evaluate("isModuleUnlocked(0)"), true);
 assert.equal(evaluate("isModuleUnlocked(1)"), false, "Module 2 must start locked.");
 assert.equal(evaluate("isPageUnlocked(0, 0, 0)"), true);

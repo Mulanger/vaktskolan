@@ -3508,32 +3508,6 @@ function finalPortalCourseDescription(courseId) {
     : "Slutprov för VU1 med regler, juridik, arbetsmiljö och yrkesetik från grundutbildningen.";
 }
 
-function renderFinalExamSidebar() {
-  const overviews = Object.keys(COURSE_CONFIG).map((courseId) => getFinalExamPortalOverview(courseId));
-  els.moduleListWrap.hidden = false;
-  els.moduleListTitle.textContent = "Tillgängliga prov";
-  els.moduleCount.textContent = "VU1 + VU2";
-  els.moduleList.innerHTML = overviews
-    .map((overview) => {
-      const isActive = state.courseId === overview.courseId;
-      return `
-        <button class="final-sidebar-card ${isActive ? "is-active" : ""} final-sidebar-card-${overview.tone}"
-          type="button"
-          data-final-portal-course="${overview.courseId}"
-          data-final-portal-action="${overview.action}"
-          ${overview.disabled ? 'disabled aria-disabled="true"' : ""}>
-          <span class="final-sidebar-index">${escapeHtml(overview.course.shortLabel.replace("VU", ""))}</span>
-          <span class="final-sidebar-copy">
-            <strong>${escapeHtml(overview.course.finalExamLabel)}</strong>
-            <small>${escapeHtml(overview.detail)}</small>
-          </span>
-          <span class="final-sidebar-status">${escapeHtml(overview.status)}</span>
-        </button>
-      `;
-    })
-    .join("");
-}
-
 function renderFinalExamPortalCard(overview) {
   const cardDescription = finalPortalCourseDescription(overview.courseId);
   const actionIcon = overview.disabled ? "lock" : overview.action === "resume" ? "play-circle" : "arrow-right";
@@ -3590,6 +3564,7 @@ function renderFinalExamPortal() {
       </div>
       <section class="final-portal-hero" aria-label="Information om slutprov">
         <div class="final-portal-hero-copy">
+          <span>Skarpt kunskapstest</span>
           <h2>Dags för slutprovet</h2>
           <p>Slutprovet är ditt skarpa kunskapstest. Till skillnad från Quiz Portalen får du inget facit under provets gång — du svarar på alla frågor, lämnar in, och ser sedan ditt resultat. Läs varje fråga noga.</p>
         </div>
@@ -3870,7 +3845,7 @@ function showFinalExamPortal() {
   els.lessonTitle.textContent = "Slutprov";
   els.breadcrumbs.innerHTML = "";
 
-  renderFinalExamSidebar();
+  hideModuleList();
   renderActiveNav();
   refreshIcons();
   els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
@@ -5614,11 +5589,7 @@ function showFinalExam() {
   els.timeEstimate.textContent = "Slutprov";
 
   renderFinalExam();
-  if (isSubmitted) {
-    renderFinalExamSidebar();
-  } else {
-    hideModuleList();
-  }
+  hideModuleList();
   renderActiveNav();
   refreshIcons();
   els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });

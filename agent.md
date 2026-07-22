@@ -750,6 +750,8 @@ Kurshubben räknar innehållsmoduler, inte slutprovmodulen, i "Moduler klara". D
 
 Slutprov finns för både VU1 och VU2.
 
+Status 2026-07-22: Slutprovsportalen använder omdesignen från `D:\Slutprovs-sida omdesign.zip` i huvudarbetsytan: mörkt regelblock, dynamiska VU1/VU2-kort, faktisk kursprogress, frågepool och provstatus. Designunderlagets specialbyggda vänsterspalt med `Tillgängliga prov` är uttryckligen inte implementerad. Portalen behåller Vaktskolans ordinarie sidopanel och döljer den vanliga modulistan med `hideModuleList()`. Texten använder fortsatt plattformens befintliga Inter-font; prototypens Plus Jakarta Sans ska inte importeras.
+
 Viktiga funktioner:
 
 - `getFinalExamQuestions()`
