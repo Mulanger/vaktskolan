@@ -22,11 +22,11 @@ Avsnitten nedan beskriver i stor utsträckning legacy-plattformens interna funkt
 `components/guide-quiz-panel.tsx` ansvarar för det tre frågor långa snabbquizet som följer med de publika guidesidorna. Frågeprogressen sparas lokalt och ska överleva navigering mellan guider. Rätt/fel visas inte efter varje svar; eleven måste svara på samtliga tre frågor innan resultatet och svarsförklaringen visas.
 
 - Desktop (`min-width: 901px`) behåller den sticky quizpanelen i guidens högra spalt.
-- Mobil (`max-width: 900px`) följer designalternativ 1B från `D:\Quiz overlay design alternativ.zip`: ett kompakt vitt `Testa dig själv`-kort ligger längst ned i läsvyn och låter besökaren välja ett svar direkt.
+- Mobil (`max-width: 900px`) följer designalternativ 1B från `D:\Quiz overlay design alternativ.zip`: efter besökarens första scroll väntar sidan två sekunder innan ett kompakt vitt `Testa dig själv`-kort visas längst ned i läsvyn. Kortet låter besökaren välja ett svar direkt.
 - Ett svar i mobilkortet öppnar quizet som en bottenpanel på samma läsposition. Panelen har dimmad bakgrund, segmenterad progress, stängknapp, Escape-stöd, låst bakgrundsscroll och stängs även vid klick utanför.
-- Alla faktiska svarsalternativ ska alltid visas. Frågorna har normalt tre alternativ, därför använder mobilkortet två kolumner och låter ett udda sista alternativ ta hela raden.
+- Alla faktiska svarsalternativ ska alltid visas, ett fullbreddsalternativ per rad.
 - När artikelns ordinarie inline-quiz kommer in i viewporten döljs det fasta mobilkortet så att två quizytor inte konkurrerar visuellt.
-- Mobilhändelser mäts separat som `guide_quiz_mobile_teaser_answer` och `guide_quiz_mobile_teaser_open`. De befintliga fråge-, resultat- och CTA-händelserna används fortsatt inne i quizflödet.
+- Mobilhändelser mäts separat som `guide_quiz_mobile_teaser_reveal`, `guide_quiz_mobile_teaser_answer` och `guide_quiz_mobile_teaser_open`. De befintliga fråge-, resultat- och CTA-händelserna används fortsatt inne i quizflödet.
 
 Stilarna finns i `app/globals.css` under guidequizets mobilregler. Ändra inte desktopens högerspalt när mobilvarianten justeras, och återinför inte omedelbar rätt/fel-feedback utan ett nytt uttryckligt produktbeslut.
 

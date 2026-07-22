@@ -1620,8 +1620,8 @@ a {
   }
   .guide-quiz-mobile-teaser__options {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 7px;
     margin-top: 10px;
   }
   .guide-quiz-mobile-teaser__options > button {
@@ -1639,9 +1639,6 @@ a {
     padding: 8px 11px;
     text-align: left;
     transition: border-color 150ms ease, background-color 150ms ease, transform 150ms ease;
-  }
-  .guide-quiz-mobile-teaser__options > button:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
   }
   .guide-quiz-mobile-teaser__options > button:hover,
   .guide-quiz-mobile-teaser__options > button:focus-visible {

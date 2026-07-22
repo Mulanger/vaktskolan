@@ -34,6 +34,7 @@ type GuideQuizPanelProps = {
 };
 
 const STORAGE_KEY = "vaktskolan-guide-quiz-v1";
+const MOBILE_TEASER_DELAY_MS = 2000;
 
 const DEFAULT_QUESTIONS: readonly GuideQuizQuestion[] = [
   {
@@ -230,6 +231,7 @@ export function GuideQuizPanel({ guideSlug, guideLabel }: GuideQuizPanelProps) {
   const [previousResult, setPreviousResult] = useState<{ label: string; score: number } | null>(null);
   const [isQuizVisible, setIsQuizVisible] = useState(false);
   const [isMobileOverlayOpen, setIsMobileOverlayOpen] = useState(false);
+  const [mobileTeaserReveal, setMobileTeaserReveal] = useState({ slug: "", ready: false });
   const panelRef = useRef<HTMLElement | null>(null);
   const mobileTeaserRef = useRef<HTMLElement | null>(null);
   const mobileCloseRef = useRef<HTMLButtonElement | null>(null);
@@ -259,6 +261,51 @@ export function GuideQuizPanel({ guideSlug, guideLabel }: GuideQuizPanelProps) {
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 900px)");
+    let revealTimer: number | undefined;
+    let isListeningForScroll = false;
+    let hasRevealed = false;
+
+    const stopListeningForScroll = () => {
+      if (!isListeningForScroll) return;
+      window.removeEventListener("scroll", startRevealTimer);
+      isListeningForScroll = false;
+    };
+
+    const startRevealTimer = () => {
+      stopListeningForScroll();
+      revealTimer = window.setTimeout(() => {
+        hasRevealed = true;
+        setMobileTeaserReveal({ slug: guideSlug, ready: true });
+        trackGuideQuizEvent("guide_quiz_mobile_teaser_reveal", guideSlug, { delay_ms: MOBILE_TEASER_DELAY_MS });
+      }, MOBILE_TEASER_DELAY_MS);
+    };
+
+    const syncScrollListener = () => {
+      if (!mediaQuery.matches) {
+        stopListeningForScroll();
+        if (revealTimer !== undefined) {
+          window.clearTimeout(revealTimer);
+          revealTimer = undefined;
+        }
+        return;
+      }
+      if (hasRevealed || revealTimer !== undefined || isListeningForScroll) return;
+      window.addEventListener("scroll", startRevealTimer, { passive: true });
+      isListeningForScroll = true;
+    };
+
+    syncScrollListener();
+    mediaQuery.addEventListener("change", syncScrollListener);
+
+    return () => {
+      stopListeningForScroll();
+      mediaQuery.removeEventListener("change", syncScrollListener);
+      if (revealTimer !== undefined) window.clearTimeout(revealTimer);
+    };
+  }, [guideSlug]);
 
   useEffect(() => {
     if (!isMobileOverlayOpen) return;
@@ -363,6 +410,7 @@ export function GuideQuizPanel({ guideSlug, guideLabel }: GuideQuizPanelProps) {
   const current = questions[progress.currentQuestion];
   const resultTitle = progress.score === questions.length ? "Full pott" : progress.score >= 2 ? "Bra koll" : "Bra start";
   const mobileStep = Math.min(progress.currentQuestion + 1, questions.length);
+  const isMobileTeaserReady = mobileTeaserReveal.slug === guideSlug && mobileTeaserReveal.ready;
 
   function renderMobileProgress() {
     return (
@@ -514,7 +562,7 @@ export function GuideQuizPanel({ guideSlug, guideLabel }: GuideQuizPanelProps) {
         </div>
       )}
 
-      {!isQuizVisible && (
+      {!isQuizVisible && isMobileTeaserReady && (
         <aside
           aria-label={`Starta snabbquiz om ${guideLabel}`}
           aria-hidden={isMobileOverlayOpen || undefined}
