@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     { url: absoluteUrl("/"), lastModified: new Date("2026-07-16T12:00:00+02:00") },
+    { url: absoluteUrl("/plattformen"), lastModified: new Date("2026-07-22T12:00:00+02:00") },
     ...contentPages,
   ];
 }

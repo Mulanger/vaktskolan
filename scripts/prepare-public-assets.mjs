@@ -84,6 +84,10 @@ const siteCopies = [
   ["assets/logo/vaktskolan-wordmark-white.svg", "logo/vaktskolan-wordmark-white.svg"],
   ["assets/logo/vaktskolan-favicon-transparent.png", "logo/favicon.png"],
   ["assets/logo/vaktskolan-icon-512.png", "logo/icon-512.png"],
+  ["assets/platform-showcase/dashboard.png", "platform-showcase/dashboard.png"],
+  ["assets/platform-showcase/course.png", "platform-showcase/course.png"],
+  ["assets/platform-showcase/quiz-portal.png", "platform-showcase/quiz-portal.png"],
+  ["assets/platform-showcase/final-exam.png", "platform-showcase/final-exam.png"],
 ];
 
 for (const [source, target] of siteCopies) {

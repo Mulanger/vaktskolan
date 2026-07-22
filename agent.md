@@ -17,7 +17,9 @@ Det här dokumentet beskriver appen i `D:\vaktskolan`: hur dashboarden och landi
 
 Avsnitten nedan beskriver i stor utsträckning legacy-plattformens interna funktioner. Påståenden om att root-sajten saknar byggsystem eller npm-dependencies är historiska och ska inte användas för den publika Next-ytan.
 
-Den publika toppnavigationen använder etiketterna `Utbildningsmaterial`, `Wiki` och `Väktaryrket`; `Wiki` länkar fortsatt till SEO-/guidehubben på `/studieteknik`. Övriga publika sidor läser länkarna från `lib/site.ts`. Startsidan återanvänder den äldre headern i `landing/index.html`, så dess desktop- och mobilmeny måste hållas i samma ordning och med samma etiketter. Inloggning ligger separat från de tre huvudlänkarna.
+Den publika toppnavigationen använder etiketterna `Plattformen`, `Wiki` och `Väktaryrket`; `Plattformen` länkar till den publika produktvisningen på `/plattformen` och `Wiki` länkar fortsatt till SEO-/guidehubben på `/studieteknik`. Övriga publika sidor läser länkarna från `lib/site.ts`. Startsidan återanvänder den äldre headern i `landing/index.html`, så dess desktop- och mobilmeny måste hållas i samma ordning och med samma etiketter. Inloggning ligger separat från de tre huvudlänkarna.
+
+Den publika sidan `/plattformen` byggs i `app/(public)/plattformen/page.tsx` och använder den gemensamma `SiteHeader`/`SiteFooter` från root-layouten. Den ska inte få en separat showcase-header. Produktbilderna ligger i `public/site-assets/platform-showcase/`, sidan är indexerbar och finns uttryckligen i `app/sitemap.ts`. Den privata elevplattformen ligger fortsatt på `/plattform`; blanda inte ihop de två adresserna.
 
 Startsidan har ingen separat `Öva nu`-knapp i mobilheadern. Mobilens quizväg är den befintliga `Gratis Quiz`-knappen i heron; ta inte tillbaka en konkurrerande header-CTA utan ett nytt uttryckligt produktbeslut.
 

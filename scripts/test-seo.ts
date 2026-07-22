@@ -4,6 +4,7 @@ const baseUrl = (process.env.BASE_URL || "http://localhost:3000").replace(/\/+$/
 
 const canonicalPaths = [
   "/",
+  "/plattformen",
   "/vaktarprov",
   "/vaktarprov/vu1-ovningsfragor",
   "/vaktarprov/vu2-ovningsfragor",
@@ -20,7 +21,7 @@ const canonicalPaths = [
   "/kontakt",
 ];
 
-const trustPaths = new Set(["/om-vaktskolan", "/redaktionell-policy", "/kontakt"]);
+const trustPaths = new Set(["/plattformen", "/om-vaktskolan", "/redaktionell-policy", "/kontakt"]);
 
 type StructuredNode = Record<string, unknown>;
 
@@ -190,11 +191,11 @@ async function main() {
   const sitemap = await fetch(`${baseUrl}/sitemap.xml`);
   const sitemapBody = await sitemap.text();
   assert(sitemap.status === 200 && sitemap.headers.get("content-type")?.includes("xml"), "sitemap.xml is invalid");
-  assert(!sitemapBody.includes("/plattform") && !sitemapBody.includes("/integritet"), "sitemap contains noindex routes");
   assert(!/<(?:changefreq|priority)>/.test(sitemapBody), "sitemap contains fields Google ignores");
   const sitemapPaths = new Set(
     [...sitemapBody.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => new URL(match[1]).pathname),
   );
+  assert(!sitemapPaths.has("/plattform") && !sitemapPaths.has("/integritet"), "sitemap contains noindex routes");
   for (const path of canonicalPaths) {
     assert(sitemapPaths.has(path), `sitemap is missing ${path}`);
   }
