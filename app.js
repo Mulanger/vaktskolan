@@ -31,6 +31,7 @@ const RESTORABLE_MODES = new Set([
   "module-milestone",
   "quiz",
   "quiz-overview",
+  "knowledge-base",
   "final-exam-portal",
   "final-exam",
 ]);
@@ -275,6 +276,7 @@ const els = {
   courseHub: $("#courseHub"),
   quizOverviewPanel: $("#quizOverviewPanel"),
   quizPortal: $("#quizPortal"),
+  knowledgeBasePanel: $("#knowledgeBasePanel"),
   courseHubTitle: $("#courseHubTitle"),
   courseHubMeta: $("#courseHubMeta"),
   courseHubPercent: $("#courseHubPercent"),
@@ -495,6 +497,7 @@ function portalHashForLocation(location) {
   if (location.mode === "hub") return "#vu1";
   if (location.mode === "vu2") return "#vu2";
   if (location.mode === "quiz-overview") return "#quiz";
+  if (location.mode === "knowledge-base") return "#kunskapsbas/lonekollen";
   if (location.mode === "final-exam-portal") return "#slutprov";
   if (location.mode === "final-exam") return `#slutprov/${courseId}/prov`;
   if (location.mode === "module-milestone") return `#${courseId}/modul/${moduleNumber}/start`;
@@ -520,6 +523,9 @@ function portalLocationFromHash(hash = window.location.hash, fallback = null) {
   if (route === "vu1") return { ...base, courseId: "vu1", mode: "hub" };
   if (route === "vu2") return { ...base, courseId: "vu2", mode: "vu2" };
   if (route === "quiz") return { ...base, mode: "quiz-overview" };
+  if (route === "kunskapsbas" || route === "kunskapsbas/lonekollen") {
+    return { ...base, mode: "knowledge-base" };
+  }
   if (route === "slutprov") return { ...base, mode: "final-exam-portal" };
 
   const finalExamMatch = route.match(/^slutprov\/(vu1|vu2)\/prov$/);
@@ -612,6 +618,10 @@ function restorePortalHistory(value) {
       cancelQuizPortalCountdown();
       resetQuizPortalSession("home");
       showQuizOverview();
+      return true;
+    }
+    if (location.mode === "knowledge-base") {
+      showKnowledgeBase();
       return true;
     }
     if (location.mode === "final-exam-portal") {
@@ -1510,6 +1520,348 @@ function hideModuleList() {
   els.moduleListWrap.hidden = true;
   els.moduleList.innerHTML = "";
   els.moduleCount.textContent = "";
+}
+
+function renderKnowledgeBaseSidebar() {
+  els.moduleListWrap.hidden = false;
+  els.moduleListTitle.textContent = "Kunskapsbas";
+  els.moduleCount.textContent = "";
+  els.moduleList.innerHTML = `
+    <button class="knowledge-sidebar-item is-active" type="button" data-open-salary-check aria-current="page">
+      <i data-lucide="credit-card" aria-hidden="true"></i>
+      <span>Lönekollen</span>
+    </button>
+  `;
+}
+
+function formatSalaryAmount(value) {
+  return Math.round(Number(value) || 0).toLocaleString("sv-SE");
+}
+
+function salaryStepByKey(key) {
+  return SALARY_CHECK_CONFIG.steps.find((step) => step.key === key) || SALARY_CHECK_CONFIG.steps[1];
+}
+
+function salaryAmountMarkup(step, options = {}) {
+  const suffix = options.suffix || "";
+  return `${step.exact ? "" : '<span class="salary-check-approx">ca</span> '}${formatSalaryAmount(step.amount)}${suffix}`;
+}
+
+function renderSalaryCheck() {
+  if (!els.knowledgeBasePanel) return;
+
+  const [newStep, baseStep, groupB, groupC, groupD, groupE] = SALARY_CHECK_CONFIG.steps;
+  const groupMarkup = [
+    {
+      step: groupB,
+      title: "Bevakningstjänst",
+      subtitle: "Den vanligaste gruppen för väktare",
+      description:
+        "Stationär och ronderande bevakning, butik och köpcentrum, reception, bostadsbevakning samt flera typer av kontroll- och tillsynsuppdrag.",
+    },
+    {
+      step: groupC,
+      title: "Kvalificerad tjänst",
+      subtitle: "Kräver ofta påbyggnadsutbildning",
+      description:
+        "Här finns bland annat ordningsvakt, skyddsvakt, värdetransport, jourdistriktsväktare och vissa roller i larmcentral.",
+    },
+    {
+      step: groupD,
+      title: "Ledning och teknik",
+      subtitle: "Arbetsledande eller tekniskt ansvar",
+      description: "Omfattar bland annat gruppledare, teknisk utryckningsväktare och operatör i särskilda larmcentraler.",
+    },
+    {
+      step: groupE,
+      title: "Specialist",
+      subtitle: "Tariffens högsta lönegrupp",
+      description: "Kvalificerad gruppledare och personskydd. De faktiska arbetsuppgifterna avgör lönegruppen.",
+    },
+  ]
+    .map(
+      ({ step, title, subtitle, description }) => `
+        <details class="salary-check-card salary-check-group">
+          <summary>
+            <span class="salary-check-group-letter" aria-hidden="true">${step.name.slice(-1)}</span>
+            <span class="salary-check-group-title">${title}<small>${subtitle}</small></span>
+            <span class="salary-check-group-pay salary-check-number">${salaryAmountMarkup(step)}<small> kr/mån</small></span>
+            <i data-lucide="chevron-right" aria-hidden="true"></i>
+          </summary>
+          <p>${description}</p>
+        </details>
+      `
+    )
+    .join("");
+
+  const obCards = SALARY_CHECK_CONFIG.ob
+    .map(
+      (item) => `
+        <article class="salary-check-card salary-check-ob-card">
+          <div class="salary-check-ob-label"><span class="salary-check-dot is-${item.tone}"></span>${item.label}</div>
+          <p class="salary-check-ob-value salary-check-number"><span>ca</span> ${formatSalaryAmount(item.amount)} <small>kr/tim</small></p>
+          <p>${item.name}</p>
+          <small>${item.schedule}</small>
+        </article>
+      `
+    )
+    .join("");
+
+  const stepButtons = SALARY_CHECK_CONFIG.steps
+    .map(
+      (step) => `
+        <button class="salary-check-chip" type="button" data-salary-step="${step.key}"
+          aria-pressed="${step.key === salaryCheckState.stepKey}">
+          ${step.name} <span>${step.exact ? "" : "ca "}${formatSalaryAmount(step.amount)} kr</span>
+        </button>
+      `
+    )
+    .join("");
+
+  const presetButtons = SALARY_CHECK_CONFIG.presets
+    .map(
+      (preset) => `
+        <button class="salary-check-chip" type="button" data-salary-preset="${preset.key}"
+          aria-pressed="${preset.key === salaryCheckState.presetKey}">${preset.name}</button>
+      `
+    )
+    .join("");
+
+  const sliderRows = SALARY_CHECK_CONFIG.ob
+    .map(
+      (item) => `
+        <div class="salary-check-slider-row">
+          <label for="salary-ob-${item.key}">${item.label} <span>· ${item.name}</span></label>
+          <input id="salary-ob-${item.key}" type="range" min="0" max="120" step="2"
+            value="${salaryCheckState.hours[item.key]}" data-salary-ob="${item.key}" />
+          <output for="salary-ob-${item.key}" data-salary-output="${item.key}">${salaryCheckState.hours[item.key]} h</output>
+        </div>
+      `
+    )
+    .join("");
+
+  els.knowledgeBasePanel.innerHTML = `
+    <article class="salary-check" aria-labelledby="salaryCheckTitle">
+      <header class="salary-check-hero">
+        <p class="salary-check-eyebrow"><i data-lucide="wallet-cards" aria-hidden="true"></i> Kunskapsbas</p>
+        <div class="salary-check-hero-row">
+          <div>
+            <h1 id="salaryCheckTitle">Lönekollen – vad tjänar en väktare?</h1>
+            <p>Se den aktuella lönetrappan, jämför lönegrupper och räkna på hur OB-timmarna påverkar din bruttolön.</p>
+          </div>
+          <span class="salary-check-reviewed"><i data-lucide="badge-check" aria-hidden="true"></i> Granskad ${SALARY_CHECK_CONFIG.reviewed}</span>
+        </div>
+      </header>
+
+      <section class="salary-check-section salary-check-overview" aria-labelledby="salaryOverviewTitle">
+        <h2 class="sr-only" id="salaryOverviewTitle">Löneöversikt</h2>
+        <div class="salary-check-stats">
+          <article class="salary-check-card salary-check-stat">
+            <p><span class="salary-check-dot is-blue"></span>Ingångslön 2026</p>
+            <strong class="salary-check-number">${formatSalaryAmount(newStep.amount)} <small>kr/mån</small></strong>
+            <span>Nyanställd, heltid</span>
+          </article>
+          <article class="salary-check-card salary-check-stat">
+            <p><span class="salary-check-dot is-green"></span>Efter 15 månader</p>
+            <strong class="salary-check-number">${formatSalaryAmount(groupB.amount)}–<span class="salary-check-approx">ca</span> ${formatSalaryAmount(groupE.amount)}</strong>
+            <span>Lönegrupp B–E, kr/mån</span>
+          </article>
+          <article class="salary-check-card salary-check-stat">
+            <p><span class="salary-check-dot is-purple"></span>Medianlön, SCB 2025</p>
+            <strong class="salary-check-number">${formatSalaryAmount(SALARY_CHECK_CONFIG.medianSalary)} <small>kr/mån</small></strong>
+            <span>Väktare och ordningsvakter</span>
+          </article>
+        </div>
+        <div class="salary-check-card salary-check-cta">
+          <div>
+            <span>Räkna på ditt schema</span>
+            <h2>Lönekalkylatorn</h2>
+            <p>Välj lönesteg och lägg till dina OB-timmar för en uppskattning före skatt.</p>
+          </div>
+          <a href="#salary-calculator" data-salary-calculator-link>Till kalkylatorn <i data-lucide="arrow-down" aria-hidden="true"></i></a>
+        </div>
+      </section>
+
+      <section class="salary-check-section" aria-labelledby="salaryLadderTitle">
+        <div class="salary-check-section-head">
+          <h2 id="salaryLadderTitle">Lönetrappan</h2>
+          <p>Tariffstegen följer anställningstid och arbetsuppgifter</p>
+        </div>
+        <div class="salary-check-card salary-check-ladder">
+          <article>
+            <span class="salary-check-step">1</span>
+            <div><h3>Väktare under utbildning <small>· efter VU1</small></h3><p>Under praktisk yrkesträning arbetar du med handledning och får nyanställningslön.</p></div>
+            <strong class="salary-check-number">${formatSalaryAmount(newStep.amount)} <small>kr/mån</small></strong>
+          </article>
+          <article>
+            <span class="salary-check-step">2</span>
+            <div><h3>Behörig väktare <small>· efter VU2</small></h3><p>VU2 öppnar för självständigt väktararbete. Nyanställningslönen gäller fortfarande till sex månader.</p></div>
+            <strong class="salary-check-number">${formatSalaryAmount(newStep.amount)} <small>kr/mån</small></strong>
+          </article>
+          <article class="is-milestone">
+            <span class="salary-check-step">3</span>
+            <div><h3>Grundlön <small>· efter sex månaders anställning</small></h3><p>Tariffen höjs till grundlön när anställningstiden är uppnådd.</p><span class="salary-check-gain">+${formatSalaryAmount(baseStep.amount - newStep.amount)} kr/mån sedan start</span></div>
+            <strong class="salary-check-number">${formatSalaryAmount(baseStep.amount)} <small>kr/mån</small></strong>
+          </article>
+          <article class="is-milestone">
+            <span class="salary-check-step">4</span>
+            <div><h3>Lönegrupp B–E <small>· efter 15 månaders anställning</small></h3><p>Arbetsuppgifterna avgör gruppen. Lokala avtal kan ge mer än tariffens lägstanivå.</p><span class="salary-check-gain">upp till ca +${formatSalaryAmount(groupE.amount - newStep.amount)} kr/mån sedan start</span></div>
+            <strong class="salary-check-number">${formatSalaryAmount(groupB.amount)}–ca ${formatSalaryAmount(groupE.amount)} <small>kr/mån</small></strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="salary-check-section" aria-labelledby="salaryVuTitle">
+        <div class="salary-check-section-head">
+          <h2 id="salaryVuTitle">Enbart VU1 – eller VU1 + VU2?</h2>
+          <p>Samma ingångslön, men olika behörighet och möjlighet till schema</p>
+        </div>
+        <div class="salary-check-vu-grid">
+          <article class="salary-check-card salary-check-vu-card">
+            <div><span class="salary-check-icon"><i data-lucide="book-open" aria-hidden="true"></i></span><span class="salary-check-badge is-neutral">Praktikfas</span></div>
+            <h3>Enbart VU1</h3>
+            <strong class="salary-check-number">${formatSalaryAmount(newStep.amount)} <small>kr/mån</small></strong>
+            <ul><li><i data-lucide="minus" aria-hidden="true"></i>Arbete under handledning i PYT</li><li><i data-lucide="minus" aria-hidden="true"></i>Ofta mer begränsat schema</li><li><i data-lucide="minus" aria-hidden="true"></i>VU2 krävs för full behörighet</li></ul>
+          </article>
+          <article class="salary-check-card salary-check-vu-card is-complete">
+            <div><span class="salary-check-icon"><i data-lucide="shield-check" aria-hidden="true"></i></span><span class="salary-check-badge">Behörig väktare</span></div>
+            <h3>VU1 + VU2</h3>
+            <strong class="salary-check-number">${formatSalaryAmount(baseStep.amount)} <small>kr/mån efter 6 mån</small></strong>
+            <ul><li><i data-lucide="check" aria-hidden="true"></i>Självständigt arbete</li><li><i data-lucide="check" aria-hidden="true"></i>Fler natt- och helgpass kan ge OB</li><li><i data-lucide="check" aria-hidden="true"></i>Grund för vidare påbyggnader</li></ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="salary-check-section" aria-labelledby="salaryGroupsTitle">
+        <div class="salary-check-section-head">
+          <h2 id="salaryGroupsTitle">Lönegrupperna B–E</h2>
+          <p>Öppna en grupp för att se exempel på roller</p>
+        </div>
+        <div class="salary-check-groups">${groupMarkup}</div>
+        <p class="salary-check-note"><i data-lucide="info" aria-hidden="true"></i><span>Grupp D–E är markerade som cirka-belopp eftersom hela 2026 års lönebilaga inte är offentligt publicerad. De har räknats fram från Transports publicerade tariff för 2024 och avtalets revisioner 2025–2026. Kontrollera alltid mot din arbetsgivares aktuella lönebilaga.</span></p>
+      </section>
+
+      <section class="salary-check-section" aria-labelledby="salaryObTitle">
+        <div class="salary-check-section-head">
+          <h2 id="salaryObTitle">OB-tillägg per timme</h2>
+          <p>Cirkanivåer som läggs ovanpå grundlönen</p>
+        </div>
+        <div class="salary-check-ob-grid">${obCards}</div>
+        <p class="salary-check-note"><i data-lucide="clock-3" aria-hidden="true"></i><span>OB-beloppen är avrundade uppskattningar för avtalsåret 2026. Exakta tider och belopp styrs av avtalet och din lönebilaga.</span></p>
+      </section>
+
+      <section class="salary-check-section" id="salary-calculator" aria-labelledby="salaryCalculatorTitle">
+        <div class="salary-check-section-head">
+          <h2 id="salaryCalculatorTitle">Lönekalkylatorn</h2>
+          <p>Uppskattad bruttolön utifrån lönesteg och OB-timmar</p>
+        </div>
+        <div class="salary-check-card salary-check-calculator">
+          <form class="salary-check-form" onsubmit="return false">
+            <fieldset><legend>1 · Var är du i lönetrappan?</legend><div class="salary-check-chips" role="group" aria-label="Välj lönesteg">${stepButtons}</div></fieldset>
+            <fieldset><legend>2 · Snabbval av schema</legend><div class="salary-check-chips" role="group" aria-label="Välj schemamall">${presetButtons}</div></fieldset>
+            <fieldset><legend>3 · Finjustera OB-timmar per månad</legend><div class="salary-check-sliders">${sliderRows}</div></fieldset>
+          </form>
+          <aside class="salary-check-result" aria-live="polite" aria-atomic="true">
+            <p>Uppskattad bruttolön / månad</p>
+            <strong class="salary-check-number"><span data-salary-total>0</span> <small>kr</small></strong>
+            <span class="salary-check-hourly">≈ <span data-salary-hourly>0</span> kr/tim som timavlönad</span>
+            <div class="salary-check-breakdown" data-salary-breakdown></div>
+            <p class="salary-check-warning" data-salary-warning hidden></p>
+            <small>Uppskattning före skatt, heltid. Semesterersättning, övertid, branschvana, hundtillägg och lokala påslag ingår inte.</small>
+          </aside>
+        </div>
+      </section>
+
+      <section class="salary-check-section" aria-labelledby="salaryCareerTitle">
+        <div class="salary-check-section-head"><h2 id="salaryCareerTitle">Fyra vägar vidare</h2><p>Påbyggnader efter VU1 och VU2</p></div>
+        <div class="salary-check-career-grid">
+          <article class="salary-check-card"><span class="salary-check-icon"><i data-lucide="shield" aria-hidden="true"></i></span><h3>Skyddsvakt</h3><p>Bevakning av skyddsobjekt som kärnkraft, flygplatser och myndigheter.</p><strong>Lönegrupp C</strong></article>
+          <article class="salary-check-card"><span class="salary-check-icon"><i data-lucide="paw-print" aria-hidden="true"></i></span><h3>Hundförare</h3><p>Rondering med tjänstehund kan ge timtillägg och hundvårdsersättning.</p><strong>Särskilda tillägg</strong></article>
+          <article class="salary-check-card"><span class="salary-check-icon"><i data-lucide="users" aria-hidden="true"></i></span><h3>Gruppledare</h3><p>Arbetsledning, bemanning och beslut på objektet.</p><strong>Lönegrupp D–E</strong></article>
+          <article class="salary-check-card"><span class="salary-check-icon"><i data-lucide="badge" aria-hidden="true"></i></span><h3>Ordningsvakt</h3><p>Utökade befogenheter efter utbildning och förordnande av Polismyndigheten.</p><strong>Lönegrupp C</strong></article>
+        </div>
+      </section>
+
+      <section class="salary-check-section" aria-labelledby="salaryFaqTitle">
+        <div class="salary-check-section-head"><h2 id="salaryFaqTitle">Vanliga frågor</h2></div>
+        <div class="salary-check-card salary-check-faq">
+          <details><summary>Tjänar jag mindre med enbart VU1?</summary><p>Tariffens nyanställningslön är densamma, men med enbart VU1 arbetar du i praktisk yrkesträning under handledning. Ett mer begränsat schema kan därför innebära mindre OB.</p></details>
+          <details><summary>Höjs lönen automatiskt?</summary><p>Tariffstegen följer anställningstid. Vilken grupp B–E du tillhör avgörs däremot av dina faktiska arbetsuppgifter, och lokala överenskommelser kan ge högre lön.</p></details>
+          <details><summary>Gäller kalkylatorn även deltid och behovsanställning?</summary><p>Den räknar på hel månadslön och visar en ungefärlig timlön med divisorn 166. Använd din faktiska timlön och lönebilaga när du kontrollerar en utbetalning.</p></details>
+          <details><summary>Varför är SCB:s median högre än tariffen?</summary><p>Tariffen är en lägstanivå. Faktisk lön kan även innehålla OB, erfarenhetstillägg, högre lönegrupp och lokala påslag.</p></details>
+          <details><summary>Vad är branschvanetillägget?</summary><p>Efter minst fem års branscherfarenhet kan ett särskilt erfarenhetstillägg gälla enligt avtalet. Kontrollera att erfarenheten finns med i arbetsgivarens underlag och på lönespecifikationen.</p></details>
+          <details><summary>Gäller nivåerna utan kollektivavtal?</summary><p>Nej. Bevaknings- och säkerhetsavtalets tariff gäller arbetsgivare som är bundna av avtalet. Kontrollera alltid vilket kollektivavtal som står i ditt anställningsavtal.</p></details>
+        </div>
+      </section>
+
+      <section class="salary-check-section salary-check-sources" aria-labelledby="salarySourcesTitle">
+        <div class="salary-check-section-head"><h2 id="salarySourcesTitle">Källor och giltighet</h2><p>Granskad ${SALARY_CHECK_CONFIG.reviewed}</p></div>
+        <div class="salary-check-card">
+          <ul>
+            <li><a href="https://www.transport.se/publicerat/avtal-klart-bevaknings-och-sakerhetsavtalet-2025" target="_blank" rel="noopener noreferrer">Transport: Bevaknings- och säkerhetsavtalet 2025–2027</a></li>
+            <li><a href="https://www.transportarbetaren.se/app/uploads/2025/11/tran-09-2025.pdf" target="_blank" rel="noopener noreferrer">Transportarbetaren: publicerade tarifflöner för 2026</a></li>
+            <li><a href="https://www.statistikdatabasen.scb.se/pxweb/sv/ssd/START__AM__AM0110__AM0110A/LoneSpridSektYrk4AN/" target="_blank" rel="noopener noreferrer">SCB: lönespridning efter yrke</a></li>
+            <li><a href="https://www.bya.se/kurstyp/vaktargrundutbildning-vu1-2/" target="_blank" rel="noopener noreferrer">BYA: VU1 och praktisk yrkesträning</a></li>
+          </ul>
+          <p class="salary-check-source-meta">Avtalsperiod: ${SALARY_CHECK_CONFIG.agreementPeriod}. Lönebelopp och OB-tillägg gäller som vägledning för avtalsåret 2026; grupp D–E och OB-belopp är markerade som uppskattningar där offentlig lönebilaga saknas.</p>
+          <p><strong>Viktigt:</strong> Lönekollen är ett kunskapsstöd och inte ett lönebesked. Din anställningsform, lönegrupp, arbetade tider och lokala avtal avgör utfallet. Vid skillnader gäller kollektivavtalets lönebilaga och din lönespecifikation.</p>
+        </div>
+      </section>
+    </article>
+  `;
+
+  updateSalaryCalculator();
+}
+
+function updateSalaryCalculator() {
+  if (!els.knowledgeBasePanel || state.mode !== "knowledge-base") return;
+
+  const step = salaryStepByKey(salaryCheckState.stepKey);
+  let obTotal = 0;
+  let totalHours = 0;
+  const rows = [];
+
+  SALARY_CHECK_CONFIG.ob.forEach((item) => {
+    const hours = Math.max(0, Number(salaryCheckState.hours[item.key]) || 0);
+    const amount = hours * item.amount;
+    totalHours += hours;
+    obTotal += amount;
+
+    const input = els.knowledgeBasePanel.querySelector(`[data-salary-ob="${item.key}"]`);
+    const output = els.knowledgeBasePanel.querySelector(`[data-salary-output="${item.key}"]`);
+    if (input && Number(input.value) !== hours) input.value = String(hours);
+    if (output) output.textContent = `${hours} h`;
+    if (hours > 0) rows.push(`<div><span>${item.label} · ${hours} h</span><strong>+ ${formatSalaryAmount(amount)} kr</strong></div>`);
+  });
+
+  els.knowledgeBasePanel.querySelectorAll("[data-salary-step]").forEach((button) => {
+    button.setAttribute("aria-pressed", String(button.dataset.salaryStep === salaryCheckState.stepKey));
+  });
+  els.knowledgeBasePanel.querySelectorAll("[data-salary-preset]").forEach((button) => {
+    button.setAttribute("aria-pressed", String(button.dataset.salaryPreset === salaryCheckState.presetKey));
+  });
+
+  const total = step.amount + obTotal;
+  const totalElement = els.knowledgeBasePanel.querySelector("[data-salary-total]");
+  const hourlyElement = els.knowledgeBasePanel.querySelector("[data-salary-hourly]");
+  const breakdownElement = els.knowledgeBasePanel.querySelector("[data-salary-breakdown]");
+  const warningElement = els.knowledgeBasePanel.querySelector("[data-salary-warning]");
+  if (totalElement) totalElement.textContent = `${step.exact ? "" : "ca "}${formatSalaryAmount(total)}`;
+  if (hourlyElement) hourlyElement.textContent = `${step.exact ? "" : "ca "}${formatSalaryAmount(step.amount / SALARY_CHECK_CONFIG.hourlyDivisor)}`;
+  if (breakdownElement) {
+    breakdownElement.innerHTML = `
+      <div><span>${step.name}</span><strong>${step.exact ? "" : "ca "}${formatSalaryAmount(step.amount)} kr</strong></div>
+      ${rows.join("")}
+      ${obTotal > 0 ? `<div class="is-total"><span>OB totalt</span><strong>+ ${formatSalaryAmount(obTotal)} kr</strong></div>` : ""}
+    `;
+  }
+  if (warningElement) {
+    warningElement.hidden = totalHours <= SALARY_CHECK_CONFIG.hourlyDivisor;
+    warningElement.textContent =
+      totalHours > SALARY_CHECK_CONFIG.hourlyDivisor
+        ? `Kontrollera timmarna: du har angett ${totalHours} OB-timmar, vilket överstiger kalkylens heltidsmått på ${SALARY_CHECK_CONFIG.hourlyDivisor} timmar.`
+        : "";
+  }
 }
 
 function shortMeta(meta) {
@@ -2629,6 +2981,8 @@ function renderActiveNav() {
   const selector =
     state.mode === "home"
       ? "[data-open-home]"
+      : state.mode === "knowledge-base"
+        ? "[data-open-knowledge-base]"
       : state.mode === "final-exam-portal" || state.mode === "final-exam"
         ? "[data-open-final-exam-portal]"
         : state.mode === "quiz" || state.mode === "quiz-overview"
@@ -2676,7 +3030,9 @@ function renderModuleContext() {
 function setBodyLayoutMode(mode = "") {
   const isModernCourseHub = mode === "course-hub-modern";
   if (mode !== "final-exam-focus") stopFinalExamTimer();
+  if (els.knowledgeBasePanel) els.knowledgeBasePanel.hidden = mode !== "knowledge-base";
   document.body.classList.toggle("home-mode", mode === "home");
+  document.body.classList.toggle("knowledge-base-mode", mode === "knowledge-base");
   document.body.classList.toggle("quiz-overview-mode", mode === "quiz-overview");
   document.body.classList.toggle("final-portal-mode", mode === "final-portal");
   document.body.classList.toggle("final-exam-focus-mode", mode === "final-exam-focus");
@@ -2686,6 +3042,31 @@ function setBodyLayoutMode(mode = "") {
   document.body.classList.toggle("course-hub-modern-mode", isModernCourseHub);
   document.body.classList.toggle("vu1-hub-mode", isModernCourseHub && state.courseId === "vu1");
   document.body.classList.toggle("vu2-hub-mode", isModernCourseHub && state.courseId === "vu2");
+}
+
+function showKnowledgeBase() {
+  state.mode = "knowledge-base";
+  saveLocation();
+  closeDrawers();
+
+  els.homePanel.hidden = true;
+  els.courseHub.hidden = true;
+  els.quizOverviewPanel.hidden = true;
+  els.moduleContextBar.hidden = true;
+  els.moduleMilestonePanel.hidden = true;
+  els.readerPanel.hidden = true;
+  els.quizPanel.hidden = true;
+  els.finalExamPanel.hidden = true;
+  els.metaPills.hidden = true;
+  els.quizButton.hidden = true;
+  setBodyLayoutMode("knowledge-base");
+  els.lessonTitle.textContent = "Kunskapsbas";
+  els.breadcrumbs.innerHTML = "";
+  renderKnowledgeBaseSidebar();
+  renderSalaryCheck();
+  renderActiveNav();
+  refreshIcons();
+  els.contentScroll.scrollTo({ top: 0, behavior: "auto" });
 }
 
 function showHome() {
@@ -3181,6 +3562,40 @@ const QUIZ_PORTAL_BANK_CONFIG = {
   vu1: { collectionId: "vu1_quiz", title: "Väktarutbildning 1 (VU1)", expectedCount: 154 },
   vu2: { collectionId: "vu2_quiz", title: "Väktarutbildning 2 (VU2)", expectedCount: 74 },
   scenario: { collectionId: "scenario_quiz", title: "Scenario Quiz", expectedCount: 300 },
+};
+
+const SALARY_CHECK_CONFIG = {
+  reviewed: "22 juli 2026",
+  agreementPeriod: "1 juni 2025–31 maj 2027",
+  hourlyDivisor: 166,
+  medianSalary: 35000,
+  steps: [
+    { key: "new", name: "Nyanställd", period: "0–6 mån", amount: 27004, exact: true },
+    { key: "base", name: "Grundlön", period: "6–15 mån", amount: 28296, exact: true },
+    { key: "group-b", name: "Lönegrupp B", period: "efter 15 mån", amount: 32354, exact: true },
+    { key: "group-c", name: "Lönegrupp C", period: "efter 15 mån", amount: 32889, exact: true },
+    { key: "group-d", name: "Lönegrupp D", period: "efter 15 mån", amount: 33648, exact: false },
+    { key: "group-e", name: "Lönegrupp E", period: "efter 15 mån", amount: 34059, exact: false },
+  ],
+  ob: [
+    { key: "a", label: "OB a", name: "Vardagskväll och natt", schedule: "mån–fre 18–06", amount: 27, tone: "blue" },
+    { key: "b", label: "OB b", name: "Helgdag", schedule: "lör–sön 06–18", amount: 40, tone: "green" },
+    { key: "b1", label: "OB b1", name: "Helgnatt", schedule: "lör–sön 18–06", amount: 45, tone: "purple" },
+    { key: "c", label: "OB c", name: "Storhelg", schedule: "enligt avtalets tider", amount: 79, tone: "orange" },
+    { key: "d", label: "OB d", name: "Jul, nyår och midsommar", schedule: "avtalets högsta OB", amount: 176, tone: "red" },
+  ],
+  presets: [
+    { key: "day", name: "Dag, vardag", hours: { a: 0, b: 0, b1: 0, c: 0, d: 0 } },
+    { key: "evening", name: "Kvällspass", hours: { a: 60, b: 8, b1: 0, c: 0, d: 0 } },
+    { key: "night", name: "Nattpass", hours: { a: 84, b: 0, b1: 28, c: 2, d: 0 } },
+    { key: "weekend", name: "Helgmix", hours: { a: 36, b: 20, b1: 16, c: 2, d: 0 } },
+  ],
+};
+
+const salaryCheckState = {
+  stepKey: "base",
+  presetKey: "day",
+  hours: Object.fromEntries(SALARY_CHECK_CONFIG.ob.map((item) => [item.key, 0])),
 };
 
 function shuffledQuizOptions(rows) {
@@ -4684,6 +5099,7 @@ function restoreSavedLocation() {
 
   if (saved.mode === "quiz") return "quiz";
   if (saved.mode === "quiz-overview") return "quiz-overview";
+  if (saved.mode === "knowledge-base") return "knowledge-base";
   if (saved.mode === "module-milestone") return "module-milestone";
   if (saved.mode === "final-exam-portal") return "final-exam-portal";
   if (saved.mode === "final-exam") return "final-exam";
@@ -4759,6 +5175,38 @@ function bindEvents() {
     const homeButton = event.target.closest("[data-open-home]");
     if (homeButton) {
       showHome();
+      return;
+    }
+
+    const knowledgeBaseButton = event.target.closest("[data-open-knowledge-base], [data-open-salary-check]");
+    if (knowledgeBaseButton) {
+      showKnowledgeBase();
+      return;
+    }
+
+    const salaryCalculatorLink = event.target.closest("[data-salary-calculator-link]");
+    if (salaryCalculatorLink && state.mode === "knowledge-base") {
+      event.preventDefault();
+      const calculator = els.knowledgeBasePanel?.querySelector("#salary-calculator");
+      calculator?.scrollIntoView({ behavior: "smooth", block: "start" });
+      calculator?.querySelector("button, input")?.focus({ preventScroll: true });
+      return;
+    }
+
+    const salaryStepButton = event.target.closest("[data-salary-step]");
+    if (salaryStepButton) {
+      salaryCheckState.stepKey = salaryStepButton.dataset.salaryStep;
+      updateSalaryCalculator();
+      return;
+    }
+
+    const salaryPresetButton = event.target.closest("[data-salary-preset]");
+    if (salaryPresetButton) {
+      const preset = SALARY_CHECK_CONFIG.presets.find((item) => item.key === salaryPresetButton.dataset.salaryPreset);
+      if (!preset) return;
+      salaryCheckState.presetKey = preset.key;
+      salaryCheckState.hours = { ...preset.hours };
+      updateSalaryCalculator();
       return;
     }
 
@@ -5091,6 +5539,14 @@ function bindEvents() {
     }
   });
 
+  document.addEventListener("input", (event) => {
+    const salaryObInput = event.target.closest?.("[data-salary-ob]");
+    if (!salaryObInput) return;
+    salaryCheckState.hours[salaryObInput.dataset.salaryOb] = Number(salaryObInput.value) || 0;
+    salaryCheckState.presetKey = "";
+    updateSalaryCalculator();
+  });
+
   els.prevButton.addEventListener("click", () => goRelative(-1));
   els.nextButton.addEventListener("click", () => goRelative(1));
   els.quizButton.addEventListener("click", showQuiz);
@@ -5193,6 +5649,8 @@ async function init() {
     showVu2();
   } else if (initialMode === "quiz-overview") {
     showQuizOverview();
+  } else if (initialMode === "knowledge-base") {
+    showKnowledgeBase();
   } else if (initialMode === "module-milestone") {
     showModuleMilestone(state.moduleIndex, state.lessonIndex, state.pageIndex);
   } else if (initialMode === "final-exam-portal") {
