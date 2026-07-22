@@ -26,10 +26,12 @@ const PROGRESS_TABLE = "student_learning_progress";
 const QUIZ_HISTORY_SCHEMA_VERSION = 1;
 const QUIZ_ATTEMPTS_TABLE = "student_quiz_attempts";
 const QUIZ_ANSWERS_TABLE = "student_quiz_answers";
+const QUIZ_REVIEW_ITEMS_TABLE = "student_quiz_review_items";
 const QUIZ_HISTORY_MAX_ATTEMPTS = 200;
 const QUIZ_HISTORY_MAX_ANSWERS = 500;
 const QUIZ_ACCURACY_WINDOW = 100;
-const QUIZ_TOPIC_WINDOW = 20;
+const QUIZ_REVIEW_INTERVAL_MS = 24 * 60 * 60 * 1000;
+const QUIZ_REVIEW_SESSION_SIZE = 15;
 const PORTAL_HISTORY_STATE_KEY = "vaktskolanPortalLocation";
 const RESTORABLE_MODES = new Set([
   "home",
@@ -118,6 +120,7 @@ function readQuizHistoryStorage() {
     ownerId: typeof value.ownerId === "string" ? value.ownerId : "",
     attempts: Array.isArray(value.attempts) ? value.attempts : [],
     answers: Array.isArray(value.answers) ? value.answers : [],
+    reviewItems: Array.isArray(value.reviewItems) ? value.reviewItems : [],
   };
 }
 
@@ -195,8 +198,10 @@ const state = {
     ownerId: storedQuizHistory.ownerId,
     attempts: storedQuizHistory.attempts,
     answers: storedQuizHistory.answers,
+    reviewItems: storedQuizHistory.reviewItems,
     ready: false,
     cloudReady: false,
+    reviewCloudReady: false,
     syncing: false,
     queued: false,
     timer: null,
@@ -247,6 +252,14 @@ const quizScenarios = [
 ];
 
 const quizPortalModules = [
+  {
+    view: "review",
+    title: "Att repetera",
+    description: "Öva på frågor du tidigare svarat fel på och bekräfta kunskapen igen efter 24 timmar.",
+    icon: "rotate-ccw",
+    theme: "orange",
+    badge: "Personligt",
+  },
   {
     view: "vu1",
     title: "VU1 Quiz",
@@ -1014,6 +1027,47 @@ function sanitizeQuizHistoryAnswer(value, synced = value?.synced === true) {
   };
 }
 
+function sanitizeQuizReviewItem(value, synced = value?.synced === true) {
+  if (!isPlainObject(value)) return null;
+  const id = typeof value.id === "string" ? value.id : "";
+  const questionKey = value.questionKey || value.question_key;
+  const originSourceType = value.originSourceType || value.origin_source_type;
+  const courseId = value.courseId || value.course_id;
+  const stage = value.stage;
+  if (!id || !questionKey || !originSourceType || !courseId || !["due", "waiting", "mastered"].includes(stage)) {
+    return null;
+  }
+
+  const moduleNumberValue = value.moduleNumber ?? value.module_number;
+  const topicKeys = value.topicKeys || value.topic_keys;
+  const topicLabels = value.topicLabels || value.topic_labels;
+  const confirmations = Math.max(0, Math.min(2, Number(value.correctConfirmations ?? value.correct_confirmations) || 0));
+  return {
+    id,
+    userId: value.userId || value.user_id || "",
+    questionId: value.questionId || value.question_id || null,
+    questionKey,
+    originSourceType,
+    courseId,
+    moduleNumber: Number.isInteger(Number(moduleNumberValue)) && Number(moduleNumberValue) > 0
+      ? Number(moduleNumberValue)
+      : null,
+    topicKeys: Array.isArray(topicKeys) ? topicKeys.filter((item) => typeof item === "string" && item) : [],
+    topicLabels: Array.isArray(topicLabels) ? topicLabels.filter((item) => typeof item === "string" && item) : [],
+    contextKey: value.contextKey || value.context_key || null,
+    contextLabel: value.contextLabel || value.context_label || null,
+    stage,
+    correctConfirmations: confirmations,
+    dueAt: value.dueAt || value.due_at ? toIsoTimestamp(value.dueAt || value.due_at) : null,
+    lastAnswerCorrect: value.lastAnswerCorrect === true || value.last_answer_correct === true,
+    lastAnsweredAt: toIsoTimestamp(value.lastAnsweredAt || value.last_answered_at),
+    masteredAt: value.masteredAt || value.mastered_at ? toIsoTimestamp(value.masteredAt || value.mastered_at) : null,
+    createdAt: toIsoTimestamp(value.createdAt || value.created_at || value.lastAnsweredAt || value.last_answered_at),
+    updatedAt: toIsoTimestamp(value.updatedAt || value.updated_at || value.lastAnsweredAt || value.last_answered_at),
+    synced,
+  };
+}
+
 function saveQuizHistory() {
   const history = state.quizHistory;
   history.attempts = history.attempts
@@ -1026,11 +1080,30 @@ function saveQuizHistory() {
     .filter(Boolean)
     .sort((left, right) => Date.parse(right.answeredAt) - Date.parse(left.answeredAt))
     .slice(0, QUIZ_HISTORY_MAX_ANSWERS);
+  const reviewItemsByQuestionKey = new Map();
+  history.reviewItems
+    .map((item) => sanitizeQuizReviewItem(item, item?.synced === true))
+    .filter(Boolean)
+    .forEach((item) => {
+      const existing = reviewItemsByQuestionKey.get(item.questionKey);
+      const itemUpdatedAt = Date.parse(item.updatedAt);
+      const existingUpdatedAt = Date.parse(existing?.updatedAt || 0);
+      if (
+        !existing ||
+        itemUpdatedAt > existingUpdatedAt ||
+        (itemUpdatedAt === existingUpdatedAt && !item.synced && existing.synced)
+      ) {
+        reviewItemsByQuestionKey.set(item.questionKey, item);
+      }
+    });
+  history.reviewItems = [...reviewItemsByQuestionKey.values()]
+    .sort((left, right) => Date.parse(right.updatedAt) - Date.parse(left.updatedAt));
   writeStorage(STORAGE_KEYS.quizHistory, {
     version: QUIZ_HISTORY_SCHEMA_VERSION,
     ownerId: history.ownerId,
     attempts: history.attempts,
     answers: history.answers,
+    reviewItems: history.reviewItems,
   });
 }
 
@@ -1073,6 +1146,29 @@ function quizAnswerDatabaseRow(answer) {
   };
 }
 
+function quizReviewItemDatabaseRow(item) {
+  return {
+    id: item.id,
+    user_id: item.userId,
+    question_id: item.questionId,
+    question_key: item.questionKey,
+    origin_source_type: item.originSourceType,
+    course_id: item.courseId,
+    module_number: item.moduleNumber,
+    topic_keys: item.topicKeys,
+    topic_labels: item.topicLabels,
+    context_key: item.contextKey,
+    context_label: item.contextLabel,
+    stage: item.stage,
+    correct_confirmations: item.correctConfirmations,
+    due_at: item.dueAt,
+    last_answer_correct: item.lastAnswerCorrect,
+    last_answered_at: item.lastAnsweredAt,
+    mastered_at: item.masteredAt,
+    created_at: item.createdAt,
+  };
+}
+
 async function syncQuizHistoryToSupabase() {
   const history = state.quizHistory;
   const supabaseApi = window.vaktskolanSupabase;
@@ -1105,6 +1201,20 @@ async function syncQuizHistoryToSupabase() {
       );
       pendingAnswers.forEach((answer) => {
         answer.synced = true;
+      });
+    }
+
+    const pendingReviewItems = history.reviewCloudReady
+      ? history.reviewItems.filter((item) => !item.synced)
+      : [];
+    if (pendingReviewItems.length) {
+      await supabaseApi.upsert(
+        QUIZ_REVIEW_ITEMS_TABLE,
+        pendingReviewItems.map(quizReviewItemDatabaseRow),
+        { onConflict: "user_id,question_key", returning: "minimal" }
+      );
+      pendingReviewItems.forEach((item) => {
+        item.synced = true;
       });
     }
     history.error = null;
@@ -1148,12 +1258,15 @@ async function initializeQuizHistory() {
 
   if (!userId) {
     history.ready = true;
+    backfillQuizReviewItems();
+    saveQuizHistory();
     return;
   }
 
   if (history.ownerId && history.ownerId !== userId) {
     history.attempts = [];
     history.answers = [];
+    history.reviewItems = [];
   }
   history.ownerId = userId;
   history.attempts = history.attempts
@@ -1162,7 +1275,11 @@ async function initializeQuizHistory() {
   history.answers = history.answers
     .map((item) => sanitizeQuizHistoryAnswer({ ...item, userId }, item?.synced === true))
     .filter(Boolean);
+  history.reviewItems = history.reviewItems
+    .map((item) => sanitizeQuizReviewItem({ ...item, userId }, item?.synced === true))
+    .filter(Boolean);
   history.ready = true;
+  backfillQuizReviewItems();
   saveQuizHistory();
 
   if (state.authPreview || !supabaseApi?.select) return;
@@ -1185,12 +1302,33 @@ async function initializeQuizHistory() {
     history.attempts = mergeQuizHistory(Array.isArray(attempts) ? attempts : [], history.attempts, sanitizeQuizHistoryAttempt);
     history.answers = mergeQuizHistory(Array.isArray(answers) ? answers : [], history.answers, sanitizeQuizHistoryAnswer);
     history.cloudReady = true;
+    try {
+      const reviewItems = await supabaseApi.select(QUIZ_REVIEW_ITEMS_TABLE, {
+        select: "id,user_id,question_id,question_key,origin_source_type,course_id,module_number,topic_keys,topic_labels,context_key,context_label,stage,correct_confirmations,due_at,last_answer_correct,last_answered_at,mastered_at,created_at,updated_at",
+        user_id: `eq.${userId}`,
+        order: "updated_at.desc",
+        limit: 1000,
+      });
+      history.reviewItems = mergeQuizHistory(
+        Array.isArray(reviewItems) ? reviewItems : [],
+        history.reviewItems,
+        sanitizeQuizReviewItem
+      );
+      history.reviewCloudReady = true;
+    } catch (reviewError) {
+      history.reviewCloudReady = false;
+      console.warn("Molnlagring för repetitionskön är inte tillgänglig ännu. Lokal lagring används.", reviewError);
+    }
+    backfillQuizReviewItems();
     history.error = null;
     saveQuizHistory();
     await syncQuizHistoryToSupabase();
   } catch (error) {
     history.cloudReady = false;
+    history.reviewCloudReady = false;
     history.error = error;
+    backfillQuizReviewItems();
+    saveQuizHistory();
     console.warn("Molnlagring för quizhistorik är inte tillgänglig ännu. Lokal lagring används.", error);
   }
 }
@@ -1269,8 +1407,131 @@ function recordQuizAnswer(details) {
   if (existingIndex >= 0) history.answers[existingIndex] = answer;
   else history.answers.unshift(answer);
   saveQuizHistory();
+  applyQuizReviewOutcome(answer);
   queueQuizHistorySync();
   return answer;
+}
+
+function upsertQuizReviewItem(answer, updates) {
+  const history = state.quizHistory;
+  const existingIndex = history.reviewItems.findIndex((item) => item.questionKey === answer.questionKey);
+  const existing = existingIndex >= 0 ? history.reviewItems[existingIndex] : null;
+  const timestamp = toIsoTimestamp(answer.answeredAt);
+  const originSourceType = answer.sourceType === "review"
+    ? existing?.originSourceType
+    : answer.sourceType;
+  if (!originSourceType) return null;
+
+  const item = sanitizeQuizReviewItem(
+    {
+      id: existing?.id || createClientUuid(),
+      userId: history.ownerId || answer.userId || state.authClient?.user?.id || "",
+      questionId: existing?.questionId || answer.questionId || null,
+      questionKey: answer.questionKey,
+      originSourceType,
+      courseId: existing?.courseId || answer.courseId || "general",
+      moduleNumber: existing?.moduleNumber || answer.moduleNumber || null,
+      topicKeys: existing?.topicKeys?.length ? existing.topicKeys : answer.topicKeys,
+      topicLabels: existing?.topicLabels?.length ? existing.topicLabels : answer.topicLabels,
+      contextKey: existing?.contextKey || answer.contextKey || null,
+      contextLabel: existing?.contextLabel || answer.contextLabel || null,
+      stage: updates.stage,
+      correctConfirmations: updates.correctConfirmations,
+      dueAt: updates.dueAt ?? null,
+      lastAnswerCorrect: answer.isCorrect,
+      lastAnsweredAt: timestamp,
+      masteredAt: updates.masteredAt ?? null,
+      createdAt: existing?.createdAt || timestamp,
+      updatedAt: timestamp,
+    },
+    false
+  );
+  if (!item) return null;
+
+  if (existingIndex >= 0) history.reviewItems[existingIndex] = item;
+  else history.reviewItems.unshift(item);
+  saveQuizHistory();
+  queueQuizHistorySync();
+  return item;
+}
+
+function applyQuizReviewOutcome(answer) {
+  const existing = state.quizHistory.reviewItems.find((item) => item.questionKey === answer.questionKey) || null;
+  const answeredAtMs = Date.parse(answer.answeredAt);
+
+  if (!answer.isCorrect) {
+    upsertQuizReviewItem(answer, {
+      stage: "due",
+      correctConfirmations: 0,
+      dueAt: answer.answeredAt,
+      masteredAt: null,
+    });
+    return;
+  }
+
+  if (answer.sourceType !== "review" || !existing) return;
+
+  if (existing.correctConfirmations === 0) {
+    upsertQuizReviewItem(answer, {
+      stage: "waiting",
+      correctConfirmations: 1,
+      dueAt: new Date(answeredAtMs + QUIZ_REVIEW_INTERVAL_MS).toISOString(),
+      masteredAt: null,
+    });
+    return;
+  }
+
+  const dueAtMs = Date.parse(existing.dueAt || 0);
+  if (existing.correctConfirmations === 1 && Number.isFinite(dueAtMs) && answeredAtMs >= dueAtMs) {
+    upsertQuizReviewItem(answer, {
+      stage: "mastered",
+      correctConfirmations: 2,
+      dueAt: null,
+      masteredAt: answer.answeredAt,
+    });
+  }
+}
+
+function backfillQuizReviewItems() {
+  const knownQuestionKeys = new Set(state.quizHistory.reviewItems.map((item) => item.questionKey));
+  const latestWrongAnswers = new Map();
+  [...state.quizHistory.answers, ...getLegacyModuleQuizAnswerEvents()]
+    .sort((left, right) => Date.parse(right.answeredAt) - Date.parse(left.answeredAt))
+    .forEach((answer) => {
+      if (
+        answer.sourceType !== "review" &&
+        !answer.isCorrect &&
+        !knownQuestionKeys.has(answer.questionKey) &&
+        !latestWrongAnswers.has(answer.questionKey)
+      ) {
+        latestWrongAnswers.set(answer.questionKey, answer);
+      }
+    });
+
+  latestWrongAnswers.forEach((answer) => {
+    upsertQuizReviewItem(answer, {
+      stage: "due",
+      correctConfirmations: 0,
+      dueAt: answer.answeredAt,
+      masteredAt: null,
+    });
+  });
+}
+
+function isQuizReviewItemDue(item, now = Date.now()) {
+  if (item.stage === "due") return true;
+  return item.stage === "waiting" && Number.isFinite(Date.parse(item.dueAt)) && Date.parse(item.dueAt) <= now;
+}
+
+function getQuizReviewQueue(now = Date.now()) {
+  const due = state.quizHistory.reviewItems
+    .filter((item) => isQuizReviewItemDue(item, now))
+    .sort((left, right) => Date.parse(left.dueAt || left.lastAnsweredAt) - Date.parse(right.dueAt || right.lastAnsweredAt));
+  const waiting = state.quizHistory.reviewItems.filter(
+    (item) => item.stage === "waiting" && !isQuizReviewItemDue(item, now)
+  );
+  const mastered = state.quizHistory.reviewItems.filter((item) => item.stage === "mastered");
+  return { due, waiting, mastered };
 }
 
 let shouldReturnHomeOnResume = false;
@@ -2672,44 +2933,12 @@ function getLegacyModuleQuizAnswerEvents() {
 
 function getStudentQuizMetrics() {
   const answers = [...state.quizHistory.answers, ...getLegacyModuleQuizAnswerEvents()]
-    .filter((answer) => answer && answer.questionKey && answer.answeredAt)
+    .filter((answer) => answer && answer.questionKey && answer.answeredAt && answer.sourceType !== "review")
     .sort((left, right) => Date.parse(right.answeredAt) - Date.parse(left.answeredAt));
   const accuracyAnswers = answers.slice(0, QUIZ_ACCURACY_WINDOW);
   const correct = accuracyAnswers.filter((answer) => answer.isCorrect).length;
   const total = accuracyAnswers.length;
-
-  const topics = new Map();
-  answers.forEach((answer) => {
-    answer.topicKeys.forEach((topicKey, index) => {
-      if (!topicKey) return;
-      const topic = topics.get(topicKey) || {
-        key: topicKey,
-        label: answer.topicLabels[index] || answer.topicLabels[0] || "Kunskapsområde",
-        answers: [],
-      };
-      if (topic.answers.length < QUIZ_TOPIC_WINDOW) topic.answers.push(answer);
-      topics.set(topicKey, topic);
-    });
-  });
-
-  const repeatCandidates = [...topics.values()]
-    .map((topic) => {
-      const topicCorrect = topic.answers.filter((answer) => answer.isCorrect).length;
-      const topicTotal = topic.answers.length;
-      const wrongQuestionKeys = [...new Set(
-        topic.answers.filter((answer) => !answer.isCorrect).map((answer) => answer.questionKey)
-      )];
-      return {
-        ...topic,
-        correct: topicCorrect,
-        total: topicTotal,
-        wrong: topicTotal - topicCorrect,
-        percent: topicTotal ? Math.round((topicCorrect / topicTotal) * 100) : null,
-        repeatCount: Math.min(3, wrongQuestionKeys.length),
-      };
-    })
-    .filter((topic) => (topic.total >= 5 && topic.percent < 80) || (topic.total >= 3 && topic.wrong >= 2))
-    .sort((left, right) => left.percent - right.percent || right.total - left.total);
+  const reviewQueue = getQuizReviewQueue();
 
   return {
     accuracy: {
@@ -2717,8 +2946,11 @@ function getStudentQuizMetrics() {
       total,
       percent: total ? Math.round((correct / total) * 100) : null,
     },
-    repeat: repeatCandidates[0] || null,
-    hasTopicEvidence: [...topics.values()].some((topic) => topic.answers.length >= 3),
+    review: {
+      due: reviewQueue.due.length,
+      waiting: reviewQueue.waiting.length,
+      mastered: reviewQueue.mastered.length,
+    },
   };
 }
 
@@ -2832,16 +3064,12 @@ function renderHome() {
   const accuracyDetail = quizMetrics.accuracy.total
     ? `${quizMetrics.accuracy.correct} av ${quizMetrics.accuracy.total} rätt${quizMetrics.accuracy.total === QUIZ_ACCURACY_WINDOW ? " · senaste 100" : ""}`
     : "Gör ett quiz för att börja mäta";
-  const repeatValue = quizMetrics.repeat
-    ? `${quizMetrics.repeat.repeatCount} ${quizMetrics.repeat.repeatCount === 1 ? "fråga" : "frågor"}`
-    : quizMetrics.hasTopicEvidence
-      ? "0 frågor"
-      : "–";
-  const repeatDetail = quizMetrics.repeat
-    ? `${quizMetrics.repeat.label} · ${quizMetrics.repeat.percent}%`
-    : quizMetrics.hasTopicEvidence
-      ? "Inget område under 80%"
-      : "Mer quizdata behövs";
+  const repeatValue = `${quizMetrics.review.due} ${quizMetrics.review.due === 1 ? "fråga" : "frågor"}`;
+  const repeatDetail = quizMetrics.review.due
+    ? "Redo nu i Quizportalen"
+    : quizMetrics.review.waiting
+      ? `${quizMetrics.review.waiting} ${quizMetrics.review.waiting === 1 ? "schemalagd" : "schemalagda"} till senare`
+      : "Du är ikapp";
   const vu2Overview = homeData.courses.find((overview) => overview.courseId === "vu2");
   const continueModule = continueOverview?.continueModule;
   const continueTitle = continueModule
@@ -4293,7 +4521,77 @@ function getQuizPortalQuiz(view = state.quizPortal.view) {
   return state.quizPortal.quizzes[view] || null;
 }
 
+function getQuizPortalQuestionByKey(questionKey) {
+  if (!questionKey.startsWith("portal:")) return null;
+  const questionId = questionKey.slice("portal:".length);
+  for (const quiz of Object.values(state.quizPortal.quizzes)) {
+    const question = quiz.questions.find((item) => item.id === questionId);
+    if (question) return question;
+  }
+  return null;
+}
+
+function getModuleReviewQuestion(item) {
+  const match = item.questionKey.match(/^module:(vu1|vu2):(\d+):(\d+)$/);
+  if (!match) return null;
+  const [, courseId, moduleNumberValue, questionNumberValue] = match;
+
+  return withCourseContext(courseId, () => {
+    const module = state.modules.find((candidate) => String(moduleNumber(candidate)) === moduleNumberValue);
+    const question = module?.quiz.find((candidate) => String(candidate.number) === questionNumberValue);
+    if (!module || !question) return null;
+    const answerIndex = question.options.findIndex((option) => option.letter === question.correct);
+    if (answerIndex < 0) return null;
+    return {
+      id: item.questionKey,
+      questionId: null,
+      historyQuestionKey: item.questionKey,
+      originSourceType: item.originSourceType,
+      courseId,
+      moduleNumber: Number(moduleNumberValue),
+      question: question.question,
+      options: question.options.map((option) => option.text),
+      answer: answerIndex,
+      explanation: question.explanation || "Rätt svar framgår av det markerade alternativet.",
+      topicKeys: item.topicKeys,
+      topicLabels: item.topicLabels,
+      contextKey: item.contextKey,
+      contextLabel: item.contextLabel,
+    };
+  });
+}
+
+function resolveQuizReviewQuestion(item) {
+  const portalQuestion = getQuizPortalQuestionByKey(item.questionKey);
+  if (portalQuestion) {
+    return {
+      ...portalQuestion,
+      questionId: portalQuestion.id,
+      historyQuestionKey: item.questionKey,
+      originSourceType: item.originSourceType,
+      topicKeys: item.topicKeys,
+      topicLabels: item.topicLabels,
+      contextKey: item.contextKey,
+      contextLabel: item.contextLabel,
+    };
+  }
+  return getModuleReviewQuestion(item);
+}
+
+function buildQuizReviewSessionQuestions() {
+  return getQuizReviewQueue().due
+    .map(resolveQuizReviewQuestion)
+    .filter(Boolean)
+    .slice(0, QUIZ_REVIEW_SESSION_SIZE);
+}
+
 function getQuizPortalSessionQuiz(view = state.quizPortal.view) {
+  if (view === "review") {
+    return {
+      title: "Att repetera",
+      questions: view === state.quizPortal.view ? state.quizPortal.sessionQuestions : [],
+    };
+  }
   const quiz = getQuizPortalQuiz(view);
   if (!quiz) return null;
 
@@ -4311,7 +4609,9 @@ function startQuizPortalHistoryAttempt(view = state.quizPortal.view) {
   if (state.quizPortal.historyAttemptId) {
     return state.quizHistory.attempts.find((attempt) => attempt.id === state.quizPortal.historyAttemptId) || null;
   }
-  const config = QUIZ_PORTAL_BANK_CONFIG[view];
+  const config = view === "review"
+    ? { sourceType: "review", collectionId: null, courseId: "general" }
+    : QUIZ_PORTAL_BANK_CONFIG[view];
   const quiz = getQuizPortalSessionQuiz(view);
   if (!config || !quiz?.questions.length) return null;
 
@@ -4319,7 +4619,7 @@ function startQuizPortalHistoryAttempt(view = state.quizPortal.view) {
   const attempt = recordQuizAttempt({
     id: attemptId,
     sourceType: config.sourceType,
-    sourceRef: `portal:${view}:${attemptId}`,
+    sourceRef: `${view === "review" ? "review" : "portal"}:${view}:${attemptId}`,
     collectionId: config.collectionId,
     courseId: config.courseId,
     questionCount: quiz.questions.length,
@@ -4334,11 +4634,12 @@ function recordQuizPortalAnswer(question, selectedOption, timedOut = false) {
   const attempt = startQuizPortalHistoryAttempt();
   if (!attempt || !question) return;
   const correctOption = question.answer;
+  const isReview = state.quizPortal.view === "review";
   recordQuizAnswer({
     attemptId: attempt.id,
-    questionId: question.id,
-    questionKey: `portal:${question.id}`,
-    sourceType: question.sourceType,
+    questionId: Object.prototype.hasOwnProperty.call(question, "questionId") ? question.questionId : question.id,
+    questionKey: question.historyQuestionKey || `portal:${question.id}`,
+    sourceType: isReview ? "review" : question.sourceType,
     courseId: question.courseId,
     moduleNumber: question.moduleNumber,
     topicKeys: question.topicKeys,
@@ -4360,6 +4661,22 @@ function completeQuizPortalHistoryAttempt() {
     completed: true,
     completedAt: new Date().toISOString(),
   });
+}
+
+async function startQuizPortalReviewSession() {
+  cancelQuizPortalCountdown();
+  resetQuizPortalSession("review");
+  renderQuizOverview();
+  refreshIcons();
+
+  if (state.quizPortal.dataStatus !== "ready") await loadQuizPortalData();
+  if (state.mode !== "quiz-overview" || state.quizPortal.view !== "review") return;
+
+  state.quizPortal.sessionQuestions = buildQuizReviewSessionQuestions();
+  if (state.quizPortal.sessionQuestions.length) startQuizPortalHistoryAttempt("review");
+  renderQuizOverview();
+  refreshIcons();
+  scrollQuizPortalToTop();
 }
 
 function stopQuizPortalQuestionTimer() {
@@ -4458,6 +4775,12 @@ function startQuizPortalQuestionTimer() {
 
 function quizPortalModuleMeta(module) {
   if (module.comingSoon) return "Kommer snart";
+  if (module.view === "review") {
+    const queue = getQuizReviewQueue();
+    if (queue.due.length) return `${queue.due.length} ${queue.due.length === 1 ? "fråga" : "frågor"} · redo nu`;
+    if (queue.waiting.length) return `${queue.waiting.length} ${queue.waiting.length === 1 ? "schemalagd" : "schemalagda"} · du är ikapp`;
+    return "Du är ikapp";
+  }
   if (state.quizPortal.dataStatus === "loading" || state.quizPortal.dataStatus === "idle") return "Laddar innehåll…";
   if (state.quizPortal.dataStatus === "error") return "Kunde inte laddas";
   if (module.view === "flashcards") {
@@ -4466,6 +4789,14 @@ function quizPortalModuleMeta(module) {
 
   const questionCount = getQuizPortalQuiz(module.view)?.questions.length || 0;
   return `${questionCount} frågor · flerval`;
+}
+
+function quizPortalModuleAction(module) {
+  if (module.comingSoon) return "Inte tillgänglig";
+  if (module.view === "review") {
+    return getQuizReviewQueue().due.length ? "Börja repetera" : "Visa status";
+  }
+  return "Starta";
 }
 
 function updateQuizPortalModuleMeta() {
@@ -4625,7 +4956,7 @@ function renderQuizPortalMobileTabbar() {
 function renderQuizPortalSidebar() {
   els.moduleListWrap.hidden = false;
   els.moduleListTitle.textContent = "Quizmoduler";
-  els.moduleCount.textContent = "4 quiz · 1 kortlek";
+  els.moduleCount.textContent = "5 quiz · 1 kortlek";
   els.moduleList.innerHTML = quizPortalModules
     .map((module) => {
       const isActive = state.quizPortal.view === module.view;
@@ -4670,7 +5001,7 @@ function renderQuizPortalHome() {
       <section class="quiz-portal-modules quiz-portal-modules-desktop" aria-labelledby="quizPortalModulesTitleDesktop">
         <div class="quiz-portal-section-head">
           <h2 id="quizPortalModulesTitleDesktop">Välj en modul</h2>
-          <span>5 sätt att träna</span>
+          <span>6 sätt att träna</span>
         </div>
         <div class="quiz-portal-grid quiz-portal-grid-desktop">
           ${quizPortalModules
@@ -4688,7 +5019,7 @@ function renderQuizPortalHome() {
                     <span class="quiz-portal-card-copy">${escapeHtml(module.description)}</span>
                     <span class="quiz-portal-card-foot">
                       <small data-quiz-portal-meta="${module.view}">${escapeHtml(quizPortalModuleMeta(module))}</small>
-                      <span class="quiz-portal-card-action">${module.comingSoon ? "Inte tillgänglig" : 'Starta <i data-lucide="arrow-right"></i>'}</span>
+                      <span class="quiz-portal-card-action">${escapeHtml(quizPortalModuleAction(module))}${module.comingSoon ? "" : ' <i data-lucide="arrow-right"></i>'}</span>
                     </span>
                   </span>
                 </button>
@@ -4713,7 +5044,7 @@ function renderQuizPortalHome() {
       <section class="quiz-portal-modules quiz-portal-modules-mobile" aria-labelledby="quizPortalModulesTitleMobile">
         <div class="quiz-portal-section-head quiz-portal-section-head-mobile">
           <h2 id="quizPortalModulesTitleMobile">Välj en modul</h2>
-          <span>4 quiz · 1 kortlek</span>
+          <span>5 quiz · 1 kortlek</span>
         </div>
         <div class="quiz-portal-grid quiz-portal-grid-mobile">
           ${quizPortalModules
@@ -4731,7 +5062,7 @@ function renderQuizPortalHome() {
                     <span class="quiz-portal-card-copy">${escapeHtml(module.description)}</span>
                     <span class="quiz-portal-card-foot">
                       <small data-quiz-portal-meta="${module.view}">${escapeHtml(quizPortalModuleMeta(module))}</small>
-                      <span class="quiz-portal-card-action">${module.comingSoon ? "Inte tillgänglig" : 'Starta <i data-lucide="arrow-right"></i>'}</span>
+                      <span class="quiz-portal-card-action">${escapeHtml(quizPortalModuleAction(module))}${module.comingSoon ? "" : ' <i data-lucide="arrow-right"></i>'}</span>
                     </span>
                   </span>
                 </button>
@@ -4744,14 +5075,56 @@ function renderQuizPortalHome() {
   `;
 }
 
+function formatQuizReviewDueAt(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "senare";
+  return new Intl.DateTimeFormat("sv-SE", {
+    weekday: "long",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+}
+
+function renderQuizPortalReviewEmpty() {
+  const queue = getQuizReviewQueue();
+  const nextItem = [...queue.waiting].sort((left, right) => Date.parse(left.dueAt) - Date.parse(right.dueAt))[0];
+  const title = nextItem ? "Du är ikapp för tillfället" : "Du är ikapp";
+  const copy = nextItem
+    ? `${queue.waiting.length} ${queue.waiting.length === 1 ? "fråga är schemalagd" : "frågor är schemalagda"}. Nästa repetition blir tillgänglig ${formatQuizReviewDueAt(nextItem.dueAt)}.`
+    : "Frågor du svarar fel på hamnar här automatiskt. Ett rätt svar schemalägger frågan igen efter 24 timmar; nästa rätt markerar den som inlärd.";
+  return `
+    <section class="quiz-portal-data-state quiz-portal-review-empty quiz-theme-orange" aria-labelledby="quizReviewEmptyTitle">
+      <span class="quiz-portal-data-state-icon"><i data-lucide="badge-check"></i></span>
+      <h2 id="quizReviewEmptyTitle">${escapeHtml(title)}</h2>
+      <p>${escapeHtml(copy)}</p>
+      <button class="quiz-portal-button quiz-portal-button-primary" type="button" data-quiz-portal-home>
+        <i data-lucide="arrow-left"></i>
+        <span>Till Quizportalen</span>
+      </button>
+    </section>
+  `;
+}
+
 function renderQuizPortalResults(quiz) {
   const percentage = Math.round((state.quizPortal.score / quiz.questions.length) * 100);
   const passed = percentage >= 80;
-  const feedbackTitle = passed ? "Starkt resultat" : "Repetera och försök igen";
-  const feedbackText = passed
-    ? "Du har bra koll på området, men gå gärna igenom frågorna nedan för att befästa detaljerna."
-    : "Titta igenom genomgången nedan och repetera quizet när du är redo.";
-  const ringColor = passed ? "#16a34a" : "#2563eb";
+  const isReview = state.quizPortal.view === "review";
+  const remainingReviewCount = isReview ? getQuizReviewQueue().due.length : 0;
+  const feedbackTitle = isReview
+    ? remainingReviewCount
+      ? "Några frågor behöver en omgång till"
+      : "Bra jobbat — du är ikapp"
+    : passed
+      ? "Starkt resultat"
+      : "Repetera och försök igen";
+  const feedbackText = isReview
+    ? remainingReviewCount
+      ? `${remainingReviewCount} ${remainingReviewCount === 1 ? "fråga ligger" : "frågor ligger"} kvar för repetition.`
+      : "Rätt besvarade frågor kommer tillbaka efter 24 timmar. Nästa rätta svar markerar dem som inlärda."
+    : passed
+      ? "Du har bra koll på området, men gå gärna igenom frågorna nedan för att befästa detaljerna."
+      : "Titta igenom genomgången nedan och repetera quizet när du är redo.";
+  const ringColor = isReview ? (remainingReviewCount ? "#ea580c" : "#16a34a") : passed ? "#16a34a" : "#2563eb";
   const reviewItems = quiz.questions
     .map((question, index) => {
       const answerIndex = state.quizPortal.answers[index];
@@ -4778,17 +5151,28 @@ function renderQuizPortalResults(quiz) {
           <span>${percentage}%</span>
         </div>
         <div>
-          <span class="quiz-portal-result-kicker">Resultat · ${escapeHtml(quiz.title)}</span>
+          <span class="quiz-portal-result-kicker">${isReview ? "Personlig repetition" : "Resultat"} · ${escapeHtml(quiz.title)}</span>
           <h2 id="quizPortalResultTitle">${feedbackTitle}</h2>
           <p>Du fick ${state.quizPortal.score} av ${quiz.questions.length} rätt. ${feedbackText}</p>
           <div class="quiz-portal-result-actions">
-            <button class="quiz-portal-button quiz-portal-button-primary" type="button" data-quiz-portal-reset>
-              <i data-lucide="refresh-cw"></i>
-              <span>Repetera quizet</span>
-            </button>
-            <button class="quiz-portal-button quiz-portal-button-secondary" type="button" data-quiz-portal-home>
-              <span>Till portalen</span>
-            </button>
+            ${
+              isReview && !remainingReviewCount
+                ? `
+                  <button class="quiz-portal-button quiz-portal-button-primary" type="button" data-quiz-portal-home>
+                    <span>Till Quizportalen</span>
+                    <i data-lucide="arrow-right"></i>
+                  </button>
+                `
+                : `
+                  <button class="quiz-portal-button quiz-portal-button-primary" type="button" data-quiz-portal-reset>
+                    <i data-lucide="refresh-cw"></i>
+                    <span>${isReview ? "Repetera kvarvarande" : "Repetera quizet"}</span>
+                  </button>
+                  <button class="quiz-portal-button quiz-portal-button-secondary" type="button" data-quiz-portal-home>
+                    <span>Till portalen</span>
+                  </button>
+                `
+            }
           </div>
         </div>
       </div>
@@ -4804,13 +5188,29 @@ function renderQuizPortalResults(quiz) {
 function renderQuizPortalQuiz() {
   const quiz = getQuizPortalSessionQuiz();
   if (!quiz) return renderQuizPortalHome();
+  const isReview = state.quizPortal.view === "review";
+  if (isReview && !quiz.questions.length) return renderQuizPortalReviewEmpty();
   if (state.quizPortal.showResults) return renderQuizPortalResults(quiz);
 
   const question = quiz.questions[state.quizPortal.currentIndex];
   const progress = ((state.quizPortal.currentIndex + (state.quizPortal.isAnswered ? 1 : 0)) / quiz.questions.length) * 100;
+  const reviewItem = isReview
+    ? state.quizHistory.reviewItems.find((item) => item.questionKey === question.historyQuestionKey)
+    : null;
+  const explanationTitle = isReview
+    ? state.quizPortal.selectedOption === question.answer
+      ? reviewItem?.stage === "mastered"
+        ? "Rätt — frågan är inlärd"
+        : "Rätt — frågan återkommer om 24 timmar"
+      : "Inte riktigt — frågan ligger kvar"
+    : state.quizPortal.selectedOption === question.answer
+      ? "Rätt svar!"
+      : state.quizPortal.timedOut
+        ? "Tiden är slut"
+        : "Faktainfo";
 
   return `
-    <section class="quiz-portal-engine" aria-labelledby="quizPortalEngineTitle">
+    <section class="quiz-portal-engine ${isReview ? "is-review quiz-theme-orange" : ""}" aria-labelledby="quizPortalEngineTitle">
       <button class="quiz-portal-back" type="button" data-quiz-portal-home>
         <i data-lucide="arrow-left"></i>
         <span>Till Quiz Portalen</span>
@@ -4819,16 +5219,22 @@ function renderQuizPortalQuiz() {
       <div class="quiz-portal-engine-head">
         <div>
           <h2 id="quizPortalEngineTitle">${escapeHtml(quiz.title)}</h2>
-          <p>Fråga ${state.quizPortal.currentIndex + 1} av ${quiz.questions.length}</p>
+          <p>${isReview ? "Personlig repetition · " : ""}Fråga ${state.quizPortal.currentIndex + 1} av ${quiz.questions.length}</p>
         </div>
-        <div class="quiz-portal-question-timer ${state.quizPortal.questionTimeRemaining === 0 ? "is-expired" : state.quizPortal.questionTimeRemaining <= 5 ? "is-warning" : ""}" style="--quiz-time-progress: ${state.quizPortal.questionTimeRemaining / QUIZ_PORTAL_QUESTION_TIME_SECONDS}" data-quiz-portal-question-timer role="timer" aria-label="${state.quizPortal.questionTimeRemaining} sekunder kvar">
-          <span class="quiz-portal-question-timer-copy">
-            <i data-lucide="timer"></i>
-            <strong data-quiz-portal-question-time>${state.quizPortal.questionTimeRemaining}</strong>
-            <small>sek</small>
-          </span>
-          <span class="quiz-portal-question-timer-track" aria-hidden="true"><span></span></span>
-        </div>
+        ${
+          isReview
+            ? '<span class="quiz-portal-review-mode-label"><i data-lucide="heart-pulse"></i>Utan tidspress</span>'
+            : `
+              <div class="quiz-portal-question-timer ${state.quizPortal.questionTimeRemaining === 0 ? "is-expired" : state.quizPortal.questionTimeRemaining <= 5 ? "is-warning" : ""}" style="--quiz-time-progress: ${state.quizPortal.questionTimeRemaining / QUIZ_PORTAL_QUESTION_TIME_SECONDS}" data-quiz-portal-question-timer role="timer" aria-label="${state.quizPortal.questionTimeRemaining} sekunder kvar">
+                <span class="quiz-portal-question-timer-copy">
+                  <i data-lucide="timer"></i>
+                  <strong data-quiz-portal-question-time>${state.quizPortal.questionTimeRemaining}</strong>
+                  <small>sek</small>
+                </span>
+                <span class="quiz-portal-question-timer-track" aria-hidden="true"><span></span></span>
+              </div>
+            `
+        }
       </div>
       <div class="quiz-portal-progress" aria-hidden="true"><span style="width: ${progress}%"></span></div>
 
@@ -4859,7 +5265,7 @@ function renderQuizPortalQuiz() {
               <div class="quiz-portal-explanation ${state.quizPortal.selectedOption === question.answer ? "is-correct" : ""} ${state.quizPortal.timedOut ? "is-timeout" : ""}">
                 <i data-lucide="${state.quizPortal.selectedOption === question.answer ? "circle-check-big" : state.quizPortal.timedOut ? "timer-off" : "triangle-alert"}"></i>
                 <div>
-                  <strong>${state.quizPortal.selectedOption === question.answer ? "Rätt svar!" : state.quizPortal.timedOut ? "Tiden är slut" : "Faktainfo"}</strong>
+                  <strong>${escapeHtml(explanationTitle)}</strong>
                   ${state.quizPortal.timedOut ? `<p class="quiz-portal-timeout-answer">Rätt svar: ${escapeHtml(question.options[question.answer])}</p>` : ""}
                   <p>${escapeHtml(question.explanation)}</p>
                 </div>
@@ -4953,9 +5359,13 @@ function renderQuizOverview() {
   renderQuizPortalSidebar();
 
   let content = "";
-  const requiresData = ["vu1", "vu2", "scenario", "flashcards"].includes(state.quizPortal.view);
+  const requiresData = ["vu1", "vu2", "scenario", "flashcards", "review"].includes(state.quizPortal.view);
   if (requiresData && state.quizPortal.dataStatus !== "ready") {
     content = renderQuizPortalDataState();
+  } else if (state.quizPortal.view === "review") {
+    content = state.quizPortal.sessionQuestions.length
+      ? renderQuizPortalQuiz()
+      : renderQuizPortalReviewEmpty();
   } else if (state.quizPortal.view === "flashcards") {
     content = renderQuizPortalFlashcards();
   } else if (getQuizPortalQuiz()) {
@@ -5966,6 +6376,10 @@ function bindEvents() {
     const quizPortalViewButton = event.target.closest("[data-quiz-portal-view]");
     if (quizPortalViewButton) {
       const view = quizPortalViewButton.dataset.quizPortalView;
+      if (view === "review") {
+        void startQuizPortalReviewSession();
+        return;
+      }
       if (Object.prototype.hasOwnProperty.call(QUIZ_PORTAL_BANK_CONFIG, view)) {
         startQuizPortalCountdown(view);
         return;
@@ -5987,8 +6401,12 @@ function bindEvents() {
       refreshIcons();
       void loadQuizPortalData().then(() => {
         if (state.quizPortal.dataStatus === "ready") {
-          startQuizPortalHistoryAttempt();
-          startQuizPortalQuestionTimer();
+          if (state.quizPortal.view === "review") {
+            void startQuizPortalReviewSession();
+          } else {
+            startQuizPortalHistoryAttempt();
+            startQuizPortalQuestionTimer();
+          }
         }
       });
       return;
@@ -6040,6 +6458,10 @@ function bindEvents() {
 
     const quizPortalResetButton = event.target.closest("[data-quiz-portal-reset]");
     if (quizPortalResetButton && state.mode === "quiz-overview") {
+      if (state.quizPortal.view === "review") {
+        void startQuizPortalReviewSession();
+        return;
+      }
       resetQuizPortalSession(state.quizPortal.view);
       startQuizPortalHistoryAttempt();
       renderQuizOverview();

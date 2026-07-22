@@ -5553,6 +5553,11 @@ body.quiz-overview-mode .content-inner {
   animation: quiz-portal-spin 900ms linear infinite;
 }
 
+.quiz-portal-review-empty .quiz-portal-data-state-icon {
+  background: var(--quiz-accent-soft);
+  color: var(--quiz-accent);
+}
+
 .quiz-portal-data-state h2 {
   margin: 0;
   color: #0f172a;
@@ -9805,6 +9810,26 @@ body.quiz-overview-mode .quiz-portal-engine-head p {
   font-weight: 700;
 }
 
+.quiz-portal-review-mode-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(var(--quiz-accent-rgb), 0.2);
+  border-radius: 999px;
+  background: var(--quiz-accent-soft);
+  color: var(--quiz-accent);
+  padding: 9px 14px;
+  font-size: 12px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.quiz-portal-review-mode-label svg {
+  width: 15px;
+  height: 15px;
+}
+
 body.quiz-overview-mode .quiz-portal-question-timer {
   --quiz-time-color: #2563eb;
   --quiz-time-soft: #dbeafe;
@@ -10016,6 +10041,21 @@ body.quiz-overview-mode .quiz-portal-explanation.is-correct {
   border-color: #bbf7d0;
   background: #f0fdf4;
   color: #166534;
+}
+
+.quiz-portal-engine.is-review .quiz-portal-option:not(:disabled):hover {
+  border-color: rgba(var(--quiz-accent-rgb), 0.38);
+  background: var(--quiz-accent-soft);
+}
+
+.quiz-portal-engine.is-review .quiz-portal-option.is-selected:not(.is-correct):not(.is-wrong) {
+  border-color: var(--quiz-accent);
+  background: var(--quiz-accent-soft);
+}
+
+.quiz-portal-engine.is-review .quiz-portal-option.is-selected:not(.is-correct):not(.is-wrong) .quiz-portal-option-letter {
+  border-color: var(--quiz-accent);
+  background: var(--quiz-accent);
 }
 
 body.quiz-overview-mode .quiz-portal-explanation.is-timeout {
@@ -10492,6 +10532,12 @@ body.quiz-overview-mode .quiz-portal-flashcard-controls svg {
   --quiz-accent: #d9821b;
   --quiz-accent-soft: #fbf1e3;
   --quiz-accent-rgb: 217, 130, 27;
+}
+
+.quiz-theme-orange {
+  --quiz-accent: #ea580c;
+  --quiz-accent-soft: #fff1e8;
+  --quiz-accent-rgb: 234, 88, 12;
 }
 
 .quiz-theme-rose {

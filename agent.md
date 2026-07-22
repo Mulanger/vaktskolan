@@ -28,37 +28,48 @@ Migrationen `supabase/migrations/20260722170000_create_student_quiz_history.sql`
 - `student_quiz_attempts`: ett försök/session från modulquiz eller Quizportalen.
 - `student_quiz_answers`: ett bedömt svar per fråga och försök, inklusive kunskapsområdena som gällde när eleven svarade.
 
-Båda tabellerna använder elevens Clerk-id (`auth.jwt() ->> 'sub'`) som `user_id`. RLS tillåter bara den autentiserade eleven att läsa och skriva sina egna försök och svar. Klientgenererade UUID:n och unika nycklar gör synken idempotent; samma lokala svar kan skickas igen utan att skapa dubbletter.
+Migrationen `supabase/migrations/20260722183000_create_student_quiz_review_items.sql`:
 
-Migrationen är additiv men måste köras i Supabase innan historiken kan följa eleven mellan enheter. Om tabellerna ännu inte finns fortsätter appen fungera och lagrar historiken lokalt. Detta är en avsiktlig mjuk fallback, inte ett skäl att skjuta upp migrationen i produktion.
+- utökar historiktabellernas `source_type` med `review`, så repetitionspass kan följas utan att blandas ihop med ordinarie quiz,
+- skapar `student_quiz_review_items`, som lagrar en elevspecifik repetitionsstatus per stabil `question_key`, och
+- lägger till RLS, index och idempotent unik nyckel på `(user_id, question_key)`.
 
-Status 2026-07-22: en read-only REST-kontroll mot molnprojektet gav `PGRST205` för båda tabellerna, alltså är denna nya migration ännu inte applicerad där. Repot har varken Supabase CLI/`psql` eller databasens connection string. Kör migrationsfilen i Supabase SQL Editor (eller via projektets normala migrationsflöde) före produktionsdeploy och verifiera därefter att båda tabellerna svarar via REST.
+Alla tre tabellerna använder elevens Clerk-id (`auth.jwt() ->> 'sub'`) som `user_id`. RLS tillåter bara den autentiserade eleven att läsa och skriva sina egna försök, svar och repetitionsposter. Klientgenererade UUID:n och unika nycklar gör synken idempotent; samma lokala data kan skickas igen utan att skapa dubbletter.
+
+Migrationerna är additiva men måste köras i ordning i Supabase innan historiken och repetitionskön kan följa eleven mellan enheter. Om tabellerna ännu inte finns fortsätter appen fungera och lagrar historiken lokalt. Detta är en avsiktlig mjuk fallback, inte ett skäl att skjuta upp migrationerna i produktion.
+
+Status 2026-07-22: en read-only REST-kontroll mot molnprojektet gav `PGRST205` för historiktabellerna, alltså var den första migrationen ännu inte applicerad där när kontrollen gjordes. Repot har varken Supabase CLI/`psql` eller databasens connection string. Kör först `20260722170000_create_student_quiz_history.sql` och sedan `20260722183000_create_student_quiz_review_items.sql` i Supabase SQL Editor (eller via projektets normala migrationsflöde) före produktionsdeploy. Verifiera därefter att alla tre tabellerna svarar via REST.
 
 ### Lokal lagring och synk
 
-`app.js` använder `vakt-quiz-history-v1` i `localStorage` med `{ ownerId, attempts, answers }`. Högst 200 försök och 500 svar hålls lokalt. Historiken rensas om en annan Clerk-användare tar över samma webbläsare, så elevdata blandas inte mellan konton.
+`app.js` använder `vakt-quiz-history-v1` i `localStorage` med `{ ownerId, attempts, answers, reviewItems }`. Högst 200 försök och 500 svar hålls lokalt. Repetitionsposterna är ett aktuellt tillstånd per fråga och kapas inte av historikgränsen. Historiken rensas om en annan Clerk-användare tar över samma webbläsare, så elevdata blandas inte mellan konton.
 
 Viktiga funktioner i `app.js`:
 
 - `initializeQuizHistory()`: hämtar och slår ihop lokal/molnlagrad historik efter den ordinarie progressionssynken.
 - `recordQuizAttempt()`, `recordQuizAnswer()` och `updateQuizAttempt()`: append/upsert av nya händelser.
-- `syncQuizHistoryToSupabase()`: skickar osynkade försök före svar; nätverksfel lämnar datan lokalt för senare försök.
+- `syncQuizHistoryToSupabase()`: skickar osynkade försök före svar och repetitionsposter; nätverksfel lämnar datan lokalt för senare försök.
 - `recordModuleQuizAttempt()`: registrerar ett färdigt modulquiz utan att ändra dess gamla progressionsformat.
 - `startQuizPortalHistoryAttempt()`, `recordQuizPortalAnswer()` och `completeQuizPortalHistoryAttempt()`: registrerar VU1-, VU2- och scenarioquiz. Timeout räknas som fel och sparas med `timed_out=true`.
 - `getLegacyModuleQuizAnswerEvents()`: gör redan inskickade modulquiz i det gamla progressionsformatet synliga i statistiken. Om motsvarande historikförsök redan finns undviks dubbelräkning.
+- `applyQuizReviewOutcome()`: uppdaterar frågans beständiga repetitionsstatus efter varje bedömt svar.
+- `backfillQuizReviewItems()`: gör tidigare felbesvarade frågor tillgängliga i kön efter uppgraderingen utan att skriva om gamla svar.
+- `getQuizReviewQueue()`: delar repetitionsposterna i `due`, `waiting` och `mastered`; både dashboarden och Quizportalen använder samma beräkning.
 
-Flashcards och slutprov ingår inte i quizträffsäkerheten. Slutprov har egna regler och ska inte blandas med träningsquiz.
+Flashcards, slutprov och själva repetitionspassen ingår inte i quizträffsäkerheten. Därmed kan en elev inte höja träffsäkerheten artificiellt genom att svara på samma repetitionsfråga flera gånger. Slutprov har egna regler och ska inte blandas med träningsquiz.
 
 ### Kunskapsområden och "Att repetera"
 
-VU1/VU2-frågor från modulquiz och Quizportalen grupperas som `kurs + modul`, exempelvis `vu1:module:3`. Scenariofrågor använder sina ämnestaggar, exempelvis `scenario:envarsgripande`. Scenarioets miljö (`butik`, `sjukhus` osv.), nivå och frågekälla sparas som kontext men räknas inte som själva kunskapsområdet.
+VU1/VU2-frågor från modulquiz och Quizportalen grupperas fortsatt som `kurs + modul`, exempelvis `vu1:module:3`. Scenariofrågor använder sina ämnestaggar, exempelvis `scenario:envarsgripande`. Scenarioets miljö (`butik`, `sjukhus` osv.), nivå och frågekälla sparas som kontext men räknas inte som själva kunskapsområdet. Metadata följer med repetitionsposten och kan senare användas för filtrering eller rekommendationer.
 
-För varje område används som mest de 20 senaste svaren. Ett område visas under `Att repetera` när något av följande gäller:
+`Att repetera` är frågebaserad, inte längre en statistisk tröskel per område:
 
-- minst 5 svar och lägre än 80 procent rätt, eller
-- minst 3 svar varav minst 2 är fel.
+1. Ett felaktigt svar i modulquiz, VU1, VU2 eller scenarioquiz lägger frågan i `due` omedelbart. Ett nytt fel återställer alltid frågan till detta läge.
+2. Första rätta svaret inne i `Att repetera` flyttar frågan till `waiting` med `due_at` exakt 24 timmar senare.
+3. När de 24 timmarna har gått blir frågan automatiskt tillgänglig igen. Nästa rätta svar markerar den som `mastered` och tar bort den från den aktiva kön.
+4. Ett rätt svar i ett vanligt quiz tar inte bort en repetitionspost; bekräftelsen ska ske i det lugna repetitionsläget.
 
-Det svagaste kvalificerade området visas först. Antalet anger upp till tre unika felbesvarade frågor att repetera. Innan det finns tillräckligt underlag visas `Mer quizdata behövs`; när underlag finns men inget område ligger under gränsen visas `0 frågor` och `Inget område under 80%`.
+Quizportalens orange kort `Att repetera` visar antalet frågor som är redo nu. Ett pass innehåller högst 15 aktuella frågor, använder samma fråga/resultat-komponenter som övriga quiz men saknar nedräkning. Om inget är redo visar statusvyn hur många frågor som väntar och när nästa blir tillgänglig.
 
 ### Dashboardens fyra nyckeltal
 
@@ -67,7 +78,7 @@ Det svagaste kvalificerade området visas först. Antalet anger upp till tre uni
 1. `Kursframsteg`: procent för elevens aktuella/fortsättningskurs, inte en missvisande blandning av en ännu låst VU2-kurs.
 2. `Moduler klara`: avklarade innehållsmoduler i samma aktuella kurs.
 3. `Quizträffsäkerhet`: andelen rätt bland elevens senaste 100 bedömda träningssvar från modulquiz och Quizportalen. Undertexten visar exakt antal rätt och totalt antal svar.
-4. `Att repetera`: upp till tre frågor från elevens svagaste kunskapsområde enligt reglerna ovan.
+4. `Att repetera`: antal personliga repetitionsfrågor som är redo just nu. När kön är tom men frågor väntar visas i undertexten hur många som är schemalagda; annars visas `Du är ikapp`.
 
 `getStudentQuizMetrics()` är den centrala beräkningen. Ändra KPI-definitionerna där och uppdatera detta avsnitt samtidigt; duplicera inte beräkningarna direkt i HTML-renderingen.
 
@@ -81,9 +92,10 @@ Kontrollerat 2026-07-22:
 - `npm run test:platform-guards`
 - browsertest på 1280×720: fyra lika breda kolumner utan overflow.
 - browsertest på 390×844: fyra kort i 2×2 utan horisontell overflow.
-- ett besvarat Quizportal-svar uppdaterade dashboarden från tom träffsäkerhet till `100%` och `1 av 1 rätt`.
+- ett felaktigt Quizportal-svar skapade omedelbart `1 fråga` i dashboarden och på Quizportalens repetitionskort.
+- repetitionskortet öppnade samma fråga utan timer; första rätta svaret ändrade den till schemalagd i 24 timmar och dashboarden återgick till `0 frågor`.
 
-Efter framtida ändringar bör även ett modulquiz, ett VU1/VU2-portalquiz, ett scenarioquiz, timeout och kontobyte testas. Frågebankernas importer ska inte modifieras för att lagra elevresultat; elevresultat hör endast hemma i de två nya historiktabellerna.
+Efter framtida ändringar bör även ett modulquiz, ett VU1/VU2-portalquiz, ett scenarioquiz, timeout, den andra 24-timmarsbekräftelsen och kontobyte testas. Frågebankernas importer ska inte modifieras för att lagra elevresultat; elevresultat hör endast hemma i historik- och repetitionstabellerna.
 
 ## Kort Sammanfattning
 
