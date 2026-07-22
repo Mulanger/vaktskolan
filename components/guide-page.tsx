@@ -6,6 +6,7 @@ import { formatEditorialDate, getRelatedContent } from "@/lib/content";
 import { GUIDE_NAVIGATION_GROUPS } from "@/lib/guide-navigation";
 import { contentPageJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/json-ld";
+import { GuideQuizPanel } from "@/components/guide-quiz-panel";
 
 function SmartLink(props: ComponentPropsWithoutRef<"a">) {
   const href = props.href || "#";
@@ -134,6 +135,13 @@ export function GuidePage({ entry }: { entry: ContentEntry }) {
                 </nav>
               )}
             </article>
+          </div>
+
+          <div className="guide-quiz-rail">
+            <GuideQuizPanel
+              guideLabel={currentNavigationItem?.label ?? "Vaktskolans guide"}
+              guideSlug={entry.slug}
+            />
           </div>
         </div>
       </main>
