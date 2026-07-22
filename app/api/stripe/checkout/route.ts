@@ -50,6 +50,7 @@ export async function POST(request: NextRequest) {
       {
         mode: "payment",
         locale: "sv",
+        managed_payments: { enabled: false },
         line_items: [{ price: price.id, quantity: 1 }],
         ...(customer
           ? { customer: customer.stripe_customer_id }
