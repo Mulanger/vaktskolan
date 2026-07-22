@@ -16,6 +16,7 @@ type SavedGuideQuiz = {
   selected: number | null;
   completed: boolean;
   answered: number;
+  answers: Array<number | null>;
   updatedAt: string;
 };
 
@@ -220,7 +221,7 @@ function trackGuideQuizEvent(eventName: string, guideSlug: string, params: Recor
 }
 
 function initialProgress(): SavedGuideQuiz {
-  return { currentQuestion: 0, score: 0, selected: null, completed: false, answered: 0, updatedAt: new Date().toISOString() };
+  return { currentQuestion: 0, score: 0, selected: null, completed: false, answered: 0, answers: [], updatedAt: new Date().toISOString() };
 }
 
 export function GuideQuizPanel({ guideSlug, guideLabel }: GuideQuizPanelProps) {
@@ -234,7 +235,9 @@ export function GuideQuizPanel({ guideSlug, guideLabel }: GuideQuizPanelProps) {
   useEffect(() => {
     const savedState = readSavedQuiz();
     const stored = savedState.guides[guideSlug];
-    const restored = stored && stored.currentQuestion >= 0 && stored.currentQuestion < questions.length ? stored : initialProgress();
+    const restored = stored && stored.currentQuestion >= 0 && stored.currentQuestion < questions.length
+      ? { ...stored, answers: Array.isArray(stored.answers) ? stored.answers : [] }
+      : initialProgress();
     const hydrateId = window.setTimeout(() => {
       setProgress(restored);
       setPreviousResult(
@@ -289,8 +292,17 @@ export function GuideQuizPanel({ guideSlug, guideLabel }: GuideQuizPanelProps) {
     if (progress.selected !== null || progress.completed) return;
     const question = questions[progress.currentQuestion];
     if (!question) return;
+    const nextAnswers = [...progress.answers];
+    nextAnswers[progress.currentQuestion] = index;
     const nextScore = progress.score + (index === question.answer ? 1 : 0);
-    const next = { ...progress, selected: index, score: nextScore, answered: progress.answered + 1, updatedAt: new Date().toISOString() };
+    const next = {
+      ...progress,
+      answers: nextAnswers,
+      selected: index,
+      score: nextScore,
+      answered: progress.answered + 1,
+      updatedAt: new Date().toISOString(),
+    };
     updateProgress(next);
     trackGuideQuizEvent("guide_quiz_answer", guideSlug, {
       question_index: progress.currentQuestion + 1,
@@ -336,6 +348,30 @@ export function GuideQuizPanel({ guideSlug, guideLabel }: GuideQuizPanelProps) {
         <p className="guide-quiz-result__score">{progress.score} av {questions.length} rätt</p>
         <h2>{resultTitle}</h2>
         <p>Du kan spara resultatet lokalt och fortsätta till nästa guide när du vill.</p>
+        <div className="guide-quiz-result-summary" aria-label="Dina svar och rätt svar">
+          {questions.map((question, index) => {
+            const selectedAnswer = progress.answers[index] ?? null;
+            const hasAnswer = selectedAnswer !== null;
+            const isCorrect = hasAnswer && selectedAnswer === question.answer;
+            return (
+              <div className="guide-quiz-result-row" key={question.question}>
+                <div className="guide-quiz-result-row__meta">
+                  <span>Fråga {index + 1}</span>
+                  <span className={`guide-quiz-result-row__status${!hasAnswer ? " is-missing" : isCorrect ? " is-correct" : " is-incorrect"}`}>
+                    {!hasAnswer ? "Ej sparat" : isCorrect ? "Rätt" : "Fel"}
+                  </span>
+                </div>
+                <p className="guide-quiz-result-row__answer">
+                  <strong>Ditt svar:</strong> {selectedAnswer === null ? "Inget svar" : question.options[selectedAnswer]}
+                </p>
+                <p className="guide-quiz-result-row__answer">
+                  <strong>Rätt svar:</strong> {question.options[question.answer]}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+        <p className="guide-quiz-result__cta-copy">Vill du öva på fler quizfrågor? Bli medlem gratis.</p>
         <div className="guide-quiz-result__actions">
           <Link
             className="guide-quiz-panel__cta"
@@ -362,11 +398,9 @@ export function GuideQuizPanel({ guideSlug, guideLabel }: GuideQuizPanelProps) {
         <div className="guide-quiz-options" role="group" aria-label={`Svarsalternativ för fråga ${progress.currentQuestion + 1}`}>
           {current.options.map((option, index) => {
             const selected = progress.selected === index;
-            const correct = progress.selected !== null && index === current.answer;
-            const incorrect = selected && !correct;
             return (
               <button
-                className={`guide-quiz-option${selected ? " is-selected" : ""}${correct ? " is-correct" : ""}${incorrect ? " is-incorrect" : ""}`}
+                className={`guide-quiz-option${selected ? " is-selected" : ""}`}
                 disabled={progress.selected !== null}
                 key={option}
                 onClick={() => chooseAnswer(index)}
@@ -379,9 +413,7 @@ export function GuideQuizPanel({ guideSlug, guideLabel }: GuideQuizPanelProps) {
           })}
         </div>
         {progress.selected !== null && (
-          <div className="guide-quiz-feedback" aria-live="polite">
-            <strong>{progress.selected === current.answer ? "Rätt." : "Inte riktigt."}</strong>
-            <p>{current.explanation}</p>
+          <div className="guide-quiz-next">
             <button className="guide-quiz-next-button" type="button" onClick={nextQuestion}>
               {progress.currentQuestion === questions.length - 1 ? "Visa resultat" : "Nästa fråga"} <span aria-hidden="true">→</span>
             </button>
@@ -404,7 +436,7 @@ export function GuideQuizPanel({ guideSlug, guideLabel }: GuideQuizPanelProps) {
 
         {progress.completed ? renderResult() : renderQuestion()}
 
-        <p className="guide-quiz-panel__note">Tre frågor · resultatet sparas bara i din webbläsare</p>
+        <p className="guide-quiz-panel__note">Ditt resultat visas efter att du svarat på alla 3 frågor.</p>
       </aside>
 
       {isMobileOverlayOpen && (
