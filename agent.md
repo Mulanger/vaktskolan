@@ -1,6 +1,6 @@
 # Agent Handoff - Vaktskolan
 
-Senast uppdaterad: 2026-07-10.
+Senast uppdaterad: 2026-07-22.
 
 Det här dokumentet beskriver appen i `D:\vaktskolan`: hur dashboarden och landing page fungerar, hur utbildningsmaterialet är uppbyggt, vilka lokala beslut som redan är tagna, och var framtida ändringar bör göras.
 
@@ -16,6 +16,74 @@ Det här dokumentet beskriver appen i `D:\vaktskolan`: hur dashboarden och landi
 - Deploymentinstruktioner och lanseringsgrind finns i `docs/seo-launch-checklist.md`.
 
 Avsnitten nedan beskriver i stor utsträckning legacy-plattformens interna funktioner. Påståenden om att root-sajten saknar byggsystem eller npm-dependencies är historiska och ska inte användas för den publika Next-ytan.
+
+## Elevspecifik quizhistorik och dashboard-KPI:er (2026-07-22)
+
+Quizhistoriken är byggd som ett additivt lager. Den ändrar eller raderar inte `quiz_questions`, `quiz_answer_options`, `utbildning.md`, elevens befintliga `student_learning_progress` eller de gamla `answers`/`quizSubmissions`-nycklarna. Befintliga frågor och progressionsdata fortsätter därför att fungera som tidigare.
+
+### Databas och driftsättning
+
+Migrationen `supabase/migrations/20260722170000_create_student_quiz_history.sql` skapar:
+
+- `student_quiz_attempts`: ett försök/session från modulquiz eller Quizportalen.
+- `student_quiz_answers`: ett bedömt svar per fråga och försök, inklusive kunskapsområdena som gällde när eleven svarade.
+
+Båda tabellerna använder elevens Clerk-id (`auth.jwt() ->> 'sub'`) som `user_id`. RLS tillåter bara den autentiserade eleven att läsa och skriva sina egna försök och svar. Klientgenererade UUID:n och unika nycklar gör synken idempotent; samma lokala svar kan skickas igen utan att skapa dubbletter.
+
+Migrationen är additiv men måste köras i Supabase innan historiken kan följa eleven mellan enheter. Om tabellerna ännu inte finns fortsätter appen fungera och lagrar historiken lokalt. Detta är en avsiktlig mjuk fallback, inte ett skäl att skjuta upp migrationen i produktion.
+
+Status 2026-07-22: en read-only REST-kontroll mot molnprojektet gav `PGRST205` för båda tabellerna, alltså är denna nya migration ännu inte applicerad där. Repot har varken Supabase CLI/`psql` eller databasens connection string. Kör migrationsfilen i Supabase SQL Editor (eller via projektets normala migrationsflöde) före produktionsdeploy och verifiera därefter att båda tabellerna svarar via REST.
+
+### Lokal lagring och synk
+
+`app.js` använder `vakt-quiz-history-v1` i `localStorage` med `{ ownerId, attempts, answers }`. Högst 200 försök och 500 svar hålls lokalt. Historiken rensas om en annan Clerk-användare tar över samma webbläsare, så elevdata blandas inte mellan konton.
+
+Viktiga funktioner i `app.js`:
+
+- `initializeQuizHistory()`: hämtar och slår ihop lokal/molnlagrad historik efter den ordinarie progressionssynken.
+- `recordQuizAttempt()`, `recordQuizAnswer()` och `updateQuizAttempt()`: append/upsert av nya händelser.
+- `syncQuizHistoryToSupabase()`: skickar osynkade försök före svar; nätverksfel lämnar datan lokalt för senare försök.
+- `recordModuleQuizAttempt()`: registrerar ett färdigt modulquiz utan att ändra dess gamla progressionsformat.
+- `startQuizPortalHistoryAttempt()`, `recordQuizPortalAnswer()` och `completeQuizPortalHistoryAttempt()`: registrerar VU1-, VU2- och scenarioquiz. Timeout räknas som fel och sparas med `timed_out=true`.
+- `getLegacyModuleQuizAnswerEvents()`: gör redan inskickade modulquiz i det gamla progressionsformatet synliga i statistiken. Om motsvarande historikförsök redan finns undviks dubbelräkning.
+
+Flashcards och slutprov ingår inte i quizträffsäkerheten. Slutprov har egna regler och ska inte blandas med träningsquiz.
+
+### Kunskapsområden och "Att repetera"
+
+VU1/VU2-frågor från modulquiz och Quizportalen grupperas som `kurs + modul`, exempelvis `vu1:module:3`. Scenariofrågor använder sina ämnestaggar, exempelvis `scenario:envarsgripande`. Scenarioets miljö (`butik`, `sjukhus` osv.), nivå och frågekälla sparas som kontext men räknas inte som själva kunskapsområdet.
+
+För varje område används som mest de 20 senaste svaren. Ett område visas under `Att repetera` när något av följande gäller:
+
+- minst 5 svar och lägre än 80 procent rätt, eller
+- minst 3 svar varav minst 2 är fel.
+
+Det svagaste kvalificerade området visas först. Antalet anger upp till tre unika felbesvarade frågor att repetera. Innan det finns tillräckligt underlag visas `Mer quizdata behövs`; när underlag finns men inget område ligger under gränsen visas `0 frågor` och `Inget område under 80%`.
+
+### Dashboardens fyra nyckeltal
+
+`renderHome()` visar en sammanhängande rad med fyra elevspecifika värden på desktop och ett 2×2-rutnät på mobil:
+
+1. `Kursframsteg`: procent för elevens aktuella/fortsättningskurs, inte en missvisande blandning av en ännu låst VU2-kurs.
+2. `Moduler klara`: avklarade innehållsmoduler i samma aktuella kurs.
+3. `Quizträffsäkerhet`: andelen rätt bland elevens senaste 100 bedömda träningssvar från modulquiz och Quizportalen. Undertexten visar exakt antal rätt och totalt antal svar.
+4. `Att repetera`: upp till tre frågor från elevens svagaste kunskapsområde enligt reglerna ovan.
+
+`getStudentQuizMetrics()` är den centrala beräkningen. Ändra KPI-definitionerna där och uppdatera detta avsnitt samtidigt; duplicera inte beräkningarna direkt i HTML-renderingen.
+
+### Verifiering
+
+Kontrollerat 2026-07-22:
+
+- `node --check app.js`
+- `npm run lint`
+- `npm run typecheck`
+- `npm run test:platform-guards`
+- browsertest på 1280×720: fyra lika breda kolumner utan overflow.
+- browsertest på 390×844: fyra kort i 2×2 utan horisontell overflow.
+- ett besvarat Quizportal-svar uppdaterade dashboarden från tom träffsäkerhet till `100%` och `1 av 1 rätt`.
+
+Efter framtida ändringar bör även ett modulquiz, ett VU1/VU2-portalquiz, ett scenarioquiz, timeout och kontobyte testas. Frågebankernas importer ska inte modifieras för att lagra elevresultat; elevresultat hör endast hemma i de två nya historiktabellerna.
 
 ## Kort Sammanfattning
 
@@ -236,10 +304,10 @@ VU2-kortet i `Dina kurser` styrs av den centrala kurslåsningsflaggan `ENFORCE_C
 Aktuella cachebusting-parametrar i `index.html`:
 
 ```html
-<link rel="stylesheet" href="styles.css?v=20260707-home-1b">
+<link rel="stylesheet" href="styles.css?v=20260722-quiz-insights">
 <script src="authProvider.js?v=20260706-light-auth"></script>
 <script src="supabaseApi.js?v=20260705-supabase"></script>
-<script src="app.js?v=20260707-home-1b"></script>
+<script src="app.js?v=20260722-quiz-insights"></script>
 ```
 
 När CSS eller JS ändras bör versionssträngarna uppdateras så webbläsaren inte visar gammal kod.
@@ -286,9 +354,9 @@ window.vaktskolanSupabase.request(path, options)
 window.vaktskolanSupabase.setAccessToken(token)
 ```
 
-`app.js` anropar `initializeSupabaseConnection()` under init. Det blockerar inte kursladdningen; om Supabase inte kan initieras fortsätter appen med `localStorage`.
+`app.js` anropar `initializeSupabaseConnection()` för health check, `initializeProgressSync()` för den obligatoriska kursprogressionen och `initializeQuizHistory()` för quizhistoriken. Den ordinarie kursprogressionen måste kunna synkas för en autentiserad elev; quizhistoriken har däremot lokal fallback och blockerar inte kursen vid ett tillfälligt fel.
 
-Viktigt: inga tabeller, RLS-policies eller authflöden är skapade i Supabase än. Nästa steg för riktig lagring är att bestämma datamodell, exempelvis elevprofil, sidprogress, quizförsök och slutprovsförsök, och sedan skapa tabeller/policies i Supabase.
+Datamodeller och RLS finns nu för både `student_learning_progress` och quizhistorik. Se migrationerna `20260714143000_create_student_learning_progress.sql` och `20260722170000_create_student_quiz_history.sql`. Frågebanken är fortsatt separat från elevens resultatdata.
 
 ## Clerk Authentication
 
@@ -942,7 +1010,7 @@ Efter ändringar i landing page:
 - Det verkar inte finnas ett fungerande Git-repo i arbetsmappen, trots att `.git` kan finnas. Tidigare `git status` har rapporterat att det inte är ett repo.
 - Appen har inget testpaket. Verifiering är syntaxcheck + manuell browserkontroll.
 - Dashboarden är stateful via `localStorage`; gamla lokala svar kan påverka hur hubbar och prov ser ut.
-- Supabase-kopplingen är bara anslutningslager än så länge. Appen skriver inte progress/quiz/slutprov till databasen innan tabeller och RLS-policies finns.
+- Supabase-kopplingen lagrar den samlade kursprogressionen i `student_learning_progress` och quizförsök/svar i de två quizhistoriktabellerna. Frågebanken och elevresultaten ska hållas separata.
 - Quiz Portal-schema finns som SQL-migration och är redan körd i Supabase-projektet.
 - Scenariofrågorna finns som SQL-seed och REST-importskript, och seed/import är redan körd i Supabase-projektet.
 - `.env` innehåller riktiga nycklar och är ignorerad av `.gitignore`. Dela inte secret key till frontend eller GitHub.
@@ -989,7 +1057,7 @@ Trolig implementation:
 7. Säkerställ att sparad position inte kan återställa eleven till en låst modul.
 8. Säkerställ att hubbens `Fortsätt` går till senaste tillåtna plats.
 
-Just nu räknar `isModuleComplete()` sidor, inte quizresultat. Om quiz ska krävas för upplåsning behöver den logiken ändras medvetet.
+`isModuleComplete()` kräver både besökta sidor och godkänt modulquiz (80 procent) för vanliga innehållsmoduler. Slutprovsmodulen styrs separat av godkänt slutprov.
 
 ## Senaste Implementerade Beslut
 

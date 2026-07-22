@@ -2330,7 +2330,7 @@ body.module-milestone-mode .content-inner {
 
 .home-stat-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   overflow: hidden;
   margin-top: 28px;
   border: 1px solid #e7ecf2;
@@ -2340,7 +2340,7 @@ body.module-milestone-mode .content-inner {
 
 .home-stat {
   min-width: 0;
-  padding: 20px 24px;
+  padding: 20px 18px;
 }
 
 .home-stat + .home-stat {
@@ -2376,6 +2376,10 @@ body.module-milestone-mode .content-inner {
 
 .home-stat-dot.is-purple {
   background: #7c3aed;
+}
+
+.home-stat-dot.is-orange {
+  background: #ea580c;
 }
 
 .home-stat-label-short {
@@ -2557,6 +2561,18 @@ body.module-milestone-mode .content-inner {
   color: #0f172a;
   font-size: 17.5px;
   font-weight: 800;
+}
+
+.home-stat-detail {
+  display: block;
+  overflow: hidden;
+  margin-top: 7px;
+  color: #8996aa;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .home-emblems-head p {
@@ -3081,7 +3097,16 @@ body.module-milestone-mode .content-inner {
   }
 
   .home-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     margin-top: 18px;
+  }
+
+  .home-stat:nth-child(odd) {
+    border-left: 0;
+  }
+
+  .home-stat:nth-child(n + 3) {
+    border-top: 1px solid #eef2f7;
   }
 
   .home-stat {
@@ -3113,6 +3138,11 @@ body.module-milestone-mode .content-inner {
 
   .home-stat small {
     font-size: 11px;
+  }
+
+  .home-stat-detail {
+    margin-top: 5px;
+    font-size: 9.5px;
   }
 
   .home-continue {

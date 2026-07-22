@@ -9,6 +9,7 @@ const STORAGE_KEYS = {
   location: "vakt-current-location",
   progressOwner: "vakt-progress-owner",
   knownEmblems: "vakt-known-emblems",
+  quizHistory: "vakt-quiz-history-v1",
 };
 
 const STORAGE_VERSION = "vu2-course-split-2026-07-04";
@@ -22,6 +23,13 @@ const FINAL_EXAM_PASS_PERCENT = 80;
 const MODULE_QUIZ_PASS_PERCENT = 80;
 const PROGRESS_SCHEMA_VERSION = 1;
 const PROGRESS_TABLE = "student_learning_progress";
+const QUIZ_HISTORY_SCHEMA_VERSION = 1;
+const QUIZ_ATTEMPTS_TABLE = "student_quiz_attempts";
+const QUIZ_ANSWERS_TABLE = "student_quiz_answers";
+const QUIZ_HISTORY_MAX_ATTEMPTS = 200;
+const QUIZ_HISTORY_MAX_ANSWERS = 500;
+const QUIZ_ACCURACY_WINDOW = 100;
+const QUIZ_TOPIC_WINDOW = 20;
 const PORTAL_HISTORY_STATE_KEY = "vaktskolanPortalLocation";
 const RESTORABLE_MODES = new Set([
   "home",
@@ -104,6 +112,15 @@ function readObjectStorage(key) {
   return isPlainObject(value) ? value : {};
 }
 
+function readQuizHistoryStorage() {
+  const value = readObjectStorage(STORAGE_KEYS.quizHistory);
+  return {
+    ownerId: typeof value.ownerId === "string" ? value.ownerId : "",
+    attempts: Array.isArray(value.attempts) ? value.attempts : [],
+    answers: Array.isArray(value.answers) ? value.answers : [],
+  };
+}
+
 function toSafeIndex(value, fallback = 0) {
   const number = Number(value);
   return Number.isInteger(number) && number >= 0 ? number : fallback;
@@ -142,6 +159,8 @@ function readFinalExamStorage() {
 
 resetStoredProgressIfNeeded();
 
+const storedQuizHistory = readQuizHistoryStorage();
+
 const state = {
   courses: { vu1: [], vu2: [] },
   courseId: "vu1",
@@ -172,6 +191,17 @@ const state = {
     timer: null,
     error: null,
   },
+  quizHistory: {
+    ownerId: storedQuizHistory.ownerId,
+    attempts: storedQuizHistory.attempts,
+    answers: storedQuizHistory.answers,
+    ready: false,
+    cloudReady: false,
+    syncing: false,
+    queued: false,
+    timer: null,
+    error: null,
+  },
   portalHistory: {
     ready: false,
     restoring: false,
@@ -190,10 +220,11 @@ const state = {
     answers: [],
     isAnswered: false,
     timedOut: false,
-    questionTimeRemaining: 15,
+    questionTimeRemaining: 30,
     questionDeadline: 0,
     score: 0,
     showResults: false,
+    historyAttemptId: "",
     flashcardIndex: 0,
     flashcardFlipped: false,
   },
@@ -901,6 +932,345 @@ async function initializeProgressSync() {
     console.warn("Kontosynkning av progression är inte tillgänglig. Plattformen öppnas inte.", error);
     return false;
   }
+}
+
+function createClientUuid() {
+  if (typeof crypto?.randomUUID === "function") return crypto.randomUUID();
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (character) => {
+    const random = Math.floor(Math.random() * 16);
+    const value = character === "x" ? random : (random & 0x3) | 0x8;
+    return value.toString(16);
+  });
+}
+
+function toIsoTimestamp(value, fallback = new Date().toISOString()) {
+  const timestamp = new Date(value || fallback);
+  return Number.isNaN(timestamp.getTime()) ? fallback : timestamp.toISOString();
+}
+
+function sanitizeQuizHistoryAttempt(value, synced = value?.synced === true) {
+  if (!isPlainObject(value)) return null;
+  const id = typeof value.id === "string" ? value.id : "";
+  const sourceType = value.sourceType || value.source_type;
+  const sourceRef = value.sourceRef || value.source_ref;
+  const courseId = value.courseId || value.course_id;
+  if (!id || !sourceType || !sourceRef || !courseId) return null;
+
+  const moduleNumberValue = value.moduleNumber ?? value.module_number;
+  return {
+    id,
+    userId: value.userId || value.user_id || "",
+    sourceType,
+    sourceRef,
+    collectionId: value.collectionId || value.collection_id || null,
+    courseId,
+    moduleNumber: Number.isInteger(Number(moduleNumberValue)) && Number(moduleNumberValue) > 0
+      ? Number(moduleNumberValue)
+      : null,
+    questionCount: Math.max(0, Number(value.questionCount ?? value.question_count) || 0),
+    correctCount: Math.max(0, Number(value.correctCount ?? value.correct_count) || 0),
+    completed: value.completed === true,
+    startedAt: toIsoTimestamp(value.startedAt || value.started_at),
+    completedAt: value.completedAt || value.completed_at
+      ? toIsoTimestamp(value.completedAt || value.completed_at)
+      : null,
+    synced,
+  };
+}
+
+function sanitizeQuizHistoryAnswer(value, synced = value?.synced === true) {
+  if (!isPlainObject(value)) return null;
+  const id = typeof value.id === "string" ? value.id : "";
+  const attemptId = value.attemptId || value.attempt_id;
+  const questionKey = value.questionKey || value.question_key;
+  const sourceType = value.sourceType || value.source_type;
+  const courseId = value.courseId || value.course_id;
+  if (!id || !attemptId || !questionKey || !sourceType || !courseId) return null;
+
+  const moduleNumberValue = value.moduleNumber ?? value.module_number;
+  const topicKeys = value.topicKeys || value.topic_keys;
+  const topicLabels = value.topicLabels || value.topic_labels;
+  return {
+    id,
+    attemptId,
+    userId: value.userId || value.user_id || "",
+    questionId: value.questionId || value.question_id || null,
+    questionKey,
+    sourceType,
+    courseId,
+    moduleNumber: Number.isInteger(Number(moduleNumberValue)) && Number(moduleNumberValue) > 0
+      ? Number(moduleNumberValue)
+      : null,
+    topicKeys: Array.isArray(topicKeys) ? topicKeys.filter((item) => typeof item === "string" && item) : [],
+    topicLabels: Array.isArray(topicLabels) ? topicLabels.filter((item) => typeof item === "string" && item) : [],
+    contextKey: value.contextKey || value.context_key || null,
+    contextLabel: value.contextLabel || value.context_label || null,
+    selectedAnswer: value.selectedAnswer ?? value.selected_answer ?? null,
+    correctAnswer: value.correctAnswer ?? value.correct_answer ?? null,
+    isCorrect: value.isCorrect === true || value.is_correct === true,
+    timedOut: value.timedOut === true || value.timed_out === true,
+    answeredAt: toIsoTimestamp(value.answeredAt || value.answered_at),
+    synced,
+  };
+}
+
+function saveQuizHistory() {
+  const history = state.quizHistory;
+  history.attempts = history.attempts
+    .map((item) => sanitizeQuizHistoryAttempt(item, item?.synced === true))
+    .filter(Boolean)
+    .sort((left, right) => Date.parse(right.startedAt) - Date.parse(left.startedAt))
+    .slice(0, QUIZ_HISTORY_MAX_ATTEMPTS);
+  history.answers = history.answers
+    .map((item) => sanitizeQuizHistoryAnswer(item, item?.synced === true))
+    .filter(Boolean)
+    .sort((left, right) => Date.parse(right.answeredAt) - Date.parse(left.answeredAt))
+    .slice(0, QUIZ_HISTORY_MAX_ANSWERS);
+  writeStorage(STORAGE_KEYS.quizHistory, {
+    version: QUIZ_HISTORY_SCHEMA_VERSION,
+    ownerId: history.ownerId,
+    attempts: history.attempts,
+    answers: history.answers,
+  });
+}
+
+function quizAttemptDatabaseRow(attempt) {
+  return {
+    id: attempt.id,
+    user_id: attempt.userId,
+    source_type: attempt.sourceType,
+    source_ref: attempt.sourceRef,
+    collection_id: attempt.collectionId,
+    course_id: attempt.courseId,
+    module_number: attempt.moduleNumber,
+    question_count: attempt.questionCount,
+    correct_count: attempt.correctCount,
+    completed: attempt.completed,
+    started_at: attempt.startedAt,
+    completed_at: attempt.completedAt,
+  };
+}
+
+function quizAnswerDatabaseRow(answer) {
+  return {
+    id: answer.id,
+    attempt_id: answer.attemptId,
+    user_id: answer.userId,
+    question_id: answer.questionId,
+    question_key: answer.questionKey,
+    source_type: answer.sourceType,
+    course_id: answer.courseId,
+    module_number: answer.moduleNumber,
+    topic_keys: answer.topicKeys,
+    topic_labels: answer.topicLabels,
+    context_key: answer.contextKey,
+    context_label: answer.contextLabel,
+    selected_answer: answer.selectedAnswer,
+    correct_answer: answer.correctAnswer,
+    is_correct: answer.isCorrect,
+    timed_out: answer.timedOut,
+    answered_at: answer.answeredAt,
+  };
+}
+
+async function syncQuizHistoryToSupabase() {
+  const history = state.quizHistory;
+  const supabaseApi = window.vaktskolanSupabase;
+  if (!history.ready || !history.cloudReady || !history.ownerId || !supabaseApi?.upsert || history.syncing) {
+    if (history.syncing) history.queued = true;
+    return;
+  }
+
+  history.syncing = true;
+  history.queued = false;
+  try {
+    const pendingAttempts = history.attempts.filter((attempt) => !attempt.synced);
+    if (pendingAttempts.length) {
+      await supabaseApi.upsert(
+        QUIZ_ATTEMPTS_TABLE,
+        pendingAttempts.map(quizAttemptDatabaseRow),
+        { onConflict: "id", returning: "minimal" }
+      );
+      pendingAttempts.forEach((attempt) => {
+        attempt.synced = true;
+      });
+    }
+
+    const pendingAnswers = history.answers.filter((answer) => !answer.synced);
+    if (pendingAnswers.length) {
+      await supabaseApi.upsert(
+        QUIZ_ANSWERS_TABLE,
+        pendingAnswers.map(quizAnswerDatabaseRow),
+        { onConflict: "attempt_id,question_key", returning: "minimal" }
+      );
+      pendingAnswers.forEach((answer) => {
+        answer.synced = true;
+      });
+    }
+    history.error = null;
+    saveQuizHistory();
+  } catch (error) {
+    history.error = error;
+    console.warn("Quizhistoriken kunde inte synkas. Nya resultat finns kvar lokalt.", error);
+  } finally {
+    history.syncing = false;
+    if (history.queued) queueQuizHistorySync(0);
+  }
+}
+
+function queueQuizHistorySync(delay = 250) {
+  const history = state.quizHistory;
+  if (!history.ready || !history.cloudReady || !history.ownerId) return;
+  if (history.syncing) {
+    history.queued = true;
+    return;
+  }
+  window.clearTimeout(history.timer);
+  history.timer = window.setTimeout(() => {
+    history.timer = null;
+    void syncQuizHistoryToSupabase();
+  }, delay);
+}
+
+function mergeQuizHistory(remoteRows, localRows, sanitizer) {
+  const records = new Map();
+  remoteRows.map((item) => sanitizer(item, true)).filter(Boolean).forEach((item) => records.set(item.id, item));
+  localRows.map((item) => sanitizer(item, item?.synced === true)).filter(Boolean).forEach((item) => {
+    if (!item.synced || !records.has(item.id)) records.set(item.id, item);
+  });
+  return [...records.values()];
+}
+
+async function initializeQuizHistory() {
+  const history = state.quizHistory;
+  const supabaseApi = window.vaktskolanSupabase;
+  const userId = state.authClient?.user?.id || "";
+
+  if (!userId) {
+    history.ready = true;
+    return;
+  }
+
+  if (history.ownerId && history.ownerId !== userId) {
+    history.attempts = [];
+    history.answers = [];
+  }
+  history.ownerId = userId;
+  history.attempts = history.attempts
+    .map((item) => sanitizeQuizHistoryAttempt({ ...item, userId }, item?.synced === true))
+    .filter(Boolean);
+  history.answers = history.answers
+    .map((item) => sanitizeQuizHistoryAnswer({ ...item, userId }, item?.synced === true))
+    .filter(Boolean);
+  history.ready = true;
+  saveQuizHistory();
+
+  if (state.authPreview || !supabaseApi?.select) return;
+
+  try {
+    const [attempts, answers] = await Promise.all([
+      supabaseApi.select(QUIZ_ATTEMPTS_TABLE, {
+        select: "id,user_id,source_type,source_ref,collection_id,course_id,module_number,question_count,correct_count,completed,started_at,completed_at",
+        user_id: `eq.${userId}`,
+        order: "started_at.desc",
+        limit: QUIZ_HISTORY_MAX_ATTEMPTS,
+      }),
+      supabaseApi.select(QUIZ_ANSWERS_TABLE, {
+        select: "id,attempt_id,user_id,question_id,question_key,source_type,course_id,module_number,topic_keys,topic_labels,context_key,context_label,selected_answer,correct_answer,is_correct,timed_out,answered_at",
+        user_id: `eq.${userId}`,
+        order: "answered_at.desc",
+        limit: QUIZ_HISTORY_MAX_ANSWERS,
+      }),
+    ]);
+    history.attempts = mergeQuizHistory(Array.isArray(attempts) ? attempts : [], history.attempts, sanitizeQuizHistoryAttempt);
+    history.answers = mergeQuizHistory(Array.isArray(answers) ? answers : [], history.answers, sanitizeQuizHistoryAnswer);
+    history.cloudReady = true;
+    history.error = null;
+    saveQuizHistory();
+    await syncQuizHistoryToSupabase();
+  } catch (error) {
+    history.cloudReady = false;
+    history.error = error;
+    console.warn("Molnlagring för quizhistorik är inte tillgänglig ännu. Lokal lagring används.", error);
+  }
+}
+
+function recordQuizAttempt(details) {
+  const history = state.quizHistory;
+  const attempt = sanitizeQuizHistoryAttempt(
+    {
+      id: details.id || createClientUuid(),
+      userId: history.ownerId || state.authClient?.user?.id || "",
+      sourceType: details.sourceType,
+      sourceRef: details.sourceRef,
+      collectionId: details.collectionId || null,
+      courseId: details.courseId || "general",
+      moduleNumber: details.moduleNumber || null,
+      questionCount: details.questionCount || 0,
+      correctCount: details.correctCount || 0,
+      completed: details.completed === true,
+      startedAt: details.startedAt || new Date().toISOString(),
+      completedAt: details.completedAt || null,
+    },
+    false
+  );
+  if (!attempt) return null;
+
+  const existingIndex = history.attempts.findIndex((item) => item.id === attempt.id);
+  if (existingIndex >= 0) history.attempts[existingIndex] = attempt;
+  else history.attempts.unshift(attempt);
+  saveQuizHistory();
+  queueQuizHistorySync();
+  return attempt;
+}
+
+function updateQuizAttempt(attemptId, updates) {
+  const attempt = state.quizHistory.attempts.find((item) => item.id === attemptId);
+  if (!attempt) return null;
+  Object.assign(attempt, updates, { synced: false });
+  const sanitized = sanitizeQuizHistoryAttempt(attempt, false);
+  if (!sanitized) return null;
+  state.quizHistory.attempts[state.quizHistory.attempts.indexOf(attempt)] = sanitized;
+  saveQuizHistory();
+  queueQuizHistorySync();
+  return sanitized;
+}
+
+function recordQuizAnswer(details) {
+  const history = state.quizHistory;
+  const answer = sanitizeQuizHistoryAnswer(
+    {
+      id: details.id || createClientUuid(),
+      attemptId: details.attemptId,
+      userId: history.ownerId || state.authClient?.user?.id || "",
+      questionId: details.questionId || null,
+      questionKey: details.questionKey,
+      sourceType: details.sourceType,
+      courseId: details.courseId || "general",
+      moduleNumber: details.moduleNumber || null,
+      topicKeys: details.topicKeys || [],
+      topicLabels: details.topicLabels || [],
+      contextKey: details.contextKey || null,
+      contextLabel: details.contextLabel || null,
+      selectedAnswer: details.selectedAnswer ?? null,
+      correctAnswer: details.correctAnswer ?? null,
+      isCorrect: details.isCorrect === true,
+      timedOut: details.timedOut === true,
+      answeredAt: details.answeredAt || new Date().toISOString(),
+    },
+    false
+  );
+  if (!answer) return null;
+
+  const existingIndex = history.answers.findIndex(
+    (item) => item.attemptId === answer.attemptId && item.questionKey === answer.questionKey
+  );
+  if (existingIndex >= 0) answer.id = history.answers[existingIndex].id;
+  if (existingIndex >= 0) history.answers[existingIndex] = answer;
+  else history.answers.unshift(answer);
+  saveQuizHistory();
+  queueQuizHistorySync();
+  return answer;
 }
 
 let shouldReturnHomeOnResume = false;
@@ -2219,6 +2589,139 @@ function renderHomeEmblem(emblem, index, isNew) {
   `;
 }
 
+function moduleQuizSourceRef(courseId, moduleNumberValue, submittedAt) {
+  return `module:${courseId}:${moduleNumberValue}:${Number(submittedAt)}`;
+}
+
+function recordModuleQuizAttempt(module, moduleAnswers, submittedAt) {
+  const moduleNumberValue = Number(moduleNumber(module));
+  const sourceRef = moduleQuizSourceRef(state.courseId, moduleNumberValue, submittedAt);
+  const completedAt = new Date(Number(submittedAt)).toISOString();
+  const topicLabel = moduleDisplayTitle(module);
+  const correctCount = module.quiz.filter((question) => moduleAnswers[question.number] === question.correct).length;
+  const attempt = recordQuizAttempt({
+    sourceType: "module_quiz",
+    sourceRef,
+    courseId: state.courseId,
+    moduleNumber: moduleNumberValue,
+    questionCount: module.quiz.length,
+    correctCount,
+    completed: true,
+    startedAt: completedAt,
+    completedAt,
+  });
+  if (!attempt) return;
+
+  module.quiz.forEach((question) => {
+    const selectedAnswer = moduleAnswers[question.number] || null;
+    recordQuizAnswer({
+      attemptId: attempt.id,
+      questionKey: `module:${state.courseId}:${moduleNumberValue}:${question.number}`,
+      sourceType: "module_quiz",
+      courseId: state.courseId,
+      moduleNumber: moduleNumberValue,
+      topicKeys: [`${state.courseId}:module:${moduleNumberValue}`],
+      topicLabels: [topicLabel],
+      selectedAnswer,
+      correctAnswer: question.correct,
+      isCorrect: selectedAnswer === question.correct,
+      answeredAt: completedAt,
+    });
+  });
+}
+
+function getLegacyModuleQuizAnswerEvents() {
+  const events = [];
+  Object.keys(COURSE_CONFIG).forEach((courseId) => {
+    withCourseContext(courseId, () => {
+      state.modules.forEach((module, moduleIndex) => {
+        if (!Array.isArray(module.quiz) || !module.quiz.length) return;
+        const key = answerKey(moduleIndex, courseId);
+        const submittedAt = Number(state.quizSubmissions[key] || 0);
+        if (!submittedAt) return;
+
+        const moduleNumberValue = Number(moduleNumber(module));
+        const sourceRef = moduleQuizSourceRef(courseId, moduleNumberValue, submittedAt);
+        if (state.quizHistory.attempts.some((attempt) => attempt.sourceRef === sourceRef)) return;
+
+        const answers = isPlainObject(state.answers[key]) ? state.answers[key] : {};
+        const answeredAt = new Date(submittedAt).toISOString();
+        const topicLabel = moduleDisplayTitle(module);
+        module.quiz.forEach((question) => {
+          const selectedAnswer = answers[question.number] || null;
+          events.push({
+            id: `legacy:${sourceRef}:${question.number}`,
+            questionKey: `module:${courseId}:${moduleNumberValue}:${question.number}`,
+            sourceType: "module_quiz",
+            courseId,
+            moduleNumber: moduleNumberValue,
+            topicKeys: [`${courseId}:module:${moduleNumberValue}`],
+            topicLabels: [topicLabel],
+            selectedAnswer,
+            correctAnswer: question.correct,
+            isCorrect: selectedAnswer === question.correct,
+            timedOut: false,
+            answeredAt,
+          });
+        });
+      });
+    });
+  });
+  return events;
+}
+
+function getStudentQuizMetrics() {
+  const answers = [...state.quizHistory.answers, ...getLegacyModuleQuizAnswerEvents()]
+    .filter((answer) => answer && answer.questionKey && answer.answeredAt)
+    .sort((left, right) => Date.parse(right.answeredAt) - Date.parse(left.answeredAt));
+  const accuracyAnswers = answers.slice(0, QUIZ_ACCURACY_WINDOW);
+  const correct = accuracyAnswers.filter((answer) => answer.isCorrect).length;
+  const total = accuracyAnswers.length;
+
+  const topics = new Map();
+  answers.forEach((answer) => {
+    answer.topicKeys.forEach((topicKey, index) => {
+      if (!topicKey) return;
+      const topic = topics.get(topicKey) || {
+        key: topicKey,
+        label: answer.topicLabels[index] || answer.topicLabels[0] || "Kunskapsområde",
+        answers: [],
+      };
+      if (topic.answers.length < QUIZ_TOPIC_WINDOW) topic.answers.push(answer);
+      topics.set(topicKey, topic);
+    });
+  });
+
+  const repeatCandidates = [...topics.values()]
+    .map((topic) => {
+      const topicCorrect = topic.answers.filter((answer) => answer.isCorrect).length;
+      const topicTotal = topic.answers.length;
+      const wrongQuestionKeys = [...new Set(
+        topic.answers.filter((answer) => !answer.isCorrect).map((answer) => answer.questionKey)
+      )];
+      return {
+        ...topic,
+        correct: topicCorrect,
+        total: topicTotal,
+        wrong: topicTotal - topicCorrect,
+        percent: topicTotal ? Math.round((topicCorrect / topicTotal) * 100) : null,
+        repeatCount: Math.min(3, wrongQuestionKeys.length),
+      };
+    })
+    .filter((topic) => (topic.total >= 5 && topic.percent < 80) || (topic.total >= 3 && topic.wrong >= 2))
+    .sort((left, right) => left.percent - right.percent || right.total - left.total);
+
+  return {
+    accuracy: {
+      correct,
+      total,
+      percent: total ? Math.round((correct / total) * 100) : null,
+    },
+    repeat: repeatCandidates[0] || null,
+    hasTopicEvidence: [...topics.values()].some((topic) => topic.answers.length >= 3),
+  };
+}
+
 function getHomeData() {
   const courses = Object.keys(COURSE_CONFIG).map((courseId) => getCourseHomeOverview(courseId));
   const vu1Overview = courses.find((item) => item.courseId === "vu1");
@@ -2325,6 +2828,20 @@ function renderHome() {
   const newlyUnlockedEmblems = registerEmblemPresentation(emblemOverview);
   state.emblems = emblemOverview.emblems;
   const continueOverview = homeData.continueCourse;
+  const quizMetrics = getStudentQuizMetrics();
+  const accuracyDetail = quizMetrics.accuracy.total
+    ? `${quizMetrics.accuracy.correct} av ${quizMetrics.accuracy.total} rätt${quizMetrics.accuracy.total === QUIZ_ACCURACY_WINDOW ? " · senaste 100" : ""}`
+    : "Gör ett quiz för att börja mäta";
+  const repeatValue = quizMetrics.repeat
+    ? `${quizMetrics.repeat.repeatCount} ${quizMetrics.repeat.repeatCount === 1 ? "fråga" : "frågor"}`
+    : quizMetrics.hasTopicEvidence
+      ? "0 frågor"
+      : "–";
+  const repeatDetail = quizMetrics.repeat
+    ? `${quizMetrics.repeat.label} · ${quizMetrics.repeat.percent}%`
+    : quizMetrics.hasTopicEvidence
+      ? "Inget område under 80%"
+      : "Mer quizdata behövs";
   const vu2Overview = homeData.courses.find((overview) => overview.courseId === "vu2");
   const continueModule = continueOverview?.continueModule;
   const continueTitle = continueModule
@@ -2358,29 +2875,38 @@ function renderHome() {
           <p>${escapeHtml(welcomeCopy)}</p>
         </div>
 
-        <section class="home-stat-grid" aria-label="Snabb översikt">
+        <section class="home-stat-grid" aria-label="Din utbildningsstatistik">
           <div class="home-stat">
             <p>
               <span class="home-stat-dot is-blue" aria-hidden="true"></span>
-              <span class="home-stat-label-full">Total utbildning</span>
-              <span class="home-stat-label-short">Utbildning</span>
+              <span>Kursframsteg</span>
             </p>
-            <strong>${homeData.totals.percent}%</strong>
+            <strong>${continueOverview?.progress.percent || 0}%</strong>
+            <span class="home-stat-detail">${escapeHtml(continueOverview?.course.shortLabel || "VU1")} · aktuell kurs</span>
           </div>
           <div class="home-stat">
             <p>
               <span class="home-stat-dot is-green" aria-hidden="true"></span>
-              <span class="home-stat-label-full">Avklarade moduler</span>
-              <span class="home-stat-label-short">Moduler</span>
+              <span>Moduler klara</span>
             </p>
-            <strong>${homeData.totals.completedModules}<small>/ ${homeData.totals.modules}</small></strong>
+            <strong>${continueOverview?.moduleStats.completed || 0}<small>/ ${continueOverview?.moduleStats.total || 0}</small></strong>
+            <span class="home-stat-detail">${escapeHtml(continueOverview?.course.shortLabel || "VU1")}</span>
           </div>
           <div class="home-stat">
             <p>
               <span class="home-stat-dot is-purple" aria-hidden="true"></span>
-              <span>Quiz-snitt</span>
+              <span>Quizträffsäkerhet</span>
             </p>
-            <strong>${homeData.totals.quizPercent === null ? "–" : `${homeData.totals.quizPercent}%`}</strong>
+            <strong>${quizMetrics.accuracy.percent === null ? "–" : `${quizMetrics.accuracy.percent}%`}</strong>
+            <span class="home-stat-detail">${escapeHtml(accuracyDetail)}</span>
+          </div>
+          <div class="home-stat">
+            <p>
+              <span class="home-stat-dot is-orange" aria-hidden="true"></span>
+              <span>Att repetera</span>
+            </p>
+            <strong>${escapeHtml(repeatValue)}</strong>
+            <span class="home-stat-detail">${escapeHtml(repeatDetail)}</span>
           </div>
         </section>
 
@@ -3545,6 +4071,7 @@ function resetQuizPortalSession(view = state.quizPortal.view) {
   state.quizPortal.questionDeadline = 0;
   state.quizPortal.score = 0;
   state.quizPortal.showResults = false;
+  state.quizPortal.historyAttemptId = "";
   state.quizPortal.flashcardIndex = 0;
   state.quizPortal.flashcardFlipped = false;
 }
@@ -3559,9 +4086,27 @@ const QUIZ_PORTAL_QUESTION_TIME_SECONDS = 30;
 const QUIZ_PORTAL_QUESTION_TIME_MS = QUIZ_PORTAL_QUESTION_TIME_SECONDS * 1000;
 
 const QUIZ_PORTAL_BANK_CONFIG = {
-  vu1: { collectionId: "vu1_quiz", title: "Väktarutbildning 1 (VU1)", expectedCount: 154 },
-  vu2: { collectionId: "vu2_quiz", title: "Väktarutbildning 2 (VU2)", expectedCount: 74 },
-  scenario: { collectionId: "scenario_quiz", title: "Scenario Quiz", expectedCount: 300 },
+  vu1: {
+    collectionId: "vu1_quiz",
+    title: "Väktarutbildning 1 (VU1)",
+    expectedCount: 154,
+    sourceType: "portal_vu1",
+    courseId: "vu1",
+  },
+  vu2: {
+    collectionId: "vu2_quiz",
+    title: "Väktarutbildning 2 (VU2)",
+    expectedCount: 74,
+    sourceType: "portal_vu2",
+    courseId: "vu2",
+  },
+  scenario: {
+    collectionId: "scenario_quiz",
+    title: "Scenario Quiz",
+    expectedCount: 300,
+    sourceType: "portal_scenario",
+    courseId: "general",
+  },
 };
 
 const SALARY_CHECK_CONFIG = {
@@ -3610,6 +4155,45 @@ function shuffledQuizOptions(rows) {
   return options;
 }
 
+function humanizeQuizTopic(value) {
+  const words = String(value || "")
+    .replace(/[_-]+/g, " ")
+    .trim();
+  return words ? `${words.charAt(0).toUpperCase()}${words.slice(1)}` : "Kunskapsområde";
+}
+
+function getQuizPortalQuestionTopics(row, config) {
+  const moduleNumberValue = Number(row.module_number);
+  if (config.courseId !== "general" && Number.isInteger(moduleNumberValue) && moduleNumberValue > 0) {
+    return {
+      topicKeys: [`${config.courseId}:module:${moduleNumberValue}`],
+      topicLabels: [row.metadata?.module_label || row.title || `Modul ${moduleNumberValue}`],
+      contextKey: null,
+      contextLabel: null,
+    };
+  }
+
+  const excludedTags = new Set([
+    row.metadata?.category,
+    row.metadata?.level,
+    row.metadata?.source,
+    row.source,
+    "general",
+    "grund",
+    "fordjupning",
+    "v1",
+    "v2",
+  ].filter(Boolean));
+  const topicTags = (Array.isArray(row.tags) ? row.tags : []).filter((tag) => !excludedTags.has(tag));
+  const resolvedTags = topicTags.length ? topicTags : [row.metadata?.category || "scenario"];
+  return {
+    topicKeys: resolvedTags.map((tag) => `scenario:${tag}`),
+    topicLabels: resolvedTags.map(humanizeQuizTopic),
+    contextKey: row.metadata?.category || null,
+    contextLabel: row.metadata?.category_label || row.title || null,
+  };
+}
+
 function buildQuizPortalQuiz(rows, config) {
   if (rows.length !== config.expectedCount) {
     throw new Error(`${config.title} innehåller ${rows.length} av förväntade ${config.expectedCount} frågor.`);
@@ -3621,15 +4205,21 @@ function buildQuizPortalQuiz(rows, config) {
       .sort((left, right) => Number(left.sort_order || 0) - Number(right.sort_order || 0))
       .map((row) => {
         const options = shuffledQuizOptions(row.quiz_answer_options || []);
+        const topics = getQuizPortalQuestionTopics(row, config);
         if (options.length !== 4 || options.filter((option) => option.correct).length !== 1) {
           throw new Error(`Frågan ${row.id} har ogiltiga svarsalternativ.`);
         }
         return {
           id: row.id,
+          collectionId: row.collection_id,
+          sourceType: config.sourceType,
+          courseId: config.courseId,
+          moduleNumber: Number(row.module_number) || null,
           question: row.prompt,
           options: options.map((option) => option.text),
           answer: options.findIndex((option) => option.correct),
           explanation: row.explanation || "Rätt svar framgår av det markerade alternativet.",
+          ...topics,
         };
       }),
   };
@@ -3663,7 +4253,7 @@ function loadQuizPortalData() {
       const collectionIds = [...Object.values(QUIZ_PORTAL_BANK_CONFIG).map((config) => config.collectionId), "flashcards"];
       const rows = await api.select("quiz_questions", {
         select:
-          "id,collection_id,prompt,answer_text,explanation,sort_order,metadata,quiz_answer_options(label,option_text,is_correct,sort_order)",
+          "id,collection_id,course_id,module_number,title,prompt,answer_text,explanation,tags,source,sort_order,metadata,quiz_answer_options(label,option_text,is_correct,sort_order)",
         collection_id: `in.(${collectionIds.join(",")})`,
         status: "eq.published",
         order: "sort_order.asc",
@@ -3715,6 +4305,61 @@ function getQuizPortalSessionQuiz(view = state.quizPortal.view) {
     title: quiz.title,
     questions: view === state.quizPortal.view ? state.quizPortal.sessionQuestions : [],
   };
+}
+
+function startQuizPortalHistoryAttempt(view = state.quizPortal.view) {
+  if (state.quizPortal.historyAttemptId) {
+    return state.quizHistory.attempts.find((attempt) => attempt.id === state.quizPortal.historyAttemptId) || null;
+  }
+  const config = QUIZ_PORTAL_BANK_CONFIG[view];
+  const quiz = getQuizPortalSessionQuiz(view);
+  if (!config || !quiz?.questions.length) return null;
+
+  const attemptId = createClientUuid();
+  const attempt = recordQuizAttempt({
+    id: attemptId,
+    sourceType: config.sourceType,
+    sourceRef: `portal:${view}:${attemptId}`,
+    collectionId: config.collectionId,
+    courseId: config.courseId,
+    questionCount: quiz.questions.length,
+    correctCount: 0,
+    completed: false,
+  });
+  state.quizPortal.historyAttemptId = attempt?.id || "";
+  return attempt;
+}
+
+function recordQuizPortalAnswer(question, selectedOption, timedOut = false) {
+  const attempt = startQuizPortalHistoryAttempt();
+  if (!attempt || !question) return;
+  const correctOption = question.answer;
+  recordQuizAnswer({
+    attemptId: attempt.id,
+    questionId: question.id,
+    questionKey: `portal:${question.id}`,
+    sourceType: question.sourceType,
+    courseId: question.courseId,
+    moduleNumber: question.moduleNumber,
+    topicKeys: question.topicKeys,
+    topicLabels: question.topicLabels,
+    contextKey: question.contextKey,
+    contextLabel: question.contextLabel,
+    selectedAnswer: Number.isInteger(selectedOption) ? question.options[selectedOption] : null,
+    correctAnswer: question.options[correctOption],
+    isCorrect: Number.isInteger(selectedOption) && selectedOption === correctOption,
+    timedOut,
+  });
+}
+
+function completeQuizPortalHistoryAttempt() {
+  if (!state.quizPortal.historyAttemptId) return;
+  updateQuizAttempt(state.quizPortal.historyAttemptId, {
+    questionCount: state.quizPortal.sessionQuestions.length,
+    correctCount: state.quizPortal.score,
+    completed: true,
+    completedAt: new Date().toISOString(),
+  });
 }
 
 function stopQuizPortalQuestionTimer() {
@@ -3783,6 +4428,7 @@ function handleQuizPortalQuestionTimeout() {
   state.quizPortal.selectedOption = null;
   state.quizPortal.isAnswered = true;
   state.quizPortal.timedOut = true;
+  recordQuizPortalAnswer(getQuizPortalSessionQuiz()?.questions[state.quizPortal.currentIndex], null, true);
   renderQuizPortalPreservingAnchor(".quiz-portal-question h3");
 }
 
@@ -3901,6 +4547,7 @@ async function finishQuizPortalCountdown(view, token) {
   if (!isQuizPortalCountdownCurrent(view, token)) return;
 
   quizPortalCountdownTimers = [];
+  startQuizPortalHistoryAttempt(view);
   renderQuizOverview();
   refreshIcons();
   startQuizPortalQuestionTimer();
@@ -4008,7 +4655,7 @@ function renderQuizPortalHome() {
         <div class="quiz-portal-training-mode" role="status">
           <span aria-hidden="true"></span>
           <strong>Träningsläge</strong>
-          <small>resultat sparas inte — repetera fritt</small>
+          <small>resultat sparas i din personliga statistik</small>
         </div>
       </header>
 
@@ -4059,7 +4706,7 @@ function renderQuizPortalHome() {
         <p>Testa dig själv, repetera juridik och öva på verkliga scenarier — så ofta du vill.</p>
         <div class="quiz-portal-mobile-mode" role="status">
           <span aria-hidden="true"></span>
-          <strong>Träningsläge — resultat sparas inte</strong>
+          <strong>Träningsläge — resultat sparas</strong>
         </div>
       </section>
 
@@ -5339,7 +5986,10 @@ function bindEvents() {
       renderQuizOverview();
       refreshIcons();
       void loadQuizPortalData().then(() => {
-        if (state.quizPortal.dataStatus === "ready") startQuizPortalQuestionTimer();
+        if (state.quizPortal.dataStatus === "ready") {
+          startQuizPortalHistoryAttempt();
+          startQuizPortalQuestionTimer();
+        }
       });
       return;
     }
@@ -5358,6 +6008,7 @@ function bindEvents() {
       if (state.quizPortal.selectedOption === question.answer) {
         state.quizPortal.score += 1;
       }
+      recordQuizPortalAnswer(question, state.quizPortal.selectedOption);
       renderQuizPortalPreservingAnchor(
         `[data-quiz-portal-option="${state.quizPortal.selectedOption}"]`
       );
@@ -5378,6 +6029,7 @@ function bindEvents() {
         state.quizPortal.questionTimeRemaining = QUIZ_PORTAL_QUESTION_TIME_SECONDS;
       } else {
         state.quizPortal.showResults = true;
+        completeQuizPortalHistoryAttempt();
       }
       renderQuizOverview();
       refreshIcons();
@@ -5389,6 +6041,7 @@ function bindEvents() {
     const quizPortalResetButton = event.target.closest("[data-quiz-portal-reset]");
     if (quizPortalResetButton && state.mode === "quiz-overview") {
       resetQuizPortalSession(state.quizPortal.view);
+      startQuizPortalHistoryAttempt();
       renderQuizOverview();
       refreshIcons();
       startQuizPortalQuestionTimer();
@@ -5532,6 +6185,7 @@ function bindEvents() {
       if (!module?.quiz.length || Object.keys(moduleAnswers).length !== module.quiz.length) return;
       state.quizSubmissions[key] = Date.now();
       saveQuizSubmissions();
+      recordModuleQuizAttempt(module, moduleAnswers, state.quizSubmissions[key]);
       renderQuiz();
       refreshIcons();
       els.contentScroll.scrollTo({ top: 0, behavior: "smooth" });
@@ -5627,6 +6281,7 @@ async function init() {
     );
     return;
   }
+  await initializeQuizHistory();
   activateCourse("vu1");
   ensureFinalExamIntegrity();
   activateCourse("vu2");
