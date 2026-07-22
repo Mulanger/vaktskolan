@@ -231,6 +231,8 @@ export function GuideQuizPanel({ guideSlug, guideLabel }: GuideQuizPanelProps) {
   const [isQuizVisible, setIsQuizVisible] = useState(false);
   const [isMobileOverlayOpen, setIsMobileOverlayOpen] = useState(false);
   const panelRef = useRef<HTMLElement | null>(null);
+  const mobileTeaserRef = useRef<HTMLElement | null>(null);
+  const mobileCloseRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     const savedState = readSavedQuiz();
@@ -262,8 +264,10 @@ export function GuideQuizPanel({ guideSlug, guideLabel }: GuideQuizPanelProps) {
     if (!isMobileOverlayOpen) return;
 
     const mediaQuery = window.matchMedia("(max-width: 900px)");
+    const mobileTeaserNode = mobileTeaserRef.current;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    const focusId = window.requestAnimationFrame(() => mobileCloseRef.current?.focus({ preventScroll: true }));
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       setIsMobileOverlayOpen(false);
@@ -277,9 +281,15 @@ export function GuideQuizPanel({ guideSlug, guideLabel }: GuideQuizPanelProps) {
     window.addEventListener("keydown", closeOnEscape);
     mediaQuery.addEventListener("change", closeOnDesktopResize);
     return () => {
+      window.cancelAnimationFrame(focusId);
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", closeOnEscape);
       mediaQuery.removeEventListener("change", closeOnDesktopResize);
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          mobileTeaserNode?.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true });
+        });
+      });
     };
   }, [guideSlug, isMobileOverlayOpen]);
 
@@ -327,10 +337,22 @@ export function GuideQuizPanel({ guideSlug, guideLabel }: GuideQuizPanelProps) {
     trackGuideQuizEvent("guide_quiz_restart", guideSlug);
   }
 
-  function scrollToQuiz() {
-    setIsQuizVisible(true);
-    panelRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    trackGuideQuizEvent("guide_quiz_sticky_cta_click", guideSlug);
+  function chooseMobileTeaserAnswer(index: number) {
+    if (progress.selected !== null || progress.completed) return;
+    chooseAnswer(index);
+    setIsMobileOverlayOpen(true);
+    trackGuideQuizEvent("guide_quiz_mobile_teaser_answer", guideSlug, {
+      question_index: progress.currentQuestion + 1,
+      option_index: index,
+    });
+  }
+
+  function openMobileOverlay() {
+    setIsMobileOverlayOpen(true);
+    trackGuideQuizEvent("guide_quiz_mobile_teaser_open", guideSlug, {
+      completed: progress.completed,
+      question_index: Math.min(progress.currentQuestion + 1, questions.length),
+    });
   }
 
   function closeMobileOverlay(method: "backdrop" | "button") {
@@ -340,6 +362,20 @@ export function GuideQuizPanel({ guideSlug, guideLabel }: GuideQuizPanelProps) {
 
   const current = questions[progress.currentQuestion];
   const resultTitle = progress.score === questions.length ? "Full pott" : progress.score >= 2 ? "Bra koll" : "Bra start";
+  const mobileStep = Math.min(progress.currentQuestion + 1, questions.length);
+
+  function renderMobileProgress() {
+    return (
+      <span className="guide-quiz-mobile-progress" aria-hidden="true">
+        {questions.map((question, index) => (
+          <span
+            className={progress.completed || index <= progress.currentQuestion ? "is-active" : undefined}
+            key={question.question}
+          />
+        ))}
+      </span>
+    );
+  }
 
   function renderResult() {
     return (
@@ -448,28 +484,84 @@ export function GuideQuizPanel({ guideSlug, guideLabel }: GuideQuizPanelProps) {
           role="presentation"
         >
           <section
-            aria-label={`Nästa fråga i quizet om ${guideLabel}`}
+            aria-label={`Quiz om ${guideLabel}`}
             aria-modal="true"
             className="guide-quiz-overlay__dialog"
             onClick={(event) => event.stopPropagation()}
             role="dialog"
           >
-            <button className="guide-quiz-overlay__close" type="button" onClick={() => closeMobileOverlay("button")} aria-label="Stäng quiz">
-              ×
-            </button>
+            <div className="guide-quiz-overlay__topline">
+              <span className="guide-quiz-overlay__eyebrow">Testa dig själv</span>
+              {renderMobileProgress()}
+              <span className="guide-quiz-overlay__step">{progress.completed ? `${progress.score}/${questions.length}` : `${mobileStep}/${questions.length}`}</span>
+              <button
+                className="guide-quiz-overlay__close"
+                ref={mobileCloseRef}
+                type="button"
+                onClick={() => closeMobileOverlay("button")}
+                aria-label="Stäng quiz"
+              >
+                ×
+              </button>
+            </div>
             <div className="guide-quiz-overlay__content">
-              <p className="guide-quiz-overlay__eyebrow">Fortsätt quizet</p>
               {progress.completed ? renderResult() : renderQuestion(false)}
+              {!progress.completed && (
+                <p className="guide-quiz-overlay__note">Ditt resultat visas efter att du svarat på alla 3 frågor.</p>
+              )}
             </div>
           </section>
         </div>
       )}
 
       {!isQuizVisible && (
-        <button className="guide-quiz-sticky-cta" type="button" onClick={scrollToQuiz}>
-          <span>Testa dig: 3 frågor</span>
-          <span aria-hidden="true">→</span>
-        </button>
+        <aside
+          aria-label={`Starta snabbquiz om ${guideLabel}`}
+          aria-hidden={isMobileOverlayOpen || undefined}
+          className={`guide-quiz-mobile-teaser${isMobileOverlayOpen ? " is-underlay" : ""}`}
+          inert={isMobileOverlayOpen || undefined}
+          ref={mobileTeaserRef}
+        >
+          <div className="guide-quiz-mobile-teaser__topline">
+            <span className="guide-quiz-mobile-teaser__eyebrow">Testa dig själv</span>
+            {renderMobileProgress()}
+            <span className="guide-quiz-mobile-teaser__step">{progress.completed ? `${progress.score}/${questions.length}` : `${mobileStep}/${questions.length}`}</span>
+          </div>
+
+          {progress.completed ? (
+            <button className="guide-quiz-mobile-teaser__resume" type="button" onClick={openMobileOverlay}>
+              <span>
+                <small>Quiz klart</small>
+                <strong>{progress.score} av {questions.length} rätt</strong>
+              </span>
+              <span aria-hidden="true">→</span>
+            </button>
+          ) : progress.selected !== null ? (
+            <button className="guide-quiz-mobile-teaser__resume" type="button" onClick={openMobileOverlay}>
+              <span>
+                <small>Fråga {mobileStep} är besvarad</small>
+                <strong>{progress.currentQuestion === questions.length - 1 ? "Visa resultatet" : "Fortsätt quizet"}</strong>
+              </span>
+              <span aria-hidden="true">→</span>
+            </button>
+          ) : (
+            <>
+              <h2>{current.question}</h2>
+              <div className="guide-quiz-mobile-teaser__options" role="group" aria-label={`Svarsalternativ för fråga ${mobileStep}`}>
+                {current.options.map((option, index) => (
+                  <button type="button" key={option} onClick={() => chooseMobileTeaserAnswer(index)}>
+                    <span aria-hidden="true">{String.fromCharCode(65 + index)}</span>
+                    <strong>{option}</strong>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+
+          {!progress.completed && (
+            <p className="guide-quiz-mobile-teaser__note">Svara direkt · resultatet visas efter alla 3 frågor</p>
+          )}
+        </aside>
       )}
     </>
   );
