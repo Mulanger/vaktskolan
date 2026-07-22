@@ -1910,6 +1910,424 @@ a {
   font-size: 18px;
 }
 
+.pricing-page {
+  background: #fff;
+}
+
+.pricing-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 82px 24px 94px;
+  background-color: #edf4fd;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cpath d='M70 62v16M62 70h16' fill='none' stroke='%23c8d8ed' stroke-width='1.2'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, #f8fbff 0%, #e8f1fd 100%);
+}
+
+.pricing-container {
+  position: relative;
+  z-index: 1;
+  width: min(940px, 100%);
+  margin: 0 auto;
+}
+
+.pricing-heading {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+  animation: pricing-heading-in 440ms ease-out both;
+}
+
+.pricing-heading p,
+.pricing-heading h1,
+.pricing-heading span {
+  margin: 0;
+}
+
+.pricing-heading p {
+  color: #1766d8;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.pricing-heading h1 {
+  margin-top: 10px;
+  color: #0d1017;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(40px, 5vw, 58px);
+  font-weight: 760;
+  letter-spacing: -.045em;
+  line-height: 1.02;
+}
+
+.pricing-heading > span {
+  display: block;
+  margin-top: 16px;
+  color: #66707e;
+  font-size: clamp(15px, 1.8vw, 18px);
+  line-height: 1.55;
+}
+
+.pricing-grid {
+  display: grid;
+  max-width: 860px;
+  margin: 54px auto 0;
+  align-items: start;
+  grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr);
+  gap: 28px;
+}
+
+.pricing-plan {
+  min-width: 0;
+  margin-top: 42px;
+  border: 1px solid #dfe6ef;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(16, 24, 40, .04);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  animation: pricing-plan-in 460ms 90ms ease-out both;
+}
+
+.pricing-plan:hover {
+  transform: translateY(-4px);
+  border-color: #cbd9eb;
+  box-shadow: 0 18px 34px -24px rgba(23, 64, 120, .35);
+}
+
+.pricing-plan--featured {
+  margin-top: 0;
+  border-color: #b9d6f6;
+  border-radius: 20px;
+  background: #dcebfd;
+  padding: 8px;
+  box-shadow: 0 22px 48px -24px rgba(23, 102, 216, .42);
+  animation-delay: 150ms;
+}
+
+.pricing-plan--featured:hover {
+  border-color: #9fc8f4;
+  box-shadow: 0 26px 54px -24px rgba(23, 102, 216, .5);
+}
+
+.pricing-plan__recommendation {
+  padding: 5px 12px 12px;
+  color: #174e9e;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.pricing-plan__inner {
+  position: relative;
+  display: flex;
+  min-height: 100%;
+  overflow: hidden;
+  flex-direction: column;
+  border-radius: inherit;
+  background: #fff;
+  padding: 30px;
+}
+
+.pricing-plan--featured .pricing-plan__inner {
+  border: 1px solid #e0e8f3;
+  border-radius: 14px;
+}
+
+.pricing-plan__orb {
+  position: absolute;
+  top: -56px;
+  right: -56px;
+  width: 158px;
+  height: 158px;
+  border: 1px solid #e7eff8;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.pricing-plan h2,
+.pricing-plan h3,
+.pricing-plan p {
+  margin: 0;
+}
+
+.pricing-plan h2 {
+  position: relative;
+  color: #0d1017;
+  font-family: var(--font-display), sans-serif;
+  font-size: 24px;
+  font-weight: 760;
+  letter-spacing: -.025em;
+}
+
+.pricing-plan__description {
+  position: relative;
+  min-height: 48px;
+  margin-top: 7px !important;
+  color: #717c8e;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.pricing-plan__price {
+  display: flex;
+  margin-top: 22px;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.pricing-plan__price strong {
+  color: #0d1017;
+  font-family: var(--font-display), sans-serif;
+  font-size: 42px;
+  font-weight: 780;
+  letter-spacing: -.045em;
+  line-height: 1;
+}
+
+.pricing-plan__price span,
+.pricing-plan__price-note {
+  color: #8791a0;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.pricing-plan__price-note {
+  margin-top: 8px !important;
+}
+
+.pricing-plan__divider {
+  height: 1px;
+  margin-top: 22px;
+  background: #e9eef5;
+}
+
+.pricing-plan h3 {
+  margin-top: 19px;
+  color: #11151d;
+  font-size: 13.5px;
+  font-weight: 800;
+}
+
+.pricing-plan ul {
+  display: grid;
+  margin: 14px 0 0;
+  padding: 0;
+  gap: 11px;
+  list-style: none;
+}
+
+.pricing-plan li {
+  display: grid;
+  min-width: 0;
+  align-items: start;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 9px;
+  color: #394454;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.pricing-check {
+  display: grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  color: #1766d8;
+}
+
+.pricing-check svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.pricing-plan__cta {
+  display: inline-flex;
+  min-height: 48px;
+  margin-top: 30px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid #dbe2eb;
+  border-radius: 999px;
+  background: #fff;
+  color: #11151d;
+  font-size: 14px;
+  font-weight: 750;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.pricing-plan__cta:hover {
+  border-color: #c8d5e5;
+  background: #f6f9fc;
+}
+
+.pricing-plan__cta span {
+  transition: transform 160ms ease;
+}
+
+.pricing-plan__cta:hover span {
+  transform: translateX(3px);
+}
+
+.pricing-plan__cta--featured {
+  border-color: #1766d8;
+  background: #1766d8;
+  color: #fff;
+  box-shadow: 0 10px 20px -12px rgba(23, 102, 216, .8);
+}
+
+.pricing-plan__cta--featured:hover {
+  border-color: #0f55bd;
+  background: #0f55bd;
+  color: #fff;
+}
+
+.pricing-plan__cta:focus-visible {
+  outline: 3px solid rgba(23, 102, 216, .28);
+  outline-offset: 3px;
+}
+
+.pricing-assurance {
+  display: flex;
+  margin: 44px 0 0;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #737f90;
+  font-size: 13px;
+  text-align: center;
+}
+
+.pricing-sources {
+  padding: 42px 24px 50px;
+  border-top: 1px solid #edf1f6;
+  background: #fff;
+  text-align: center;
+}
+
+.pricing-sources p {
+  margin: 0;
+  color: #97a1af;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.pricing-sources div {
+  display: flex;
+  margin-top: 22px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px 40px;
+  color: #687383;
+}
+
+.pricing-sources span {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+@keyframes pricing-heading-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pricing-plan-in {
+  from { opacity: 0; translate: 0 18px; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+@media (max-width: 760px) {
+  .pricing-hero {
+    padding: 52px 18px 62px;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M60 53v14M53 60h14' fill='none' stroke='%23c8d8ed' stroke-width='1.1'/%3E%3C/svg%3E"),
+      linear-gradient(180deg, #f8fbff 0%, #e8f1fd 100%);
+  }
+
+  .pricing-heading h1 {
+    margin-inline: auto;
+    max-width: 330px;
+    font-size: 38px;
+    line-height: 1.05;
+  }
+
+  .pricing-heading > span {
+    max-width: 350px;
+    margin-inline: auto;
+    font-size: 14.5px;
+  }
+
+  .pricing-grid {
+    max-width: 520px;
+    margin-top: 34px;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .pricing-plan {
+    margin-top: 0;
+  }
+
+  .pricing-plan--featured {
+    order: -1;
+  }
+
+  .pricing-plan__inner {
+    padding: 24px 22px;
+  }
+
+  .pricing-plan__description {
+    min-height: 0;
+  }
+
+  .pricing-plan__price strong {
+    font-size: 38px;
+  }
+
+  .pricing-plan li {
+    font-size: 13px;
+  }
+
+  .pricing-assurance {
+    margin-top: 32px;
+    font-size: 12.5px;
+  }
+
+  .pricing-sources {
+    padding: 32px 18px 38px;
+  }
+
+  .pricing-sources div {
+    gap: 14px 24px;
+  }
+
+  .pricing-sources span {
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pricing-heading,
+  .pricing-plan {
+    animation: none;
+  }
+
+  .pricing-plan,
+  .pricing-plan__cta span {
+    transition: none;
+  }
+}
+
 .site-footer {
   background: #0c0e12;
   color: #c2c8d0;

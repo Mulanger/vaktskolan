@@ -20,6 +20,7 @@ export function SiteFooter() {
           </div>
           <div>
             <strong>Om Vaktskolan</strong>
+            <Link href="/priser">Priser</Link>
             <Link href="/om-vaktskolan">Om oss</Link>
             <Link href="/redaktionell-policy">Redaktionell policy</Link>
             <Link href="/kontakt">Kontakt</Link>
