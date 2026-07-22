@@ -19,6 +19,10 @@ Avsnitten nedan beskriver i stor utsträckning legacy-plattformens interna funkt
 
 Den publika toppnavigationen använder etiketterna `Utbildningsmaterial`, `Wiki` och `Väktaryrket`; `Wiki` länkar fortsatt till SEO-/guidehubben på `/studieteknik`. Övriga publika sidor läser länkarna från `lib/site.ts`. Startsidan återanvänder den äldre headern i `landing/index.html`, så dess desktop- och mobilmeny måste hållas i samma ordning och med samma etiketter. Inloggning ligger separat från de tre huvudlänkarna.
 
+Startsidan har ingen separat `Öva nu`-knapp i mobilheadern. Mobilens quizväg är den befintliga `Gratis Quiz`-knappen i heron; ta inte tillbaka en konkurrerande header-CTA utan ett nytt uttryckligt produktbeslut.
+
+Wiki-/guidesidornas mobiltypografi har ett gemensamt skydd i `app/globals.css` för långa svenska sammansättningar. Rubriker, ingresser, guidenavigation, källor, relaterade länkar och quiztexter använder `overflow-wrap: anywhere` där innehållet annars kan bredda sidan; rubriker använder även svensk automatisk avstavning. Tabeller och eventuell preformaterad text får egen horisontell scroll i stället för att skapa overflow för hela dokumentet. Ta inte bort dessa regler när en enskild guide justeras.
+
 ## Guidequiz på desktop och mobil (2026-07-22)
 
 `components/guide-quiz-panel.tsx` ansvarar för det tre frågor långa snabbquizet som följer med de publika guidesidorna. Frågeprogressen sparas lokalt och ska överleva navigering mellan guider. Rätt/fel visas inte efter varje svar; eleven måste svara på samtliga tre frågor innan resultatet och svarsförklaringen visas.
