@@ -15,6 +15,6 @@ export const EDITORIAL_AUTHOR = "Vaktskolans redaktion";
 
 export const PRIMARY_NAVIGATION = [
   { href: "/#utbildningar", label: "Utbildningsmaterial" },
-  { href: "/studieteknik", label: "Studieteknik" },
+  { href: "/studieteknik", label: "Wiki" },
   { href: "/?study=yrket#utbildningar", label: "Väktaryrket" },
 ] as const;

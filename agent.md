@@ -17,6 +17,8 @@ Det här dokumentet beskriver appen i `D:\vaktskolan`: hur dashboarden och landi
 
 Avsnitten nedan beskriver i stor utsträckning legacy-plattformens interna funktioner. Påståenden om att root-sajten saknar byggsystem eller npm-dependencies är historiska och ska inte användas för den publika Next-ytan.
 
+Den publika toppnavigationen använder etiketterna `Utbildningsmaterial`, `Wiki` och `Väktaryrket`; `Wiki` länkar fortsatt till SEO-/guidehubben på `/studieteknik`. Övriga publika sidor läser länkarna från `lib/site.ts`. Startsidan återanvänder den äldre headern i `landing/index.html`, så dess desktop- och mobilmeny måste hållas i samma ordning och med samma etiketter. Inloggning ligger separat från de tre huvudlänkarna.
+
 ## Guidequiz på desktop och mobil (2026-07-22)
 
 `components/guide-quiz-panel.tsx` ansvarar för det tre frågor långa snabbquizet som följer med de publika guidesidorna. Frågeprogressen sparas lokalt och ska överleva navigering mellan guider. Rätt/fel visas inte efter varje svar; eleven måste svara på samtliga tre frågor innan resultatet och svarsförklaringen visas.
