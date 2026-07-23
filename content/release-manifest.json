@@ -1,15 +1,15 @@
 {
   "schemaVersion": 2,
-  "releaseId": "2026-07-16-prelaunch.2",
-  "contentVersion": "65147425bea62461d8258d5bd9f0a3ff9dda79d6140508f857f4705640047f9e",
-  "generatedAt": "2026-07-16T17:07:42.204Z",
+  "releaseId": "2026-07-23-quiz-balans.2",
+  "contentVersion": "93b86c449d79f34fe00ce2f61f98b81dddc1756ecab8a4e8fe8bc4b46693464a",
+  "generatedAt": "2026-07-23T10:44:18.057Z",
   "sourceChecks": [
     {
       "id": "polisen-fap-573-01-pmfs-2017-10",
       "publisher": "Polismyndigheten",
       "title": "PMFS 2017:10, FAP 573-01",
       "url": "https://polisen.se/siteassets/forfattningssamling/fap-nummer/fap573-01-pmfs2017_10/",
-      "verifiedAt": "2026-07-16"
+      "verifiedAt": "2026-07-23"
     }
   ],
   "files": [
@@ -95,13 +95,13 @@
     },
     {
       "path": "supabase/seeds/20260705143000_seed_scenario_quiz_300.sql",
-      "bytes": 358185,
-      "sha256": "c605eab9bb1098293b76d50d83d631bb0fb5c3536c3506d957a948d63fc02860"
+      "bytes": 427355,
+      "sha256": "60e078efab64f7ac1858d009ada2eba6fa79d5ac1e6d3fe802dcc46044814840"
     },
     {
       "path": "utbildning.md",
-      "bytes": 299177,
-      "sha256": "0584ec7bcb80f663e9991695286b81541d12d131eda0c88ed1ef1c390e4c2ba5"
+      "bytes": 312613,
+      "sha256": "0e614a90fd64fb36c1cca761b84ebcb99a57a7c5fbdbd1767d2a82c68ba8c919"
     },
     {
       "path": "vaktarskolan_flashcards_200.json",
@@ -110,13 +110,13 @@
     },
     {
       "path": "vu1quiz.json",
-      "bytes": 125671,
-      "sha256": "acae4369ca58b25a174674949409ef6cdf3c284828125db8168622e60e419718"
+      "bytes": 134350,
+      "sha256": "c226500fae13009e810ac9fd8347c720c0f7ee54bd2204537dce749fff5c327a"
     },
     {
       "path": "vu2quiz.json",
-      "bytes": 67558,
-      "sha256": "548136c22a60d1e610f224555b33fb616b68a016a04e36a640aa687dc2eb37fc"
+      "bytes": 72317,
+      "sha256": "10a4998c2e5dcafde67a4f950081611a5801ba614bc5cc13ab8375dcd34db835"
     }
   ]
 }

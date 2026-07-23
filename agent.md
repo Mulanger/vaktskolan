@@ -1137,3 +1137,22 @@ Det här har nyligen ändrats och bör inte råka rullas tillbaka:
 - Landing-sidans mobilhero följer den bifogade agentdesignens responsiva struktur: statisk mobilheader, max 480px canvas, fullbreddsrubrik, brödtext och väktarillustration i tvåkolumnsgrid samt 78px CTA-kort. `Gratis Quiz` ersätter CTA-korten med ett större, lättläst trefrågorsquiz som använder hela den tillgängliga mobilbredden, och `Tillbaka till valen` återställer knapparna. Quizpanelen är även förstorad på desktop med större text, minst 48–52px höga svarsalternativ och blå nästa-knapp.
 - Hero-quizet får inte ligga bakom en vertikal overflow-mask. `main` på landningssidan ska inte ha `overflow-hidden`; quizlogiken använder `keepHeroQuizInView()` efter svar/nästa för att hålla feedback och `Nästa fråga` synliga.
 - Hero-quizets resultatskärm är visuellt uppdaterad från `D:\quiz_result.tsx`: modern toppheader med tillbaka/resultatbadge/progress, färgtema per score och ikoncirkel. Storlek och placering ska följa den större responsiva hero-quizpanelen och får inte krympas tillbaka till den äldre 320px-mobilbredden.
+
+## Quizbalansering – längdläckage eliminerat (2026-07-23)
+
+Alla 528 quizfrågor (VU1 154, VU2 74, scenario 300) skrevs om för att ta bort "längdläckage": rätt svar var tidigare nästan alltid det längsta alternativet, vilket gjorde quizen gissningsbara. **Endast `options`-texter och `explanation` ändrades** – frågetext, `id`, `correct`, `correctIndex`, alternativens ordning, modultillhörighet och antal är oförändrade. Ändringen fördes ut genom hela datakedjan:
+
+- `utbildning.md`: de fyra alternativraderna och förklaringen uppdaterades för alla 228 VU1/VU2-frågor (matchning på modul + frågetext via engångsscript). `**Fråga N.**`-numrering och `**Rätt svar: X.**`-bokstäver är bevarade tecken för tecken; filen är fortfarande UTF-8 utan BOM (LF).
+- `vu1quiz.json` (154) och `vu2quiz.json` (74): `questions`-arrayen ersattes, `meta.version` bumpad till `1.1` och `generated` till `2026-07-23`. `modules` och id:n oförändrade.
+- Scenario: `supabase/seeds/20260705143000_seed_scenario_quiz_300.sql` regenererades från `quiz-balans/data/scenariobank_300_fixed.json` med `--status published`; `$vakt_scenario_json$`-markörerna bevarade.
+- Supabase: bankerna upsertas på befintliga nycklar (`import:quiz-portal` på `(collection_id, external_id)` + `(question_id, label)`; scenario via `import-scenario-quiz.mjs`), aldrig delete+insert, så `portal:<id>`- och `module:*`-nycklarna i elevernas repetitionskö överlever. Produktionsimporten kördes 2026-07-23 och verifierades till 154/74/300 publicerade frågor med 616/296/1200 alternativ. Fråge- och alternativ-ID:n var oförändrade före/efter importen, databasens innehåll matchade källbankerna exakt och radantalen i `student_quiz_attempts`, `student_quiz_answers`, `student_quiz_review_items` och `student_learning_progress` var oförändrade.
+
+Nya invarianter, bevakade av `scripts/test-quiz-balance.mjs`:
+
+- Varje fråga har exakt 4 alternativ och exakt 1 rätt svar.
+- Längdbandet mellan rätt svarets teckenlängd och längsta felsvarets får vara högst **1,35**.
+- Andelen frågor per bank där rätt svar är strikt längst får vara högst **40 %** (nuläge: VU1 20,1 %, VU2 21,6 %, scenario 26,3 %; slump ≈ 25 %).
+
+`test:quiz-balance` läser `vu1quiz.json`, `vu2quiz.json` och scenario-seedens JSON-payload (mellan `$vakt_scenario_json$`-markörerna) och ingår nu i både `prebuild` och `test`, direkt efter `test:platform-guards`. Den failar (exit 1) om något band överskrids – verifierat att den passerar på nuvarande data och failar på en medvetet saboterad fråga.
+
+Cache: markdown-fetchen i `app.js` och CSS/JS-query strings i `index.html` är bumpade till `?v=20260723-quiz-balans`. Release-manifestet är regenererat som `2026-07-23-quiz-balans.2`.

@@ -1,9 +1,9 @@
 {
   "meta": {
     "name": "Väktarskolan – VU1 quizbank",
-    "version": "1.1",
+    "version": "1.0",
     "language": "sv",
-    "generated": "2026-07-23",
+    "generated": "2026-07-10",
     "count": 154,
     "source": "utbildning.md",
     "notes": "Extraherad ur utbildningsmaterialet. source=modulquiz är modulernas quiz, source=sluttest är sluttestets frågebank (slumpbart, viktat urval per modul). Alternativen ligger i ursprunglig A–D-ordning med rätt svar i correct/correctIndex – appen bör slumpa alternativens ordning vid visning. Samma schema som scenariobanken och flashcardsbanken, så samma quizkomponent kan återanvändas."

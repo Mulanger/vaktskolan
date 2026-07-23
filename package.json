@@ -7,7 +7,7 @@
     "prepare:assets": "node scripts/prepare-public-assets.mjs",
     "predev": "npm run prepare:assets",
     "dev": "next dev",
-    "prebuild": "npm run prepare:assets && npm run validate:content && npm run validate:release && npm run validate:legacy && npm run test:platform-guards && npm run test:emblems && npm run test:billing",
+    "prebuild": "npm run prepare:assets && npm run validate:content && npm run validate:release && npm run validate:legacy && npm run test:platform-guards && npm run test:quiz-balance && npm run test:emblems && npm run test:billing",
     "build": "next build",
     "start": "next start -H 0.0.0.0",
     "lint": "eslint .",
@@ -17,13 +17,14 @@
     "validate:release": "node scripts/content-release-manifest.mjs --check",
     "validate:legacy": "node --check app.js && node --check authProvider.js && node --check auth.js && node --check supabaseApi.js && node --check emblemSystem.js",
     "test:platform-guards": "node scripts/test-platform-guards.mjs",
+    "test:quiz-balance": "node scripts/test-quiz-balance.mjs",
     "test:emblems": "node scripts/test-emblem-system.mjs",
     "test:billing": "tsx scripts/test-stripe-billing.ts",
     "verify:supabase-progress": "node scripts/verify-supabase-progress.mjs",
     "stripe:setup": "node --env-file=.env scripts/create-stripe-premium-product.mjs",
     "import:quiz-portal": "node scripts/import-quiz-portal-banks.mjs",
     "test:seo": "tsx scripts/test-seo.ts",
-    "test": "npm run typecheck && npm run lint && npm run validate:content && npm run validate:release && npm run test:platform-guards && npm run test:emblems && npm run test:billing"
+    "test": "npm run typecheck && npm run lint && npm run validate:content && npm run validate:release && npm run test:platform-guards && npm run test:quiz-balance && npm run test:emblems && npm run test:billing"
   },
   "dependencies": {
     "@clerk/backend": "^3.12.0",

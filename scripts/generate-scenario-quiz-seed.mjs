@@ -61,9 +61,13 @@ function buildSql(jsonText, status) {
     throw new Error(`Input JSON cannot contain the SQL dollar quote tag ${JSON_TAG}.`);
   }
 
+  const publicationNote = status === "published"
+    ? "Content approval is recorded before publication."
+    : "Change --status to published only after review.";
+
   return `-- Seed the scenario_quiz collection with the 300-question scenario bank.
 -- Generated from D:/vaktarskolan_scenariobank_300.json.
--- Questions are inserted as ${status}. Change --status to published only after review.
+-- Questions are inserted as ${status}. ${publicationNote}
 
 begin;
 

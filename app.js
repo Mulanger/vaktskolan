@@ -7054,7 +7054,7 @@ async function init() {
   bindEvents();
   initializeSupabaseConnection();
   await initializeMembership();
-  const response = await fetch("utbildning.md?v=20260704-vu2");
+  const response = await fetch("utbildning.md?v=20260723-quiz-balans");
   const markdown = await response.text();
   state.courses = parseCourses(markdown);
   state.finalExamPools = Object.fromEntries(
