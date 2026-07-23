@@ -10,6 +10,7 @@ const STORAGE_KEYS = {
   progressOwner: "vakt-progress-owner",
   knownEmblems: "vakt-known-emblems",
   quizHistory: "vakt-quiz-history-v1",
+  cvBuilder: "vakt-cv-builder-v1",
 };
 
 const STORAGE_VERSION = "vu2-course-split-2026-07-04";
@@ -45,6 +46,9 @@ const RESTORABLE_MODES = new Set([
   "final-exam-portal",
   "final-exam",
 ]);
+
+const KNOWLEDGE_BASE_TABS = new Set(["lonekollen", "cv"]);
+const CV_BUILDER_COMPACT_QUERY = "(max-width: 940px)";
 
 const COURSE_CONFIG = {
   vu1: {
@@ -172,6 +176,7 @@ const state = {
   lessonIndex: 0,
   pageIndex: 0,
   mode: "home",
+  knowledgeBaseTab: "lonekollen",
   answers: readObjectStorage(STORAGE_KEYS.answers),
   quizSubmissions: readObjectStorage(STORAGE_KEYS.quizSubmissions),
   scenarioProgress: readObjectStorage(STORAGE_KEYS.scenarioProgress),
@@ -404,6 +409,7 @@ const els = {
   contextSidebar: $("#contextSidebar"),
   navOverlay: $("#navOverlay"),
   quizResetModal: $("#quizResetModal"),
+  cvDesktopModal: $("#cvDesktopModal"),
   premiumModal: $("#premiumModal"),
   premiumModalDescription: $("#premiumModalDescription"),
   premiumCheckoutButton: $("#premiumCheckoutButton"),
@@ -515,6 +521,7 @@ function getPortalLocationSnapshot(mode = state.mode) {
     lessonIndex: state.lessonIndex,
     pageIndex: state.pageIndex,
     mode: RESTORABLE_MODES.has(mode) ? mode : "home",
+    knowledgeBaseTab: KNOWLEDGE_BASE_TABS.has(state.knowledgeBaseTab) ? state.knowledgeBaseTab : "lonekollen",
   };
 }
 
@@ -526,6 +533,7 @@ function normalizePortalLocationSnapshot(value) {
     lessonIndex: Math.max(0, Number.parseInt(value.lessonIndex, 10) || 0),
     pageIndex: Math.max(0, Number.parseInt(value.pageIndex, 10) || 0),
     mode: value.mode,
+    knowledgeBaseTab: KNOWLEDGE_BASE_TABS.has(value.knowledgeBaseTab) ? value.knowledgeBaseTab : "lonekollen",
   };
 }
 
@@ -537,7 +545,8 @@ function portalLocationsMatch(left, right) {
       left.moduleIndex === right.moduleIndex &&
       left.lessonIndex === right.lessonIndex &&
       left.pageIndex === right.pageIndex &&
-      left.mode === right.mode
+      left.mode === right.mode &&
+      (left.mode !== "knowledge-base" || left.knowledgeBaseTab === right.knowledgeBaseTab)
   );
 }
 
@@ -556,7 +565,9 @@ function portalHashForLocation(location) {
   if (location.mode === "hub") return "#vu1";
   if (location.mode === "vu2") return "#vu2";
   if (location.mode === "quiz-overview") return "#quiz";
-  if (location.mode === "knowledge-base") return "#kunskapsbas/lonekollen";
+  if (location.mode === "knowledge-base") {
+    return location.knowledgeBaseTab === "cv" ? "#kunskapsbas/cv-mall" : "#kunskapsbas/lonekollen";
+  }
   if (location.mode === "final-exam-portal") return "#slutprov";
   if (location.mode === "final-exam") return `#slutprov/${courseId}/prov`;
   if (location.mode === "module-milestone") return `#${courseId}/modul/${moduleNumber}/start`;
@@ -583,7 +594,10 @@ function portalLocationFromHash(hash = window.location.hash, fallback = null) {
   if (route === "vu2") return { ...base, courseId: "vu2", mode: "vu2" };
   if (route === "quiz") return { ...base, mode: "quiz-overview" };
   if (route === "kunskapsbas" || route === "kunskapsbas/lonekollen") {
-    return { ...base, mode: "knowledge-base" };
+    return { ...base, mode: "knowledge-base", knowledgeBaseTab: "lonekollen" };
+  }
+  if (route === "kunskapsbas/cv-mall" || route === "kunskapsbas/cv") {
+    return { ...base, mode: "knowledge-base", knowledgeBaseTab: "cv" };
   }
   if (route === "slutprov") return { ...base, mode: "final-exam-portal" };
 
@@ -680,7 +694,7 @@ function restorePortalHistory(value) {
       return true;
     }
     if (location.mode === "knowledge-base") {
-      showKnowledgeBase();
+      showKnowledgeBase(location.knowledgeBaseTab);
       return true;
     }
     if (location.mode === "final-exam-portal") {
@@ -2359,10 +2373,15 @@ function renderKnowledgeBaseSidebar() {
   els.moduleListWrap.hidden = false;
   els.moduleListTitle.textContent = "Kunskapsbas";
   els.moduleCount.textContent = "";
+  const activeTab = state.knowledgeBaseTab === "cv" ? "cv" : "lonekollen";
   els.moduleList.innerHTML = `
-    <button class="knowledge-sidebar-item is-active" type="button" data-open-salary-check aria-current="page">
+    <button class="knowledge-sidebar-item${activeTab === "lonekollen" ? " is-active" : ""}" type="button" data-open-salary-check ${activeTab === "lonekollen" ? 'aria-current="page"' : ""}>
       <i data-lucide="credit-card" aria-hidden="true"></i>
       <span>Lönekollen</span>
+    </button>
+    <button class="knowledge-sidebar-item${activeTab === "cv" ? " is-active" : ""}" type="button" data-open-cv-builder ${activeTab === "cv" ? 'aria-current="page"' : ""}>
+      <i data-lucide="file-text" aria-hidden="true"></i>
+      <span>CV-mall</span>
     </button>
   `;
 }
@@ -2706,6 +2725,692 @@ function updateSalaryCalculator() {
   }
 }
 
+function renderKnowledgeBasePanel() {
+  if (state.knowledgeBaseTab === "cv") renderCvBuilder();
+  else renderSalaryCheck();
+}
+
+const CV_BUILDER_TEXT_FIELDS = [
+  "fullname",
+  "title",
+  "email",
+  "phone",
+  "location",
+  "birthYear",
+  "korkort",
+  "ovrigt",
+  "summary",
+  "skills",
+  "languages",
+];
+const CV_BUILDER_CHECK_FIELDS = ["vu1", "vu2", "lansstyrelsen", "belastning"];
+
+let cvBuilderIdCounter = 0;
+
+function createCvItemId() {
+  cvBuilderIdCounter += 1;
+  return `cv-${Date.now()}-${cvBuilderIdCounter}`;
+}
+
+function normalizeCvBuilderState(value) {
+  const base = { experiences: [], educations: [] };
+  base.photo =
+    isPlainObject(value) && typeof value.photo === "string" && value.photo.startsWith("data:image/")
+      ? value.photo
+      : "";
+  CV_BUILDER_TEXT_FIELDS.forEach((key) => {
+    base[key] = isPlainObject(value) && typeof value[key] === "string" ? value[key] : "";
+  });
+  CV_BUILDER_CHECK_FIELDS.forEach((key) => {
+    base[key] = Boolean(isPlainObject(value) && value[key]);
+  });
+  if (isPlainObject(value) && Array.isArray(value.experiences)) {
+    base.experiences = value.experiences.filter(isPlainObject).map((item) => ({
+      id: typeof item.id === "string" && item.id ? item.id : createCvItemId(),
+      company: typeof item.company === "string" ? item.company : "",
+      role: typeof item.role === "string" ? item.role : "",
+      date: typeof item.date === "string" ? item.date : "",
+      desc: typeof item.desc === "string" ? item.desc : "",
+    }));
+  }
+  if (isPlainObject(value) && Array.isArray(value.educations)) {
+    base.educations = value.educations.filter(isPlainObject).map((item) => ({
+      id: typeof item.id === "string" && item.id ? item.id : createCvItemId(),
+      school: typeof item.school === "string" ? item.school : "",
+      title: typeof item.title === "string" ? item.title : "",
+      date: typeof item.date === "string" ? item.date : "",
+    }));
+  }
+  return base;
+}
+
+const cvBuilderHadSavedState = readStorage(STORAGE_KEYS.cvBuilder, null) !== null;
+let cvBuilderState = normalizeCvBuilderState(readObjectStorage(STORAGE_KEYS.cvBuilder));
+// Första besöket: ingen sparad data ännu. Förifyll ett exempel-CV så förhandsvisningen
+// ser komplett ut, och låt "Rensa"-knappen pulsera som en diskret hint.
+let cvBuilderHintActive = !cvBuilderHadSavedState;
+if (cvBuilderHintActive) {
+  cvBuilderState = normalizeCvBuilderState(cvSampleData());
+}
+
+function saveCvBuilderState() {
+  writeStorage(STORAGE_KEYS.cvBuilder, cvBuilderState);
+}
+
+function dismissCvBuilderHint() {
+  if (!cvBuilderHintActive) return;
+  cvBuilderHintActive = false;
+  els.knowledgeBasePanel
+    ?.querySelector('[data-cv-action="reset"]')
+    ?.classList.remove("is-hinting");
+}
+
+function cvSampleData() {
+  return {
+    fullname: "Kevin Sjöberg",
+    title: "Auktoriserad Väktare / Rondväktare",
+    email: "kevin.sjoberg@vaktskolan.se",
+    phone: "070-812 34 56",
+    location: "Stockholm",
+    birthYear: String(new Date().getFullYear() - 29),
+    vu1: true,
+    vu2: true,
+    lansstyrelsen: true,
+    belastning: true,
+    korkort: "B-Körkort (Manuell)",
+    ovrigt: "HLR & Hjärtstartare",
+    summary:
+      "Diplomerad och auktoriserad väktare utbildad via Vaktskolan. Har god erfarenhet av passerkontroller, ronderande bevakning och kundbemötande. Stresstålig, punktlig och med utpräglad förmåga att bevara lugnet i konfliktsituationer.",
+    skills: "Konflikthantering, Deeskalering, Rondering, Larmhantering, Passerkontroll, HLR, Hög Säkerhetsmedvetenhet",
+    languages: "Svenska (Modersmål), Engelska (Flytande)",
+    experiences: [
+      {
+        id: createCvItemId(),
+        company: "Avarn Security",
+        role: "Rond- och Störningsbevakare",
+        date: "2023 - Pågående",
+        desc: "Ansvarig för nattlig rondbevakning av kommersiella fastigheter. Larmryck, förebyggande brand- och säkerhetskontroller samt upprättande av incidentrapporter.",
+      },
+      {
+        id: createCvItemId(),
+        company: "Retail Security AB",
+        role: "Butikskontrollant / Entrévärd",
+        date: "2021 - 2023",
+        desc: "Förebyggande av tillgrepp, kundtjänst i entremiljö samt samverkan med polis och centrumledning.",
+      },
+    ],
+    educations: [
+      {
+        id: createCvItemId(),
+        school: "Vaktskolan.se",
+        title: "VU1 & VU2 (Väktargrundutbildning Del 1 & 2)",
+        date: "2023",
+      },
+      {
+        id: createCvItemId(),
+        school: "Röda Korset",
+        title: "Första Hjälpen & HLR-Certifikat",
+        date: "2023",
+      },
+    ],
+  };
+}
+
+function isCompactCvViewport() {
+  return window.matchMedia(CV_BUILDER_COMPACT_QUERY).matches;
+}
+
+function cvTextInputMarkup(field, label, placeholder, options = {}) {
+  const value = escapeHtml(cvBuilderState[field] || "");
+  const type = options.type || "text";
+  return `
+    <div class="cv-field${options.wide ? " is-wide" : ""}">
+      <label for="cv-input-${field}">${label}</label>
+      <input class="cv-input" id="cv-input-${field}" type="${type}" data-cv-field="${field}" value="${value}" placeholder="${placeholder}">
+    </div>
+  `;
+}
+
+function cvCheckboxMarkup(field, label) {
+  return `
+    <label class="cv-check">
+      <input type="checkbox" data-cv-field="${field}" ${cvBuilderState[field] ? "checked" : ""}>
+      <span>${label}</span>
+    </label>
+  `;
+}
+
+function cvAgeFromBirthYear(birthYear) {
+  const year = Number.parseInt(birthYear, 10);
+  if (!Number.isFinite(year)) return null;
+  const age = new Date().getFullYear() - year;
+  return age >= 0 && age <= 120 ? age : null;
+}
+
+function cvBirthYearMarkup() {
+  const currentYear = new Date().getFullYear();
+  const selected = cvBuilderState.birthYear || "";
+  let options = '<option value="">Välj födelseår</option>';
+  for (let year = currentYear - 16; year >= currentYear - 80; year -= 1) {
+    const age = currentYear - year;
+    options += `<option value="${year}"${String(year) === selected ? " selected" : ""}>${year} · ${age} år</option>`;
+  }
+  return `
+    <div class="cv-field">
+      <label for="cv-input-birthYear">Ålder</label>
+      <select class="cv-input" id="cv-input-birthYear" data-cv-field="birthYear">${options}</select>
+    </div>
+  `;
+}
+
+function renderCvBuilder() {
+  if (!els.knowledgeBasePanel) return;
+
+  if (isCompactCvViewport()) {
+    els.knowledgeBasePanel.innerHTML = `
+      <article class="cv-builder" aria-labelledby="cvBuilderTitle">
+        <div class="cv-mobile-notice">
+          <span class="cv-mobile-notice-icon"><i data-lucide="monitor" aria-hidden="true"></i></span>
+          <h1 id="cvBuilderTitle">Öppna CV-mallen på en dator</h1>
+          <p>CV-skaparen är byggd för större skärmar så att du kan fylla i dina uppgifter och se förhandsgranskningen sida vid sida. Logga in från en dator för att skapa och spara ditt CV som PDF.</p>
+          <button class="cv-toolbar-button is-primary" type="button" data-open-salary-check>Till Lönekollen</button>
+        </div>
+      </article>
+    `;
+    return;
+  }
+
+  els.knowledgeBasePanel.innerHTML = `
+    <article class="cv-builder" aria-labelledby="cvBuilderTitle">
+      <header class="salary-check-hero cv-builder-hero">
+        <p class="salary-check-eyebrow"><i data-lucide="file-text" aria-hidden="true"></i> Kunskapsbas</p>
+        <div class="salary-check-hero-row">
+          <div>
+            <h1 id="cvBuilderTitle">CV-mall – skapa ditt väktar-CV</h1>
+            <p>Fyll i dina uppgifter och se ditt CV växa fram i realtid. Spara som PDF när du är klar.</p>
+          </div>
+          <div class="cv-builder-actions no-print">
+            <button class="cv-toolbar-button" type="button" data-cv-action="sample">
+              <i data-lucide="zap" aria-hidden="true"></i> Fyll med exempel
+            </button>
+            <button class="cv-toolbar-button is-ghost${cvBuilderHintActive ? " is-hinting" : ""}" type="button" data-cv-action="reset">Rensa</button>
+            <button class="cv-toolbar-button is-primary" type="button" data-cv-action="print">
+              <i data-lucide="printer" aria-hidden="true"></i> Spara PDF / Skriv ut
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div class="cv-builder-grid">
+        <div class="cv-builder-form no-print">
+          <div class="cv-form-tip">
+            <i data-lucide="info" aria-hidden="true"></i>
+            <p><strong>Väktartips:</strong> Rekryterare inom bevakning tittar först på dina godkännanden (VU1/VU2), körkort och Länsstyrelsens godkännande. Se till att kryssa i dessa nedan!</p>
+          </div>
+
+          <section class="cv-form-card">
+            <h2><i data-lucide="user" aria-hidden="true"></i> Personuppgifter</h2>
+            <div class="cv-photo-field">
+              <div class="cv-photo-thumb${cvBuilderState.photo ? " has-photo" : ""}" id="cvPhotoThumb">
+                ${cvBuilderState.photo
+                  ? `<img src="${cvBuilderState.photo}" alt="Förhandsvisning av profilbild">`
+                  : '<i data-lucide="user-round" aria-hidden="true"></i>'}
+              </div>
+              <div class="cv-photo-actions">
+                <span class="cv-photo-label">Profilbild</span>
+                <div class="cv-photo-buttons">
+                  <button class="cv-photo-button" type="button" data-cv-action="upload-photo">
+                    <i data-lucide="upload" aria-hidden="true"></i> ${cvBuilderState.photo ? "Byt bild" : "Ladda upp bild"}
+                  </button>
+                  ${cvBuilderState.photo ? '<button class="cv-photo-button is-remove" type="button" data-cv-action="remove-photo">Ta bort</button>' : ""}
+                </div>
+                <p class="cv-photo-hint">JPG eller PNG. Bilden beskärs automatiskt till en kvadrat.</p>
+              </div>
+              <input type="file" id="cvPhotoInput" accept="image/png, image/jpeg, image/webp" hidden>
+            </div>
+            <div class="cv-form-grid">
+              ${cvTextInputMarkup("fullname", "Namn *", "t.ex. Kevin Sjöberg")}
+              ${cvTextInputMarkup("title", "Yrkesroll / Titel", "t.ex. Auktoriserad Väktare")}
+              ${cvTextInputMarkup("email", "E-post *", "kevin@exempel.se", { type: "email" })}
+              ${cvTextInputMarkup("phone", "Telefon *", "070-123 45 67")}
+              ${cvTextInputMarkup("location", "Ort / Stad", "t.ex. Stockholm")}
+              ${cvBirthYearMarkup()}
+            </div>
+          </section>
+
+          <section class="cv-form-card is-highlight">
+            <h2>
+              <i data-lucide="shield-check" aria-hidden="true"></i> Säkerhetsmeriter &amp; Licenser
+              <span class="cv-form-card-flag">Viktigast</span>
+            </h2>
+            <div class="cv-check-list">
+              ${cvCheckboxMarkup("vu1", "VU1 (Väktargrundutbildning del 1)")}
+              ${cvCheckboxMarkup("vu2", "VU2 (Väktargrundutbildning del 2)")}
+              ${cvCheckboxMarkup("lansstyrelsen", "Godkänd av Länsstyrelsen")}
+              ${cvCheckboxMarkup("belastning", "Utdrag ur Belastningsregistret utan anmärkning")}
+            </div>
+            <div class="cv-form-grid cv-form-grid-divider">
+              ${cvTextInputMarkup("korkort", "Körkort behörighet", "t.ex. B-Körkort (Manuell)")}
+              ${cvTextInputMarkup("ovrigt", "Övriga förordnanden", "t.ex. Skyddsvakt, HLR")}
+            </div>
+          </section>
+
+          <section class="cv-form-card">
+            <h2><i data-lucide="pen-line" aria-hidden="true"></i> Profil / Om mig</h2>
+            <textarea class="cv-input" rows="4" data-cv-field="summary" placeholder="Beskriv kort varför du passar som väktare, dina personliga egenskaper och dina mål...">${escapeHtml(cvBuilderState.summary)}</textarea>
+          </section>
+
+          <section class="cv-form-card">
+            <h2>
+              <i data-lucide="briefcase" aria-hidden="true"></i> Arbetslivserfarenhet
+              <button class="cv-add-button" type="button" data-cv-action="add-experience">+ Lägg till</button>
+            </h2>
+            <div class="cv-item-list" id="cvExperienceForms"></div>
+          </section>
+
+          <section class="cv-form-card">
+            <h2>
+              <i data-lucide="graduation-cap" aria-hidden="true"></i> Utbildningar &amp; Kurser
+              <button class="cv-add-button" type="button" data-cv-action="add-education">+ Lägg till</button>
+            </h2>
+            <div class="cv-item-list" id="cvEducationForms"></div>
+          </section>
+
+          <section class="cv-form-card">
+            <h2><i data-lucide="badge-check" aria-hidden="true"></i> Egenskaper &amp; Språk</h2>
+            <div class="cv-form-grid">
+              ${cvTextInputMarkup("skills", "Egenskaper & kompetenser (kommaseparerade)", "Stresstålig, Konflikthantering, HLR, Passerkontroll", { wide: true })}
+              ${cvTextInputMarkup("languages", "Språkkunskaper", "Svenska (Modersmål), Engelska (Flytande)", { wide: true })}
+            </div>
+          </section>
+        </div>
+
+        <div class="cv-builder-preview">
+          <div class="cv-preview-page" id="cvPreviewPage">
+            <div class="cv-preview-accent" aria-hidden="true"></div>
+            <div class="cv-preview-body">
+              <div class="cv-preview-header">
+                <div class="cv-preview-header-row">
+                  <div>
+                    <h1 id="cvPreviewName">Ditt Namn</h1>
+                    <p class="cv-preview-role" id="cvPreviewTitle">Auktoriserad Väktare</p>
+                  </div>
+                  <button type="button" class="cv-preview-photo${cvBuilderState.photo ? " has-photo" : ""}" id="cvPreviewPhoto" data-cv-action="upload-photo" aria-label="Ladda upp profilbild">
+                    ${cvBuilderState.photo
+                      ? `<img src="${cvBuilderState.photo}" alt="Profilbild">`
+                      : '<span class="cv-preview-photo-placeholder"><i data-lucide="user-round" aria-hidden="true"></i><small>Lägg till foto</small></span>'}
+                  </button>
+                </div>
+                <div class="cv-preview-contact">
+                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg><span id="cvPreviewEmail">epost@exempel.se</span></span>
+                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg><span id="cvPreviewPhone">070-000 00 00</span></span>
+                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span id="cvPreviewLocation">Ort</span></span>
+                  <span id="cvPreviewAgeContainer" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span id="cvPreviewAge"></span></span>
+                </div>
+              </div>
+
+              <div class="cv-preview-security">
+                <h3>Säkerhetsgodkännanden &amp; Licenser</h3>
+                <div class="cv-preview-badges" id="cvPreviewQualifications"></div>
+              </div>
+
+              <section class="cv-preview-section">
+                <h2>Om Mig</h2>
+                <p id="cvPreviewSummary"></p>
+              </section>
+
+              <section class="cv-preview-section">
+                <h2>Arbetslivserfarenhet</h2>
+                <div class="cv-preview-list" id="cvPreviewExperience"></div>
+              </section>
+
+              <section class="cv-preview-section">
+                <h2>Utbildning &amp; Certifikat</h2>
+                <div class="cv-preview-list is-compact" id="cvPreviewEducation"></div>
+              </section>
+
+              <div class="cv-preview-columns">
+                <section class="cv-preview-section">
+                  <h2>Egenskaper</h2>
+                  <div class="cv-preview-tags" id="cvPreviewSkills"></div>
+                </section>
+                <section class="cv-preview-section">
+                  <h2>Språk</h2>
+                  <p id="cvPreviewLanguages">Svenska</p>
+                </section>
+              </div>
+            </div>
+
+            <div class="cv-preview-footer">
+              <span>CV skapat via Vaktskolan.se – Utbildningsplattform för Väktare</span>
+              <span>Referenser lämnas på begäran</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  `;
+
+  renderCvExperienceForms();
+  renderCvEducationForms();
+  updateCvPreview();
+}
+
+function renderCvExperienceForms() {
+  const container = els.knowledgeBasePanel?.querySelector("#cvExperienceForms");
+  if (!container) return;
+  if (!cvBuilderState.experiences.length) {
+    container.innerHTML = '<p class="cv-item-empty">Inga anställningar tillagda ännu. Klicka på ”+ Lägg till”.</p>';
+    return;
+  }
+  container.innerHTML = cvBuilderState.experiences
+    .map(
+      (exp) => `
+        <div class="cv-item-card">
+          <button class="cv-item-remove" type="button" data-cv-remove-experience="${exp.id}" aria-label="Ta bort anställning">✕</button>
+          <div class="cv-item-grid">
+            <input class="cv-input" type="text" placeholder="Företag / Arbetsgivare" value="${escapeHtml(exp.company)}" data-cv-exp-id="${exp.id}" data-cv-exp-field="company">
+            <input class="cv-input" type="text" placeholder="Titel / Roll" value="${escapeHtml(exp.role)}" data-cv-exp-id="${exp.id}" data-cv-exp-field="role">
+          </div>
+          <input class="cv-input" type="text" placeholder="Tidsperiod (t.ex. 2022 - Pågående)" value="${escapeHtml(exp.date)}" data-cv-exp-id="${exp.id}" data-cv-exp-field="date">
+          <textarea class="cv-input" rows="2" placeholder="Beskrivning av arbetsuppgifter..." data-cv-exp-id="${exp.id}" data-cv-exp-field="desc">${escapeHtml(exp.desc)}</textarea>
+        </div>
+      `
+    )
+    .join("");
+}
+
+function renderCvEducationForms() {
+  const container = els.knowledgeBasePanel?.querySelector("#cvEducationForms");
+  if (!container) return;
+  if (!cvBuilderState.educations.length) {
+    container.innerHTML = '<p class="cv-item-empty">Inga utbildningar tillagda ännu. Klicka på ”+ Lägg till”.</p>';
+    return;
+  }
+  container.innerHTML = cvBuilderState.educations
+    .map(
+      (edu) => `
+        <div class="cv-item-card">
+          <button class="cv-item-remove" type="button" data-cv-remove-education="${edu.id}" aria-label="Ta bort utbildning">✕</button>
+          <div class="cv-item-grid">
+            <input class="cv-input" type="text" placeholder="Skola / Arrangör" value="${escapeHtml(edu.school)}" data-cv-edu-id="${edu.id}" data-cv-edu-field="school">
+            <input class="cv-input" type="text" placeholder="Utbildning / Kurs" value="${escapeHtml(edu.title)}" data-cv-edu-id="${edu.id}" data-cv-edu-field="title">
+          </div>
+          <input class="cv-input" type="text" placeholder="År / Datum" value="${escapeHtml(edu.date)}" data-cv-edu-id="${edu.id}" data-cv-edu-field="date">
+        </div>
+      `
+    )
+    .join("");
+}
+
+const CV_CHECK_ICON =
+  '<svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>';
+const CV_CROSS_ICON =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18L18 6M6 6l12 12"/></svg>';
+const CV_CARD_ICON =
+  '<svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 00-1-1H6zm1 2h6v1H7V4zm8 3H5v9h10V7z" clip-rule="evenodd"/></svg>';
+
+function cvStandardBadge(label, active) {
+  return `
+    <div class="cv-badge ${active ? "is-on" : "is-off"}">
+      ${active ? CV_CHECK_ICON : CV_CROSS_ICON}
+      <span>${label}</span>
+    </div>
+  `;
+}
+
+function cvCustomBadge(label) {
+  return `
+    <div class="cv-badge is-custom">
+      ${CV_CARD_ICON}
+      <span>${escapeHtml(label)}</span>
+    </div>
+  `;
+}
+
+function updateCvPreview() {
+  const panel = els.knowledgeBasePanel;
+  if (!panel || state.mode !== "knowledge-base" || state.knowledgeBaseTab !== "cv") return;
+  const byId = (id) => panel.querySelector(`#${id}`);
+  if (!byId("cvPreviewPage")) return;
+
+  const setText = (id, value, fallback) => {
+    const element = byId(id);
+    if (element) element.textContent = value || fallback;
+  };
+
+  setText("cvPreviewName", cvBuilderState.fullname, "Ditt Namn");
+  setText("cvPreviewTitle", cvBuilderState.title, "Auktoriserad Väktare");
+  setText("cvPreviewEmail", cvBuilderState.email, "epost@exempel.se");
+  setText("cvPreviewPhone", cvBuilderState.phone, "070-000 00 00");
+  setText("cvPreviewLocation", cvBuilderState.location, "Ort");
+
+  const age = cvAgeFromBirthYear(cvBuilderState.birthYear);
+  const ageContainer = byId("cvPreviewAgeContainer");
+  if (ageContainer) {
+    ageContainer.hidden = age === null;
+    if (age !== null) setText("cvPreviewAge", `${age} år`);
+  }
+
+  setText(
+    "cvPreviewSummary",
+    cvBuilderState.summary,
+    "Skriv en kort sammanfattning om din bakgrund och dina ambitioner..."
+  );
+  setText("cvPreviewLanguages", cvBuilderState.languages, "Svenska");
+
+  const qualifications = byId("cvPreviewQualifications");
+  if (qualifications) {
+    let badges =
+      cvStandardBadge("VU1 (Grundutbildning 1)", cvBuilderState.vu1) +
+      cvStandardBadge("VU2 (Grundutbildning 2)", cvBuilderState.vu2) +
+      cvStandardBadge("Länsstyrelsen Godkänd", cvBuilderState.lansstyrelsen) +
+      cvStandardBadge("Belastningsregister U.A.", cvBuilderState.belastning);
+    if (cvBuilderState.korkort.trim()) badges += cvCustomBadge(cvBuilderState.korkort.trim());
+    if (cvBuilderState.ovrigt.trim()) badges += cvCustomBadge(cvBuilderState.ovrigt.trim());
+    qualifications.innerHTML = badges;
+  }
+
+  const experienceList = byId("cvPreviewExperience");
+  if (experienceList) {
+    experienceList.innerHTML = cvBuilderState.experiences.length
+      ? cvBuilderState.experiences
+          .map(
+            (exp) => `
+              <div class="cv-preview-item">
+                <div class="cv-preview-item-head">
+                  <h3>${escapeHtml(exp.role) || "Titel"} <span>| ${escapeHtml(exp.company) || "Företag"}</span></h3>
+                  <span class="cv-preview-item-date">${escapeHtml(exp.date)}</span>
+                </div>
+                ${exp.desc ? `<p>${escapeHtml(exp.desc)}</p>` : ""}
+              </div>
+            `
+          )
+          .join("")
+      : '<p class="cv-preview-empty">Ingen erfarenhet tillagd ännu.</p>';
+  }
+
+  const educationList = byId("cvPreviewEducation");
+  if (educationList) {
+    educationList.innerHTML = cvBuilderState.educations.length
+      ? cvBuilderState.educations
+          .map(
+            (edu) => `
+              <div class="cv-preview-item is-row">
+                <p><strong>${escapeHtml(edu.title) || "Utbildning"}</strong> <span>– ${escapeHtml(edu.school) || "Skola/Anordnare"}</span></p>
+                <span class="cv-preview-item-date">${escapeHtml(edu.date)}</span>
+              </div>
+            `
+          )
+          .join("")
+      : '<p class="cv-preview-empty">Ingen utbildning tillagd ännu.</p>';
+  }
+
+  const skillsTags = byId("cvPreviewSkills");
+  if (skillsTags) {
+    const tags = cvBuilderState.skills
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+    skillsTags.innerHTML = tags.length
+      ? tags.map((tag) => `<span class="cv-tag">${escapeHtml(tag)}</span>`).join("")
+      : '<span class="cv-preview-empty">Inga egenskaper angivna</span>';
+  }
+}
+
+function handleCvBuilderFieldInput(event) {
+  if (state.mode !== "knowledge-base" || state.knowledgeBaseTab !== "cv") return;
+  const target = event.target;
+  if (
+    !(
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target instanceof HTMLSelectElement
+    )
+  ) {
+    return;
+  }
+
+  if (target.id === "cvPhotoInput") {
+    const file = target.files && target.files[0];
+    if (file) processCvPhotoFile(file);
+    target.value = "";
+    return;
+  }
+
+  const { cvField, cvExpId, cvExpField, cvEduId, cvEduField } = target.dataset;
+  if (cvField && CV_BUILDER_CHECK_FIELDS.includes(cvField)) {
+    cvBuilderState[cvField] = target.checked;
+  } else if (cvField && CV_BUILDER_TEXT_FIELDS.includes(cvField)) {
+    cvBuilderState[cvField] = target.value;
+  } else if (cvExpId && cvExpField) {
+    const item = cvBuilderState.experiences.find((entry) => entry.id === cvExpId);
+    if (!item || !["company", "role", "date", "desc"].includes(cvExpField)) return;
+    item[cvExpField] = target.value;
+  } else if (cvEduId && cvEduField) {
+    const item = cvBuilderState.educations.find((entry) => entry.id === cvEduId);
+    if (!item || !["school", "title", "date"].includes(cvEduField)) return;
+    item[cvEduField] = target.value;
+  } else {
+    return;
+  }
+
+  dismissCvBuilderHint();
+  saveCvBuilderState();
+  updateCvPreview();
+}
+
+function handleCvBuilderAction(action) {
+  if (action === "upload-photo") {
+    els.knowledgeBasePanel?.querySelector("#cvPhotoInput")?.click();
+    return;
+  }
+  if (action === "remove-photo") {
+    dismissCvBuilderHint();
+    cvBuilderState.photo = "";
+    saveCvBuilderState();
+    renderCvBuilder();
+    refreshIcons();
+    return;
+  }
+  if (action === "add-experience") {
+    dismissCvBuilderHint();
+    cvBuilderState.experiences.push({ id: createCvItemId(), company: "", role: "", date: "", desc: "" });
+    saveCvBuilderState();
+    renderCvExperienceForms();
+    updateCvPreview();
+    els.knowledgeBasePanel?.querySelector("#cvExperienceForms .cv-item-card:last-child input")?.focus();
+    return;
+  }
+  if (action === "add-education") {
+    dismissCvBuilderHint();
+    cvBuilderState.educations.push({ id: createCvItemId(), school: "", title: "", date: "" });
+    saveCvBuilderState();
+    renderCvEducationForms();
+    updateCvPreview();
+    els.knowledgeBasePanel?.querySelector("#cvEducationForms .cv-item-card:last-child input")?.focus();
+    return;
+  }
+  if (action === "sample") {
+    dismissCvBuilderHint();
+    cvBuilderState = normalizeCvBuilderState(cvSampleData());
+    saveCvBuilderState();
+    renderCvBuilder();
+    refreshIcons();
+    return;
+  }
+  if (action === "reset") {
+    dismissCvBuilderHint();
+    cvBuilderState = normalizeCvBuilderState(null);
+    saveCvBuilderState();
+    renderCvBuilder();
+    refreshIcons();
+    return;
+  }
+  if (action === "print") {
+    window.print();
+  }
+}
+
+function applyCvPhoto(dataUrl) {
+  cvBuilderState.photo = dataUrl;
+  dismissCvBuilderHint();
+  saveCvBuilderState();
+  renderCvBuilder();
+  refreshIcons();
+}
+
+function processCvPhotoFile(file) {
+  if (!file || !file.type.startsWith("image/")) {
+    showToast("Välj en bildfil (JPG, PNG eller WebP).");
+    return;
+  }
+  if (file.size > 8 * 1024 * 1024) {
+    showToast("Bilden är för stor. Välj en bild under 8 MB.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      // Beskär automatiskt till en kvadrat (cover) och skala ner för rimlig lagringsstorlek.
+      const size = 320;
+      const canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        showToast("Bilden kunde inte bearbetas.");
+        return;
+      }
+      const scale = Math.max(size / img.width, size / img.height);
+      const drawW = img.width * scale;
+      const drawH = img.height * scale;
+      ctx.drawImage(img, (size - drawW) / 2, (size - drawH) / 2, drawW, drawH);
+      applyCvPhoto(canvas.toDataURL("image/jpeg", 0.85));
+    };
+    img.onerror = () => showToast("Bilden kunde inte läsas in.");
+    img.src = String(reader.result || "");
+  };
+  reader.onerror = () => showToast("Bilden kunde inte läsas in.");
+  reader.readAsDataURL(file);
+}
+
+function openCvDesktopModal() {
+  if (!els.cvDesktopModal) return;
+  els.cvDesktopModal.hidden = false;
+  syncModalOpenState();
+  refreshIcons();
+  els.cvDesktopModal.querySelector("[data-close-cv-desktop]")?.focus();
+}
+
+function closeCvDesktopModal() {
+  if (!els.cvDesktopModal || els.cvDesktopModal.hidden) return;
+  els.cvDesktopModal.hidden = true;
+  syncModalOpenState();
+}
+
 function shortMeta(meta) {
   const match = meta.match(/tid i appen:\s*([^\.]+)\./i);
   return match?.[1] || "";
@@ -2954,6 +3659,7 @@ function readSavedLocation() {
     lessonIndex: toSafeIndex(saved.lessonIndex),
     pageIndex: toSafeIndex(saved.pageIndex),
     mode,
+    knowledgeBaseTab: KNOWLEDGE_BASE_TABS.has(saved.knowledgeBaseTab) ? saved.knowledgeBaseTab : "lonekollen",
   };
 }
 
@@ -3994,6 +4700,7 @@ function setBodyLayoutMode(mode = "") {
   if (els.knowledgeBasePanel) els.knowledgeBasePanel.hidden = mode !== "knowledge-base";
   document.body.classList.toggle("home-mode", mode === "home");
   document.body.classList.toggle("knowledge-base-mode", mode === "knowledge-base");
+  document.body.classList.toggle("cv-builder-mode", mode === "knowledge-base" && state.knowledgeBaseTab === "cv");
   document.body.classList.toggle("quiz-overview-mode", mode === "quiz-overview");
   document.body.classList.toggle("final-portal-mode", mode === "final-portal");
   document.body.classList.toggle("final-exam-focus-mode", mode === "final-exam-focus");
@@ -4005,7 +4712,9 @@ function setBodyLayoutMode(mode = "") {
   document.body.classList.toggle("vu2-hub-mode", isModernCourseHub && state.courseId === "vu2");
 }
 
-function showKnowledgeBase() {
+function showKnowledgeBase(tab) {
+  if (KNOWLEDGE_BASE_TABS.has(tab)) state.knowledgeBaseTab = tab;
+  else if (!KNOWLEDGE_BASE_TABS.has(state.knowledgeBaseTab)) state.knowledgeBaseTab = "lonekollen";
   state.mode = "knowledge-base";
   saveLocation();
   closeDrawers();
@@ -4024,7 +4733,7 @@ function showKnowledgeBase() {
   els.lessonTitle.textContent = "Kunskapsbas";
   els.breadcrumbs.innerHTML = "";
   renderKnowledgeBaseSidebar();
-  renderSalaryCheck();
+  renderKnowledgeBasePanel();
   renderActiveNav();
   refreshIcons();
   els.contentScroll.scrollTo({ top: 0, behavior: "auto" });
@@ -6326,7 +7035,11 @@ function openDrawer(which) {
 }
 
 function syncModalOpenState() {
-  const hasOpenModal = !els.quizResetModal.hidden || !els.emblemModal.hidden || !els.premiumModal.hidden;
+  const hasOpenModal =
+    !els.quizResetModal.hidden ||
+    !els.emblemModal.hidden ||
+    !els.premiumModal.hidden ||
+    Boolean(els.cvDesktopModal && !els.cvDesktopModal.hidden);
   document.body.classList.toggle("modal-open", hasOpenModal);
 }
 
@@ -6481,6 +7194,7 @@ function restoreSavedLocation() {
   }
 
   activateCourse(saved.courseId);
+  if (KNOWLEDGE_BASE_TABS.has(saved.knowledgeBaseTab)) state.knowledgeBaseTab = saved.knowledgeBaseTab;
   if (!state.modules.length) return "home";
 
   state.moduleIndex = Math.max(0, Math.min(saved.moduleIndex, state.modules.length - 1));
@@ -6548,6 +7262,11 @@ function bindEvents() {
       return;
     }
 
+    if (event.target === els.cvDesktopModal || event.target.closest("[data-close-cv-desktop]")) {
+      closeCvDesktopModal();
+      return;
+    }
+
     if (event.target.closest("[data-start-premium-checkout]")) {
       void handlePremiumCheckout();
       return;
@@ -6603,9 +7322,42 @@ function bindEvents() {
       return;
     }
 
+    const cvBuilderTab = event.target.closest("[data-open-cv-builder]");
+    if (cvBuilderTab) {
+      if (isCompactCvViewport()) openCvDesktopModal();
+      else showKnowledgeBase("cv");
+      return;
+    }
+
     const knowledgeBaseButton = event.target.closest("[data-open-knowledge-base], [data-open-salary-check]");
     if (knowledgeBaseButton) {
-      showKnowledgeBase();
+      showKnowledgeBase(knowledgeBaseButton.hasAttribute("data-open-salary-check") ? "lonekollen" : undefined);
+      return;
+    }
+
+    const cvActionButton = event.target.closest("[data-cv-action]");
+    if (cvActionButton && state.mode === "knowledge-base" && state.knowledgeBaseTab === "cv") {
+      handleCvBuilderAction(cvActionButton.dataset.cvAction);
+      return;
+    }
+
+    const cvRemoveExperienceButton = event.target.closest("[data-cv-remove-experience]");
+    if (cvRemoveExperienceButton) {
+      const id = cvRemoveExperienceButton.dataset.cvRemoveExperience;
+      cvBuilderState.experiences = cvBuilderState.experiences.filter((entry) => entry.id !== id);
+      saveCvBuilderState();
+      renderCvExperienceForms();
+      updateCvPreview();
+      return;
+    }
+
+    const cvRemoveEducationButton = event.target.closest("[data-cv-remove-education]");
+    if (cvRemoveEducationButton) {
+      const id = cvRemoveEducationButton.dataset.cvRemoveEducation;
+      cvBuilderState.educations = cvBuilderState.educations.filter((entry) => entry.id !== id);
+      saveCvBuilderState();
+      renderCvEducationForms();
+      updateCvPreview();
       return;
     }
 
@@ -7001,6 +7753,8 @@ function bindEvents() {
     renderQuiz();
     refreshIcons();
   });
+  els.knowledgeBasePanel?.addEventListener("input", handleCvBuilderFieldInput);
+  els.knowledgeBasePanel?.addEventListener("change", handleCvBuilderFieldInput);
   $("#openNavButton").addEventListener("click", () => openDrawer("nav"));
   $("#closeNavButton").addEventListener("click", closeDrawers);
   $("#openContextButton").addEventListener("click", () => openDrawer("context"));
@@ -7008,7 +7762,13 @@ function bindEvents() {
   els.navOverlay.addEventListener("click", closeDrawers);
   document.addEventListener("keydown", (event) => {
     const isTyping = event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement;
-    const openDialog = !els.premiumModal.hidden ? els.premiumModal : !els.emblemModal.hidden ? els.emblemModal : null;
+    const openDialog = !els.premiumModal.hidden
+      ? els.premiumModal
+      : !els.emblemModal.hidden
+        ? els.emblemModal
+        : els.cvDesktopModal && !els.cvDesktopModal.hidden
+          ? els.cvDesktopModal
+          : null;
     if (event.key === "Tab" && openDialog) {
       const focusable = Array.from(openDialog.querySelectorAll("button:not([disabled]), a[href]"));
       const first = focusable[0];
@@ -7025,6 +7785,7 @@ function bindEvents() {
       closePremiumModal();
       closeEmblemModal();
       closeQuizResetModal();
+      closeCvDesktopModal();
       closeDrawers();
     }
 

@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Schibsted+Grotesk:wght@500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="styles.css?v=20260723-quiz-balans">
+  <link rel="stylesheet" href="styles.css?v=20260723-cv-builder-7">
 </head>
 <body class="app-booting">
   <div class="shell">
@@ -433,6 +433,23 @@
     </div>
   </div>
 
+  <div class="premium-modal cv-desktop-modal" id="cvDesktopModal" role="dialog" aria-modal="true" aria-labelledby="cvDesktopModalTitle" aria-describedby="cvDesktopModalDescription" hidden>
+    <div class="premium-dialog cv-desktop-dialog">
+      <button class="premium-dialog-close" type="button" data-close-cv-desktop aria-label="Stäng informationen om CV-mallen">
+        <i data-lucide="x"></i>
+      </button>
+
+      <span class="cv-desktop-dialog-icon" aria-hidden="true"><i data-lucide="monitor"></i></span>
+
+      <div class="premium-dialog-heading">
+        <h2 id="cvDesktopModalTitle">Öppna CV-mallen på en dator</h2>
+        <p id="cvDesktopModalDescription">CV-skaparen är byggd för större skärmar så att du kan fylla i dina uppgifter och se förhandsgranskningen sida vid sida. Logga in från en dator för att skapa och spara ditt CV som PDF.</p>
+      </div>
+
+      <button class="cv-desktop-dialog-button" type="button" data-close-cv-desktop>Okej, jag förstår</button>
+    </div>
+  </div>
+
   <div class="quiz-reset-modal" id="quizResetModal" role="dialog" aria-modal="true" aria-labelledby="quizResetTitle" hidden>
     <div class="quiz-reset-dialog">
       <div class="quiz-reset-icon">
@@ -482,6 +499,6 @@
   <script src="authProvider.js?v=20260716-fail-closed"></script>
   <script src="supabaseApi.js?v=20260714-public-quiz-auth"></script>
   <script src="emblemSystem.js?v=20260716-emblems"></script>
-  <script src="app.js?v=20260723-quiz-balans"></script>
+  <script src="app.js?v=20260723-cv-builder-7"></script>
 </body>
 </html>
