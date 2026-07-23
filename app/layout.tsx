@@ -47,6 +47,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-FGHQ62P8QY');
+            gtag('config', 'AW-18345242280');
           `}
         </Script>
       </body>
