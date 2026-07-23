@@ -1,6 +1,6 @@
 # Agent Handoff - Vaktskolan
 
-Senast uppdaterad: 2026-07-22.
+Senast uppdaterad: 2026-07-23.
 
 Det här dokumentet beskriver appen i `D:\vaktskolan`: hur dashboarden och landing page fungerar, hur utbildningsmaterialet är uppbyggt, vilka lokala beslut som redan är tagna, och var framtida ändringar bör göras.
 
@@ -24,6 +24,8 @@ Den publika sidan `/plattformen` byggs i `app/(public)/plattformen/page.tsx` och
 Prissidan ligger på `/priser` i `app/(public)/priser/page.tsx` och använder samma gemensamma `SiteHeader`/`SiteFooter` som övriga publika undersidor. `Priser` ska inte läggas i huvudnavigationen; vägen till sidan ligger i footern på både Next-sidorna och den extraherade landningssidan i `landing/index.html`. Paketkorten heter `Basic` och `Premium`. CTA-länkarna har `data-pricing-plan` för en framtida premium-overlay. Basic går till vanlig registrering medan Premium bevarar uppgraderingsavsikten genom Clerk-inloggningen.
 
 Medlemskapssystemet finns i `app/api/membership/`, `app/api/stripe/`, `lib/stripe-server.ts`, `lib/clerk-session.ts`, `lib/clerk-membership.ts` och `lib/billing-store.ts`; full setup och testflöde beskrivs i `docs/stripe-integration.md`. Basic är kostnadsfritt och ger hela VU1 modul 1 samt livstidsgränser per Clerk-konto på 10 VU1-frågor, 10 scenariofrågor och 10 flashcard-vändningar. Premium kostar 399 SEK som engångsbetalning och ger permanent tillgång. Clerk-JWT verifieras server-side mot JWKS och Supabase-migrationen `20260722210000_create_stripe_billing.sql` lagrar entitlement, köp och atomiska usage-events. Stripe-webhooks är source of truth för köp; en Checkout-redirect får aldrig ensam ge Premium-access. Webhooken synkar även `membershipTier`/`premiumAccess` till Clerk-metadata, men databasen och medlemskaps-API:t är auktoritativa för åtkomst. Stripe- och Clerk-hemligheter ska bara finnas i `.env`/hostingens secret store.
+
+Det kompletta Stripe-sandboxflödet verifierades 2026-07-23 mot commit `851382a`: Basic före köp, Checkout på 399 SEK, signerad webhook, Premium i Supabase/Clerk/UI, replay-idempotens, avvisad ogiltig signatur, full refund och återgång till Basic. Det daterade kvittot och instruktionerna för att upprepa testet finns i `docs/stripe-e2e-verification-2026-07-23.md`. Stagingpodden heter `vaktskolan-staging`, ligger på `https://vaktskolan-staging.nbg1-5.instapods.app` och lämnades stoppad efter testet. Starta den endast under tester och stoppa den igen efteråt.
 
 Startsidan har ingen separat `Öva nu`-knapp i mobilheadern. Mobilens quizväg är den befintliga `Gratis Quiz`-knappen i heron; ta inte tillbaka en konkurrerande header-CTA utan ett nytt uttryckligt produktbeslut.
 

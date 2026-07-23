@@ -1,5 +1,11 @@
 # Permanent Premium och Stripe för Vaktskolan
 
+## Verifierad E2E-status
+
+Ett fullständigt sandboxflöde med Basic, betald Checkout på 399 SEK, signerad webhook, Premium-upplåsning, webhook-replay, ogiltig signatur, full återbetalning och återlåsning verifierades 2026-07-23 mot commit `851382a`.
+
+Det daterade revisionskvittot, inklusive testmiljö, observerade databas-/Clerk-resultat, kvarlämnade resurser och reproduktionssteg, finns i [`docs/stripe-e2e-verification-2026-07-23.md`](stripe-e2e-verification-2026-07-23.md).
+
 ## Modell
 
 Vaktskolan har två nivåer:
