@@ -345,13 +345,19 @@ VU2-kortet i `Dina kurser` styrs av den centrala kurslåsningsflaggan `ENFORCE_C
 Aktuella cachebusting-parametrar i `index.html`:
 
 ```html
-<link rel="stylesheet" href="styles.css?v=20260722-quiz-insights">
-<script src="authProvider.js?v=20260706-light-auth"></script>
-<script src="supabaseApi.js?v=20260705-supabase"></script>
-<script src="app.js?v=20260722-quiz-insights"></script>
+<link rel="stylesheet" href="styles.css?v=20260723-schemaguide">
+<script src="authProvider.js?v=20260716-fail-closed"></script>
+<script src="supabaseApi.js?v=20260714-public-quiz-auth"></script>
+<script src="emblemSystem.js?v=20260716-emblems"></script>
+<script src="app.js?v=20260723-schemaguide"></script>
 ```
 
-När CSS eller JS ändras bör versionssträngarna uppdateras så webbläsaren inte visar gammal kod.
+**KRAV (får inte hoppas över):** Varje gång du ändrar en legacy-plattformsfil (`app.js`, `styles.css`, `authProvider.js`, `supabaseApi.js`, `emblemSystem.js`) MÅSTE du bumpa dess `?v=`-sträng i `index.html` i samma ändring. Utan detta kan återkommande besökare köra gammal cachad kod och t.ex. sakna CSS för en ny vy.
+
+Regler:
+- Ändra `app.js` **eller** `styles.css` → bumpa **båda** och håll deras versionssträngar identiska (de laddar samma vy och måste matcha).
+- Använd formatet `ÅÅÅÅMMDD-kort-beskrivning`, t.ex. `20260723-schemaguide`.
+- Redigera bara `index.html` i roten. `public/legacy-platform/index.html` genereras av `scripts/prepare-public-assets.mjs` vid `npm run dev`/`build` och ska inte handredigeras.
 
 ## Dashboardens JavaScript
 

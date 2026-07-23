@@ -47,7 +47,7 @@ const RESTORABLE_MODES = new Set([
   "final-exam",
 ]);
 
-const KNOWLEDGE_BASE_TABS = new Set(["lonekollen", "cv"]);
+const KNOWLEDGE_BASE_TABS = new Set(["lonekollen", "cv", "schema"]);
 const CV_BUILDER_COMPACT_QUERY = "(max-width: 940px)";
 
 const COURSE_CONFIG = {
@@ -566,7 +566,9 @@ function portalHashForLocation(location) {
   if (location.mode === "vu2") return "#vu2";
   if (location.mode === "quiz-overview") return "#quiz";
   if (location.mode === "knowledge-base") {
-    return location.knowledgeBaseTab === "cv" ? "#kunskapsbas/cv-mall" : "#kunskapsbas/lonekollen";
+    if (location.knowledgeBaseTab === "cv") return "#kunskapsbas/cv-mall";
+    if (location.knowledgeBaseTab === "schema") return "#kunskapsbas/schema";
+    return "#kunskapsbas/lonekollen";
   }
   if (location.mode === "final-exam-portal") return "#slutprov";
   if (location.mode === "final-exam") return `#slutprov/${courseId}/prov`;
@@ -598,6 +600,9 @@ function portalLocationFromHash(hash = window.location.hash, fallback = null) {
   }
   if (route === "kunskapsbas/cv-mall" || route === "kunskapsbas/cv") {
     return { ...base, mode: "knowledge-base", knowledgeBaseTab: "cv" };
+  }
+  if (route === "kunskapsbas/schema" || route === "kunskapsbas/schemaguide") {
+    return { ...base, mode: "knowledge-base", knowledgeBaseTab: "schema" };
   }
   if (route === "slutprov") return { ...base, mode: "final-exam-portal" };
 
@@ -2375,7 +2380,7 @@ function renderKnowledgeBaseSidebar() {
   els.moduleListWrap.hidden = false;
   els.moduleListTitle.textContent = "Karriärverktyg";
   els.moduleCount.textContent = "";
-  const activeTab = state.knowledgeBaseTab === "cv" ? "cv" : "lonekollen";
+  const activeTab = KNOWLEDGE_BASE_TABS.has(state.knowledgeBaseTab) ? state.knowledgeBaseTab : "lonekollen";
   els.moduleList.innerHTML = `
     <button class="knowledge-sidebar-item${activeTab === "lonekollen" ? " is-active" : ""}" type="button" data-open-salary-check ${activeTab === "lonekollen" ? 'aria-current="page"' : ""}>
       <i data-lucide="credit-card" aria-hidden="true"></i>
@@ -2384,6 +2389,10 @@ function renderKnowledgeBaseSidebar() {
     <button class="knowledge-sidebar-item${activeTab === "cv" ? " is-active" : ""}" type="button" data-open-cv-builder ${activeTab === "cv" ? 'aria-current="page"' : ""}>
       <i data-lucide="file-text" aria-hidden="true"></i>
       <span>CV-mall</span>
+    </button>
+    <button class="knowledge-sidebar-item${activeTab === "schema" ? " is-active" : ""}" type="button" data-open-schema-guide ${activeTab === "schema" ? 'aria-current="page"' : ""}>
+      <i data-lucide="calendar-clock" aria-hidden="true"></i>
+      <span>Schemaguide</span>
     </button>
   `;
 }
@@ -2727,8 +2736,211 @@ function updateSalaryCalculator() {
   }
 }
 
+function schemaWeekRow(label, days) {
+  const cells = days
+    .map((worked) =>
+      worked
+        ? '<td class="schema-guide-cell is-work">Jobb</td>'
+        : '<td class="schema-guide-cell is-off">Ledig</td>'
+    )
+    .join("");
+  return `<tr><th scope="row">${label}</th>${cells}</tr>`;
+}
+
+function renderSchemaGuide() {
+  if (!els.knowledgeBasePanel) return;
+
+  const proCon = (pros, cons) => `
+    <div class="schema-guide-proscons">
+      <div class="schema-guide-pros">
+        <h4><i data-lucide="check" aria-hidden="true"></i> Fördelar</h4>
+        <p>${pros}</p>
+      </div>
+      <div class="schema-guide-cons">
+        <h4><i data-lucide="x" aria-hidden="true"></i> Nackdelar</h4>
+        <p>${cons}</p>
+      </div>
+    </div>
+  `;
+
+  els.knowledgeBasePanel.innerHTML = `
+    <article class="schema-guide" aria-labelledby="schemaGuideTitle">
+      <header class="schema-guide-hero">
+        <p class="schema-guide-eyebrow"><i data-lucide="calendar-clock" aria-hidden="true"></i> Väktaryrket</p>
+        <h1 id="schemaGuideTitle">Guiden till arbetstider och scheman för väktare</h1>
+        <p class="schema-guide-lead">
+          Det speciella med väktaryrket är att många arbetar långa pass i block, i stället för vanliga
+          åttatimmarsdagar. Här förklarar vi de vanligaste begreppen som 5–2, 5–4 och vad de innebär i praktiken.
+        </p>
+      </header>
+
+      <aside class="schema-guide-note">
+        <span class="schema-guide-note-icon"><i data-lucide="info" aria-hidden="true"></i></span>
+        <div>
+          <h4>Bevaknings- och säkerhetsavtalet</h4>
+          <p>
+            De flesta anställda i auktoriserade bevakningsföretag omfattas av Bevaknings- och säkerhetsavtalet,
+            som för närvarande gäller från den <strong>1 juni 2025 till den 31 maj 2027</strong>. Den exakta
+            placeringen av passen kan dock skilja sig mellan företag, orter och bevakningsobjekt.
+          </p>
+        </div>
+      </aside>
+
+      <div class="schema-guide-sections">
+        <section class="schema-guide-card">
+          <div class="schema-guide-card-head">
+            <span class="schema-guide-badge">1</span>
+            <h2>5–2-schema</h2>
+          </div>
+          <p>
+            5–2 betyder normalt att du arbetar fem pass den ena kalenderveckan och två pass nästa vecka. Det betyder
+            alltså <strong>inte alltid</strong> ”fem dagar arbete, två dagar ledigt” som ett vanligt vardagsschema.
+          </p>
+          <p>
+            Det ger totalt sju arbetsdagar och sju lediga dagar under två veckor. Passen är ofta omkring 12 timmar,
+            exempelvis 06–18, 07–19, 18–06 eller 19–07. Tjänstgöring sker ofta varannan helg.
+          </p>
+          <div class="schema-guide-table-wrap">
+            <table class="schema-guide-table">
+              <thead>
+                <tr>
+                  <th scope="col">Vecka</th>
+                  <th scope="col">Mån</th><th scope="col">Tis</th><th scope="col">Ons</th>
+                  <th scope="col">Tor</th><th scope="col">Fre</th><th scope="col">Lör</th><th scope="col">Sön</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${schemaWeekRow("1", [true, true, false, false, true, true, true])}
+                ${schemaWeekRow("2", [false, false, true, true, false, false, false])}
+              </tbody>
+            </table>
+          </div>
+          ${proCon(
+            "Många sammanhängande lediga dagar, regelbundet mönster och lediga vardagar.",
+            "Under fempassveckan går nästan all tid åt till arbete, pendling och sömn. Normalt jobb varannan helg."
+          )}
+        </section>
+
+        <section class="schema-guide-card">
+          <div class="schema-guide-card-head">
+            <span class="schema-guide-badge">2</span>
+            <h2>5–4-schema</h2>
+          </div>
+          <p>
+            Benämningen beskriver växlande block, inte en vanlig sjudagarsvecka. Hela rotationen är 18 dagar och
+            används ofta för ständig natt och tolvtimmarspass (t.ex. 18–06).
+          </p>
+          <div class="schema-guide-flow">
+            <span class="schema-guide-flow-step is-work">5 dagar arbete</span>
+            <i data-lucide="arrow-right" aria-hidden="true"></i>
+            <span class="schema-guide-flow-step is-rest">4 dagar ledigt</span>
+            <i data-lucide="arrow-right" aria-hidden="true"></i>
+            <span class="schema-guide-flow-step is-work">4 dagar arbete</span>
+            <i data-lucide="arrow-right" aria-hidden="true"></i>
+            <span class="schema-guide-flow-step is-rest">5 dagar ledigt</span>
+          </div>
+          ${proCon(
+            "Längre ledighetsblock än 5–2 och färre resor till arbetsplatsen.",
+            "4–5 tolvtimmarspass i följd är belastande, särskilt natt. Arbetsdagarna flyttar sig genom månaderna då cykeln är 18 dagar."
+          )}
+        </section>
+
+        <div class="schema-guide-duo">
+          <section class="schema-guide-mini">
+            <h3>7–7-schema</h3>
+            <p>
+              Sju dagar/nätter i tjänst, följt av sju dagar helt ledigt. Vanligt inom stationär bevakning och
+              hundförartjänster.
+            </p>
+            <ul class="schema-guide-list">
+              <li><span class="is-plus">+</span> En hel veckas sammanhängande ledighet. Bra för långpendlare.</li>
+              <li><span class="is-minus">−</span> Sju långa pass i rad ger stor trötthet. Första lediga dagarna går ofta till återhämtning.</li>
+            </ul>
+          </section>
+          <section class="schema-guide-mini">
+            <h3>4–4 &amp; andra block</h3>
+            <p>
+              T.ex. fyra pass och fyra dagar ledigt, eller 3–3. Siffrorna används olika av företag – fråga alltid vad
+              det betyder i praktiken!
+            </p>
+            <div class="schema-guide-callout">
+              <strong>Obs:</strong> Ett rent 4–4-schema ”glider” genom kalendern. Arbetshelgerna flyttar sig genom året.
+            </div>
+          </section>
+        </div>
+
+        <section class="schema-guide-card">
+          <div class="schema-guide-card-head has-border">
+            <span class="schema-guide-head-icon"><i data-lucide="clock" aria-hidden="true"></i></span>
+            <h2>Skift, fasta &amp; blandade pass</h2>
+          </div>
+          <div class="schema-guide-subblock">
+            <h4>Åttatimmarsschema (2- eller 3-skift)</h4>
+            <p>
+              Används ofta i receptioner, köpcentrum och sjukhus.
+              <strong>2-skift:</strong> Dag (ex. 06–14) och Kväll (ex. 14–22).
+              <strong>3-skift:</strong> Adderar Natt (ex. 22–06).
+            </p>
+            <p class="schema-guide-inline-note">
+              <strong>Fördel:</strong> Kortare arbetsdagar, mer energi kvar.
+              <strong>Nackdel:</strong> Fler arbetsdagar och resor till jobbet.
+            </p>
+          </div>
+          <div class="schema-guide-triple">
+            <div class="schema-guide-shift">
+              <h5>Fast dag</h5>
+              <p>Bara dagtid (t.ex. 06–18). Lättast socialt, men ofta helgarbete.</p>
+            </div>
+            <div class="schema-guide-shift is-dark">
+              <h5>Fast natt</h5>
+              <p>Bara natt (t.ex. 18–06). Stabilt mönster, men tungt för sömn/återhämtning.</p>
+            </div>
+            <div class="schema-guide-shift">
+              <h5>Blandat / roterande</h5>
+              <p>Dag, kväll och natt i samma period. Tufft för kroppen. Viktigt med rotation framåt (Dag › Kväll › Natt).</p>
+            </div>
+          </div>
+        </section>
+
+        <div class="schema-guide-duo">
+          <section class="schema-guide-mini is-accent">
+            <h3>Resurs- / avlösarschema</h3>
+            <p>
+              Täcker frånvaro och luckor på olika objekt. Arbetsplats, tider och resväg varierar från pass till pass.
+              Passar dig som vill ha variation, men kräver stor flexibilitet.
+            </p>
+          </section>
+          <section class="schema-guide-mini">
+            <h3>Behovsanställning</h3>
+            <p>
+              Inget garanterat arbetstidsmått. Du får pass-erbjudanden som du kan tacka ja/nej till. Perfekt för
+              studenter, men inkomsten kan variera kraftigt.
+            </p>
+          </section>
+        </div>
+
+        <section class="schema-guide-law">
+          <h2><i data-lucide="scale" aria-hidden="true"></i> Reglerna som sätter gränserna</h2>
+          <p>
+            Enligt arbetstidslagen och kollektivavtal finns det gränser. Centrala kollektivavtal kan ersätta delar av
+            lagen. Grundreglerna säger bland annat:
+          </p>
+          <ul class="schema-guide-law-list">
+            <li><i data-lucide="check" aria-hidden="true"></i> Högst 40 timmars ordinarie arbetstid/vecka (eller snitt på max 4 v)</li>
+            <li><i data-lucide="check" aria-hidden="true"></i> Högst 48 h/vecka i genomsnitt över högst fyra månader</li>
+            <li><i data-lucide="check" aria-hidden="true"></i> Minst 11 timmars sammanhängande dygnsvila</li>
+            <li><i data-lucide="check" aria-hidden="true"></i> Minst 36 timmars sammanhängande veckovila</li>
+            <li><i data-lucide="check" aria-hidden="true"></i> Rast så att man normalt inte arbetar mer än 5 timmar i följd</li>
+          </ul>
+        </section>
+      </div>
+    </article>
+  `;
+}
+
 function renderKnowledgeBasePanel() {
   if (state.knowledgeBaseTab === "cv") renderCvBuilder();
+  else if (state.knowledgeBaseTab === "schema") renderSchemaGuide();
   else renderSalaryCheck();
 }
 
@@ -7328,6 +7540,12 @@ function bindEvents() {
     if (cvBuilderTab) {
       if (isCompactCvViewport()) openCvDesktopModal();
       else showKnowledgeBase("cv");
+      return;
+    }
+
+    const schemaGuideTab = event.target.closest("[data-open-schema-guide]");
+    if (schemaGuideTab) {
+      showKnowledgeBase("schema");
       return;
     }
 
