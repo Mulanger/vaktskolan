@@ -4235,9 +4235,35 @@ body.knowledge-base-mode .section-label-row h2 {
 
 .salary-check-approx {
   color: var(--salary-faint);
-  font-size: 0.72em;
-  font-weight: 600;
-  letter-spacing: 0;
+  font-size: 0.58em;
+  font-weight: 700;
+  letter-spacing: 0.015em;
+  line-height: 1;
+  position: relative;
+  top: -0.14em;
+}
+
+.salary-check-range {
+  display: flex !important;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: 0.14em;
+}
+
+.salary-check-range-end {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.13em;
+  white-space: nowrap;
+}
+
+.salary-check-range--ladder {
+  justify-content: flex-end;
+  row-gap: 0.12em;
+}
+
+.salary-check-range--ladder > small {
+  margin-left: 0.18em;
 }
 
 .salary-check-cta {
@@ -5008,6 +5034,10 @@ body.knowledge-base-mode .section-label-row h2 {
     padding: 2px 0 0;
     font-size: 15px;
     text-align: left;
+  }
+
+  .salary-check-range--ladder {
+    justify-content: flex-start;
   }
 
   .salary-check-ob-grid {

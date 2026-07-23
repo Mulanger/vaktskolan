@@ -2496,7 +2496,11 @@ function renderSalaryCheck() {
           </article>
           <article class="salary-check-card salary-check-stat">
             <p><span class="salary-check-dot is-green"></span>Efter 15 månader</p>
-            <strong class="salary-check-number">${formatSalaryAmount(groupB.amount)}–<span class="salary-check-approx">ca</span> ${formatSalaryAmount(groupE.amount)}</strong>
+            <strong class="salary-check-number salary-check-range">
+              <span class="sr-only">${formatSalaryAmount(groupB.amount)} till cirka ${formatSalaryAmount(groupE.amount)} kronor per månad</span>
+              <span aria-hidden="true">${formatSalaryAmount(groupB.amount)}</span>
+              <span class="salary-check-range-end" aria-hidden="true"><span>–</span><span class="salary-check-approx">ca</span><span>${formatSalaryAmount(groupE.amount)}</span></span>
+            </strong>
             <span>Lönegrupp B–E, kr/mån</span>
           </article>
           <article class="salary-check-card salary-check-stat">
@@ -2539,7 +2543,12 @@ function renderSalaryCheck() {
           <article class="is-milestone">
             <span class="salary-check-step">4</span>
             <div><h3>Lönegrupp B–E <small>· efter 15 månaders anställning</small></h3><p>Arbetsuppgifterna avgör gruppen. Lokala avtal kan ge mer än tariffens lägstanivå.</p><span class="salary-check-gain">upp till ca +${formatSalaryAmount(groupE.amount - newStep.amount)} kr/mån sedan start</span></div>
-            <strong class="salary-check-number">${formatSalaryAmount(groupB.amount)}–ca ${formatSalaryAmount(groupE.amount)} <small>kr/mån</small></strong>
+            <strong class="salary-check-number salary-check-range salary-check-range--ladder">
+              <span class="sr-only">${formatSalaryAmount(groupB.amount)} till cirka ${formatSalaryAmount(groupE.amount)} kronor per månad</span>
+              <span aria-hidden="true">${formatSalaryAmount(groupB.amount)}</span>
+              <span class="salary-check-range-end" aria-hidden="true"><span>–</span><span class="salary-check-approx">ca</span><span>${formatSalaryAmount(groupE.amount)}</span></span>
+              <small aria-hidden="true">kr/mån</small>
+            </strong>
           </article>
         </div>
       </section>

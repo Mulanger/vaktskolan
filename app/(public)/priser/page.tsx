@@ -6,6 +6,10 @@ import { absoluteUrl } from "@/lib/site";
 const BASIC_SIGN_UP_URL = "/login?mode=sign-up&redirect_url=%2Fplattform";
 const PREMIUM_SIGN_UP_URL = "/login?mode=sign-up&redirect_url=%2Fplattform%3Fupgrade%3Dpremium";
 
+type PricingPageProps = {
+  searchParams: Promise<{ checkout?: string | string[] }>;
+};
+
 const plans = [
   {
     id: "basic",
@@ -79,7 +83,9 @@ function CheckIcon() {
   );
 }
 
-export default function PricingPage() {
+export default async function PricingPage({ searchParams }: PricingPageProps) {
+  const query = await searchParams;
+  const checkoutWasCancelled = query.checkout === "cancelled";
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -100,6 +106,16 @@ export default function PricingPage() {
               <h1 id="pricing-title">Välj ditt medlemskap</h1>
               <span>Prova grunderna kostnadsfritt eller få permanent tillgång till hela Vaktskolan.</span>
             </div>
+
+            {checkoutWasCancelled ? (
+              <div className="pricing-return-status" role="status">
+                <span className="pricing-return-status__icon" aria-hidden="true">←</span>
+                <span>
+                  <strong>Köpet avbröts</strong>
+                  Ingen betalning genomfördes. Du kan välja Premium när du vill.
+                </span>
+              </div>
+            ) : null}
 
             <div className="pricing-grid">
               {plans.map((plan) => (
@@ -139,7 +155,11 @@ export default function PricingPage() {
               ))}
             </div>
 
-            <p className="pricing-assurance">En betalning <span aria-hidden="true">·</span> Permanent Premium <span aria-hidden="true">·</span> Inga återkommande avgifter</p>
+            <ul className="pricing-assurance" aria-label="Tryggt Premiumköp">
+              <li><span className="pricing-assurance__check" aria-hidden="true"><CheckIcon /></span>En betalning</li>
+              <li><span className="pricing-assurance__check" aria-hidden="true"><CheckIcon /></span>Permanent Premium</li>
+              <li><span className="pricing-assurance__check" aria-hidden="true"><CheckIcon /></span>Inga återkommande avgifter</li>
+            </ul>
           </div>
         </section>
 
