@@ -3408,7 +3408,7 @@ function renderHome() {
           <i data-lucide="book-open"></i>
           <span>VU1</span>
         </button>
-        <button class="home-mobile-tab ${vu2Overview?.locked ? "is-disabled" : ""}" type="button" ${vu2NavAttributes}>
+        <button class="home-mobile-tab ${vu2Overview?.locked ? "is-disabled" : ""}" type="button" data-mobile-course="vu2" ${vu2NavAttributes}>
           <i data-lucide="shield-check"></i>
           <span>VU2</span>
         </button>
@@ -3695,8 +3695,8 @@ function renderFinalPortalMobileTabbar() {
         <i data-lucide="book-open"></i>
         <span>VU1</span>
       </button>
-      <button class="final-portal-mobile-tab" type="button" data-open-vu2>
-        <i data-lucide="shield"></i>
+      <button class="final-portal-mobile-tab" type="button" data-open-vu2 data-mobile-course="vu2">
+        <i data-lucide="shield-check"></i>
         <span>VU2</span>
       </button>
       <button class="final-portal-mobile-tab" type="button" data-show-quiz>
@@ -3913,6 +3913,15 @@ function renderNavigationLocks() {
     "Slutprov",
     "Slutför kursens moduler för att låsa upp."
   );
+
+  const vu2Locked = !isCourseUnlocked("vu2");
+  const vu2LockReason = isPremiumMember()
+    ? "Slutför och klara VU1 för att låsa upp."
+    : "Premium krävs för att låsa upp.";
+  document.querySelectorAll('[data-mobile-course="vu2"]').forEach((button) => {
+    button.classList.toggle("is-disabled", vu2Locked);
+    button.setAttribute("aria-label", vu2Locked ? `VU2, låst. ${vu2LockReason}` : "VU2");
+  });
 }
 
 function renderActiveNav() {
@@ -5217,8 +5226,8 @@ function renderQuizPortalMobileTabbar() {
         <i data-lucide="book-open"></i>
         <span>VU1</span>
       </button>
-      <button class="quiz-portal-mobile-tab" type="button" data-open-vu2>
-        <i data-lucide="shield"></i>
+      <button class="quiz-portal-mobile-tab" type="button" data-open-vu2 data-mobile-course="vu2">
+        <i data-lucide="shield-check"></i>
         <span>VU2</span>
       </button>
       <button class="quiz-portal-mobile-tab is-active" type="button" data-show-quiz>

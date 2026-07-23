@@ -14006,3 +14006,10 @@ body.final-exam-result-mode .final-exam-question {
     transition: none;
   }
 }
+
+body .home-mobile-tab.is-disabled,
+body .vu1-hub-mobile-tab.is-disabled,
+body .quiz-portal-mobile-tab.is-disabled,
+body .final-portal-mobile-tab.is-disabled {
+  color: #c2cad7;
+}

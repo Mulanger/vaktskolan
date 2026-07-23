@@ -69,6 +69,7 @@ const context = vm.createContext({
   URL,
 });
 const source = readFileSync("app.js", "utf8").replace(/\ninit\(\)\.catch\([\s\S]*$/, "\n");
+const indexSource = readFileSync("index.html", "utf8");
 vm.runInContext(source, context, { filename: "app.js" });
 
 vm.runInContext(
@@ -109,6 +110,14 @@ assert.match(
   /function showFinalExamPortal\(\)[\s\S]{0,2000}hideModuleList\(\);/,
   "The final exam portal must keep the platform sidebar and hide its contextual module list.",
 );
+const mobileVu2Tabs = [...`${indexSource}\n${source}`.matchAll(
+  /<button class="(?:home-mobile-tab|vu1-hub-mobile-tab|quiz-portal-mobile-tab|final-portal-mobile-tab)[\s\S]{0,350}?<span>VU2<\/span>\s*<\/button>/g,
+)].map((match) => match[0]);
+assert.equal(mobileVu2Tabs.length, 4, "Every mobile platform view must render one VU2 tab.");
+mobileVu2Tabs.forEach((tab) => {
+  assert.match(tab, /data-mobile-course="vu2"/, "Every mobile VU2 tab must share the lock-state hook.");
+  assert.match(tab, /data-lucide="shield-check"/, "Every mobile VU2 tab must use the same shield-check emblem.");
+});
 assert.equal(evaluate("isModuleUnlocked(0)"), true);
 assert.equal(evaluate("isModuleUnlocked(1)"), false, "Module 2 must start locked.");
 assert.equal(evaluate("isModuleMembershipLocked(1)"), true, "Basic must membership-lock VU1 module 2.");

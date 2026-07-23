@@ -830,6 +830,7 @@ Följande beteenden är avsiktliga och kommer från användarens senaste beslut:
 - Slutprovsresultat ska inte visa de gamla provknapparna efter inlämning.
 - Slutprovsresultat ska ha `Klar` längst ned till höger tillbaka till hubben.
 - Slutprovsmodulen ska inte räknas som en vanlig färdig modul i hubbstatistik.
+- Mobilens VU2-flik ska använda samma `shield-check`-ikon och samma låsta gråton på Hem, VU1, Quiz och Slutprov. Alla fyra tabbar märks med `data-mobile-course="vu2"` och låsstatus synkas centralt av `renderNavigationLocks()`; återinför inte separata VU2-ikoner per vy.
 
 ## CSS Och Responsivitet
 
