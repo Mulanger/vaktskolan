@@ -1022,12 +1022,30 @@ function clearBillingReturnParameters() {
   window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
 }
 
+// Google Ads – köp-konvertering. Fires bara i produktion (aldrig lokalt) och
+// bara en gång per sidladdning. transaction_id = Stripe session_id → Google
+// dedupar mot dubbelräkning vid omladdning.
+let adsPurchaseConversionSent = false;
+function trackAdsPurchaseConversion(transactionId) {
+  if (adsPurchaseConversionSent || IS_LOCAL_DEVELOPMENT) return;
+  if (typeof window.gtag !== "function") return;
+  adsPurchaseConversionSent = true;
+  window.gtag("event", "conversion", {
+    send_to: "AW-18345242280/Zis-CMuhv9UcEKjd2KtE",
+    value: 399,
+    currency: "SEK",
+    transaction_id: transactionId || "",
+  });
+}
+
 async function confirmPremiumAfterCheckout() {
   const url = new URL(window.location.href);
   if (url.searchParams.get("billing") !== "success") return;
+  const checkoutSessionId = url.searchParams.get("session_id") || "";
 
   for (let attempt = 0; attempt < 8; attempt += 1) {
     if (state.membership.tier === "premium") {
+      trackAdsPurchaseConversion(checkoutSessionId);
       clearBillingReturnParameters();
       closePremiumModal();
       rerenderAfterMembershipChange();
