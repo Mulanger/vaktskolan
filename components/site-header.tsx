@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PRIMARY_NAVIGATION } from "@/lib/site";
+import { MobileMenu } from "@/components/mobile-menu";
 
 export function SiteHeader() {
   return (
@@ -21,21 +22,7 @@ export function SiteHeader() {
           <Link className="login-link" href="/login?mode=sign-in&redirect_url=/plattform">
             Logga in
           </Link>
-          <details className="mobile-menu">
-            <summary aria-label="Öppna meny">
-              <span />
-              <span />
-              <span />
-            </summary>
-            <nav aria-label="Mobilnavigation">
-              {PRIMARY_NAVIGATION.map((item) => (
-                <Link key={item.href} href={item.href}>
-                  {item.label}
-                </Link>
-              ))}
-              <Link href="/login?mode=sign-in&redirect_url=/plattform">Logga in</Link>
-            </nav>
-          </details>
+          <MobileMenu />
         </div>
       </div>
     </header>
