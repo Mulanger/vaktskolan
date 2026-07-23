@@ -14565,8 +14565,8 @@ select.cv-input {
 }
 
 .cv-preview-photo {
-  width: 92px;
-  height: 92px;
+  width: 116px;
+  height: 116px;
   flex-shrink: 0;
   padding: 0;
   border-radius: 50%;
@@ -15010,5 +15010,10 @@ select.cv-input {
   body.cv-builder-mode .cv-preview-photo {
     border: 0 !important;
     box-shadow: none !important;
+  }
+
+  /* Vaktskolan-avsändaren ska inte följa med i den sparade PDF:en */
+  body.cv-builder-mode .cv-preview-footer-brand {
+    display: none !important;
   }
 }

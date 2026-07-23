@@ -2371,7 +2371,7 @@ function hideModuleList() {
 
 function renderKnowledgeBaseSidebar() {
   els.moduleListWrap.hidden = false;
-  els.moduleListTitle.textContent = "Kunskapsbas";
+  els.moduleListTitle.textContent = "Karriärverktyg";
   els.moduleCount.textContent = "";
   const activeTab = state.knowledgeBaseTab === "cv" ? "cv" : "lonekollen";
   els.moduleList.innerHTML = `
@@ -2495,7 +2495,7 @@ function renderSalaryCheck() {
   els.knowledgeBasePanel.innerHTML = `
     <article class="salary-check" aria-labelledby="salaryCheckTitle">
       <header class="salary-check-hero">
-        <p class="salary-check-eyebrow"><i data-lucide="wallet-cards" aria-hidden="true"></i> Kunskapsbas</p>
+        <p class="salary-check-eyebrow"><i data-lucide="wallet-cards" aria-hidden="true"></i> Karriärverktyg</p>
         <div class="salary-check-hero-row">
           <div>
             <h1 id="salaryCheckTitle">Lönekollen – vad tjänar en väktare?</h1>
@@ -2923,7 +2923,7 @@ function renderCvBuilder() {
   els.knowledgeBasePanel.innerHTML = `
     <article class="cv-builder" aria-labelledby="cvBuilderTitle">
       <header class="salary-check-hero cv-builder-hero">
-        <p class="salary-check-eyebrow"><i data-lucide="file-text" aria-hidden="true"></i> Kunskapsbas</p>
+        <p class="salary-check-eyebrow"><i data-lucide="file-text" aria-hidden="true"></i> Karriärverktyg</p>
         <div class="salary-check-hero-row">
           <div>
             <h1 id="cvBuilderTitle">CV-mall – skapa ditt väktar-CV</h1>
@@ -3082,7 +3082,7 @@ function renderCvBuilder() {
             </div>
 
             <div class="cv-preview-footer">
-              <span>CV skapat via Vaktskolan.se – Utbildningsplattform för Väktare</span>
+              <span class="cv-preview-footer-brand">CV skapat via Vaktskolan.se – Utbildningsplattform för Väktare</span>
               <span>Referenser lämnas på begäran</span>
             </div>
           </div>
@@ -4730,7 +4730,7 @@ function showKnowledgeBase(tab) {
   els.metaPills.hidden = true;
   els.quizButton.hidden = true;
   setBodyLayoutMode("knowledge-base");
-  els.lessonTitle.textContent = "Kunskapsbas";
+  els.lessonTitle.textContent = "Karriärverktyg";
   els.breadcrumbs.innerHTML = "";
   renderKnowledgeBaseSidebar();
   renderKnowledgeBasePanel();
