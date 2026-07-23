@@ -1735,6 +1735,8 @@ function getQuizReviewQueue(now = Date.now()) {
 let shouldReturnHomeOnResume = false;
 
 function prepareHomeReturn() {
+  // Karriärverktyget (Lönekollen/CV-mall) ska ligga kvar om eleven byter flik.
+  if (state.mode === "knowledge-base") return;
   shouldReturnHomeOnResume = true;
   saveLocation("home", { historyAction: "none" });
 }
