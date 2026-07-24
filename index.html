@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Schibsted+Grotesk:wght@500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="styles.css?v=20260724-cv-key-v2">
+  <link rel="stylesheet" href="styles.css?v=20260724-career-mobile">
 </head>
 <body class="app-booting">
   <div class="shell">
@@ -187,6 +187,17 @@
           <section class="quiz-overview-panel" id="quizOverviewPanel" aria-labelledby="quizOverviewTitle" hidden>
             <div class="quiz-portal" id="quizPortal"></div>
           </section>
+
+          <div class="kb-mobile-bar" aria-hidden="true">
+            <button class="kb-mobile-bar-back" type="button" data-open-home aria-label="Tillbaka till Hem">
+              <i data-lucide="chevron-left"></i>
+              <span>Hem</span>
+            </button>
+            <span class="kb-mobile-bar-title">Karriärverktyg</span>
+            <button class="kb-mobile-bar-tools" type="button" data-open-career-menu aria-label="Byt verktyg">
+              <i data-lucide="briefcase"></i>
+            </button>
+          </div>
 
           <section class="knowledge-base-panel" id="knowledgeBasePanel" aria-label="Karriärverktyg" hidden></section>
 
@@ -495,11 +506,59 @@
     </div>
   </div>
 
+  <div class="career-menu" id="careerMenu" role="dialog" aria-modal="true" aria-labelledby="careerMenuTitle" hidden>
+    <div class="career-menu-sheet">
+      <div class="career-menu-head">
+        <div>
+          <span class="career-menu-eyebrow">Karriärverktyg</span>
+          <h2 id="careerMenuTitle">Verktyg för din karriär</h2>
+        </div>
+        <button class="career-menu-close" type="button" data-close-career-menu aria-label="Stäng menyn">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="career-menu-list">
+        <button class="career-menu-item" type="button" data-career-tool="lonekollen">
+          <span class="career-menu-item-icon"><i data-lucide="credit-card"></i></span>
+          <span class="career-menu-item-copy">
+            <strong>Lönekollen</strong>
+            <small>Lönetrappa, lönegrupper och OB</small>
+          </span>
+          <i data-lucide="chevron-right" class="career-menu-item-chevron" aria-hidden="true"></i>
+        </button>
+        <button class="career-menu-item" type="button" data-career-tool="cv">
+          <span class="career-menu-item-icon"><i data-lucide="file-text"></i></span>
+          <span class="career-menu-item-copy">
+            <strong>CV-mall</strong>
+            <small>Skapa ditt väktar-CV</small>
+          </span>
+          <i data-lucide="chevron-right" class="career-menu-item-chevron" aria-hidden="true"></i>
+        </button>
+        <button class="career-menu-item" type="button" data-career-tool="schema">
+          <span class="career-menu-item-icon"><i data-lucide="calendar-clock"></i></span>
+          <span class="career-menu-item-copy">
+            <strong>Schemaguide</strong>
+            <small>Arbetstider, 5–2, 5–4 och skift</small>
+          </span>
+          <i data-lucide="chevron-right" class="career-menu-item-chevron" aria-hidden="true"></i>
+        </button>
+        <button class="career-menu-item" type="button" data-career-tool="arbetsgivare">
+          <span class="career-menu-item-icon"><i data-lucide="building-2"></i></span>
+          <span class="career-menu-item-copy">
+            <strong>Arbetsgivare</strong>
+            <small>Hitta bevakningsföretag att söka jobb hos</small>
+          </span>
+          <i data-lucide="chevron-right" class="career-menu-item-chevron" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
   <script src="authProvider.js?v=20260716-fail-closed"></script>
   <script src="supabaseApi.js?v=20260714-public-quiz-auth"></script>
   <script src="emblemSystem.js?v=20260716-emblems"></script>
-  <script src="app.js?v=20260724-cv-key-v2"></script>
+  <script src="app.js?v=20260724-career-mobile"></script>
 </body>
 </html>

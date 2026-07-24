@@ -415,6 +415,7 @@ const els = {
   navOverlay: $("#navOverlay"),
   quizResetModal: $("#quizResetModal"),
   cvDesktopModal: $("#cvDesktopModal"),
+  careerMenu: $("#careerMenu"),
   premiumModal: $("#premiumModal"),
   premiumModalDescription: $("#premiumModalDescription"),
   premiumCheckoutButton: $("#premiumCheckoutButton"),
@@ -4438,7 +4439,12 @@ function renderHome() {
             <img class="app-brand-icon" src="/assets/logo/vaktskolan-icon-512.png" alt="" aria-hidden="true">
             <img class="app-brand-wordmark" src="/assets/logo/vaktskolan-wordmark.png" alt="vaktskolan.">
           </div>
-          <div class="home-mobile-avatar mobile-auth-user-button" data-mobile-auth-user-button aria-label="Öppna profilmeny">${escapeHtml(initials)}</div>
+          <div class="mobile-head-actions">
+            <button class="mobile-tools-button" type="button" data-open-career-menu aria-label="Öppna karriärverktyg">
+              <i data-lucide="briefcase" aria-hidden="true"></i>
+            </button>
+            <div class="home-mobile-avatar mobile-auth-user-button" data-mobile-auth-user-button aria-label="Öppna profilmeny">${escapeHtml(initials)}</div>
+          </div>
         </div>
 
         <div class="home-dashboard-head">
@@ -4814,7 +4820,12 @@ function renderFinalPortalMobileHead() {
         <img class="app-brand-icon" src="/assets/logo/vaktskolan-icon-512.png" alt="" aria-hidden="true">
         <img class="app-brand-wordmark" src="/assets/logo/vaktskolan-wordmark.png" alt="vaktskolan.">
       </div>
-      <div class="final-portal-mobile-avatar mobile-auth-user-button" data-mobile-auth-user-button aria-label="Öppna profilmeny">${escapeHtml(initials)}</div>
+      <div class="mobile-head-actions">
+        <button class="mobile-tools-button" type="button" data-open-career-menu aria-label="Öppna karriärverktyg">
+          <i data-lucide="briefcase" aria-hidden="true"></i>
+        </button>
+        <div class="final-portal-mobile-avatar mobile-auth-user-button" data-mobile-auth-user-button aria-label="Öppna profilmeny">${escapeHtml(initials)}</div>
+      </div>
     </div>
   `;
 }
@@ -6350,7 +6361,12 @@ function renderQuizPortalMobileHead() {
         <img class="app-brand-icon" src="/assets/logo/vaktskolan-icon-512.png" alt="" aria-hidden="true">
         <img class="app-brand-wordmark" src="/assets/logo/vaktskolan-wordmark.png" alt="vaktskolan.">
       </div>
-      <div class="quiz-portal-mobile-avatar mobile-auth-user-button" data-mobile-auth-user-button aria-label="Öppna profilmeny">${escapeHtml(initials)}</div>
+      <div class="mobile-head-actions">
+        <button class="mobile-tools-button" type="button" data-open-career-menu aria-label="Öppna karriärverktyg">
+          <i data-lucide="briefcase" aria-hidden="true"></i>
+        </button>
+        <div class="quiz-portal-mobile-avatar mobile-auth-user-button" data-mobile-auth-user-button aria-label="Öppna profilmeny">${escapeHtml(initials)}</div>
+      </div>
     </div>
   `;
 }
@@ -7465,8 +7481,26 @@ function syncModalOpenState() {
     !els.quizResetModal.hidden ||
     !els.emblemModal.hidden ||
     !els.premiumModal.hidden ||
-    Boolean(els.cvDesktopModal && !els.cvDesktopModal.hidden);
+    Boolean(els.cvDesktopModal && !els.cvDesktopModal.hidden) ||
+    Boolean(els.careerMenu && !els.careerMenu.hidden);
   document.body.classList.toggle("modal-open", hasOpenModal);
+}
+
+function openCareerMenu(trigger = null) {
+  if (!els.careerMenu || !els.careerMenu.hidden) return;
+  state.careerMenuTrigger = trigger || document.activeElement;
+  els.careerMenu.hidden = false;
+  syncModalOpenState();
+  refreshIcons();
+  els.careerMenu.querySelector("[data-career-tool]")?.focus();
+}
+
+function closeCareerMenu() {
+  if (!els.careerMenu || els.careerMenu.hidden) return;
+  els.careerMenu.hidden = true;
+  syncModalOpenState();
+  state.careerMenuTrigger?.focus?.();
+  state.careerMenuTrigger = null;
 }
 
 const PREMIUM_MODAL_REASONS = {
@@ -7690,6 +7724,24 @@ function bindEvents() {
 
     if (event.target === els.cvDesktopModal || event.target.closest("[data-close-cv-desktop]")) {
       closeCvDesktopModal();
+      return;
+    }
+
+    const careerToolButton = event.target.closest("[data-career-tool]");
+    if (careerToolButton) {
+      closeCareerMenu();
+      showKnowledgeBase(careerToolButton.dataset.careerTool);
+      return;
+    }
+
+    const openCareerMenuButton = event.target.closest("[data-open-career-menu]");
+    if (openCareerMenuButton) {
+      openCareerMenu(openCareerMenuButton);
+      return;
+    }
+
+    if (event.target === els.careerMenu || event.target.closest("[data-close-career-menu]")) {
+      closeCareerMenu();
       return;
     }
 
@@ -8229,6 +8281,7 @@ function bindEvents() {
       closeEmblemModal();
       closeQuizResetModal();
       closeCvDesktopModal();
+      closeCareerMenu();
       closeDrawers();
     }
 
