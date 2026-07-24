@@ -1113,6 +1113,8 @@ Trolig implementation:
 
 Det här har nyligen ändrats och bör inte råka rullas tillbaka:
 
+- Quizportalens VU1-, VU2- och Scenario-kort visar en uppskattad tidsåtgång i stället för antal frågor: `timeEstimate` på modulen (`~4-5 min` för VU1/VU2, `~6-7 min` för scenario) returneras av `quizPortalModuleMeta()` före frågeantalet. Gäller när kortet inte är gratisbegränsat/premiumlåst – gratisanvändares "N av 10 kostnadsfria kvar" och "Ingår i Premium" är oförändrade.
+- CV-mallens exempeldata (`cvSampleData()`) använder namnet `Josef Svensson` (och e-post `josef.svensson@vaktskolan.se`), inte ägarens personliga namn.
 - Quizportalens kort `Vanlig Quiz` (`view: "general"`) är dolt via `hidden: true` i `quizPortalModules`. Alla tre renderytorna (sidebar, desktop-grid, mobil-grid) filtrerar `!module.hidden` och räknarna ("N sätt att träna", "N quiz · 1 kortlek") är dynamiska. Ta bort `hidden`-flaggan för att visa kortet igen.
 
 - VU2 implementerad från `utbildning.md` på samma sätt som VU1.

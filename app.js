@@ -284,6 +284,7 @@ const quizPortalModules = [
     icon: "shield",
     theme: "blue",
     badge: "Flervalsquiz",
+    timeEstimate: "~4-5 min",
   },
   {
     view: "vu2",
@@ -292,6 +293,7 @@ const quizPortalModules = [
     icon: "shield-check",
     theme: "violet",
     badge: "Flervalsquiz",
+    timeEstimate: "~4-5 min",
   },
   {
     view: "flashcards",
@@ -319,6 +321,7 @@ const quizPortalModules = [
     icon: "triangle-alert",
     theme: "rose",
     badge: "Scenario",
+    timeEstimate: "~6-7 min",
   },
 ];
 
@@ -3224,9 +3227,9 @@ function dismissCvBuilderHint() {
 
 function cvSampleData() {
   return {
-    fullname: "Kevin Sjöberg",
+    fullname: "Josef Svensson",
     title: "Auktoriserad Väktare / Rondväktare",
-    email: "kevin.sjoberg@vaktskolan.se",
+    email: "josef.svensson@vaktskolan.se",
     phone: "070-812 34 56",
     location: "Stockholm",
     birthYear: String(new Date().getFullYear() - 29),
@@ -3386,7 +3389,7 @@ function renderCvBuilder() {
               <input type="file" id="cvPhotoInput" accept="image/png, image/jpeg, image/webp" hidden>
             </div>
             <div class="cv-form-grid">
-              ${cvTextInputMarkup("fullname", "Namn *", "t.ex. Kevin Sjöberg")}
+              ${cvTextInputMarkup("fullname", "Namn *", "t.ex. Josef Svensson")}
               ${cvTextInputMarkup("title", "Yrkesroll / Titel", "t.ex. Auktoriserad Väktare")}
               ${cvTextInputMarkup("email", "E-post *", "kevin@exempel.se", { type: "email" })}
               ${cvTextInputMarkup("phone", "Telefon *", "070-123 45 67")}
@@ -6189,6 +6192,8 @@ function quizPortalModuleMeta(module) {
     if (queue.waiting.length) return `${queue.waiting.length} ${queue.waiting.length === 1 ? "schemalagd" : "schemalagda"} · du är ikapp`;
     return "Du är ikapp";
   }
+  // VU1/VU2/Scenario visar en uppskattad tidsåtgång i stället för antal frågor.
+  if (module.timeEstimate) return module.timeEstimate;
   if (state.quizPortal.dataStatus === "loading" || state.quizPortal.dataStatus === "idle") return "Laddar innehåll…";
   if (state.quizPortal.dataStatus === "error") return "Kunde inte laddas";
   if (module.view === "flashcards") {
