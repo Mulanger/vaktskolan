@@ -10,7 +10,7 @@ const STORAGE_KEYS = {
   progressOwner: "vakt-progress-owner",
   knownEmblems: "vakt-known-emblems",
   quizHistory: "vakt-quiz-history-v1",
-  cvBuilder: "vakt-cv-builder-v1",
+  cvBuilder: "vakt-cv-builder-v2",
 };
 
 const STORAGE_VERSION = "vu2-course-split-2026-07-04";

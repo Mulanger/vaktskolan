@@ -1114,7 +1114,7 @@ Trolig implementation:
 Det här har nyligen ändrats och bör inte råka rullas tillbaka:
 
 - Quizportalens VU1-, VU2- och Scenario-kort visar en uppskattad tidsåtgång i stället för antal frågor: `timeEstimate` på modulen (`~4-5 min` för VU1/VU2, `~6-7 min` för scenario) returneras av `quizPortalModuleMeta()` före frågeantalet. Gäller när kortet inte är gratisbegränsat/premiumlåst – gratisanvändares "N av 10 kostnadsfria kvar" och "Ingår i Premium" är oförändrade.
-- CV-mallens exempeldata (`cvSampleData()`) använder namnet `Josef Svensson` (och e-post `josef.svensson@vaktskolan.se`), inte ägarens personliga namn.
+- CV-mallens exempeldata (`cvSampleData()`) använder namnet `Josef Svensson` (och e-post `josef.svensson@vaktskolan.se`), inte ägarens personliga namn. CV-byggaren sparar allt i `localStorage` under `STORAGE_KEYS.cvBuilder` och förifyller exempeldatan bara vid första besöket (ingen sparad nyckel). Nyckeln ligger medvetet **inte** i `resetStoredProgressIfNeeded()`-listan, så en `STORAGE_VERSION`-bump rensar den inte – för att nollställa exempel-CV:t för alla bumpas i stället nyckelns egen suffix. Den höjdes `vakt-cv-builder-v1` → `-v2` 2026-07-24 för att slå ut gammal sparad exempeldata (t.ex. ett tidigare namn) hos alla; ingen kunddata fanns än.
 - Quizportalens kort `Vanlig Quiz` (`view: "general"`) är dolt via `hidden: true` i `quizPortalModules`. Alla tre renderytorna (sidebar, desktop-grid, mobil-grid) filtrerar `!module.hidden` och räknarna ("N sätt att träna", "N quiz · 1 kortlek") är dynamiska. Ta bort `hidden`-flaggan för att visa kortet igen.
 
 - VU2 implementerad från `utbildning.md` på samma sätt som VU1.
