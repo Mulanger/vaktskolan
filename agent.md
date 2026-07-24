@@ -1113,6 +1113,8 @@ Trolig implementation:
 
 Det här har nyligen ändrats och bör inte råka rullas tillbaka:
 
+- Quizportalens kort `Vanlig Quiz` (`view: "general"`) är dolt via `hidden: true` i `quizPortalModules`. Alla tre renderytorna (sidebar, desktop-grid, mobil-grid) filtrerar `!module.hidden` och räknarna ("N sätt att träna", "N quiz · 1 kortlek") är dynamiska. Ta bort `hidden`-flaggan för att visa kortet igen.
+
 - VU2 implementerad från `utbildning.md` på samma sätt som VU1.
 - Appen hämtar `utbildning.md`, inte äldre namngiven kopia.
 - Kursstate, quizsvar och slutprov separeras per VU1/VU2.

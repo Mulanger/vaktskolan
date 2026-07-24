@@ -309,6 +309,8 @@ const quizPortalModules = [
     theme: "amber",
     badge: "Flervalsquiz",
     comingSoon: true,
+    // Dolt tills vidare – ta bort denna flagga för att visa kortet igen.
+    hidden: true,
   },
   {
     view: "scenario",
@@ -6378,8 +6380,10 @@ function renderQuizPortalMobileTabbar() {
 function renderQuizPortalSidebar() {
   els.moduleListWrap.hidden = false;
   els.moduleListTitle.textContent = "Quizmoduler";
-  els.moduleCount.textContent = "5 quiz · 1 kortlek";
-  els.moduleList.innerHTML = quizPortalModules
+  const visibleSidebarModules = quizPortalModules.filter((module) => !module.hidden);
+  const sidebarKortlek = visibleSidebarModules.filter((module) => module.view === "flashcards").length;
+  els.moduleCount.textContent = `${visibleSidebarModules.length - sidebarKortlek} quiz · ${sidebarKortlek} kortlek`;
+  els.moduleList.innerHTML = visibleSidebarModules
     .map((module) => {
       const isActive = state.quizPortal.view === module.view;
       const lockReason = quizPortalLockReason(module);
@@ -6424,10 +6428,11 @@ function renderQuizPortalHome() {
       <section class="quiz-portal-modules quiz-portal-modules-desktop" aria-labelledby="quizPortalModulesTitleDesktop">
         <div class="quiz-portal-section-head">
           <h2 id="quizPortalModulesTitleDesktop">Välj en modul</h2>
-          <span>6 sätt att träna</span>
+          <span>${quizPortalModules.filter((module) => !module.hidden).length} sätt att träna</span>
         </div>
         <div class="quiz-portal-grid quiz-portal-grid-desktop">
           ${quizPortalModules
+            .filter((module) => !module.hidden)
             .map(
               (module, index) => `
                 <button class="quiz-portal-card quiz-portal-card-desktop quiz-theme-${module.theme} ${module.comingSoon ? "is-coming-soon" : ""} ${quizPortalLockReason(module) ? "is-premium-lock" : ""}" style="--quiz-card-index:${index}" type="button" ${
@@ -6467,10 +6472,11 @@ function renderQuizPortalHome() {
       <section class="quiz-portal-modules quiz-portal-modules-mobile" aria-labelledby="quizPortalModulesTitleMobile">
         <div class="quiz-portal-section-head quiz-portal-section-head-mobile">
           <h2 id="quizPortalModulesTitleMobile">Välj en modul</h2>
-          <span>5 quiz · 1 kortlek</span>
+          <span>${quizPortalModules.filter((module) => !module.hidden && module.view !== "flashcards").length} quiz · ${quizPortalModules.filter((module) => !module.hidden && module.view === "flashcards").length} kortlek</span>
         </div>
         <div class="quiz-portal-grid quiz-portal-grid-mobile">
           ${quizPortalModules
+            .filter((module) => !module.hidden)
             .map(
               (module, index) => `
                 <button class="quiz-portal-card quiz-portal-card-mobile quiz-theme-${module.theme} ${module.comingSoon ? "is-coming-soon" : ""} ${quizPortalLockReason(module) ? "is-premium-lock" : ""}" style="--quiz-card-index:${index}" type="button" ${
