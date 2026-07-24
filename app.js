@@ -47,7 +47,7 @@ const RESTORABLE_MODES = new Set([
   "final-exam",
 ]);
 
-const KNOWLEDGE_BASE_TABS = new Set(["lonekollen", "cv", "schema"]);
+const KNOWLEDGE_BASE_TABS = new Set(["lonekollen", "cv", "schema", "arbetsgivare"]);
 const CV_BUILDER_COMPACT_QUERY = "(max-width: 940px)";
 
 const COURSE_CONFIG = {
@@ -568,6 +568,7 @@ function portalHashForLocation(location) {
   if (location.mode === "knowledge-base") {
     if (location.knowledgeBaseTab === "cv") return "#kunskapsbas/cv-mall";
     if (location.knowledgeBaseTab === "schema") return "#kunskapsbas/schema";
+    if (location.knowledgeBaseTab === "arbetsgivare") return "#kunskapsbas/arbetsgivare";
     return "#kunskapsbas/lonekollen";
   }
   if (location.mode === "final-exam-portal") return "#slutprov";
@@ -603,6 +604,9 @@ function portalLocationFromHash(hash = window.location.hash, fallback = null) {
   }
   if (route === "kunskapsbas/schema" || route === "kunskapsbas/schemaguide") {
     return { ...base, mode: "knowledge-base", knowledgeBaseTab: "schema" };
+  }
+  if (route === "kunskapsbas/arbetsgivare" || route === "kunskapsbas/employers") {
+    return { ...base, mode: "knowledge-base", knowledgeBaseTab: "arbetsgivare" };
   }
   if (route === "slutprov") return { ...base, mode: "final-exam-portal" };
 
@@ -2412,6 +2416,10 @@ function renderKnowledgeBaseSidebar() {
       <i data-lucide="calendar-clock" aria-hidden="true"></i>
       <span>Schemaguide</span>
     </button>
+    <button class="knowledge-sidebar-item${activeTab === "arbetsgivare" ? " is-active" : ""}" type="button" data-open-employers ${activeTab === "arbetsgivare" ? 'aria-current="page"' : ""}>
+      <i data-lucide="building-2" aria-hidden="true"></i>
+      <span>Arbetsgivare</span>
+    </button>
   `;
 }
 
@@ -2956,9 +2964,184 @@ function renderSchemaGuide() {
   `;
 }
 
+const EMPLOYER_DIRECTORY = [
+  {
+    name: "Securitas Sverige AB",
+    address: "Lindhagensplan 70, 112 43 Stockholm",
+    phone: "010-470 10 00",
+    email: "kundservice@securitas.se",
+    website: "https://www.securitas.se",
+    logo: "/assets/employers/securitas.png",
+  },
+  {
+    name: "Avarn Security AB",
+    address: "Västberga allé 11, 126 30 Hägersten",
+    phone: "010-210 95 00",
+    email: "vi.hjalper.dig@avarnsecurity.com",
+    website: "https://www.avarnsecurity.com",
+    logo: "/assets/employers/avarn.png",
+  },
+  {
+    name: "Cubsec AB",
+    address: "Hemvärnsgatan 15 plan 7, 171 54 Solna",
+    phone: "0771-761 900",
+    email: "kundservice@cubsec.se",
+    website: "https://www.cubsec.se",
+    logo: "/assets/employers/cubsec.png",
+  },
+  {
+    name: "Tempest Security Sverige AB",
+    address: "Rålambsvägen 17, 112 59 Stockholm",
+    phone: "010-45 777 60",
+    email: "info@tempest.se",
+    website: "https://www.tempest.se",
+    logo: "/assets/employers/tempest.png",
+  },
+  {
+    name: "Addici Security & Technology AB",
+    address: "Knarrarnäsgatan 7, 164 99 Kista",
+    phone: "010-559 50 90",
+    email: "info@addici.com",
+    website: "https://www.addici.com",
+    logo: "/assets/employers/addici.png",
+  },
+  {
+    name: "Community Security Group Sweden AB",
+    address: "Finlandsgatan 60, 164 74 Kista",
+    phone: "08-410 147 00",
+    email: "info@csgab.se",
+    website: "https://www.csgab.se",
+    logo: "/assets/employers/csg.png",
+  },
+  {
+    name: "Securus Säkerhet i Sverige AB",
+    address: "Mossängsvägen 1, 141 71 Segeltorp",
+    phone: "08-734 00 20",
+    email: "info@securus.se",
+    website: "https://www.securus.se",
+    logo: "/assets/employers/securus.png",
+  },
+  {
+    name: "Säkerhet Ordningsbevakning SOB AB",
+    address: "Karins väg 7 5 tr, 194 61 Upplands Väsby",
+    phone: "08-642 05 80",
+    email: "info@sob.nu",
+    website: "https://www.sob.nu",
+    logo: "/assets/employers/sob.png",
+  },
+  {
+    name: "Safetly AB",
+    address: "Torshamnsgatan 27, 164 40 Kista",
+    phone: "08-121 044 33",
+    email: "info@safetly.se",
+    website: "https://www.safetly.se",
+    logo: "/assets/employers/safetly.png",
+  },
+];
+
+function employerCardMarkup(company) {
+  const searchKey = escapeHtml(`${company.name} ${company.address}`.toLowerCase());
+  const website = escapeHtml(company.website);
+  const websiteHost = escapeHtml(company.website.replace(/^https?:\/\//, "").replace(/\/$/, ""));
+  const openLabel = escapeHtml(`Öppna ${company.name}s webbplats i en ny flik`);
+  const logoMarkup = company.logo
+    ? `<img class="employer-logo-img" src="${escapeHtml(company.logo)}" alt="${escapeHtml(company.name)} logotyp" loading="lazy" decoding="async" onerror="this.closest('.employer-logo').classList.add('is-fallback')" />`
+    : "";
+  return `
+    <article class="employer-card" data-employer-card data-employer-search="${searchKey}">
+      <div class="employer-card-head">
+        <a class="employer-logo${company.logo ? "" : " is-fallback"}" href="${website}" target="_blank" rel="noopener noreferrer" aria-label="${openLabel}">
+          ${logoMarkup}
+          <span class="employer-logo-fallback" aria-hidden="true"><i data-lucide="building-2"></i></span>
+        </a>
+        <div class="employer-card-heading">
+          <h2 class="employer-name"><a class="employer-name-link" href="${website}" target="_blank" rel="noopener noreferrer">${escapeHtml(company.name)}</a></h2>
+          <span class="employer-badge"><span class="employer-badge-dot"></span> Auktoriserat</span>
+        </div>
+      </div>
+      <div class="employer-rows">
+        <div class="employer-row">
+          <i data-lucide="map-pin" aria-hidden="true"></i>
+          <div>
+            <p class="employer-row-label">Besöksadress</p>
+            <p class="employer-row-value">${escapeHtml(company.address)}</p>
+          </div>
+        </div>
+        <div class="employer-row">
+          <i data-lucide="mail" aria-hidden="true"></i>
+          <div>
+            <p class="employer-row-label">E-post</p>
+            <a class="employer-link" href="mailto:${escapeHtml(company.email)}">${escapeHtml(company.email)}</a>
+          </div>
+        </div>
+        <div class="employer-row">
+          <i data-lucide="phone" aria-hidden="true"></i>
+          <div>
+            <p class="employer-row-label">Telefon</p>
+            <a class="employer-row-value employer-phone" href="tel:${escapeHtml(company.phone.replace(/\s+/g, ""))}">${escapeHtml(company.phone)}</a>
+          </div>
+        </div>
+      </div>
+      <a class="employer-cta" href="${escapeHtml(company.website)}" target="_blank" rel="noopener noreferrer">
+        <span>Besök hemsida</span>
+        <i data-lucide="arrow-up-right" aria-hidden="true"></i>
+        <span class="sr-only"> (${websiteHost}, öppnas i ny flik)</span>
+      </a>
+    </article>
+  `;
+}
+
+function renderEmployerDirectory() {
+  if (!els.knowledgeBasePanel) return;
+
+  const cards = EMPLOYER_DIRECTORY.map(employerCardMarkup).join("");
+
+  els.knowledgeBasePanel.innerHTML = `
+    <article class="employers" aria-labelledby="employersTitle">
+      <header class="employers-hero">
+        <div class="employers-hero-text">
+          <p class="employers-eyebrow"><i data-lucide="briefcase" aria-hidden="true"></i> Nästa steg i karriären</p>
+          <h1 id="employersTitle">Hitta din framtida arbetsgivare</h1>
+          <p class="employers-lead">
+            Här listar vi auktoriserade bevakningsföretag runt om i landet. Hitta företaget som passar dig bäst,
+            ta kontakt och ta nästa kliv i din karriär som väktare.
+          </p>
+        </div>
+        <div class="employers-search">
+          <i data-lucide="search" aria-hidden="true"></i>
+          <label class="sr-only" for="employerSearch">Sök företag eller ort</label>
+          <input id="employerSearch" type="search" inputmode="search" autocomplete="off"
+            placeholder="Sök företag eller ort…" data-employer-search-input />
+        </div>
+      </header>
+
+      <div class="employers-grid" data-employer-grid>
+        ${cards}
+      </div>
+      <p class="employers-empty" data-employer-empty hidden>Inga företag matchar din sökning.</p>
+    </article>
+  `;
+}
+
+function filterEmployerDirectory(query) {
+  const panel = els.knowledgeBasePanel;
+  if (!panel) return;
+  const normalized = String(query || "").trim().toLowerCase();
+  const cards = panel.querySelectorAll("[data-employer-card]");
+  let visible = 0;
+  cards.forEach((card) => {
+    const match = !normalized || (card.dataset.employerSearch || "").includes(normalized);
+    card.hidden = !match;
+    if (match) visible += 1;
+  });
+  const empty = panel.querySelector("[data-employer-empty]");
+  if (empty) empty.hidden = visible !== 0;
+}
+
 function renderKnowledgeBasePanel() {
   if (state.knowledgeBaseTab === "cv") renderCvBuilder();
   else if (state.knowledgeBaseTab === "schema") renderSchemaGuide();
+  else if (state.knowledgeBaseTab === "arbetsgivare") renderEmployerDirectory();
   else renderSalaryCheck();
 }
 
@@ -7567,6 +7750,12 @@ function bindEvents() {
       return;
     }
 
+    const employersTab = event.target.closest("[data-open-employers]");
+    if (employersTab) {
+      showKnowledgeBase("arbetsgivare");
+      return;
+    }
+
     const knowledgeBaseButton = event.target.closest("[data-open-knowledge-base], [data-open-salary-check]");
     if (knowledgeBaseButton) {
       showKnowledgeBase(knowledgeBaseButton.hasAttribute("data-open-salary-check") ? "lonekollen" : undefined);
@@ -7993,6 +8182,11 @@ function bindEvents() {
   });
   els.knowledgeBasePanel?.addEventListener("input", handleCvBuilderFieldInput);
   els.knowledgeBasePanel?.addEventListener("change", handleCvBuilderFieldInput);
+  els.knowledgeBasePanel?.addEventListener("input", (event) => {
+    const searchInput = event.target.closest?.("[data-employer-search-input]");
+    if (!searchInput) return;
+    filterEmployerDirectory(searchInput.value);
+  });
   $("#openNavButton").addEventListener("click", () => openDrawer("nav"));
   $("#closeNavButton").addEventListener("click", closeDrawers);
   $("#openContextButton").addEventListener("click", () => openDrawer("context"));
