@@ -370,9 +370,10 @@ const STORAGE_VERSION = "vu2-course-split-2026-07-04";
 const IS_LOCAL_DEVELOPMENT = ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
 const UNLOCK_MODULE_NAVIGATION = IS_LOCAL_DEVELOPMENT;
 const ENFORCE_COURSE_LOCKS = !IS_LOCAL_DEVELOPMENT;
-const FINAL_EXAM_SIZE = 30;
+const FINAL_EXAM_DURATION_MS = 30 * 60 * 1000;
 const FINAL_EXAM_LOCK_MS = 24 * 60 * 60 * 1000;
 const FINAL_EXAM_PASS_PERCENT = 80;
+const FINAL_EXAM_QUESTION_IDS = { vu1: [/* 50 id:n */], vu2: [/* 40 id:n */] };
 ```
 
 De två låsflaggorna är inte längre hårdkodade utan härleds från hostnamnet, så produktion och lokal utveckling beter sig olika:
@@ -538,7 +539,8 @@ vakt-current-location
 - `mode`: aktuell vy
 - `answers`: modulquizsvar, separerat per kurs och modul
 - `finalExams`: slutprovsstate per kurs
-- `finalExamPools`: frågepooler per kurs
+- `finalExamPools`: aktiva 50/40-urval per kurs
+- `finalExamArchives`: kompletta källpooler för historiska avslutade prov
 - `visited`: set med besökta sidor
 
 Quizsvar sparas per kurs och modul via:
@@ -615,12 +617,12 @@ Aktuellt material i `utbildning.md`:
 - VU2 modulquiz: 44 frågor.
 - VU2 sluttestbank: 30 frågor.
 
-Appens slutprovsfrågepool kombinerar sluttestbanken med modulquizfrågorna och deduplicerar på frågetext:
+Appens fullständiga slutprovskälla kombinerar sluttestbanken med modulquizfrågorna och deduplicerar på frågetext:
 
 - VU1 pool: 60 + 94 = 154 möjliga frågor före dedupe.
 - VU2 pool: 30 + 44 = 74 möjliga frågor före dedupe.
 
-Varje slutprov drar `FINAL_EXAM_SIZE` frågor, just nu 30.
+Den fullständiga källan sparas i `state.finalExamArchives`, så gamla genomförda prov kan fortsätta poängsättas. Nya prov filtreras genom `FINAL_EXAM_QUESTION_IDS` till exakt 50 frågor för VU1 och 40 för VU2. Samtliga valda frågor visas i respektive prov, i slumpad ordning.
 
 ## Parser Och Datamodell
 
@@ -629,6 +631,7 @@ Viktigaste parserfunktioner:
 - `parseCourses(markdown)`: bygger `{ vu1, vu2 }`.
 - `parseFinalExamBank(modules)`: läser sluttest/frågebank-modulen.
 - `buildFinalExamPool(modules)`: kombinerar sluttestbank och modulquiz.
+- `selectFinalExamQuestions(courseId, sourcePool)`: filtrerar nya prov till det dokumenterade ID-urvalet.
 - `renderBlocks(lines)`: konverterar Markdown-liknande sidtext till HTML.
 
 Modulobjekt ser i praktiken ut så här:
@@ -796,7 +799,9 @@ Viktiga funktioner:
 
 Regler:
 
-- 30 slumpade frågor per prov.
+- VU1 visar alla 50 utvalda frågor; VU2 visar alla 40 utvalda frågor.
+- Frågeordningen slumpas, men provet drar inte in frågor utanför det låsta ID-urvalet.
+- Båda slutproven har 30 minuters skrivtid.
 - 80% krävs för godkänt.
 - Efter inlämning låses nytt prov i 24 timmar.
 - Ett aktivt prov kan återupptas.
@@ -1258,10 +1263,10 @@ Texterna är skrivna som en teknisk beskrivning av vad som faktiskt sätts. Form
 
 Slutprovsportalen har fått den nya landningsdesignen från `D:\Slutprovs-sida omdesign (1).zip`: variant 1a för desktop och 1b för mobil. Ändringen är avgränsad till portalens presentation i `renderFinalExamPortal()`/`renderFinalExamPortalCard()` och till den dedikerade CSS-sektionen `Slutprovsportal 1a/1b` i `styles.css`.
 
-- Befintlig provlogik är orörd: start/återuppta, timer, frågeurval, svar, inlämning, poäng, godkäntgräns och 24-timmarsspärr använder samma state och händelsehanterare som tidigare.
+- Portalens designändring var avgränsad till presentationen. Provlogiken har därefter uppdaterats separat med det låsta 50/40-urvalet och 30 minuters skrivtid.
 - Korten visar fortfarande data från `getFinalExamPortalOverview()` och använder samma `data-final-portal-course`/`data-final-portal-action`-kontrakt. Presentationen visar nu kursprogress, frågepool, aktiv/låst status och senaste resultat med godkäntgräns.
 - Desktop använder två parallella provkort. Vid `max-width: 940px` växlar sidan till variant 1b med staplade kort, mobilheader och den befintliga fasta bottennavigeringen.
-- Verifierat visuellt i 1440 px och 390 px utan horisontell overflow. Mobilens båda kort kan nås ovanför bottennavigeringen. En faktisk lokal start av VU2 öppnade den befintliga provvyn med timer och fråga 1 av 30.
+- Verifierat visuellt i 1440 px och 390 px utan horisontell overflow. Mobilens båda kort kan nås ovanför bottennavigeringen.
 - Cacheversionen för `styles.css` och `app.js` i `index.html` är `20260726-slutprov-hub-1ab`.
 
 ## Quiz Portal – låsstatus och modalpaus (2026-07-26)
@@ -1333,3 +1338,17 @@ logotyp visar bygg-ikonen via `.employer-logo.is-fallback`.
 - 1280 px: tre kolumner. 800 px: två kolumner. 390 px: en kolumn, sifferknappar dolda, ingen
   horisontell overflow.
 - Cacheversionen för `styles.css` och `app.js` i `index.html` är `20260726-arbetsgivare-paginering`.
+
+## Låst slutprovsurval och 30 minuter (2026-07-26)
+
+Nya slutprov använder det kvalitetssäkrade urvalet i `docs/slutprov-topplista-vu1-vu2.md`.
+
+- `FINAL_EXAM_QUESTION_IDS` är den aktiva vitlistan: exakt 50 frågor för VU1 och 40 för VU2.
+- `buildFinalExamPool()` bygger fortfarande den kompletta källan (154 VU1 och 74 VU2). Källfrågorna har inte tagits bort ur `utbildning.md` eller databasen.
+- `selectFinalExamQuestions()` mappar vitlistan till källan. Alla valda frågor ingår i varje nytt prov; `pickFinalExamQuestions()` blandar bara ordningen.
+- `state.finalExamPools` innehåller det aktiva urvalet. `state.finalExamArchives` behåller den kompletta källan enbart för att gamla avslutade försök ska kunna poängsättas och fortsätta styra upplåsning korrekt.
+- Ett äldre pågående försök med frågor utanför urvalet ogiltigförklaras av `ensureFinalExamIntegrity()` och startas om i det nya formatet. Avslutade försök bevaras.
+- `FINAL_EXAM_DURATION_MS` är 30 minuter. Saniteringen förlänger även ett redan sparat pågående 15-minutersförsök till totalt 30 minuter från dess ursprungliga starttid.
+- Godkäntgränsen är fortsatt 80 procent: 40/50 i VU1 och 32/40 i VU2.
+- `scripts/test-platform-guards.mjs` verifierar exakt ID-ordning, 50/40-frågeantal, att de två bortvalda felaktiga VU1-frågorna inte kan visas, att hela källan finns kvar, 30-minuterstiden och hela upplåsningskedjan.
+- Cacheversionen för `styles.css` och `app.js` i `index.html` är `20260726-slutprov-urval-30min`.

@@ -68,7 +68,7 @@ Lägg till `"test:quiz-balance": "node scripts/test-quiz-balance.mjs"` i `packag
 1. `node --check app.js` och `npm test` (kör hela sviten inkl. typecheck, lint, validate:content, validate:release, platform-guards).
 2. Browsertest: öppna plattformen, kör ett VU1-modulquiz och ett Quizportal-pass (VU1, VU2, scenario) — nya alternativtexter ska synas, rätt svar ska rättas korrekt, förklaringarna ska visas.
 3. Repetitionsflödet: svara fel på en portalfråga → kontrollera att den dyker upp i "Att repetera" och går att öppna (bekräftar att frågenycklarna överlevde).
-4. Slutprov: starta ett VU1-slutprov och kontrollera att 30 frågor dras utan fel.
+4. Slutprov: starta VU1 och kontrollera att exakt de 50 valda frågorna laddas med 30 minuter. Kontrollera även VU2 med exakt 40 valda frågor och 30 minuter.
 5. Uppdatera `agent.md` med ett daterat avsnitt som beskriver quizbalanseringen, de nya invarianten (längdband ≤1,35, max 40 % längst) och att `test:quiz-balance` nu ingår i prebuild.
 
 ## Kända fällor

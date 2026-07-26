@@ -72,6 +72,7 @@ const context = vm.createContext({
 const source = readFileSync("app.js", "utf8").replace(/\ninit\(\)\.catch\([\s\S]*$/, "\n");
 const indexSource = readFileSync("index.html", "utf8");
 const courseMarkdown = readFileSync("utbildning.md", "utf8");
+const finalExamSelectionDoc = readFileSync("docs/slutprov-topplista-vu1-vu2.md", "utf8");
 vm.runInContext(source, context, { filename: "app.js" });
 
 vm.runInContext(
@@ -106,6 +107,35 @@ function evaluate(expression) {
 
 assert.equal(evaluate("UNLOCK_MODULE_NAVIGATION"), false, "Production host must enforce module navigation.");
 assert.equal(evaluate("ENFORCE_COURSE_LOCKS"), true, "Production host must enforce course locks.");
+assert.equal(evaluate("FINAL_EXAM_DURATION_MS"), 30 * 60 * 1000, "Every final exam must allow 30 minutes.");
+assert.equal(evaluate("getFinalExamRequiredCorrect(50)"), 40, "VU1 must require 40 of 50 correct answers.");
+assert.equal(evaluate("getFinalExamRequiredCorrect(40)"), 32, "VU2 must require 32 of 40 correct answers.");
+const documentedFinalExamIds = [...finalExamSelectionDoc.matchAll(/Internt fråge-id: `(vu[12]-[^`]+)`/g)]
+  .map((match) => match[1]);
+assert.equal(documentedFinalExamIds.length, 90, "The selection document must contain all 90 final exam questions.");
+assert.equal(new Set(documentedFinalExamIds).size, 90, "Every documented final exam question ID must be unique.");
+assert.equal(
+  JSON.stringify(documentedFinalExamIds.filter((id) => id.startsWith("vu1-"))),
+  evaluate("JSON.stringify(FINAL_EXAM_QUESTION_IDS.vu1)"),
+  "The documented VU1 list and the active VU1 selection must remain identical.",
+);
+assert.equal(
+  JSON.stringify(documentedFinalExamIds.filter((id) => id.startsWith("vu2-"))),
+  evaluate("JSON.stringify(FINAL_EXAM_QUESTION_IDS.vu2)"),
+  "The documented VU2 list and the active VU2 selection must remain identical.",
+);
+assert.equal(
+  evaluate(`sanitizeFinalExamSession({
+    id: "old-active",
+    createdAt: 1000,
+    endsAt: 1000 + (15 * 60 * 1000),
+    completedAt: null,
+    questionIds: ["old-question"],
+    answers: {}
+  }).endsAt`),
+  1000 + (30 * 60 * 1000),
+  "A stored active 15-minute attempt must be extended to 30 minutes from its original start.",
+);
 assert.doesNotMatch(source, /renderFinalExamSidebar|final-sidebar-card/, "The final exam must not create a designer-specific sidebar.");
 assert.match(
   source,
@@ -196,8 +226,14 @@ evaluate("stopQuizPortalQuestionTimer()");
 const fullCourseResult = vm.runInContext(
   `
     state.courses = parseCourses(${JSON.stringify(courseMarkdown)});
-    state.finalExamPools = Object.fromEntries(
+    state.finalExamArchives = Object.fromEntries(
       Object.entries(state.courses).map(([courseId, modules]) => [courseId, buildFinalExamPool(modules)])
+    );
+    state.finalExamPools = Object.fromEntries(
+      Object.entries(state.finalExamArchives).map(([courseId, sourcePool]) => [
+        courseId,
+        selectFinalExamQuestions(courseId, sourcePool)
+      ])
     );
     state.visited = new Set();
     state.answers = {};
@@ -221,8 +257,9 @@ const fullCourseResult = vm.runInContext(
 
     function auditInstallFinalExam(courseId, passed, completedAt) {
       activateCourse(courseId);
-      const questions = state.finalExamPool.slice(0, FINAL_EXAM_SIZE);
-      assert.equal(questions.length, FINAL_EXAM_SIZE);
+      const examSize = getFinalExamSize(courseId);
+      const questions = state.finalExamPool;
+      assert.equal(questions.length, examSize);
       state.finalExam = {
         id: courseId + "-guard-" + completedAt,
         createdAt: completedAt - 1000,
@@ -246,7 +283,61 @@ const fullCourseResult = vm.runInContext(
 
     const vu1Items = getContentModuleItems();
     assert.equal(vu1Items.length, 11, "The real VU1 course must contain 11 content modules.");
-    assert.equal(state.finalExamPool.length, 154, "The real VU1 final pool must contain 154 questions.");
+    assert.equal(state.finalExamArchive.length, 154, "The complete VU1 source bank must remain intact.");
+    assert.equal(state.finalExamPool.length, 50, "The active VU1 final exam must contain exactly 50 selected questions.");
+    assert.equal(
+      state.finalExamPool.every(
+        (question) => question.options.length === 4 && question.options.some((option) => option.letter === question.correct)
+      ),
+      true,
+      "Every selected VU1 question must have four options and a resolvable correct answer."
+    );
+    assert.equal(
+      JSON.stringify(state.finalExamPool.map((question) => question.id)),
+      JSON.stringify(FINAL_EXAM_QUESTION_IDS.vu1),
+      "VU1 must use only the documented selected question IDs."
+    );
+    assert.equal(
+      new Set(pickFinalExamQuestions().map((question) => question.id)).size,
+      50,
+      "A new VU1 attempt must include all 50 selected questions."
+    );
+    assert.equal(
+      state.finalExamPool.some((question) => ["vu1-module-1-quiz-2", "vu1-module-1-quiz-8"].includes(question.id)),
+      false,
+      "The two rejected VU1 questions must not be shown in new final exams."
+    );
+    const legacyVu1Question = state.finalExamArchive.find(
+      (question) => !FINAL_EXAM_QUESTION_IDS.vu1.includes(question.id)
+    );
+    state.finalExam = {
+      id: "legacy-completed-vu1",
+      createdAt: 1,
+      completedAt: 2,
+      currentIndex: 0,
+      endsAt: null,
+      reviewMode: false,
+      questionIds: [legacyVu1Question.id],
+      answers: { [legacyVu1Question.id]: legacyVu1Question.correct }
+    };
+    state.finalExams.vu1 = state.finalExam;
+    ensureFinalExamIntegrity();
+    assert.equal(state.finalExam?.id, "legacy-completed-vu1", "A completed legacy attempt must be preserved.");
+    assert.equal(getFinalExamResult().passed, true, "A completed legacy attempt must still be scoreable.");
+    state.finalExam = {
+      id: "legacy-active-vu1",
+      createdAt: 1,
+      completedAt: null,
+      currentIndex: 0,
+      endsAt: Date.now() + FINAL_EXAM_DURATION_MS,
+      reviewMode: false,
+      questionIds: [legacyVu1Question.id],
+      answers: {}
+    };
+    state.finalExams.vu1 = state.finalExam;
+    ensureFinalExamIntegrity();
+    assert.equal(state.finalExam, null, "An active legacy attempt outside the new selection must be reset.");
+    state.finalExams = {};
     vu1Items.forEach(({ index }, offset) => {
       if (offset > 0) assert.equal(isModuleUnlocked(index), true);
       auditCompleteContentModule(index, 1000 + offset);
@@ -266,7 +357,25 @@ const fullCourseResult = vm.runInContext(
     activateCourse("vu2");
     const vu2Items = getContentModuleItems();
     assert.equal(vu2Items.length, 6, "The real VU2 course must contain 6 content modules.");
-    assert.equal(state.finalExamPool.length, 74, "The real VU2 final pool must contain 74 questions.");
+    assert.equal(state.finalExamArchive.length, 74, "The complete VU2 source bank must remain intact.");
+    assert.equal(state.finalExamPool.length, 40, "The active VU2 final exam must contain exactly 40 selected questions.");
+    assert.equal(
+      state.finalExamPool.every(
+        (question) => question.options.length === 4 && question.options.some((option) => option.letter === question.correct)
+      ),
+      true,
+      "Every selected VU2 question must have four options and a resolvable correct answer."
+    );
+    assert.equal(
+      JSON.stringify(state.finalExamPool.map((question) => question.id)),
+      JSON.stringify(FINAL_EXAM_QUESTION_IDS.vu2),
+      "VU2 must use only the documented selected question IDs."
+    );
+    assert.equal(
+      new Set(pickFinalExamQuestions().map((question) => question.id)).size,
+      40,
+      "A new VU2 attempt must include all 40 selected questions."
+    );
     vu2Items.slice(0, -1).forEach(({ index }, offset) => auditCompleteContentModule(index, 2000 + offset));
     assert.equal(canStartFinalExam(), false, "VU2 final exam must stay locked while one real module remains.");
     const lastVu2 = vu2Items.at(-1);

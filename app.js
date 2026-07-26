@@ -17,10 +17,105 @@ const STORAGE_VERSION = "vu2-course-split-2026-07-04";
 const IS_LOCAL_DEVELOPMENT = ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
 const UNLOCK_MODULE_NAVIGATION = IS_LOCAL_DEVELOPMENT;
 const ENFORCE_COURSE_LOCKS = !IS_LOCAL_DEVELOPMENT;
-const FINAL_EXAM_SIZE = 30;
-const FINAL_EXAM_DURATION_MS = 15 * 60 * 1000;
+const FINAL_EXAM_DURATION_MS = 30 * 60 * 1000;
 const FINAL_EXAM_LOCK_MS = 24 * 60 * 60 * 1000;
 const FINAL_EXAM_PASS_PERCENT = 80;
+const FINAL_EXAM_QUESTION_IDS = Object.freeze({
+  vu1: Object.freeze([
+    "vu1-module-1-quiz-1",
+    "vu1-final-bank-1-2-1",
+    "vu1-module-1-quiz-3",
+    "vu1-module-1-quiz-7",
+    "vu1-final-bank-2-1-5",
+    "vu1-final-bank-2-2-6",
+    "vu1-module-2-quiz-1",
+    "vu1-module-2-quiz-3",
+    "vu1-module-2-quiz-5",
+    "vu1-module-2-quiz-9",
+    "vu1-module-2-quiz-11",
+    "vu1-module-2-quiz-13",
+    "vu1-module-3-quiz-1",
+    "vu1-module-3-quiz-4",
+    "vu1-module-3-quiz-6",
+    "vu1-module-4-quiz-2",
+    "vu1-module-4-quiz-4",
+    "vu1-module-4-quiz-5",
+    "vu1-module-4-quiz-6",
+    "vu1-final-bank-4-7-25",
+    "vu1-module-5-quiz-1",
+    "vu1-module-5-quiz-2",
+    "vu1-module-5-quiz-6",
+    "vu1-module-5-quiz-7",
+    "vu1-final-bank-6-4-34",
+    "vu1-module-6-quiz-3",
+    "vu1-module-6-quiz-4",
+    "vu1-module-6-quiz-6",
+    "vu1-module-6-quiz-9",
+    "vu1-final-bank-7-3-40",
+    "vu1-module-7-quiz-3",
+    "vu1-module-7-quiz-5",
+    "vu1-module-7-quiz-8",
+    "vu1-module-8-quiz-2",
+    "vu1-module-8-quiz-3",
+    "vu1-module-8-quiz-4",
+    "vu1-final-bank-9-2-47",
+    "vu1-final-bank-9-5-50",
+    "vu1-module-9-quiz-2",
+    "vu1-module-9-quiz-3",
+    "vu1-module-9-quiz-6",
+    "vu1-module-10-quiz-2",
+    "vu1-module-10-quiz-3",
+    "vu1-module-10-quiz-4",
+    "vu1-module-10-quiz-6",
+    "vu1-module-11-quiz-1",
+    "vu1-module-11-quiz-3",
+    "vu1-module-11-quiz-4",
+    "vu1-module-11-quiz-5",
+    "vu1-module-11-quiz-7",
+  ]),
+  vu2: Object.freeze([
+    "vu2-final-bank-1-2-1",
+    "vu2-final-bank-1-3-2",
+    "vu2-module-1-quiz-1",
+    "vu2-module-1-quiz-2",
+    "vu2-module-1-quiz-3",
+    "vu2-module-1-quiz-4",
+    "vu2-module-1-quiz-7",
+    "vu2-module-1-quiz-8",
+    "vu2-final-bank-2-2-7",
+    "vu2-module-2-quiz-3",
+    "vu2-module-2-quiz-4",
+    "vu2-module-2-quiz-5",
+    "vu2-module-2-quiz-6",
+    "vu2-module-2-quiz-7",
+    "vu2-module-2-quiz-8",
+    "vu2-final-bank-3-2-13",
+    "vu2-final-bank-3-4-15",
+    "vu2-final-bank-3-5-16",
+    "vu2-module-3-quiz-3",
+    "vu2-module-3-quiz-5",
+    "vu2-module-3-quiz-6",
+    "vu2-module-3-quiz-8",
+    "vu2-final-bank-4-2-19",
+    "vu2-final-bank-4-4-21",
+    "vu2-module-4-quiz-2",
+    "vu2-module-4-quiz-3",
+    "vu2-module-4-quiz-4",
+    "vu2-module-4-quiz-6",
+    "vu2-module-4-quiz-7",
+    "vu2-final-bank-5-1-24",
+    "vu2-module-5-quiz-1",
+    "vu2-module-5-quiz-2",
+    "vu2-module-5-quiz-5",
+    "vu2-module-5-quiz-6",
+    "vu2-final-bank-6-3-29",
+    "vu2-module-6-quiz-2",
+    "vu2-module-6-quiz-3",
+    "vu2-module-6-quiz-4",
+    "vu2-module-6-quiz-5",
+    "vu2-module-6-quiz-6",
+  ]),
+});
 const MODULE_QUIZ_PASS_PERCENT = 80;
 const PROGRESS_SCHEMA_VERSION = 1;
 const PROGRESS_TABLE = "student_learning_progress";
@@ -143,13 +238,14 @@ function sanitizeFinalExamSession(session) {
   const completedAt = Number(session.completedAt || 0);
   const createdAt = Number(session.createdAt || Date.now());
   const endsAt = Number(session.endsAt || 0);
+  const minimumEndsAt = createdAt + FINAL_EXAM_DURATION_MS;
   const reviewMode = session.reviewMode === true || session.view === "review";
   return {
     id: typeof session.id === "string" ? session.id : `restored-final-${Date.now()}`,
     createdAt,
     completedAt: completedAt > 0 ? completedAt : null,
     currentIndex: toSafeIndex(session.currentIndex),
-    endsAt: endsAt > 0 ? endsAt : completedAt > 0 ? null : createdAt + FINAL_EXAM_DURATION_MS,
+    endsAt: completedAt > 0 ? null : Math.max(endsAt, minimumEndsAt),
     reviewMode: completedAt > 0 ? false : reviewMode,
     questionIds,
     answers: isPlainObject(session.answers) ? session.answers : {},
@@ -186,7 +282,9 @@ const state = {
   finalExams: readFinalExamStorage(),
   finalExam: null,
   finalExamPools: { vu1: [], vu2: [] },
+  finalExamArchives: { vu1: [], vu2: [] },
   finalExamPool: [],
+  finalExamArchive: [],
   visited: new Set(readArrayStorage(STORAGE_KEYS.completedPages).filter((id) => typeof id === "string")),
   user: {
     displayName: "Sven Svensson",
@@ -1930,6 +2028,8 @@ function activateCourse(courseId = "vu1") {
   state.courseId = nextCourseId;
   state.modules = state.courses[nextCourseId] || [];
   state.finalExamPool = state.finalExamPools[nextCourseId] || [];
+  const archivedQuestions = state.finalExamArchives[nextCourseId] || [];
+  state.finalExamArchive = archivedQuestions.length ? archivedQuestions : state.finalExamPool;
   state.finalExam = state.finalExams[nextCourseId] || null;
 
   if (!state.modules.length) {
@@ -2317,6 +2417,23 @@ function buildFinalExamPool(modules) {
     seen.add(key);
     return question.options.length >= 2 && question.correct;
   });
+}
+
+function getFinalExamSize(courseId = state.courseId) {
+  return FINAL_EXAM_QUESTION_IDS[courseId]?.length || 0;
+}
+
+function selectFinalExamQuestions(courseId, sourcePool) {
+  const selectedIds = FINAL_EXAM_QUESTION_IDS[courseId] || [];
+  const questionsById = new Map(sourcePool.map((question) => [question.id, question]));
+  const selectedQuestions = selectedIds.map((id) => questionsById.get(id)).filter(Boolean);
+
+  if (selectedQuestions.length !== selectedIds.length) {
+    const missingIds = selectedIds.filter((id) => !questionsById.has(id));
+    console.error(`Slutprovet för ${courseId} saknar valda frågor: ${missingIds.join(", ")}`);
+  }
+
+  return selectedQuestions;
 }
 
 function renderBlocks(lines) {
@@ -5893,7 +6010,7 @@ function getModuleActionState(moduleIndex) {
 
 function moduleMetaSummary(module) {
   if (isFinalExamModule(module)) {
-    return `${FINAL_EXAM_SIZE} slumpade frågor`;
+    return `${getFinalExamSize()} utvalda frågor`;
   }
 
   const appTime = shortMeta(module.meta);
@@ -5922,7 +6039,7 @@ function setQuizButtonLabel(label) {
 function getModuleProgress(module, moduleIndex) {
   if (isFinalExamModule(module)) {
     if (state.finalExam?.completedAt) return isFinalExamPassed() ? 100 : getFinalExamResult().percent;
-    const total = state.finalExam?.questionIds?.length || FINAL_EXAM_SIZE;
+    const total = state.finalExam?.questionIds?.length || getFinalExamSize();
     return Math.round((getFinalExamAnsweredCount() / total) * 100);
   }
 
@@ -6061,6 +6178,7 @@ function withCourseContext(courseId, callback) {
     lessonIndex: state.lessonIndex,
     pageIndex: state.pageIndex,
     finalExamPool: state.finalExamPool,
+    finalExamArchive: state.finalExamArchive,
     finalExam: state.finalExam,
   };
 
@@ -6074,6 +6192,7 @@ function withCourseContext(courseId, callback) {
     state.lessonIndex = previous.lessonIndex;
     state.pageIndex = previous.pageIndex;
     state.finalExamPool = previous.finalExamPool;
+    state.finalExamArchive = previous.finalExamArchive;
     state.finalExam = previous.finalExam;
   }
 }
@@ -6309,8 +6428,8 @@ function homeContinueMeta(overview) {
   if (isFinalExamModule(overview.continueModule)) {
     const exam = state.finalExams[overview.courseId] || null;
     if (exam?.completedAt) return "Slutprovet är inlämnat";
-    if (exam) return `${Object.keys(exam.answers || {}).length}/${exam.questionIds?.length || FINAL_EXAM_SIZE} svarade`;
-    return `${FINAL_EXAM_SIZE} slumpade frågor`;
+    if (exam) return `${Object.keys(exam.answers || {}).length}/${exam.questionIds?.length || getFinalExamSize(overview.courseId)} svarade`;
+    return `${getFinalExamSize(overview.courseId)} utvalda frågor`;
   }
 
   if (!overview.continueLesson || !overview.continuePage) return "Starta utbildningen";
@@ -6547,7 +6666,8 @@ function renderHome() {
 
 function getFinalExamQuestions() {
   const ids = Array.isArray(state.finalExam?.questionIds) ? state.finalExam.questionIds : [];
-  return ids.map((id) => state.finalExamPool.find((question) => question.id === id)).filter(Boolean);
+  const questionSource = state.finalExam?.completedAt ? state.finalExamArchive : state.finalExamPool;
+  return ids.map((id) => questionSource.find((question) => question.id === id)).filter(Boolean);
 }
 
 function getFinalExamAnsweredCount() {
@@ -6657,7 +6777,7 @@ function formatClockTime(milliseconds, options = {}) {
   return `${pad(minutes)}:${pad(seconds)}`;
 }
 
-function getFinalExamRequiredCorrect(total = FINAL_EXAM_SIZE) {
+function getFinalExamRequiredCorrect(total = getFinalExamSize()) {
   return Math.ceil((total * FINAL_EXAM_PASS_PERCENT) / 100);
 }
 
@@ -6712,13 +6832,14 @@ function getFinalExamPortalOverview(courseId) {
     const finalExamReady = canStartFinalExam();
     const courseUnlocked = isCourseUnlocked(courseId);
     const answered = getFinalExamAnsweredCount();
-    const total = state.finalExam?.questionIds?.length || FINAL_EXAM_SIZE;
+    const examSize = getFinalExamSize(courseId);
+    const total = state.finalExam?.questionIds?.length || examSize;
     const score = completedSession ? getFinalExamScore() : null;
     const poolCount = state.finalExamPool.length;
 
     let tone = "ready";
     let status = "Redo";
-    let detail = `${poolCount} frågor i underlaget`;
+    let detail = `${poolCount} utvalda frågor · 30 minuter`;
     let action = "start";
     let actionLabel = completedSession ? "Starta nytt prov" : "Starta slutprov";
     let disabled = false;
@@ -6731,10 +6852,10 @@ function getFinalExamPortalOverview(courseId) {
       actionLabel = "Låst";
       disabled = true;
       icon = "lock";
-    } else if (poolCount < FINAL_EXAM_SIZE) {
+    } else if (poolCount < examSize) {
       tone = "locked";
       status = "Ej redo";
-      detail = `Frågepoolen har ${poolCount} av ${FINAL_EXAM_SIZE} frågor.`;
+      detail = `Slutprovet har ${poolCount} av ${examSize} valda frågor.`;
       actionLabel = "Ej redo";
       disabled = true;
       icon = "circle-alert";
@@ -6836,8 +6957,8 @@ function renderFinalPortalMobileTabbar() {
 
 function finalPortalCourseDescription(courseId) {
   return courseId === "vu2"
-    ? "Praktiska situationer, arbetsmiljö och avancerad juridik — bygger vidare på VU1."
-    : "Regler, juridik, arbetsmiljö och yrkesetik — 30 slumpade frågor ur frågepoolen.";
+    ? "Praktiska situationer, arbetsmiljö och avancerad juridik — 40 utvalda frågor."
+    : "Regler, juridik, arbetsmiljö och yrkesetik — 50 utvalda frågor.";
 }
 
 function finalPortalCourseLabel(courseId) {
@@ -6846,7 +6967,7 @@ function finalPortalCourseLabel(courseId) {
 
 function renderFinalPortalAttemptStatus(overview) {
   if (overview.completedSession && overview.score) {
-    const scoreTotal = Math.max(1, Number(overview.score.total || overview.total || FINAL_EXAM_SIZE));
+    const scoreTotal = Math.max(1, Number(overview.score.total || overview.total || getFinalExamSize(overview.courseId)));
     const scoreCorrect = Math.max(0, Math.min(scoreTotal, Number(overview.score.correct || 0)));
     const passRequired = Math.max(1, Math.min(scoreTotal, Number(overview.passRequired || 1)));
     const scorePercent = Math.min(100, (scoreCorrect / scoreTotal) * 100);
@@ -6972,7 +7093,7 @@ function renderFinalExamPortal() {
           </div>
           <div>
             <i data-lucide="badge-check"></i>
-            <span><strong>${getFinalExamRequiredCorrect(FINAL_EXAM_SIZE)}/${FINAL_EXAM_SIZE} rätt</strong><small>Krävs för godkänt</small></span>
+            <span><strong>${FINAL_EXAM_PASS_PERCENT}% rätt</strong><small>Krävs för godkänt</small></span>
           </div>
           <div>
             <i data-lucide="lock"></i>
@@ -7008,7 +7129,7 @@ function pickFinalExamQuestions() {
   const previousIds = new Set(state.finalExam?.questionIds || []);
   const freshQuestions = state.finalExamPool.filter((question) => !previousIds.has(question.id));
   const fallbackQuestions = state.finalExamPool.filter((question) => previousIds.has(question.id));
-  return [...shuffleItems(freshQuestions), ...shuffleItems(fallbackQuestions)].slice(0, FINAL_EXAM_SIZE);
+  return [...shuffleItems(freshQuestions), ...shuffleItems(fallbackQuestions)].slice(0, getFinalExamSize());
 }
 
 function startFinalExam() {
@@ -7034,8 +7155,9 @@ function startFinalExam() {
     return;
   }
 
-  if (state.finalExamPool.length < FINAL_EXAM_SIZE) {
-    showToast("Frågepoolen är för liten för ett slutprov på 30 frågor.");
+  const examSize = getFinalExamSize();
+  if (state.finalExamPool.length < examSize) {
+    showToast(`Slutprovet saknar valda frågor (${state.finalExamPool.length} av ${examSize}).`);
     return;
   }
 
@@ -7057,7 +7179,8 @@ function startFinalExam() {
 function ensureFinalExamIntegrity() {
   if (!state.finalExam?.questionIds?.length) return;
 
-  const availableIds = new Set(state.finalExamPool.map((question) => question.id));
+  const questionSource = state.finalExam.completedAt ? state.finalExamArchive : state.finalExamPool;
+  const availableIds = new Set(questionSource.map((question) => question.id));
   const isValid = state.finalExam.questionIds.every((id) => availableIds.has(id));
   if (!isValid) {
     state.finalExam = null;
@@ -7432,7 +7555,7 @@ function renderCourseHub() {
       ? "Slutprovet är inlämnat"
       : state.finalExam
         ? `${getFinalExamAnsweredCount()}/${state.finalExam.questionIds.length} svarade`
-        : `${FINAL_EXAM_SIZE} slumpade frågor`
+        : `${getFinalExamSize()} utvalda frågor`
     : continuePage
       ? `${continueLesson.title} · ${continuePage.title.replace(/^Sida\s+\d+:\s*/, "")}`
       : "Starta utbildningen";
@@ -7455,7 +7578,7 @@ function renderCourseHub() {
       const pages = allPages(module);
       const quizCount = module.quiz.length;
       const detailText = isFinalExamModule(module)
-        ? `${FINAL_EXAM_SIZE} slumpade frågor`
+        ? `${getFinalExamSize()} utvalda frågor`
         : quizCount
           ? `${pages.length} sidor · ${quizCount} frågor`
           : `${pages.length} sidor`;
@@ -7643,9 +7766,9 @@ function renderContext() {
         : "Inlämnat. Nytt prov kan startas."
       : activeSession
         ? `${getFinalExamAnsweredCount()}/${state.finalExam.questionIds.length} frågor besvarade.`
-        : `${FINAL_EXAM_SIZE} slumpade frågor.`;
+        : `${getFinalExamSize()} utvalda frågor.`;
 
-    els.progressSummary.textContent = `Slutprov med ${FINAL_EXAM_SIZE} slumpade frågor.`;
+    els.progressSummary.textContent = `Slutprov med ${getFinalExamSize()} utvalda frågor och 30 minuters skrivtid.`;
     els.lessonTimeline.innerHTML = `
       <div class="lesson-step is-active">
         <span class="step-dot"></span>
@@ -8933,7 +9056,8 @@ function renderFinalExamInlineCta() {
   const lock = getFinalExamLockInfo();
   const finalExamReady = canStartFinalExam();
   const answered = getFinalExamAnsweredCount();
-  const total = state.finalExam?.questionIds?.length || FINAL_EXAM_SIZE;
+  const examSize = getFinalExamSize();
+  const total = state.finalExam?.questionIds?.length || examSize;
   const isLockedAfterSubmit = Boolean(completedSession) && lock.locked;
   const buttonAction = activeSession || isLockedAfterSubmit ? "data-resume-final-exam" : "data-start-final-exam";
   const buttonLabel = activeSession ? "Fortsätt slutprov" : isLockedAfterSubmit ? "Visa resultat" : "Starta slutprov";
@@ -8949,15 +9073,15 @@ function renderFinalExamInlineCta() {
     <section class="final-exam-inline" aria-label="Starta slutprov">
       <div>
         <span>${course.finalExamLabel}</span>
-        <h2>30 slumpade frågor</h2>
-        <p>Provet visar en fråga per sida och blandas om vid varje nytt provtillfälle. När provet lämnas in spärras nytt prov i 24 timmar.</p>
+        <h2>${examSize} utvalda frågor</h2>
+        <p>Alla utvalda frågor ingår, men ordningen blandas vid varje nytt provtillfälle. Du har 30 minuter. När provet lämnas in spärras nytt prov i 24 timmar.</p>
       </div>
       <div class="final-exam-inline-stats">
-        <span>${state.finalExamPool.length} frågor i underlaget</span>
-        <span>30 frågor per prov</span>
+        <span>${examSize} frågor per prov</span>
+        <span>${getFinalExamRequiredCorrect(examSize)} rätt krävs</span>
         <span>${statusText}</span>
       </div>
-      <button class="dark-action" type="button" ${buttonAction} ${state.finalExamPool.length < FINAL_EXAM_SIZE || (!finalExamReady && !state.finalExam) ? "disabled" : ""}>
+      <button class="dark-action" type="button" ${buttonAction} ${state.finalExamPool.length < examSize || (!finalExamReady && !state.finalExam) ? "disabled" : ""}>
         <span>${buttonLabel}</span>
         <i data-lucide="clipboard-check"></i>
       </button>
@@ -10482,8 +10606,14 @@ async function init() {
   const response = await fetch("utbildning.md?v=20260723-quiz-balans");
   const markdown = await response.text();
   state.courses = parseCourses(markdown);
-  state.finalExamPools = Object.fromEntries(
+  state.finalExamArchives = Object.fromEntries(
     Object.entries(state.courses).map(([courseId, modules]) => [courseId, buildFinalExamPool(modules)])
+  );
+  state.finalExamPools = Object.fromEntries(
+    Object.entries(state.finalExamArchives).map(([courseId, sourcePool]) => [
+      courseId,
+      selectFinalExamQuestions(courseId, sourcePool),
+    ])
   );
   activateCourse("vu1");
   const progressReady = await initializeProgressSync();

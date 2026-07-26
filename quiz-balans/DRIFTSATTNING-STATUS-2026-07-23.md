@@ -47,7 +47,7 @@ npm test        # typecheck, lint, validate:content, validate:release, platform-
 
 - Öppna plattformen, kör ett VU1-modulquiz och ett Quizportal-pass (VU1, VU2, scenario): nya alternativtexter syns, rätt svar rättas rätt, förklaringar visas.
 - Svara **fel** på en portalfråga → kontrollera att den dyker upp i "Att repetera" och går att öppna (bekräftar att frågenycklarna överlevde upsert).
-- Starta ett VU1-slutprov → 30 frågor dras utan fel.
+- Starta ett VU1-slutprov → exakt de 50 valda frågorna laddas och timern startar på 30 minuter. Kontrollera även VU2 med dess 40 valda frågor. (Detta ersätter det ursprungliga 30-frågorstestet från 2026-07-23.)
 
 ## Viktigt att känna till
 
