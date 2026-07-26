@@ -1,8 +1,8 @@
 {
   "schemaVersion": 2,
-  "releaseId": "2026-07-26-cookie-consent.1",
-  "contentVersion": "1c4b61727d296df7901735471c068ccfcc9f9dc562279ddeb75167354e993dff",
-  "generatedAt": "2026-07-26T02:28:54.976Z",
+  "releaseId": "2026-07-26-kontaktadress.1",
+  "contentVersion": "5f2447b7aeb726fad9683313dfce473eeccc728fe46a47eccc709d0d2c6a9d77",
+  "generatedAt": "2026-07-26T02:56:27.032Z",
   "sourceChecks": [
     {
       "id": "polisen-fap-573-01-pmfs-2017-10",
@@ -15,8 +15,8 @@
   "files": [
     {
       "path": "content/guides/anvandarvillkor.mdx",
-      "bytes": 1946,
-      "sha256": "7a4b1b068bfa30e0cd0ec82fb39da6fac677ef9683569220d51c4aa01d57c8b8"
+      "bytes": 1940,
+      "sha256": "6e87945ff6df3f6216658e7f97f25eb786790c90c28cbf40888e141a35f91956"
     },
     {
       "path": "content/guides/bli-vaktare.mdx",
@@ -30,13 +30,13 @@
     },
     {
       "path": "content/guides/integritet.mdx",
-      "bytes": 3721,
-      "sha256": "f887de9ac60d512f16adeafddc03444129948a6e8a61a77ab7ee749a57137385"
+      "bytes": 3715,
+      "sha256": "6b6918893c27fc4cf6cb1dd5966211fd349852e74be65854a5d352447affe6b8"
     },
     {
       "path": "content/guides/kontakt.mdx",
-      "bytes": 1433,
-      "sha256": "5febf8a526025e99fc9dd12eee02a26e5e06cc7b3bb43aea61bd827e6f5d9156"
+      "bytes": 1427,
+      "sha256": "6b76a3a23ea619138e498fe41b0f63d358a5dd297719bd4290fde1e5d8db54d2"
     },
     {
       "path": "content/guides/nodvarn-och-nod.mdx",
@@ -50,8 +50,8 @@
     },
     {
       "path": "content/guides/redaktionell-policy.mdx",
-      "bytes": 2395,
-      "sha256": "5819a91f2a1a9beaa87fa5f9222a807097438fd56b08e8c5bcfecf206d31c7f6"
+      "bytes": 2389,
+      "sha256": "606260ef722beb04fa9fee8c71935366d9fb13adf6e24c43b8e3e5ad1eb17c01"
     },
     {
       "path": "content/guides/studieteknik.mdx",

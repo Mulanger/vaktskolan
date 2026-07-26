@@ -33,7 +33,7 @@ function organizationEntity(): Organization {
     name: SITE_NAME,
     alternateName: "vaktskolan.se",
     url: absoluteUrl("/"),
-    email: "kontakt@vaktskolan.se",
+    email: "info@vaktskolan.se",
     logo: {
       "@type": "ImageObject",
       url: absoluteUrl("/site-assets/logo/icon-512.png"),

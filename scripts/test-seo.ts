@@ -130,7 +130,7 @@ async function main() {
       const organization = structuredNodes.find((node) => node["@type"] === "Organization");
       assert(webSite?.name === "Vaktskolan", "/: missing WebSite name structured data");
       assert(webSite?.alternateName === "vaktskolan.se", "/: missing WebSite alternateName");
-      assert(organization?.email === "kontakt@vaktskolan.se", "/: missing public organization email");
+      assert(organization?.email === "info@vaktskolan.se", "/: missing public organization email");
       assert(organization?.logo, "/: missing organization logo");
     } else {
       const breadcrumb = structuredNodes.find((node) => node["@type"] === "BreadcrumbList");

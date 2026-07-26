@@ -16,7 +16,7 @@
 ## Obligatoriskt innehåll före indexering
 
 - Ersätt organisationsuppgifter i integritets- och villkorstexterna med korrekt juridiskt namn, organisationsnummer och postadress.
-- Verifiera att `kontakt@vaktskolan.se` är aktiv och bevakad.
+- Verifiera att `info@vaktskolan.se` är aktiv och bevakad.
 - Låt ansvarig redaktion manuellt kontrollera samtliga 12 kärnsidor mot de synliga primärkällorna.
 - Kontrollera särskilt utbildningstider, PYT-krav, FAP-hänvisningar och all text om befogenheter.
 - Publicera inte formuleringar som “expertgranskad”, “officiell”, “godkänd utbildning” eller “branschledande” utan dokumenterbart stöd.
