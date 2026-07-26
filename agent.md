@@ -1347,7 +1347,7 @@ Nya slutprov använder det kvalitetssäkrade urvalet i `docs/slutprov-topplista-
 - `buildFinalExamPool()` bygger fortfarande den kompletta källan (154 VU1 och 74 VU2). Källfrågorna har inte tagits bort ur `utbildning.md` eller databasen.
 - `selectFinalExamQuestions()` mappar vitlistan till källan. Alla valda frågor ingår i varje nytt prov; `pickFinalExamQuestions()` blandar bara ordningen.
 - `state.finalExamPools` innehåller det aktiva urvalet. `state.finalExamArchives` behåller den kompletta källan enbart för att gamla avslutade försök ska kunna poängsättas och fortsätta styra upplåsning korrekt.
-- Ett äldre pågående försök med frågor utanför urvalet ogiltigförklaras av `ensureFinalExamIntegrity()` och startas om i det nya formatet. Avslutade försök bevaras.
+- Ett äldre pågående försök som inte innehåller exakt hela kursens 50/40-urval ogiltigförklaras av `ensureFinalExamIntegrity()` och startas om i det nya formatet. Avslutade försök bevaras.
 - `FINAL_EXAM_DURATION_MS` är 30 minuter. Saniteringen förlänger även ett redan sparat pågående 15-minutersförsök till totalt 30 minuter från dess ursprungliga starttid.
 - Godkäntgränsen är fortsatt 80 procent: 40/50 i VU1 och 32/40 i VU2.
 - `scripts/test-platform-guards.mjs` verifierar exakt ID-ordning, 50/40-frågeantal, att de två bortvalda felaktiga VU1-frågorna inte kan visas, att hela källan finns kvar, 30-minuterstiden och hela upplåsningskedjan.

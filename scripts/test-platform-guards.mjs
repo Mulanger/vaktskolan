@@ -337,6 +337,19 @@ const fullCourseResult = vm.runInContext(
     state.finalExams.vu1 = state.finalExam;
     ensureFinalExamIntegrity();
     assert.equal(state.finalExam, null, "An active legacy attempt outside the new selection must be reset.");
+    state.finalExam = {
+      id: "legacy-short-vu1",
+      createdAt: 1,
+      completedAt: null,
+      currentIndex: 0,
+      endsAt: Date.now() + FINAL_EXAM_DURATION_MS,
+      reviewMode: false,
+      questionIds: state.finalExamPool.slice(0, 30).map((question) => question.id),
+      answers: {}
+    };
+    state.finalExams.vu1 = state.finalExam;
+    ensureFinalExamIntegrity();
+    assert.equal(state.finalExam, null, "An active 30-question attempt must be reset even if every question is selected.");
     state.finalExams = {};
     vu1Items.forEach(({ index }, offset) => {
       if (offset > 0) assert.equal(isModuleUnlocked(index), true);

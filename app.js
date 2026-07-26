@@ -7181,7 +7181,13 @@ function ensureFinalExamIntegrity() {
 
   const questionSource = state.finalExam.completedAt ? state.finalExamArchive : state.finalExamPool;
   const availableIds = new Set(questionSource.map((question) => question.id));
-  const isValid = state.finalExam.questionIds.every((id) => availableIds.has(id));
+  const sessionIds = new Set(state.finalExam.questionIds);
+  const hasValidQuestions = state.finalExam.questionIds.every((id) => availableIds.has(id));
+  const hasCompleteActiveSelection =
+    Boolean(state.finalExam.completedAt) ||
+    (state.finalExam.questionIds.length === getFinalExamSize() &&
+      sessionIds.size === state.finalExam.questionIds.length);
+  const isValid = hasValidQuestions && hasCompleteActiveSelection;
   if (!isValid) {
     state.finalExam = null;
     saveFinalExam();

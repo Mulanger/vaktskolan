@@ -10,7 +10,7 @@ Detta är det implementerade urvalet från de frågor som redan finns i slutprov
 - Skrivtiden är 30 minuter för båda slutproven.
 - Godkäntgränsen är fortsatt 80 procent: minst 40 av 50 rätt i VU1 och minst 32 av 40 rätt i VU2.
 - Den fullständiga källbanken ligger kvar oförändrad i kursmaterialet (154 tillgängliga VU1-frågor och 74 tillgängliga VU2-frågor efter nuvarande parser/deduplicering). Filtreringen sker i `app.js` genom stabila fråge-ID:n.
-- Gamla avslutade prov kan fortfarande läsas från den fullständiga källbanken så att tidigare resultat och kursupplåsningar bevaras. Ett äldre pågående prov som inte följer det nya urvalet återställs och måste startas om.
+- Gamla avslutade prov kan fortfarande läsas från den fullständiga källbanken så att tidigare resultat och kursupplåsningar bevaras. Ett äldre pågående prov som inte innehåller exakt hela det nya 50/40-urvalet återställs och måste startas om.
 
 ## Urvalsprinciper
 
