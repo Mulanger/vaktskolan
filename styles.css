@@ -1358,8 +1358,14 @@ body.app-unavailable .app-boot-screen {
 .shell {
   display: grid;
   grid-template-columns: var(--portal-sidebar-width) minmax(0, 1fr) 336px;
+  /* dvh följer mobilens adressfält. Med enbart vh blir skalet högre än den
+     synliga ytan, och eftersom overflow är hidden hamnar nederkanten bakom
+     webbläsarens chrome utan att gå att scrolla fram. vh står kvar först
+     som fallback för webbläsare utan dvh-stöd. */
   height: 100vh;
+  height: 100dvh;
   min-height: 100vh;
+  min-height: 100dvh;
   overflow: hidden;
 }
 
@@ -9113,6 +9119,7 @@ body.modal-open {
 
   .workspace {
     height: 100vh;
+    height: 100dvh;
   }
 
   .topbar {
@@ -9143,6 +9150,14 @@ body.modal-open {
 
   .content-inner {
     padding: 20px 18px 72px;
+  }
+
+  /* Karriärverktyget går kant i kant på bredden, men behöver samma luft i
+     botten som övriga vyer. Utan den slutar sista kortet exakt vid
+     containerkanten och ser avklippt ut på mobil. Måste ligga efter
+     body.knowledge-base-mode .content-inner för att vinna. */
+  body.knowledge-base-mode .content-inner {
+    padding: 0 0 96px;
   }
 
   body.quiz-overview-mode .content-inner {
