@@ -1353,3 +1353,29 @@ Nya slutprov använder det kvalitetssäkrade urvalet i `docs/slutprov-topplista-
 - Slutprovsportalens resultatkort visar alltid aktuell skala (`x/50` för VU1 och `x/40` för VU2). Historiska 30-frågorsresultat visas som en tydligt märkt omräkning utan att den sparade sessionen eller upplåsningen ändras.
 - `scripts/test-platform-guards.mjs` verifierar exakt ID-ordning, 50/40-frågeantal, att de två bortvalda felaktiga VU1-frågorna inte kan visas, att hela källan finns kvar, 30-minuterstiden och hela upplåsningskedjan.
 - Cacheversionen för `styles.css` och `app.js` i `index.html` är `20260726-slutprov-resultat-50-40`.
+
+## VU1 modul 1 fråga 2 – felaktigt facit rättat, importen gjord ordningssäker (2026-07-26)
+
+En granskning av hela VU1-materialet (dokumenterad i `docs/granskning-vu1-kursmaterial-2026-07-26.md`) hittade ett felaktigt facit. Modul 1 fråga 2 – "Vilka tre saker prövas när en person ska godkännas för anställning i ett bevakningsföretag?" – pekade ut alternativ D ("Körkort, språkkunskaper och svenskt medborgarskap") som rätt. Rätt svar är B, "Laglydnad, medborgerlig pålitlighet och lämplighet i övrigt", enligt 4 § lagen (1974:191) om bevakningsföretag.
+
+Felet uppstod vid quizbalanseringen 2026-07-23: alternativtexterna byttes om men bokstaven D följde inte med. Förklaringstexten och brödtexten i modul 1 beskrev hela tiden det rätta svaret. En maskinjämförelse av samtliga 154 VU1-frågor mot före/efter-underlaget i `quiz-balans/vu1-banken-alla-154.md` visar att detta var den **enda** frågan där facit hamnat på fel alternativ.
+
+Rättat i `utbildning.md`, `vu1quiz.json` och `quiz-balans/data/vu1_fixed.json` (`correct: "B"`, `correctIndex: 1`). Alternativens ordning, frågetext, `id` och antal är orörda. Cachesträngarna för `utbildning.md` och `app.js` är bumpade till `20260726-vu1-fraga2-facit` och release-manifestet är regenererat som `2026-07-26-vu1-fraga2-facit.1`.
+
+### Importen kraschade – och varför
+
+Första produktionsimporten avbröts med `23505 duplicate key value violates unique constraint "quiz_answer_options_one_correct_per_question"`. Tabellen har ett unikt index som tillåter exakt ett `is_correct = true` per `question_id`. `upsertOptions()` skrev alla fyra alternativraderna i en batch, så det nya rätta svaret (B) sattes till sant medan det gamla (D) fortfarande var det.
+
+Det farliga är inte kraschen utan att den lämnar databasen **halvskriven**: `upsertQuestions()` hade redan uppdaterat `metadata.correct` till B, medan `quiz_answer_options` rullades tillbaka atomiskt och behöll D. Det syns inte i frågeantalen. Tillståndet reparerades manuellt med två ordnade PATCH-anrop (nolla D, sätt B) följt av en omkörning.
+
+### Fixen i `scripts/import-quiz-portal-banks.mjs`
+
+- `clearMovedCorrectOptions()` läser aktuella `is_correct`-etiketter före upserten och nollar **bara** de frågor vars facit faktiskt flyttat. Oförändrade frågor passerar aldrig ett läge där inget alternativ är markerat som rätt. Antalet flyttade svar rapporteras som `movedAnswers` i utdata.
+- `verifyAnswerConsistency()` körs efter varje import och jämför `quiz_questions.metadata.correct` mot den rad i `quiz_answer_options` som är markerad som rätt, för alla 228 VU1/VU2-frågor. Den kontrollerar även att antalet lästa frågor är 154 respektive 74. Avvikelse ger exit 1.
+- Samma kontroll går att köra fristående utan att något skrivs: `npm run verify:quiz-portal` (`--verify-only`). Den kräver nätverk och `SUPABASE_SECRET_KEY` och ingår därför **inte** i `prebuild` eller `test`.
+
+Verifierat genom att medvetet återskapa driften (metadata=B, alternativ D markerat): `verify:quiz-portal` failade med exit 1 och pekade ut `vu1_quiz:vu1:2`, därefter reparerade `import:quiz-portal` tillståndet med `movedAnswers: 1` och passerade facitkontrollen. Slutläget är 154/74/300 publicerade frågor och 2 112 svarsalternativ (616 + 296 + 1 200), noll avvikelser, inga `student_*`-tabeller berörda.
+
+### Kvarstående från granskningen
+
+Åtta faktapunkter är dokumenterade men **inte** åtgärdade. Högst prioritet har frågan om väktarens tystnadsplikt: materialet beskriver den som lagstadgad enligt lagen om bevakningsföretag, men den lagen (1 §–16 §) innehåller ingen sådan bestämmelse, och inte heller PMFS 2017:10. Det påverkar `utbildning.md:49`, rubriceringen "brott mot tystnadsplikt (BrB 20:3)" på rad 462 och förklaringen till fråga 8. Bör passera jurist innan något ändras.

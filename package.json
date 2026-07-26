@@ -23,6 +23,7 @@
     "verify:supabase-progress": "node scripts/verify-supabase-progress.mjs",
     "stripe:setup": "node --env-file=.env scripts/create-stripe-premium-product.mjs",
     "import:quiz-portal": "node scripts/import-quiz-portal-banks.mjs",
+    "verify:quiz-portal": "node scripts/import-quiz-portal-banks.mjs --verify-only",
     "test:seo": "tsx scripts/test-seo.ts",
     "test": "npm run typecheck && npm run lint && npm run validate:content && npm run validate:release && npm run test:platform-guards && npm run test:quiz-balance && npm run test:emblems && npm run test:billing"
   },

@@ -3,6 +3,8 @@ import { resolve } from "node:path";
 
 const QUESTION_CHUNK_SIZE = 100;
 const OPTION_CHUNK_SIZE = 500;
+const ID_FILTER_CHUNK_SIZE = 50;
+const MAX_ROWS = 5000;
 const VALID_STATUSES = new Set(["draft", "published", "archived"]);
 
 function parseArgs(argv) {
@@ -13,6 +15,7 @@ function parseArgs(argv) {
     status: "published",
     publishScenarios: true,
     dryRun: false,
+    verifyOnly: false,
   };
 
   for (let index = 2; index < argv.length; index += 1) {
@@ -23,6 +26,7 @@ function parseArgs(argv) {
     else if (arg === "--status") args.status = argv[++index];
     else if (arg === "--skip-scenarios") args.publishScenarios = false;
     else if (arg === "--dry-run") args.dryRun = true;
+    else if (arg === "--verify-only") args.verifyOnly = true;
   }
 
   if (!VALID_STATUSES.has(args.status)) {
@@ -241,7 +245,44 @@ async function upsertQuestions(client, rows) {
   return upserted;
 }
 
+async function readCorrectLabels(client, questionIds) {
+  const found = new Map();
+  for (const batch of chunk(questionIds, ID_FILTER_CHUNK_SIZE)) {
+    const rows = await client.request(
+      `quiz_answer_options?is_correct=is.true&question_id=in.(${batch.join(",")})&select=question_id,label&limit=${MAX_ROWS}`
+    );
+    for (const row of rows) found.set(row.question_id, row.label);
+  }
+  return found;
+}
+
+// quiz_answer_options har ett unikt index som tillåter exakt ett is_correct
+// per fråga. Flyttas ett rätt svar till en annan bokstav hinner den nya raden
+// sättas till true medan den gamla fortfarande är det, och hela batchen rullas
+// tillbaka. Nollställ därför de gamla raderna först – men bara för de frågor
+// vars facit faktiskt har flyttat, så att oförändrade frågor aldrig passerar
+// ett läge där inget alternativ är markerat som rätt.
+async function clearMovedCorrectOptions(client, rows) {
+  const desired = new Map();
+  for (const row of rows) if (row.is_correct) desired.set(row.question_id, row.label);
+
+  const current = await readCorrectLabels(client, [...desired.keys()]);
+  const moved = [...current.entries()]
+    .filter(([questionId, label]) => desired.get(questionId) !== label)
+    .map(([questionId, label]) => ({ questionId, label }));
+
+  for (const { questionId, label } of moved) {
+    await client.request(`quiz_answer_options?question_id=eq.${questionId}&label=eq.${label}`, {
+      method: "PATCH",
+      headers: { Prefer: "return=minimal" },
+      body: { is_correct: false },
+    });
+  }
+  return moved;
+}
+
 async function upsertOptions(client, rows) {
+  const moved = await clearMovedCorrectOptions(client, rows);
   for (const batch of chunk(rows, OPTION_CHUNK_SIZE)) {
     await client.request("quiz_answer_options?on_conflict=question_id,label", {
       method: "POST",
@@ -249,10 +290,62 @@ async function upsertOptions(client, rows) {
       body: batch,
     });
   }
+  return moved;
+}
+
+// Fångar glapp mellan quiz_questions.metadata.correct och den rad i
+// quiz_answer_options som faktiskt är markerad som rätt. Ett avbrutet
+// importförsök kan lämna exakt det tillståndet, och det syns inte i
+// frågeantalen.
+async function verifyAnswerConsistency(client, collections) {
+  const problems = [];
+
+  for (const { collectionId, expectedCount } of collections) {
+    const questions = await client.request(
+      `quiz_questions?collection_id=eq.${collectionId}&question_kind=eq.multiple_choice&select=id,external_id,metadata&limit=${MAX_ROWS}`
+    );
+    if (questions.length !== expectedCount) {
+      problems.push(`${collectionId}: läste ${questions.length} frågor, förväntade ${expectedCount}.`);
+    }
+
+    const correctLabels = await readCorrectLabels(client, questions.map((question) => question.id));
+    for (const question of questions) {
+      const actual = correctLabels.get(question.id);
+      const expected = question.metadata?.correct;
+      if (!actual) problems.push(`${collectionId}:${question.external_id} saknar markerat rätt svar.`);
+      else if (actual !== expected) {
+        problems.push(`${collectionId}:${question.external_id} har ${actual} markerat men metadata.correct=${expected}.`);
+      }
+    }
+  }
+
+  return problems;
+}
+
+const CONSISTENCY_TARGETS = [
+  { collectionId: "vu1_quiz", expectedCount: 154 },
+  { collectionId: "vu2_quiz", expectedCount: 74 },
+];
+
+async function reportConsistency(client) {
+  const problems = await verifyAnswerConsistency(client, CONSISTENCY_TARGETS);
+  if (problems.length) {
+    console.error(`Facitkontrollen hittade ${problems.length} avvikelse(r):`);
+    for (const problem of problems) console.error(`  - ${problem}`);
+    throw new Error("Facit stämmer inte mot svarsalternativen. Databasen behöver ses över.");
+  }
+  const total = CONSISTENCY_TARGETS.reduce((sum, target) => sum + target.expectedCount, 0);
+  console.log(`Facitkontroll: metadata.correct stämmer med markerat svarsalternativ för samtliga ${total} frågor.`);
 }
 
 async function main() {
   const args = parseArgs(process.argv);
+
+  if (args.verifyOnly) {
+    await reportConsistency(new SupabaseRestClient(loadEnv()));
+    return;
+  }
+
   const vu1 = readJson(args.vu1);
   const vu2 = readJson(args.vu2);
   const flashcards = readJson(args.flashcards);
@@ -284,7 +377,7 @@ async function main() {
       return quizOptionRows(question, questionId);
     })
   );
-  await upsertOptions(client, optionRows);
+  const movedAnswers = await upsertOptions(client, optionRows);
   const upsertedFlashcards = await upsertQuestions(client, flashcardRows);
 
   if (args.publishScenarios) {
@@ -310,7 +403,10 @@ async function main() {
     flashcards: upsertedFlashcards.length,
     scenariosPublished: args.publishScenarios,
     status: args.status,
+    movedAnswers: movedAnswers.length,
   }, null, 2));
+
+  await reportConsistency(client);
 }
 
 main().catch((error) => {
