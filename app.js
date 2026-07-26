@@ -4806,6 +4806,11 @@ function getFinalExamPortalOverview(courseId) {
       courseProgress,
       moduleStats,
       poolCount,
+      activeSession,
+      completedSession,
+      score,
+      total,
+      passRequired: getFinalExamRequiredCorrect(total),
       tone,
       status,
       detail,
@@ -4864,22 +4869,81 @@ function renderFinalPortalMobileTabbar() {
 
 function finalPortalCourseDescription(courseId) {
   return courseId === "vu2"
-    ? "Fördjupande slutprov för VU2 med situationer, arbetsmiljö och avancerad juridik."
-    : "Slutprov för VU1 med regler, juridik, arbetsmiljö och yrkesetik från grundutbildningen.";
+    ? "Praktiska situationer, arbetsmiljö och avancerad juridik — bygger vidare på VU1."
+    : "Regler, juridik, arbetsmiljö och yrkesetik — 30 slumpade frågor ur frågepoolen.";
+}
+
+function finalPortalCourseLabel(courseId) {
+  return courseId === "vu2" ? "VU2 · Fortsättningsutbildning" : "VU1 · Grundutbildning";
+}
+
+function renderFinalPortalAttemptStatus(overview) {
+  if (overview.completedSession && overview.score) {
+    const scoreTotal = Math.max(1, Number(overview.score.total || overview.total || FINAL_EXAM_SIZE));
+    const scoreCorrect = Math.max(0, Math.min(scoreTotal, Number(overview.score.correct || 0)));
+    const passRequired = Math.max(1, Math.min(scoreTotal, Number(overview.passRequired || 1)));
+    const scorePercent = Math.min(100, (scoreCorrect / scoreTotal) * 100);
+    const passPercent = Math.min(100, (passRequired / scoreTotal) * 100);
+    const passed = scoreCorrect >= passRequired;
+    const resultNote = passed
+      ? "Över godkäntgränsen — bra jobbat"
+      : overview.tone === "submitted"
+        ? overview.detail
+        : "Under gränsen · nytt försök kan startas";
+
+    return `
+      <div class="final-portal-result" style="--final-score:${scorePercent.toFixed(1)}%;--final-pass:${passPercent.toFixed(1)}%;--final-result-color:${passed ? "#16a34a" : "#f0a22e"}">
+        <div class="final-portal-result-head">
+          <span>Senaste resultat</span>
+          <strong>${scoreCorrect}/${scoreTotal}</strong>
+        </div>
+        <div class="final-portal-result-track" aria-label="${scoreCorrect} av ${scoreTotal} rätt, godkäntgräns ${passRequired}">
+          <span></span>
+          <i aria-hidden="true"></i>
+        </div>
+        <div class="final-portal-result-meta">
+          <span>${escapeHtml(resultNote)}</span>
+          <strong>Gräns ${passRequired}/${scoreTotal}</strong>
+        </div>
+      </div>
+    `;
+  }
+
+  const noteIcon = overview.disabled
+    ? "lock"
+    : overview.activeSession
+      ? "play-circle"
+      : "circle-check";
+
+  return `
+    <div class="final-portal-note final-portal-note-${overview.tone}">
+      <i data-lucide="${noteIcon}"></i>
+      <span>${escapeHtml(overview.detail)}</span>
+    </div>
+  `;
 }
 
 function renderFinalExamPortalCard(overview) {
   const cardDescription = finalPortalCourseDescription(overview.courseId);
-  const actionIcon = overview.disabled ? "lock" : overview.action === "resume" ? "play-circle" : "arrow-right";
+  const actionIcon = overview.disabled
+    ? "lock"
+    : overview.tone === "submitted"
+      ? "eye"
+      : overview.action === "resume"
+        ? "play-circle"
+        : "arrow-right";
 
   return `
     <article class="final-portal-card final-portal-card-${overview.tone}">
       <div class="final-portal-card-head">
         <span class="final-portal-icon"><i data-lucide="${overview.icon}"></i></span>
-        <span class="final-portal-status final-portal-status-${overview.tone}">${escapeHtml(overview.status)}</span>
+        <span class="final-portal-status final-portal-status-${overview.tone}">
+          <i aria-hidden="true"></i>
+          ${escapeHtml(overview.status)}
+        </span>
       </div>
       <div class="final-portal-card-copy">
-        <span>${escapeHtml(overview.course.shortLabel)}</span>
+        <span>${escapeHtml(finalPortalCourseLabel(overview.courseId))}</span>
         <h2>${escapeHtml(overview.course.finalExamLabel)}</h2>
         <p>${escapeHtml(cardDescription)}</p>
       </div>
@@ -4897,7 +4961,7 @@ function renderFinalExamPortalCard(overview) {
           <strong>${overview.poolCount}</strong>
         </div>
       </div>
-      <p class="final-portal-detail">${escapeHtml(overview.detail)}</p>
+      ${renderFinalPortalAttemptStatus(overview)}
       <button class="final-portal-action" type="button"
         data-final-portal-course="${overview.courseId}"
         data-final-portal-action="${overview.action}"
@@ -4905,6 +4969,11 @@ function renderFinalExamPortalCard(overview) {
         <span>${escapeHtml(overview.actionLabel)}</span>
         <i data-lucide="${actionIcon}"></i>
       </button>
+      <p class="final-portal-action-note">
+        ${overview.disabled
+          ? "Låses upp automatiskt när kravet är uppfyllt"
+          : `${overview.total} frågor · en fråga i taget · resultat direkt efter inlämning`}
+      </p>
     </article>
   `;
 }
@@ -4921,17 +4990,31 @@ function renderFinalExamPortal() {
           <h1 id="finalPortalTitle">Slutprov</h1>
           <p>Provläge · en fråga i taget · inget facit förrän du lämnat in.</p>
         </div>
+        <div class="final-portal-mode-pill" aria-label="Provläge, resultatet räknas">
+          <i aria-hidden="true"></i>
+          <strong>Provläge</strong>
+          <span>resultatet räknas</span>
+        </div>
       </div>
       <section class="final-portal-hero" aria-label="Information om slutprov">
         <div class="final-portal-hero-copy">
           <span>Skarpt kunskapstest</span>
           <h2>Dags för slutprovet</h2>
-          <p>Slutprovet är ditt skarpa kunskapstest. Till skillnad från Quiz Portalen får du inget facit under provets gång — du svarar på alla frågor, lämnar in, och ser sedan ditt resultat. Läs varje fråga noga.</p>
+          <p>Till skillnad från Quiz Portalen får du inget facit under provets gång — du svarar på alla frågor, lämnar in och ser sedan ditt resultat. Läs varje fråga noga.</p>
         </div>
         <div class="final-portal-rules" aria-label="Regler">
-          <div><i data-lucide="clock-3"></i><span>${Math.round(FINAL_EXAM_DURATION_MS / 60000)} min tidsgräns</span></div>
-          <div><i data-lucide="badge-check"></i><span>Godkänt vid ${getFinalExamRequiredCorrect(FINAL_EXAM_SIZE)}/${FINAL_EXAM_SIZE}</span></div>
-          <div><i data-lucide="lock"></i><span>24h spärr vid underkänt</span></div>
+          <div>
+            <i data-lucide="clock-3"></i>
+            <span><strong>${Math.round(FINAL_EXAM_DURATION_MS / 60000)} minuter</strong><small>Tidsgräns för hela provet</small></span>
+          </div>
+          <div>
+            <i data-lucide="badge-check"></i>
+            <span><strong>${getFinalExamRequiredCorrect(FINAL_EXAM_SIZE)}/${FINAL_EXAM_SIZE} rätt</strong><small>Krävs för godkänt</small></span>
+          </div>
+          <div>
+            <i data-lucide="lock"></i>
+            <span><strong>24 timmar</strong><small>Spärr vid underkänt försök</small></span>
+          </div>
         </div>
       </section>
 

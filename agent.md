@@ -1253,3 +1253,13 @@ Landningsfooterns `Användarvillkor` och `Integritetspolicy` pekade på `href="#
 ### Kvar att bedöma
 
 Texterna är skrivna som en teknisk beskrivning av vad som faktiskt sätts. Formuleringarna om rättslig grund och tredjelandsöverföring bör läsas av jurist tillsammans med de organisationsuppgifter som `docs/seo-launch-checklist.md` redan flaggar för.
+
+## Slutprovets landningssida – design 1a/1b (2026-07-26)
+
+Slutprovsportalen har fått den nya landningsdesignen från `D:\Slutprovs-sida omdesign (1).zip`: variant 1a för desktop och 1b för mobil. Ändringen är avgränsad till portalens presentation i `renderFinalExamPortal()`/`renderFinalExamPortalCard()` och till den dedikerade CSS-sektionen `Slutprovsportal 1a/1b` i `styles.css`.
+
+- Befintlig provlogik är orörd: start/återuppta, timer, frågeurval, svar, inlämning, poäng, godkäntgräns och 24-timmarsspärr använder samma state och händelsehanterare som tidigare.
+- Korten visar fortfarande data från `getFinalExamPortalOverview()` och använder samma `data-final-portal-course`/`data-final-portal-action`-kontrakt. Presentationen visar nu kursprogress, frågepool, aktiv/låst status och senaste resultat med godkäntgräns.
+- Desktop använder två parallella provkort. Vid `max-width: 940px` växlar sidan till variant 1b med staplade kort, mobilheader och den befintliga fasta bottennavigeringen.
+- Verifierat visuellt i 1440 px och 390 px utan horisontell overflow. Mobilens båda kort kan nås ovanför bottennavigeringen. En faktisk lokal start av VU2 öppnade den befintliga provvyn med timer och fråga 1 av 30.
+- Cacheversionen för `styles.css` och `app.js` i `index.html` är `20260726-slutprov-hub-1ab`.
