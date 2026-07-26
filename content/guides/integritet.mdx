@@ -1,10 +1,10 @@
 ---
 slug: integritet
 title: "Integritetspolicy för Vaktskolans webb och plattform"
-description: "Läs hur Vaktskolan behandlar konto-, användnings- och tekniska uppgifter, vilka leverantörer som används och hur du kontaktar oss om dina rättigheter."
-summary: "Information om personuppgifter, driftleverantörer, lagring, säkerhet och dina rättigheter."
+description: "Läs hur Vaktskolan behandlar konto- och tekniska uppgifter, vilka kakor som används, vilka leverantörer vi anlitar och hur du utövar dina rättigheter."
+summary: "Information om personuppgifter, kakor och samtycke, driftleverantörer, lagring, säkerhet och dina rättigheter."
 publishedAt: "2026-07-10"
-reviewedAt: "2026-07-10"
+reviewedAt: "2026-07-26"
 author: "Vaktskolans redaktion"
 primaryTopic: legal
 image: /opengraph-image
@@ -23,9 +23,27 @@ När du använder den publika webbplatsen kan tekniska uppgifter behandlas, exem
 
 Uppgifter behandlas för att tillhandahålla tjänsten, skydda konton, felsöka, mäta teknisk prestanda och förbättra innehåll och funktioner. Uppgifter ska inte användas för oförenliga ändamål.
 
+## Kakor och samtycke
+
+Kakor är små textfiler som lagras på din enhet. Vaktskolan delar in dem i två grupper.
+
+**Nödvändiga kakor** krävs för att tjänsten ska fungera och sätts utan samtycke. Hit hör inloggningens sessionskakor (`__session` och `__client` från Clerk), som håller dig inloggad och skyddar kontot. Utan dem går det inte att använda plattformen.
+
+**Kakor för analys och marknadsföring** sätts först efter att du har godkänt dem. Hit hör:
+
+- `_ga` och `_ga_*` från Google Analytics, som mäter hur webbplatsen används. Lagras upp till 2 år.
+- `_gcl_au` från Google Ads, som kopplar ett annonsklick till ett senare köp. Lagras upp till 90 dagar.
+- Kakor från `doubleclick.net` som Google kan sätta för annonsmätning.
+
+Innan du gör ett val är dessa avstängda via Google Consent Mode, och inga analys- eller marknadsföringskakor lagras på din enhet. Väljer du **Endast nödvändiga** raderas dessutom eventuella sådana kakor som redan finns sparade.
+
+Ditt val sparas lokalt i webbläsaren tillsammans med en tidsstämpel. Du kan när som helst ändra dig via länken **Cookie-inställningar** i sidfoten. Väljer du att neka fungerar inloggning, kursinnehåll, quiz och betalning precis som vanligt.
+
+Betalning sker hos Stripe på deras egen webbplats. De kakor som sätts under betalningen omfattas av Stripes egna villkor och kan inte styras härifrån.
+
 ## Leverantörer
 
-Vaktskolan använder InstaPods för webbdrift, Clerk för autentisering och Supabase för datalagring och API-funktioner. Respektive leverantör kan behandla tekniska uppgifter enligt avtal och egna integritetsvillkor.
+Vaktskolan använder InstaPods för webbdrift, Clerk för autentisering, Supabase för datalagring och API-funktioner, Stripe för betalningar samt Google Analytics och Google Ads för webbanalys och annonsmätning. Respektive leverantör kan behandla tekniska uppgifter enligt avtal och egna integritetsvillkor. Google och Stripe kan innebära överföring av uppgifter till tredje land, med de skyddsåtgärder som respektive leverantör tillämpar.
 
 ## Lagring och säkerhet
 

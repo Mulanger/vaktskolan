@@ -38,6 +38,7 @@ transformText("index.html", "index.html", [
   ...sharedAssetReplacements,
   ['<meta name="viewport" content="width=device-width, initial-scale=1.0">', '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <meta name="robots" content="noindex, nofollow, noarchive">'],
   ['href="styles.css', 'href="/legacy-platform/styles.css'],
+  ['src="consent.js', 'src="/legacy-platform/consent.js'],
   ['src="authProvider.js', 'src="/legacy-platform/authProvider.js'],
   ['src="supabaseApi.js', 'src="/legacy-platform/supabaseApi.js'],
   ['src="emblemSystem.js', 'src="/legacy-platform/emblemSystem.js'],
@@ -68,6 +69,7 @@ transformText("auth.css", "auth.css", sharedAssetReplacements);
 for (const file of [
   "authProvider.js",
   "clerkAuth.js",
+  "consent.js",
   "emblemSystem.js",
   "supabaseApi.js",
   "utbildning.md",
@@ -79,6 +81,9 @@ for (const file of [
 copy("assets", "assets");
 
 const siteCopies = [
+  // Samma källfil som legacy-plattformen använder, så samtyckesbannern inte
+  // kan glida isär mellan de två ytorna.
+  ["consent.js", "consent.js"],
   ["assets/logo/vaktskolan-icon.svg", "logo/vaktskolan-icon.svg"],
   ["assets/logo/vaktskolan-wordmark.svg", "logo/vaktskolan-wordmark.svg"],
   ["assets/logo/vaktskolan-wordmark-white.svg", "logo/vaktskolan-wordmark-white.svg"],

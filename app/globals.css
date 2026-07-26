@@ -2489,6 +2489,22 @@ a {
   color: white;
 }
 
+/* Cookie-inställningar är en knapp, inte en länk, men ska ligga i samma
+   lodräta rytm som länkarna omkring den. */
+.footer-link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.footer-link-button:hover {
+  color: white;
+}
+
 .site-footer__bottom {
   display: flex;
   padding: 24px 0 34px;

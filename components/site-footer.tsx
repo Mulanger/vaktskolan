@@ -29,6 +29,14 @@ export function SiteFooter() {
             <strong>Juridiskt</strong>
             <Link href="/integritet">Integritet</Link>
             <Link href="/anvandarvillkor">Användarvillkor</Link>
+            {/*
+              Samtycket måste gå att ändra i efterhand. consent.js lyssnar
+              delegerat på [data-cookie-settings], så footern kan förbli en
+              server component.
+            */}
+            <button type="button" data-cookie-settings className="footer-link-button">
+              Cookie-inställningar
+            </button>
           </div>
         </nav>
       </div>

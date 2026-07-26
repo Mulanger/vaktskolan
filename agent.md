@@ -1189,3 +1189,61 @@ Karriärverktygets fyra flikar (Lönekollen, CV-mall, Schemaguide, Arbetsgivare)
 - Ett verktygsval (`[data-career-tool]`) stänger menyn och kör `showKnowledgeBase(tab)`. För att verktygsvyn ska gå att navigera på mobil finns en sticky **mobil-navbar** (`.kb-mobile-bar` i `index.html`, före `#knowledgeBasePanel`) med Tillbaka-till-Hem (`data-open-home`) och en verktygsknapp som öppnar menyn igen. Den visas bara i `body.knowledge-base-mode` på ≤940px (dold på desktop, där sidebaren sköter flikbytet).
 - CV-mall på liten skärm visar fortsatt "Öppna på dator"-notisen (`isCompactCvViewport()`); de tre övriga är fullt mobilanpassade.
 - Stil i `styles.css` efter `body.modal-open` (`.mobile-tools-button`, `.career-menu*`, `.kb-mobile-bar`), med `prefers-reduced-motion`-vakt. Cache bumpad till `?v=20260724-career-mobile`. Verifierat via isolerad förhandsvisning (Clerk-auth kan inte initieras lokalt): knapp vänster om avatar, meny öppnas/stängs, verktygsval visar sticky navbar, Tillbaka återgår.
+
+## Cookie-samtycke och Google Consent Mode v2 (2026-07-26)
+
+Sajten laddade tidigare GA4 (`G-FGHQ62P8QY`) och Google Ads (`AW-18345242280`) ovillkorligt på båda ytorna, utan banner och utan samtycke. `_ga`, `_ga_*` och `_gcl_au` sattes alltså vid första sidladdningen. Det är nu åtgärdat.
+
+### Arkitektur – `consent.js` äger hela gtag-bootstrappen
+
+`consent.js` i roten är enda källan. Den är självbärande vanilla JS utan beroenden, eftersom den laddas på två separata CSS-världar (Next-sajten och legacy-plattformen). Stilarna injiceras från filen som en `<style>`-tagg, så varken `app.js` eller `styles.css` behöver röras.
+
+**Viktigt designbeslut:** filen laddar `gtag.js` själv, i stället för att ligga före ett separat gtag-block. Första implementationen förlitade sig på script-ordning, men Next lägger både `beforeInteractive`-scriptet och `afterInteractive`-blocket i RSC-payloaden utan garanterad ordning – samtyckesspärren kunde alltså tyst sluta gälla vid en ombyggnad. Nu är ordningen en följd av satsordningen i en och samma fil:
+
+1. `dataLayer` + `window.gtag`-stub (behövs av `trackAdsPurchaseConversion()` i `app.js`)
+2. `consent default` med allt `denied` + `wait_for_update: 500`
+3. `ads_data_redaction` och `url_passthrough`
+4. `consent update granted` om besökaren redan har godkänt
+5. `js`/`config`-kommandon och först därefter injiceras `gtag.js`
+
+**Lägg inte tillbaka ett separat gtag-block i `index.html` eller `app/layout.tsx`.** Mät-ID:na ligger som konstanter i `consent.js`.
+
+### Inkoppling
+
+- `app/layout.tsx`: `<Script src="/site-assets/consent.js?v=..." strategy="afterInteractive" />`
+- `index.html`: `<script src="consent.js?v=...">` (skrivs om till `/legacy-platform/consent.js` av `prepare-public-assets.mjs`)
+- `prepare-public-assets.mjs` kopierar `consent.js` till både `public/legacy-platform/` och `public/site-assets/` från samma källfil, så ytorna inte kan glida isär.
+
+Bannern har egen `?v=`-sträng. Den ingår **inte** i `app.js`/`styles.css`-dubbelbumpen eftersom den inte rör de filerna.
+
+### Beteende
+
+- Två likvärdiga knappar: `Endast nödvändiga` och `Godkänn alla`. Mätt till identiska 313×48px på mobil. Gör dem inte olika stora – likvärdigheten är ett lagkrav, inte en designpreferens.
+- Ingen auto-stängning, inget kryss som räknas som ja. Escape stänger bara när ett val redan finns sparat.
+- Valet sparas i `localStorage` under `vakt-cookie-consent-v1` med `decidedAt`-tidsstämpel (GDPR art. 7.1 kräver att samtycket går att visa upp). Nyckeln ligger avsiktligt utanför `resetStoredProgressIfNeeded()`, så en `STORAGE_VERSION`-bump inte tvingar fram nytt samtycke.
+- Nej raderar aktivt befintliga `_ga`/`_ga_*`/`_gid`/`_gat*`/`_gcl_*` på alla domänvarianter. Viktigt eftersom besökare från tiden före bannern redan har dem.
+- `[data-cookie-settings]` fångas delegerat på `document`, så `site-footer.tsx` kan förbli server component. Länken finns i Next-footern och i landningsfootern.
+- Färgerna ärvs per yta via CSS-variabelkedjor: `var(--blue, var(--primary, #075fea))` ger Next-sajtens `#075fea` och plattformens `#2563eb` utan hårdkodad kompromiss. Samma mönster för text, kant och bakgrund.
+
+### Verifiering 2026-07-26
+
+Mätt via `gcs`-parametern i Googles faktiska collect-anrop, inte bara UI:
+
+- Utan val: `gcs=G100`, `npa=1`, **noll cookies** på både `/` och `/plattform`.
+- `Godkänn alla`: `gcs=G111`, `_ga`/`_ga_FGHQ62P8QY`/`_gcl_au` sätts.
+- `Godkänt → nekat`: alla tre cookies raderade, `gcs` tillbaka till `G100`.
+- Valet överlever omladdning; bannern återkommer inte.
+- Footer-länken återöppnar bannern och flyttar fokus till rubriken.
+- 375px: staplad layout, ingen horisontell overflow, ingen klippning.
+- `window.gtag` finns kvar som funktion på plattformen, så köp-konverteringen i `app.js` är opåverkad.
+- `npm test` och `npm run build` gröna.
+
+### Innehåll
+
+`content/guides/integritet.mdx` har ett nytt avsnitt `Kakor och samtycke` samt en kompletterad leverantörslista – Google och Stripe saknades tidigare helt. `reviewedAt` bumpad till 2026-07-26 och release-manifestet regenererat som `2026-07-26-cookie-consent.1`.
+
+Landningsfooterns `Användarvillkor` och `Integritetspolicy` pekade på `href="#"` och gick alltså ingenstans från startsidan. De pekar nu på `/anvandarvillkor` och `/integritet`.
+
+### Kvar att bedöma
+
+Texterna är skrivna som en teknisk beskrivning av vad som faktiskt sätts. Formuleringarna om rättslig grund och tredjelandsöverföring bör läsas av jurist tillsammans med de organisationsuppgifter som `docs/seo-launch-checklist.md` redan flaggar för.

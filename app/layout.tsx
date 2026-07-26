@@ -37,19 +37,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SiteHeader />
         {children}
         <SiteFooter />
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-FGHQ62P8QY"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-FGHQ62P8QY');
-            gtag('config', 'AW-18345242280');
-          `}
-        </Script>
+        {/*
+          Cookie-samtycke med Consent Mode v2. consent.js sätter consent-
+          defaults och laddar därefter själv in gtag.js, så Google-taggen kan
+          aldrig hinna före samtyckesspärren. Lägg inte tillbaka ett separat
+          gtag-block här – då återuppstår ordningsberoendet.
+        */}
+        <Script src="/site-assets/consent.js?v=20260726-consent" strategy="afterInteractive" />
       </body>
     </html>
   );

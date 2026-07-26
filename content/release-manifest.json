@@ -1,15 +1,15 @@
 {
   "schemaVersion": 2,
-  "releaseId": "2026-07-23-quiz-balans.2",
-  "contentVersion": "93b86c449d79f34fe00ce2f61f98b81dddc1756ecab8a4e8fe8bc4b46693464a",
-  "generatedAt": "2026-07-23T10:44:18.057Z",
+  "releaseId": "2026-07-26-cookie-consent.1",
+  "contentVersion": "1c4b61727d296df7901735471c068ccfcc9f9dc562279ddeb75167354e993dff",
+  "generatedAt": "2026-07-26T02:28:54.976Z",
   "sourceChecks": [
     {
       "id": "polisen-fap-573-01-pmfs-2017-10",
       "publisher": "Polismyndigheten",
       "title": "PMFS 2017:10, FAP 573-01",
       "url": "https://polisen.se/siteassets/forfattningssamling/fap-nummer/fap573-01-pmfs2017_10/",
-      "verifiedAt": "2026-07-23"
+      "verifiedAt": "2026-07-26"
     }
   ],
   "files": [
@@ -30,8 +30,8 @@
     },
     {
       "path": "content/guides/integritet.mdx",
-      "bytes": 2064,
-      "sha256": "43b51b1376a456a4c8d27aa56093c3f14045f01349cb29b6e4f175f47be6e56b"
+      "bytes": 3721,
+      "sha256": "f887de9ac60d512f16adeafddc03444129948a6e8a61a77ab7ee749a57137385"
     },
     {
       "path": "content/guides/kontakt.mdx",
