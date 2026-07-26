@@ -11,6 +11,7 @@ Detta är det implementerade urvalet från de frågor som redan finns i slutprov
 - Godkäntgränsen är fortsatt 80 procent: minst 40 av 50 rätt i VU1 och minst 32 av 40 rätt i VU2.
 - Den fullständiga källbanken ligger kvar oförändrad i kursmaterialet (154 tillgängliga VU1-frågor och 74 tillgängliga VU2-frågor efter nuvarande parser/deduplicering). Filtreringen sker i `app.js` genom stabila fråge-ID:n.
 - Gamla avslutade prov kan fortfarande läsas från den fullständiga källbanken så att tidigare resultat och kursupplåsningar bevaras. Ett äldre pågående prov som inte innehåller exakt hela det nya 50/40-urvalet återställs och måste startas om.
+- Slutprovets landningskort visar alltid resultat på den aktuella skalan: VU1 som `x/50` och VU2 som `x/40`. Resultat från det äldre 30-frågorsformatet räknas om till motsvarande nivå och märks som omräknade; det sparade originalresultatet ändras inte.
 
 ## Urvalsprinciper
 

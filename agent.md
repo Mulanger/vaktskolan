@@ -1350,5 +1350,6 @@ Nya slutprov använder det kvalitetssäkrade urvalet i `docs/slutprov-topplista-
 - Ett äldre pågående försök som inte innehåller exakt hela kursens 50/40-urval ogiltigförklaras av `ensureFinalExamIntegrity()` och startas om i det nya formatet. Avslutade försök bevaras.
 - `FINAL_EXAM_DURATION_MS` är 30 minuter. Saniteringen förlänger även ett redan sparat pågående 15-minutersförsök till totalt 30 minuter från dess ursprungliga starttid.
 - Godkäntgränsen är fortsatt 80 procent: 40/50 i VU1 och 32/40 i VU2.
+- Slutprovsportalens resultatkort visar alltid aktuell skala (`x/50` för VU1 och `x/40` för VU2). Historiska 30-frågorsresultat visas som en tydligt märkt omräkning utan att den sparade sessionen eller upplåsningen ändras.
 - `scripts/test-platform-guards.mjs` verifierar exakt ID-ordning, 50/40-frågeantal, att de två bortvalda felaktiga VU1-frågorna inte kan visas, att hela källan finns kvar, 30-minuterstiden och hela upplåsningskedjan.
-- Cacheversionen för `styles.css` och `app.js` i `index.html` är `20260726-slutprov-urval-30min`.
+- Cacheversionen för `styles.css` och `app.js` i `index.html` är `20260726-slutprov-resultat-50-40`.

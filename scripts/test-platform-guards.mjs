@@ -110,6 +110,17 @@ assert.equal(evaluate("ENFORCE_COURSE_LOCKS"), true, "Production host must enfor
 assert.equal(evaluate("FINAL_EXAM_DURATION_MS"), 30 * 60 * 1000, "Every final exam must allow 30 minutes.");
 assert.equal(evaluate("getFinalExamRequiredCorrect(50)"), 40, "VU1 must require 40 of 50 correct answers.");
 assert.equal(evaluate("getFinalExamRequiredCorrect(40)"), 32, "VU2 must require 32 of 40 correct answers.");
+assert.deepEqual(
+  JSON.parse(evaluate('JSON.stringify(getFinalExamPortalScore({ correct: 24, total: 30, percent: 80 }, "vu1"))')),
+  { correct: 40, total: 50, percent: 80, normalized: true },
+  "A legacy VU1 result must be displayed on the current 50-question scale.",
+);
+assert.deepEqual(
+  JSON.parse(evaluate('JSON.stringify(getFinalExamPortalScore({ correct: 24, total: 30, percent: 80 }, "vu2"))')),
+  { correct: 32, total: 40, percent: 80, normalized: true },
+  "A legacy VU2 result must be displayed on the current 40-question scale.",
+);
+assert.doesNotMatch(indexSource, /15:00|0 av 30 besvarade/, "Final exam placeholders must not show the old format.");
 const documentedFinalExamIds = [...finalExamSelectionDoc.matchAll(/Internt fråge-id: `(vu[12]-[^`]+)`/g)]
   .map((match) => match[1]);
 assert.equal(documentedFinalExamIds.length, 90, "The selection document must contain all 90 final exam questions.");

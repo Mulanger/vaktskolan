@@ -6681,6 +6681,27 @@ function getFinalExamScore() {
   return { correct, total: questions.length, percent: questions.length ? Math.round((correct / questions.length) * 100) : 0 };
 }
 
+function getFinalExamPortalScore(score, courseId) {
+  const total = getFinalExamSize(courseId);
+  const sourceTotal = Math.max(0, Number(score?.total || 0));
+  const sourceCorrect = Math.max(0, Math.min(sourceTotal, Number(score?.correct || 0)));
+  const percent = Math.max(0, Math.min(100, Number(score?.percent || 0)));
+  const normalized = sourceTotal > 0 && sourceTotal !== total;
+
+  if (!normalized) {
+    return { ...score, correct: sourceCorrect, total, percent, normalized: false };
+  }
+
+  const passRequired = getFinalExamRequiredCorrect(total);
+  const passed = percent >= FINAL_EXAM_PASS_PERCENT;
+  const equivalentCorrect = Math.round((sourceCorrect / sourceTotal) * total);
+  const correct = passed
+    ? Math.max(passRequired, equivalentCorrect)
+    : Math.min(passRequired - 1, equivalentCorrect);
+
+  return { ...score, correct, total, percent, normalized: true };
+}
+
 function getFinalExamOptionText(question, letter) {
   if (!letter) return "Ej besvarad";
   const option = question.options.find((item) => item.letter === letter);
@@ -6833,8 +6854,8 @@ function getFinalExamPortalOverview(courseId) {
     const courseUnlocked = isCourseUnlocked(courseId);
     const answered = getFinalExamAnsweredCount();
     const examSize = getFinalExamSize(courseId);
-    const total = state.finalExam?.questionIds?.length || examSize;
-    const score = completedSession ? getFinalExamScore() : null;
+    const total = examSize;
+    const score = completedSession ? getFinalExamPortalScore(getFinalExamScore(), courseId) : null;
     const poolCount = state.finalExamPool.length;
 
     let tone = "ready";
@@ -6898,6 +6919,7 @@ function getFinalExamPortalOverview(courseId) {
       completedSession,
       score,
       total,
+      lock,
       passRequired: getFinalExamRequiredCorrect(total),
       tone,
       status,
@@ -6973,7 +6995,11 @@ function renderFinalPortalAttemptStatus(overview) {
     const scorePercent = Math.min(100, (scoreCorrect / scoreTotal) * 100);
     const passPercent = Math.min(100, (passRequired / scoreTotal) * 100);
     const passed = scoreCorrect >= passRequired;
-    const resultNote = passed
+    const resultNote = overview.score.normalized
+      ? overview.tone === "submitted" && overview.lock?.locked
+        ? `Omräknat från tidigare provformat · nytt prov om ${formatRemainingTime(overview.lock.remaining)}`
+        : "Omräknat från tidigare provformat"
+      : passed
       ? "Över godkäntgränsen — bra jobbat"
       : overview.tone === "submitted"
         ? overview.detail
