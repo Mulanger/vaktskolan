@@ -191,7 +191,7 @@ B) Laglydnad, medborgerlig pålitlighet och lämplighet i övrigt
 C) Fysisk förmåga, godkänd synskärpa och god hörsel
 D) Körkort, språkkunskaper och svenskt medborgarskap
 
-**Rätt svar: D.** Det är lagens tre kriterier, och de kontrolleras bland annat genom registerkontroll. Prövningen gäller all personal i företaget, inte bara väktarna.
+**Rätt svar: B.** Det är lagens tre kriterier, och de kontrolleras bland annat genom registerkontroll. Prövningen gäller all personal i företaget, inte bara väktarna.
 
 **Fråga 3.** Vilken är rätt ordning i väktarens grundutbildning?
 
