@@ -340,7 +340,7 @@ Hemvyn är uppdaterad efter designalternativ `1b` från `D:\Modern siddesign upp
 
 Första gången eleven kommer till Hem, innan någon progress/quiz finns, ska rubriken vara `Välkommen, Sven`. När progress finns ska rubriken vara `Välkommen tillbaka, Sven`.
 
-VU2-kortet i `Dina kurser` styrs av den centrala kurslåsningsflaggan `ENFORCE_COURSE_LOCKS`. Under implementation är flaggan `false`, så VU2 är öppet för snabb testnavigation. När flaggan sätts till `true` ska VU2 låsas överallt tills VU1:s innehållsmoduler är klara.
+VU2-kortet i `Dina kurser` styrs av den centrala kurslåsningsflaggan `ENFORCE_COURSE_LOCKS`. Flaggan är `true` i produktion och `false` på localhost, så VU2 är låst för riktiga elever men öppet för snabb testnavigation lokalt. Låst betyder Premium plus godkänt VU1-slutprov; se `isCourseUnlocked()`.
 
 Aktuella cachebusting-parametrar i `index.html`:
 
@@ -367,16 +367,25 @@ Viktiga konstanter:
 
 ```js
 const STORAGE_VERSION = "vu2-course-split-2026-07-04";
-const UNLOCK_MODULE_NAVIGATION = true;
+const IS_LOCAL_DEVELOPMENT = ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+const UNLOCK_MODULE_NAVIGATION = IS_LOCAL_DEVELOPMENT;
+const ENFORCE_COURSE_LOCKS = !IS_LOCAL_DEVELOPMENT;
 const FINAL_EXAM_SIZE = 30;
 const FINAL_EXAM_LOCK_MS = 24 * 60 * 60 * 1000;
 const FINAL_EXAM_PASS_PERCENT = 80;
 ```
 
-`UNLOCK_MODULE_NAVIGATION = true` betyder att eleven just nu kan hoppa mellan moduler. Användaren har sagt att appen senare ska låsas till steg-för-steg-flöde. När det ska införas är första steget att sätta denna konstant till `false` och testa:
+De två låsflaggorna är inte längre hårdkodade utan härleds från hostnamnet, så produktion och lokal utveckling beter sig olika:
 
-- nästa modul låses tills föregående är klar,
-- slutprov låses tills alla innehållsmoduler är klara,
+| | localhost | produktion |
+| --- | --- | --- |
+| `UNLOCK_MODULE_NAVIGATION` | `true` – fri navigering | `false` – steg för steg |
+| `ENFORCE_COURSE_LOCKS` | `false` – VU2 öppet | `true` – VU2 kräver Premium + godkänt VU1-slutprov |
+
+Det betyder att det låsta flödet inte syns på `npm run dev`. För att testa låsningen lokalt måste `IS_LOCAL_DEVELOPMENT` tillfälligt tvingas till `false`; kontrollera då att
+
+- nästa modul är låst tills föregående är klar,
+- slutprov är låst tills alla innehållsmoduler är klara,
 - hubbens låsta statusar är begripliga,
 - direktlänkar/sparad position inte tar eleven till låst innehåll.
 
@@ -749,7 +758,7 @@ Modulprogress bygger på besökta sidor. Viktiga funktioner:
 - `canAccessFinalExam()`
 - `isCourseUnlocked(courseId)`
 
-`ENFORCE_COURSE_LOCKS = false` just nu, så VU2 är öppet under implementation. När flaggan sätts till `true` ska `isCourseUnlocked("vu2")` kräva att VU1:s innehållsmoduler är klara. Använd den centrala funktionen i nya flöden i stället för separata VU2-specialfall.
+`ENFORCE_COURSE_LOCKS` är `true` i produktion och `false` på localhost. `isCourseUnlocked("vu2")` kräver alltid Premium; med flaggan på krävs dessutom godkänt VU1-slutprov (`isFinalExamPassed()` i VU1-kontext), inte bara klara innehållsmoduler. Använd den centrala funktionen i nya flöden i stället för separata VU2-specialfall.
 
 Kurshubben räknar innehållsmoduler, inte slutprovmodulen, i "Moduler klara". Det var en tidigare bug där slutprovet kunde visas som `Klar · 7/7`; det är ändrat. Slutprovets hubbstatus ska vara:
 
@@ -1024,7 +1033,7 @@ Manuell kontroll i browser:
 - Hem visar inte höger sidopanel.
 - Hem visar snabbstatistik, fortsättbanner, VU1/VU2-kort och Quiz Portal-snabbväg.
 - Hem visar `Välkommen, Sven` första gången och `Välkommen tillbaka, Sven` efter progress.
-- Hem: VU2-kortet är öppet när `ENFORCE_COURSE_LOCKS = false`; när flaggan är `true` ska kortet vara låst tills VU1 är avklarad.
+- Hem: VU2-kortet är öppet på localhost (`ENFORCE_COURSE_LOCKS = false`); i produktion ska det vara låst tills eleven har Premium och godkänt VU1-slutprov.
 - Hem: `Fortsätt` går till rätt modulstart/lektion via sparad progress.
 - Hem: VU1/VU2-kort öppnar respektive kurshubb.
 - Hem: Quiz Portal-snabbvägen öppnar rätt vy.
@@ -1068,8 +1077,7 @@ Efter ändringar i landing page:
 - Clerk secret key delades i chatten 2026-07-05 och bör roteras i Clerk Dashboard.
 - Databaslösenordet bör roteras i Supabase Dashboard eftersom det delades i chatten under setupen.
 - Slutprovsmodulen finns i `utbildning.md` som en modul för att parsern ska kunna läsa frågebanken, men i UI ska den behandlas som slutprov, inte som vanlig modul.
-- `UNLOCK_MODULE_NAVIGATION` är fortfarande `true`; låst steg-för-steg-flöde är framtida arbete.
-- `ENFORCE_COURSE_LOCKS` är fortfarande `false`; VU2 är medvetet öppet under implementation men kan låsas centralt senare.
+- `UNLOCK_MODULE_NAVIGATION` och `ENFORCE_COURSE_LOCKS` härleds från hostnamnet. Låst steg-för-steg-flöde och VU2-låset är alltså aktiva i produktion men avstängda på localhost. Det som ser öppet ut lokalt är inte det eleverna möter.
 - Landing page har separata CSS/JS-filer som inte används av den aktiva sidan.
 
 ## Rekommenderad Arbetsgång För Framtida Ändringar
@@ -1084,30 +1092,28 @@ Efter ändringar i landing page:
 8. Kör `node --check app.js`.
 9. Verifiera visuellt i browser på desktop och smal viewport.
 
-## Framtida Låst Modulflöde
+## Låst Modulflöde
 
-Användaren har sagt att utbildningen senare ska gå steg för steg och att man inte ska kunna hoppa till moduler man inte nått.
+Utbildningen går steg för steg i produktion. Eleven kan inte hoppa till moduler hen inte nått. Detta är implementerat, inte planerat.
 
-Förberedda funktioner finns redan:
+Funktionerna som håller ihop låsningen:
 
-- `isModuleUnlocked(moduleIndex)`
-- `isPageUnlocked(moduleIndex, lessonIndex, pageIndex)`
-- `canStartFinalExam()`
-- `canAccessFinalExam()`
-- låsta CSS-klasser i modullistor och hubb
-
-Trolig implementation:
-
-1. Sätt `UNLOCK_MODULE_NAVIGATION = false`.
-2. Sätt `ENFORCE_COURSE_LOCKS = true` när VU2 ska låsas överallt tills VU1 är klar.
-3. Säkerställ att första modulen alltid är öppen.
-4. Säkerställ att nästa modul öppnas först när föregående modul är komplett.
-5. Avgör om "komplett modul" ska kräva bara lästa sidor eller även genomfört quiz.
-6. Säkerställ att slutprov låses tills alla innehållsmoduler är kompletta.
-7. Säkerställ att sparad position inte kan återställa eleven till en låst modul.
-8. Säkerställ att hubbens `Fortsätt` går till senaste tillåtna plats.
+- `isModuleUnlocked(moduleIndex)`: modul 0 är alltid öppen, därefter krävs `isModuleComplete(moduleIndex - 1)`. Membership-låset kontrolleras först.
+- `isPageUnlocked(moduleIndex, lessonIndex, pageIndex)`: nästa sida öppnas när föregående sida är besökt.
+- `canStartFinalExam()` / `canAccessFinalExam()`: slutprovet kräver att alla innehållsmoduler är kompletta.
+- `isCourseUnlocked(courseId)`: VU2 kräver Premium plus godkänt VU1-slutprov när `ENFORCE_COURSE_LOCKS` är på.
+- låsta CSS-klasser i modullistor och hubb.
 
 `isModuleComplete()` kräver både besökta sidor och godkänt modulquiz (80 procent) för vanliga innehållsmoduler. Slutprovsmodulen styrs separat av godkänt slutprov.
+
+Att kontrollera om låslogiken ändras:
+
+1. Första modulen är alltid öppen.
+2. Nästa modul öppnas först när föregående är komplett.
+3. Slutprovet är låst tills alla innehållsmoduler är kompletta.
+4. Sparad position återställer inte eleven till en låst modul.
+5. Hubbens `Fortsätt` går till senaste tillåtna plats.
+6. Testet måste göras med `IS_LOCAL_DEVELOPMENT` tvingad till `false`, annars är allt olåst och kontrollen säger ingenting.
 
 ## Senaste Implementerade Beslut
 
@@ -1138,7 +1144,7 @@ Det här har nyligen ändrats och bör inte råka rullas tillbaka:
 - Supabase-molndatabasen är uppdaterad med Quiz Portal-tabeller och 300 scenariofrågor i `scenario_quiz`.
 - Landing-sidans `Logga in` går nu till `login.html?mode=sign-in&redirect_url=/platform` när projektet körs via root-servern.
 - Hemfliken är byggd från `D:\hem_dashboard.html`-referensen med data-driven progress, fortsättlogik, kurskort och snabbvägar.
-- Hemfliken visar nu första-besök-rubrik. VU2-låsning styrs centralt av `ENFORCE_COURSE_LOCKS`, som är `false` under implementation.
+- Hemfliken visar nu första-besök-rubrik. VU2-låsning styrs centralt av `ENFORCE_COURSE_LOCKS`, som är på i produktion och av på localhost.
 - Modulstart-/milstolpesidan är breddad på desktop via `body.module-milestone-mode`, bredare `module-milestone-panel` och tvåkolumnslista för modulens innehåll.
 - Slutprov i vänstermenyn har en egen portal med VU1/VU2-status, kursrätt start/fortsätt/visa-resultat och inga beroenden till gamla `finalExam*`-kort-ID:n.
 - `localStorage`-läsning validerar nu array/object-form för visited, answers, finalExams och sparad location. Korrupt sparad plats faller tillbaka till Hem.
