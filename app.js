@@ -4957,10 +4957,6 @@ function renderFinalExamPortalCard(overview) {
           <span>Kursprogress</span>
           <strong>${overview.courseProgress.percent}%</strong>
         </div>
-        <div>
-          <span>Frågepool</span>
-          <strong>${overview.poolCount}</strong>
-        </div>
       </div>
       ${renderFinalPortalAttemptStatus(overview)}
       <button class="final-portal-action" type="button"
