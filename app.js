@@ -244,6 +244,7 @@ const state = {
     timedOut: false,
     questionTimeRemaining: 30,
     questionDeadline: 0,
+    questionTimerPausedRemainingMs: 0,
     score: 0,
     showResults: false,
     historyAttemptId: "",
@@ -5744,6 +5745,7 @@ function resetQuizPortalSession(view = state.quizPortal.view) {
   state.quizPortal.timedOut = false;
   state.quizPortal.questionTimeRemaining = QUIZ_PORTAL_QUESTION_TIME_SECONDS;
   state.quizPortal.questionDeadline = 0;
+  state.quizPortal.questionTimerPausedRemainingMs = 0;
   state.quizPortal.score = 0;
   state.quizPortal.showResults = false;
   state.quizPortal.historyAttemptId = "";
@@ -6130,6 +6132,45 @@ function stopQuizPortalQuestionTimer() {
   if (quizPortalQuestionTimer) window.clearInterval(quizPortalQuestionTimer);
   quizPortalQuestionTimer = null;
   state.quizPortal.questionDeadline = 0;
+  state.quizPortal.questionTimerPausedRemainingMs = 0;
+}
+
+function pauseQuizPortalQuestionTimerForModal() {
+  if (
+    !quizPortalQuestionTimer ||
+    !state.quizPortal.questionDeadline ||
+    state.mode !== "quiz-overview" ||
+    state.quizPortal.isAnswered ||
+    state.quizPortal.showResults
+  ) {
+    return false;
+  }
+
+  const remainingMs = Math.max(0, state.quizPortal.questionDeadline - Date.now());
+  if (remainingMs <= 0) return false;
+
+  window.clearInterval(quizPortalQuestionTimer);
+  quizPortalQuestionTimer = null;
+  state.quizPortal.questionDeadline = 0;
+  state.quizPortal.questionTimerPausedRemainingMs = remainingMs;
+  state.quizPortal.questionTimeRemaining = Math.max(0, Math.ceil(remainingMs / 1000));
+  return true;
+}
+
+function resumeQuizPortalQuestionTimerAfterModal() {
+  const remainingMs = Number(state.quizPortal.questionTimerPausedRemainingMs || 0);
+  state.quizPortal.questionTimerPausedRemainingMs = 0;
+  if (
+    remainingMs <= 0 ||
+    state.mode !== "quiz-overview" ||
+    state.quizPortal.isAnswered ||
+    state.quizPortal.showResults
+  ) {
+    return false;
+  }
+
+  startQuizPortalQuestionTimer(remainingMs);
+  return true;
 }
 
 function scrollQuizPortalToTop() {
@@ -6253,7 +6294,7 @@ async function handleQuizPortalQuestionTimeout() {
   await answerQuizPortalQuestion(null, true);
 }
 
-function startQuizPortalQuestionTimer() {
+function startQuizPortalQuestionTimer(durationMs = QUIZ_PORTAL_QUESTION_TIME_MS) {
   stopQuizPortalQuestionTimer();
   if (
     state.mode !== "quiz-overview" ||
@@ -6265,8 +6306,14 @@ function startQuizPortalQuestionTimer() {
     return;
   }
 
-  state.quizPortal.questionTimeRemaining = QUIZ_PORTAL_QUESTION_TIME_SECONDS;
-  state.quizPortal.questionDeadline = Date.now() + QUIZ_PORTAL_QUESTION_TIME_MS;
+  const resolvedDurationMs = Math.max(1, Math.min(QUIZ_PORTAL_QUESTION_TIME_MS, Number(durationMs) || QUIZ_PORTAL_QUESTION_TIME_MS));
+  state.quizPortal.questionTimeRemaining = Math.ceil(resolvedDurationMs / 1000);
+  if (document.body.classList.contains("modal-open")) {
+    state.quizPortal.questionTimerPausedRemainingMs = resolvedDurationMs;
+    return;
+  }
+
+  state.quizPortal.questionDeadline = Date.now() + resolvedDurationMs;
   updateQuizPortalQuestionTimerUi();
   quizPortalQuestionTimer = window.setInterval(() => {
     if (Date.now() >= state.quizPortal.questionDeadline) {
@@ -6914,6 +6961,7 @@ function renderQuizOverview() {
   }
 
   els.quizPortal.innerHTML = `${renderQuizPortalMobileHead()}${content}${renderQuizPortalMobileTabbar()}`;
+  renderNavigationLocks();
 }
 
 function renderFinalExamInlineCta() {
@@ -7593,6 +7641,11 @@ function syncModalOpenState() {
     Boolean(els.cvDesktopModal && !els.cvDesktopModal.hidden) ||
     Boolean(els.careerMenu && !els.careerMenu.hidden);
   document.body.classList.toggle("modal-open", hasOpenModal);
+  if (hasOpenModal) {
+    pauseQuizPortalQuestionTimerForModal();
+  } else {
+    resumeQuizPortalQuestionTimerAfterModal();
+  }
 }
 
 function openCareerMenu(trigger = null) {

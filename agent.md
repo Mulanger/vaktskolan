@@ -1263,3 +1263,12 @@ Slutprovsportalen har fått den nya landningsdesignen från `D:\Slutprovs-sida o
 - Desktop använder två parallella provkort. Vid `max-width: 940px` växlar sidan till variant 1b med staplade kort, mobilheader och den befintliga fasta bottennavigeringen.
 - Verifierat visuellt i 1440 px och 390 px utan horisontell overflow. Mobilens båda kort kan nås ovanför bottennavigeringen. En faktisk lokal start av VU2 öppnade den befintliga provvyn med timer och fråga 1 av 30.
 - Cacheversionen för `styles.css` och `app.js` i `index.html` är `20260726-slutprov-hub-1ab`.
+
+## Quiz Portal – låsstatus och modalpaus (2026-07-26)
+
+En mobil regression gjorde att den dynamiskt återrenderade Quiz Portal-bottenmenyn tappade VU2-flikens `.is-disabled`-klass och låsta `aria-label`. Den funktionella grinden i `showVu2()` fanns kvar, men en Basic-elev kunde öppna Premium-dialogen mitt under en tidsbegränsad fråga medan frågetimern fortsatte bakom dialogen och förbrukade en gratisfråga vid timeout.
+
+- `renderQuizOverview()` anropar nu `renderNavigationLocks()` efter varje dynamisk återrendering.
+- Frågetimern pausas av `syncModalOpenState()` när en dialog eller bottensheet öppnas och återupptas med exakt återstående millisekunder när den sista stängs. Om en dialog redan är öppen när nedräkningen övergår till frågan startas timern direkt i pausat läge.
+- `scripts/test-platform-guards.mjs` verifierar modalpaus/återupptagning, låsåterställningen och den fullständiga riktiga kurskedjan: 11 VU1-moduler → godkänt VU1-slutprov → 6 VU2-moduler → upplåst VU2-slutprov.
+- Cacheversionen för `styles.css` och `app.js` i `index.html` är `20260726-quiz-modal-timer-lock`.
