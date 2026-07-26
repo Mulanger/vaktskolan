@@ -4932,6 +4932,104 @@ a.employer-phone:hover {
   font-size: 15px;
 }
 
+.employers-count {
+  margin: 0 0 16px;
+  color: var(--emp-soft);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.employers-note {
+  max-width: 720px;
+  margin: 28px auto 0;
+  color: var(--emp-soft);
+  font-size: 13.5px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.employers-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.employer-page-numbers {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.employer-page-step,
+.employer-page-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 14px;
+  background: var(--emp-card);
+  border: 1px solid var(--emp-border);
+  border-radius: 10px;
+  color: var(--emp-ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.employer-page-number {
+  padding: 0 10px;
+}
+
+.employer-page-step:hover:not(:disabled),
+.employer-page-number:hover:not(.is-active) {
+  border-color: var(--emp-blue-border);
+  color: var(--emp-blue);
+}
+
+.employer-page-step:focus-visible,
+.employer-page-number:focus-visible {
+  outline: 2px solid var(--emp-blue);
+  outline-offset: 2px;
+}
+
+.employer-page-step:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.employer-page-step svg {
+  width: 16px;
+  height: 16px;
+}
+
+.employer-page-number.is-active {
+  background: var(--emp-blue);
+  border-color: var(--emp-blue);
+  color: #ffffff;
+}
+
+.employer-page-gap {
+  padding: 0 2px;
+  color: var(--emp-soft);
+  font-size: 14px;
+}
+
+/* Sidräknaren är reserven på mobil, där sifferknapparna inte får plats. */
+.employer-page-status {
+  display: none;
+  margin: 0;
+  color: var(--emp-soft);
+  font-size: 14px;
+  font-weight: 500;
+}
+
 @media (max-width: 1024px) {
   .employers-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -4968,6 +5066,26 @@ a.employer-phone:hover {
 
   .employer-card {
     padding: 20px;
+  }
+
+  .employers-pagination {
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .employer-page-numbers {
+    display: none;
+  }
+
+  .employer-page-status {
+    display: block;
+    order: 0;
+    text-align: center;
+  }
+
+  .employer-page-step {
+    flex: 0 0 auto;
+    padding: 0 12px;
   }
 }
 

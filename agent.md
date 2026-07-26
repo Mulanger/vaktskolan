@@ -1178,7 +1178,7 @@ Cache: markdown-fetchen i `app.js` och CSS/JS-query strings i `index.html` är b
 Karriärverktyget har nu en fjärde flik, `Arbetsgivare`, vid sidan av Lönekollen, CV-mall och Schemaguide. Den listar auktoriserade bevakningsföretag som eleven kan söka jobb hos. Designen kommer från `D:\vaktskolan_arbetsgivare.html` (AI-designerns egen header/footer implementerades avsiktligt inte – bara innehållet monterades i den befintliga plattformsytan).
 
 - Fliken är kopplad in i samma mönster som Schemaguide: `KNOWLEDGE_BASE_TABS` innehåller `arbetsgivare`, `renderKnowledgeBaseSidebar()` har en `data-open-employers`-knapp (lucide `building-2`), `renderKnowledgeBasePanel()` anropar `renderEmployerDirectory()`, och rutten är `#kunskapsbas/arbetsgivare` (alias `#kunskapsbas/employers`) i `portalHashForLocation`/`portalLocationFromHash`. Klickhanteraren kallar `showKnowledgeBase("arbetsgivare")`.
-- Bolagsdatan ligger i konstanten `EMPLOYER_DIRECTORY` i `app.js` (namn, adress, telefon, e-post, hemsida, logo). Första omgången är 9 riktiga bolag (Securitas, Avarn, Cubsec, Tempest, Addici, Community Security Group, Securus, SOB, Safetly). Lägg till fler genom att utöka arrayen – korten byggs av `employerCardMarkup()`.
+- Bolagsdatan ligger i konstanten `EMPLOYER_DIRECTORY` i `app.js` (namn, adress, telefon, e-post, hemsida, logo, samt `authorized: true` för de bolag som får auktorisationsmärket). Listan utökades 2026-07-26 från 9 till 231 bolag; se avsnittet `Arbetsgivarlistan utökad till 231 bolag` nedan. Lägg till fler genom att utöka arrayen – korten byggs av `employerCardMarkup()`.
 - Logotyperna hostas lokalt i `assets/employers/<slug>.png` (kopieras till `public/legacy-platform/assets/employers/` av `prepare-public-assets.mjs` via den generella `/assets/`→`/legacy-platform/assets/`-omskrivningen). De laddades ner från bolagens webbplatser/CDN och optimerades med `sharp` till max 120px (fit inside), 2–8 KB styck. Medvetet lokalt hostade i stället för hotlänkade eftersom flera käll-URL:er var tillfälliga Google-/Facebook-/LinkedIn-CDN-länkar. `employerCardMarkup()` renderar `<img class="employer-logo-img">` med `onerror` som sätter `.employer-logo.is-fallback`; då visas bygg-ikonen (`.employer-logo-fallback`) i stället. Brickan är vit så både transparenta och vit-bakgrundslogotyper smälter in.
 - Bolagets webbplats nås från tre klickytor per kort – logotyps-brickan (`a.employer-logo`), företagsnamnet (`a.employer-name-link`) och `Besök hemsida`-knappen (`a.employer-cta`). Alla tre är `<a href={website} target="_blank" rel="noopener noreferrer">`, så de öppnas i en ny flik medan Vaktskolan-fliken blir kvar; `rel="noopener"` hindrar den öppnade sidan från att styra Vaktskolan-fönstret. Logotyps- och namnlänken är stylade diskret (namnet ärver rubrikens utseende, blir blått vid hover) så kortet inte ser överlänkat ut.
 - E-postraden är medvetet neutralt märkt `E-post` (inte designens `E-post (Jobbansökan)`), eftersom de angivna adresserna är kundservice-/info-adresser, inte dedikerade rekryteringsadresser. Hemsidan (`Besök hemsida`) härleds från bolagens domän och öppnas i ny flik med `rel="noopener"`.
@@ -1272,3 +1272,64 @@ En mobil regression gjorde att den dynamiskt återrenderade Quiz Portal-bottenme
 - Frågetimern pausas av `syncModalOpenState()` när en dialog eller bottensheet öppnas och återupptas med exakt återstående millisekunder när den sista stängs. Om en dialog redan är öppen när nedräkningen övergår till frågan startas timern direkt i pausat läge.
 - `scripts/test-platform-guards.mjs` verifierar modalpaus/återupptagning, låsåterställningen och den fullständiga riktiga kurskedjan: 11 VU1-moduler → godkänt VU1-slutprov → 6 VU2-moduler → upplåst VU2-slutprov.
 - Cacheversionen för `styles.css` och `app.js` i `index.html` är `20260726-quiz-modal-timer-lock`.
+
+## Arbetsgivarlistan utökad till 231 bolag med paginering (2026-07-26)
+
+`EMPLOYER_DIRECTORY` i `app.js` innehåller nu 231 bevakningsföretag i stället för 9. Underlaget,
+med källor och täckningsstatistik per fält, ligger i `docs/bevakningsforetag-arbetsgivare.md`.
+
+### Data
+
+- Källorna är Eniros kategorier för bevakningsföretag (inklusive *auktoriserade*), SäkerhetsBranschens
+  och Almega Säkerhetsföretagens medlemsregister, plus e-post/hemsida/logotyp från bolagens egna
+  webbplatser. Uppgifterna är maskinellt insamlade och stickprovskontrollerade, inte manuellt ringda.
+- Dubbletter rensades på fem nycklar: normaliserat firmanamn, varumärke + ort, delad webbplats,
+  delat telefonnummer och delad e-post, samt ett sista pass på samma besöksadress + gemensamt
+  särskiljande ord i namnet. De ursprungliga nio korten är oförändrade och ligger först i arrayen.
+- Icke-bevakningsbolag filtrerades bort ur underlaget: privatpersoner och enskilda ordningsvakter,
+  utbildningsföretag, parkeringsbolag samt hemlarms-, larmcentral- och säkerhetsteknikbolag.
+  Därför saknas t.ex. Verisure, Securitas Direct och Securitas Teknik medvetet.
+- Alla fält utom `name` kan vara tomma. `employerCardMarkup()` hoppar över rader utan värde, gör
+  logotyp och namn till vanlig text när `website` saknas, döljer `Besök hemsida`-knappen och faller
+  tillbaka på raden `Kontaktuppgifter finns på företagets webbplats` när inget kontaktfält finns.
+
+### Auktorisationsmärket
+
+`authorized: true` sätts bara på de 76 bolag som kommer ur katalogernas kategori för auktoriserade
+bevakningsföretag plus de nio ursprungliga korten. Övriga kort visar inget märke, herotexten påstår
+inte längre att alla listade bolag är auktoriserade, och en not under listan påminner om att
+Länsstyrelsen utfärdar auktorisationen. **Sätt inte märket generellt på hela listan** – Länsstyrelsen
+publicerar inget öppet register, så påståendet går inte att belägga per bolag.
+
+### Logotyper
+
+84 nya logotyper laddades ner från bolagens egna webbplatser (schema.org-logo, `<img>` med
+logo/logga i filnamnet, eller apple-touch-icon), verifierades som riktiga bildsvar och optimerades
+med `sharp` till max 120 px transparent PNG i `assets/employers/<slug>.png`. Totalt 93 filer, snitt
+~3,6 kB. Samma lokalhostade mönster som tidigare – hotlänka inte bolagens egna URL:er. Bolag utan
+logotyp visar bygg-ikonen via `.employer-logo.is-fallback`.
+
+### Paginering
+
+- `EMPLOYER_PAGE_SIZE = 9` styr antalet kort per sida. 231 bolag ger 26 sidor.
+- `state.employerQuery` och `state.employerPage` är vy-state och sparas inte i `localStorage`.
+- `renderEmployerDirectory()` ritar hero + sökfält en gång. Allt som beror på sida och sökning ligger
+  i `[data-employer-results]` och renderas om av `renderEmployerResults()`, så sökfältet aldrig
+  tappar fokus mitt i inskrivningen.
+- Sökningen filtrerar hela listan, inte bara aktuell sida, och nollställer alltid sidan till 1.
+  Den gamla DOM-filtreringen som dolde kort med `hidden` är ersatt.
+- `employerPageWindow()` visar sidnummer runt aktiv sida med ellips mot första och sista sidan.
+  På `max-width: 760px` döljs sifferknapparna och `Sida X av Y` visas i stället mellan
+  Föregående/Nästa.
+- Sidbyte scrollar upp till `.employers-hero` och flyttar fokus till den aktiva sidknappen.
+
+### Verifiering 2026-07-26
+
+- `node --check app.js`, `npm run lint`, `npm run typecheck`, `npm run test:platform-guards` gröna.
+- Isolerad förhandsvisning av arbetsgivarvyn (legacy-dashboarden kräver inloggad Clerk-användare som
+  inte kan initieras lokalt): 9 kort per sida, 26 sidor, sista sidan full, Nästa/Föregående
+  inaktiveras i ändarna, sökning på `malmö` gav 13 träffar och hoppade till sida 1 av 2, sökning utan
+  träff dolde pagineringen och visade tomt-läget, alla logotyper på sidan laddade utan 404.
+- 1280 px: tre kolumner. 800 px: två kolumner. 390 px: en kolumn, sifferknappar dolda, ingen
+  horisontell overflow.
+- Cacheversionen för `styles.css` och `app.js` i `index.html` är `20260726-arbetsgivare-paginering`.

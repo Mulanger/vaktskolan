@@ -48,6 +48,7 @@ const RESTORABLE_MODES = new Set([
 ]);
 
 const KNOWLEDGE_BASE_TABS = new Set(["lonekollen", "cv", "schema", "arbetsgivare"]);
+const EMPLOYER_PAGE_SIZE = 9;
 const CV_BUILDER_COMPACT_QUERY = "(max-width: 940px)";
 
 const COURSE_CONFIG = {
@@ -177,6 +178,8 @@ const state = {
   pageIndex: 0,
   mode: "home",
   knowledgeBaseTab: "lonekollen",
+  employerQuery: "",
+  employerPage: 1,
   answers: readObjectStorage(STORAGE_KEYS.answers),
   quizSubmissions: readObjectStorage(STORAGE_KEYS.quizSubmissions),
   scenarioProgress: readObjectStorage(STORAGE_KEYS.scenarioProgress),
@@ -2981,6 +2984,7 @@ const EMPLOYER_DIRECTORY = [
     email: "kundservice@securitas.se",
     website: "https://www.securitas.se",
     logo: "/assets/employers/securitas.png",
+    authorized: true,
   },
   {
     name: "Avarn Security AB",
@@ -2989,6 +2993,7 @@ const EMPLOYER_DIRECTORY = [
     email: "vi.hjalper.dig@avarnsecurity.com",
     website: "https://www.avarnsecurity.com",
     logo: "/assets/employers/avarn.png",
+    authorized: true,
   },
   {
     name: "Cubsec AB",
@@ -2997,6 +3002,7 @@ const EMPLOYER_DIRECTORY = [
     email: "kundservice@cubsec.se",
     website: "https://www.cubsec.se",
     logo: "/assets/employers/cubsec.png",
+    authorized: true,
   },
   {
     name: "Tempest Security Sverige AB",
@@ -3005,6 +3011,7 @@ const EMPLOYER_DIRECTORY = [
     email: "info@tempest.se",
     website: "https://www.tempest.se",
     logo: "/assets/employers/tempest.png",
+    authorized: true,
   },
   {
     name: "Addici Security & Technology AB",
@@ -3013,6 +3020,7 @@ const EMPLOYER_DIRECTORY = [
     email: "info@addici.com",
     website: "https://www.addici.com",
     logo: "/assets/employers/addici.png",
+    authorized: true,
   },
   {
     name: "Community Security Group Sweden AB",
@@ -3021,6 +3029,7 @@ const EMPLOYER_DIRECTORY = [
     email: "info@csgab.se",
     website: "https://www.csgab.se",
     logo: "/assets/employers/csg.png",
+    authorized: true,
   },
   {
     name: "Securus Säkerhet i Sverige AB",
@@ -3029,6 +3038,7 @@ const EMPLOYER_DIRECTORY = [
     email: "info@securus.se",
     website: "https://www.securus.se",
     logo: "/assets/employers/securus.png",
+    authorized: true,
   },
   {
     name: "Säkerhet Ordningsbevakning SOB AB",
@@ -3037,6 +3047,7 @@ const EMPLOYER_DIRECTORY = [
     email: "info@sob.nu",
     website: "https://www.sob.nu",
     logo: "/assets/employers/sob.png",
+    authorized: true,
   },
   {
     name: "Safetly AB",
@@ -3045,8 +3056,1863 @@ const EMPLOYER_DIRECTORY = [
     email: "info@safetly.se",
     website: "https://www.safetly.se",
     logo: "/assets/employers/safetly.png",
+    authorized: true,
+  },
+  {
+    name: "1Security AB",
+    address: "Batterivägen 14, 432 32 Varberg",
+    phone: "0340-187 77",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "23 Bevakning AB",
+    address: "Järntorget 4, 413 04 Göteborg",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "247 Säkerhet AB",
+    address: "",
+    phone: "",
+    email: "",
+    website: "https://247sakerhet.se",
+    logo: "/assets/employers/247-sakerhet.png",
+  },
+  {
+    name: "2Secure AB",
+    address: "Gustavslundsvägen 42, 167 51 Bromma",
+    phone: "08-656 50 00",
+    email: "info@2secure.se",
+    website: "https://2secure.se",
+    logo: "/assets/employers/2secure.png",
+  },
+  {
+    name: "916 Svensk Spårsäkerhet, AB",
+    address: "Hallongatan 27, 298 33 Tollarp",
+    phone: "076-633 14 00",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Aimo Bevakning AB",
+    address: "Förmansvägen 11, 117 59 Stockholm",
+    phone: "08-722 15 00",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Alingsås Vaktbolag AB",
+    address: "Hemvägen 17E, 441 39 Alingsås",
+    phone: "0322-197 92",
+    email: "info@alingsas-vaktbolag.se",
+    website: "https://alingsas-vaktbolag.se",
+    logo: "/assets/employers/alingsas-vaktbolag.png",
+    authorized: true,
+  },
+  {
+    name: "Alpha Bevakning AB",
+    address: "Fallängsvägen 13, 671 30 Arvika",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Anna Security AB",
+    address: "Solbergsvägen 59B, 168 66 Bromma",
+    phone: "08-25 99 88",
+    email: "",
+    website: "https://www.annasecurity.se",
+    logo: "/assets/employers/anna-security.png",
+  },
+  {
+    name: "Apex Security AB",
+    address: "Köpmanstorget 1, 456 31 Kungshamn",
+    phone: "010-682 23 50",
+    email: "info@apexsecurity.se",
+    website: "https://apexsecurity.se",
+    logo: "",
+  },
+  {
+    name: "Argus Security Handelsbolag",
+    address: "Sundstorget 2, 252 21 Helsingborg",
+    phone: "010-214 66 40",
+    email: "info@argussecurity.se",
+    website: "https://argussecurity.se",
+    logo: "/assets/employers/argus-security.png",
+  },
+  {
+    name: "Argus Vakt AB",
+    address: "Linnégatan 6, 114 47 Stockholm",
+    phone: "031-12 62 03",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Arm Bevakning AB",
+    address: "Harpsundsvägen 82B, 124 58 Bandhagen",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Armins Elitbevakning AB",
+    address: "Ekholmsvägen 245, 127 46 Skärholmen",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Atlas Bevakning AB",
+    address: "A Odhners gata 43, 421 30 Västra Frölunda",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Aurora Säkerhet AB",
+    address: "Hagtorpsvägen 19, 754 71 Uppsala",
+    phone: "08-121 377 07",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Aventra Bevakning AB",
+    address: "Tallvägen 14, 233 76 Klågerup",
+    phone: "073-344 79 00",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Avn Bevakning",
+    address: "Östra Midvintersgatan 19, 415 42 Göteborg",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Behovia Tjänster HB",
+    address: "Morsarvet 1, 179 96 Svartsjö",
+    phone: "073-663 06 22",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Bertil Jarnemyr AB",
+    address: "Hermelinsvägen 4, 146 38 Tullinge",
+    phone: "070-719 29 03",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Bevakning & Säkerhet I Väst AB",
+    address: "Solgårdsgatan 4C, 412 64 Göteborg",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Bevaknings AB Prevendo",
+    address: "Solhagavägen 28, 184 63 Åkersberga",
+    phone: "070-854 02 46",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Bevakningsaktiebolaget Företagsskydd",
+    address: "Svartövägen 22, 974 37 Luleå",
+    phone: "0920-920 00",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Bevakningspoolen I Östhammar AB",
+    address: "Gammelbygatan 22, 742 34 Östhammar",
+    phone: "0173-500 57",
+    email: "info@bevakningspoolen.se",
+    website: "https://bevakningspoolen.se",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Bevakningsskydd I Hässleholm AB",
+    address: "Logementsvägen 4, 281 56 Hässleholm",
+    phone: "0451-800 50",
+    email: "info@bevakningsskydd.se",
+    website: "https://www.bevakningsskydd.se",
+    logo: "/assets/employers/bevakningsskydd-hassleholm.png",
+    authorized: true,
+  },
+  {
+    name: "Bevakningstjänst Nordisk Security AB",
+    address: "Skeppargatan 57, 114 59 Stockholm",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "BK Gruppen AB",
+    address: "Bergvägen 5, 649 30 Sparreholm",
+    phone: "010-200 78 78",
+    email: "info@bkgruppen.se",
+    website: "https://www.bkgruppen.se",
+    logo: "/assets/employers/bk-gruppen.png",
+    authorized: true,
+  },
+  {
+    name: "Bol Säkerhet AB",
+    address: "Träffgatan 2, 136 44 Handen",
+    phone: "08-742 07 69",
+    email: "info@bol-sakerhet.se",
+    website: "https://www.bol-sakerhet.se",
+    logo: "/assets/employers/bol-sakerhet.png",
+    authorized: true,
+  },
+  {
+    name: "Capricorn Security AB",
+    address: "Löjtnantsgatan 14, 115 50 Stockholm",
+    phone: "070-755 62 75",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "CB Eventsäkerhet AB",
+    address: "Södra Förstadsgatan 26, 211 43 Malmö",
+    phone: "073-325 25 04",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Citadel Group Security AB",
+    address: "Kvarnhagsvägen 75, 145 60 Norsborg",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "City Security Sweden AB",
+    address: "",
+    phone: "031-761 51 00",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "CityBevakning Sverige AB",
+    address: "Nobelvägen 147E, 212 15 Malmö",
+    phone: "010-210 22 80",
+    email: "",
+    website: "https://www.citybevakning.se",
+    logo: "/assets/employers/citybevakning.png",
+  },
+  {
+    name: "Commando Security AB",
+    address: "Norra Skeppspromenaden 14, 417 60 Göteborg",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Cpg Bevakning Sverige AB",
+    address: "J A Wettergrens gata 14, 421 30 Västra Frölunda",
+    phone: "031-762 86 00",
+    email: "info@cpgbevakning.se",
+    website: "https://cpgbevakning.se",
+    logo: "/assets/employers/cpg-bevakning.png",
+  },
+  {
+    name: "Creab Säkerhet AB",
+    address: "Ölandsgatan 5, 371 33 Karlskrona",
+    phone: "077-112 41 24",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Crewsec AB",
+    address: "Strandvägen 67, 115 23 Stockholm",
+    phone: "010-707 97 59",
+    email: "kontakt@crewsec.se",
+    website: "https://crewsec.se",
+    logo: "/assets/employers/crewsec.png",
+  },
+  {
+    name: "CubAB KB",
+    address: "Säbygatan 25, 753 23 Uppsala",
+    phone: "018-69 33 30",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Dala Bevakningsservice AB",
+    address: "Lomtorpet 23, 783 90 Säter",
+    phone: "010-750 07 02",
+    email: "info@dalabevakningsservice.se",
+    website: "https://dalabevakningsservice.se",
+    logo: "/assets/employers/dala-bevakningsservice.png",
+  },
+  {
+    name: "Defencia Bevakning AB",
+    address: "Björnänge 825, 837 97 Åre",
+    phone: "0647-510 00",
+    email: "",
+    website: "",
+    logo: "/assets/employers/defencia-bevakning.png",
+  },
+  {
+    name: "DS Bevakning AB",
+    address: "Månskärsvägen 10B, 141 75 Kungens Kurva",
+    phone: "08-123 505 55",
+    email: "",
+    website: "https://dsbevakning.se",
+    logo: "/assets/employers/ds-bevakning.png",
+  },
+  {
+    name: "Eagle Security, AB",
+    address: "Sparbanksvägen 9, 129 32 Hägersten",
+    phone: "070-679 67 97",
+    email: "info@eaglesecurity.se",
+    website: "https://www.eaglesecurity.se",
+    logo: "/assets/employers/eagle-security.png",
+    authorized: true,
+  },
+  {
+    name: "Earthart Business Protection Agency",
+    address: "Malmskillnadsgatan 44, 111 57 Stockholm",
+    phone: "08-400 215 70",
+    email: "contact@earhart.se",
+    website: "https://earhart.se",
+    logo: "",
+  },
+  {
+    name: "EGAB Bevakning AB",
+    address: "Knådavägen 74, 828 94 Edsbyn",
+    phone: "0271-23330",
+    email: "info@egabbevakning.se",
+    website: "https://egabbevakning.se",
+    logo: "/assets/employers/egab-bevakning.png",
+  },
+  {
+    name: "Ek's Vakthundar AB",
+    address: "Badvägen 10, 264 34 Klippan",
+    phone: "070-785 44 00",
+    email: "info@eksvakthundar.se",
+    website: "https://eksvakthundar.se",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Elite Service & Security Stockholm AB",
+    address: "Älvsjö stationsgata 4, 125 31 Älvsjö",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Englavakt Bevakning AB",
+    address: "Trastvägen 23, 227 29 Lund",
+    phone: "046-32 40 60",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Ensec AB",
+    address: "Löfströms allé 2E, 172 61 Sundbyberg",
+    phone: "073-505 02 52",
+    email: "info@ensec.se",
+    website: "https://ensec.se",
+    logo: "/assets/employers/ensec.png",
+  },
+  {
+    name: "Epok:S Vaktservice",
+    address: "Skogslundsvägen 11, 574 34 Vetlanda",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Eps Bevakning AB",
+    address: "Årstaängsvägen 21B, 117 60 Stockholm",
+    phone: "08-556 306 70",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Event Security AB",
+    address: "Löfströms allé 5, 172 66 Sundbyberg",
+    phone: "08-624 05 80",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Executive Security Sweden AB",
+    address: "Linnégatan 50, 114 54 Stockholm",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Exista Säkerhet AB",
+    address: "Banvaktsvägen 12, 171 48 Solna",
+    phone: "08-7392900",
+    email: "info@exista.se",
+    website: "https://www.exista.se",
+    logo: "/assets/employers/exista-sakerhet.png",
+  },
+  {
+    name: "F.D Security AB",
+    address: "Långströmsgatan 36C, 418 70 Göteborg",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Fair Security Scandinavia AB",
+    address: "Sedelvägen 12, 129 32 Hägersten",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Fairdeal Group Sverige AB",
+    address: "Virkesvägen 10, 120 30 Stockholm",
+    phone: "08-452 04 90",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Falbygdens Bevaknings AB",
+    address: "Torggatan 56, 534 50 Vara",
+    phone: "0512-222 00",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Focus Security AB",
+    address: "Övre Husargatan 19, 413 14 Göteborg",
+    phone: "073-508 23 29",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Fortify Security Sverige AB",
+    address: "Sankt Eriksgatan 63B, 112 34 Stockholm",
+    phone: "070-685 83 87",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Fyrstads Säkerhetsservice AB",
+    address: "Kungsgatan 13, 451 30 Uddevalla",
+    phone: "0522-191 90",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Föreningen Ordningsvakterna C4",
+    address: "Hemvärnsvägen 1, 291 63 Kristianstad",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Gateeas Security AB",
+    address: "Sågverksgatan 5, 652 21 Karlstad",
+    phone: "054-53 66 01",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Gdr Security Group AB",
+    address: "Cypressvägen 12, 213 63 Malmö",
+    phone: "040-97 09 07",
+    email: "info@gdr.se",
+    website: "https://www.gdr.se",
+    logo: "",
+  },
+  {
+    name: "Gefle-Vakt AB",
+    address: "Forskarvägen 21, 804 23 Gävle",
+    phone: "073-046 56 45",
+    email: "info@geflevakt.se",
+    website: "https://geflevakt.se",
+    logo: "",
+  },
+  {
+    name: "Global Security IPS AB",
+    address: "Kungsporten 6C, 427 50 Billdal",
+    phone: "031-2070779",
+    email: "info@globalsecurity.se",
+    website: "https://www.globalsecurity.se",
+    logo: "/assets/employers/global-security-ips.png",
+  },
+  {
+    name: "Gotsec Säkerhet & Utbildning",
+    address: "Säljåsbacken 3, 437 93 Lindome",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Grand Bevakning AB",
+    address: "Varuvägen 9, 125 30 Älvsjö",
+    phone: "08-410 457 70",
+    email: "",
+    website: "https://grandbevakning.se",
+    logo: "",
+  },
+  {
+    name: "Great Security Holding AB",
+    address: "Vagnvägen 16C, 432 32 Varberg",
+    phone: "0340-64 58 00",
+    email: "info@greatsecurity.se",
+    website: "https://greatsecurity.se",
+    logo: "/assets/employers/great-security.png",
+  },
+  {
+    name: "Gripen Bevakning AB",
+    address: "Jägersrovägen 160, 212 37 Malmö",
+    phone: "070-419 60 80",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Grupplarm AB",
+    address: "Björkhemsvägen 25, 291 54 Kristianstad",
+    phone: "044-10 38 50",
+    email: "info@grupplarm.se",
+    website: "https://www.grupplarm.se",
+    logo: "/assets/employers/grupplarm.png",
+    authorized: true,
+  },
+  {
+    name: "GSV Security AB",
+    address: "Rissneleden 110, 174 57 Sundbyberg",
+    phone: "077-022 05 99",
+    email: "",
+    website: "https://www.gsvsecurity.se",
+    logo: "/assets/employers/gsv-security.png",
+  },
+  {
+    name: "Gävleborgs Bevakning AB",
+    address: "",
+    phone: "026-25 25 80",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Hallstavik Bevakning Ek. För.",
+    address: "Lundåsvägen 6, 763 30 Hallstavik",
+    phone: "070-810 10 99",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Handelsbevakning Sverige AB",
+    address: "Alströmergatan 51, 112 47 Stockholm",
+    phone: "010-174 08 00",
+    email: "info@handelsbevakning.com",
+    website: "https://handelsbevakning.com",
+    logo: "/assets/employers/handelsbevakning.png",
+  },
+  {
+    name: "Helsingborgs Beskydd & Bevakning AB",
+    address: "Fjällugglegatan 9, 254 50 Helsingborg",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "HIGH Security Stockholm AB",
+    address: "Sparbanksvägen 10, 129 32 Hägersten",
+    phone: "08-68459600",
+    email: "info@highsecurity.se",
+    website: "https://www.highsecurity.se",
+    logo: "/assets/employers/high-security-stockholm.png",
+  },
+  {
+    name: "Hometec Security Gbg AB",
+    address: "Johannas väg 5, 512 91 Sexdrega",
+    phone: "031-755 49 00",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Honk & Sandström Säkerhetsbemanning AB",
+    address: "Bulyckevägen 5, 418 78 Göteborg",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "I-SEC Sweden Aviation Security AB",
+    address: "Fraktvägen 45B, 190 60 Stockholm-Arlanda",
+    phone: "010-185 00 00",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Imperium Security AB",
+    address: "Övralidsgatan 25, 422 47 Hisings Backa",
+    phone: "",
+    email: "info@imperiumsecurity.se",
+    website: "https://imperiumsecurity.se",
+    logo: "/assets/employers/imperium-security.png",
+  },
+  {
+    name: "Ipatrol Security AB",
+    address: "Industrivägen 4, 449 44 Nol",
+    phone: "030-323 30 00",
+    email: "info@ipatrol.se",
+    website: "https://ipatrol.se",
+    logo: "/assets/employers/ipatrol-security.png",
+  },
+  {
+    name: "JB Bevakning AB",
+    address: "Kungsgatan 32, 285 31 Markaryd",
+    phone: "0433-732 00",
+    email: "info@jbbevakning.se",
+    website: "https://jbbevakning.se",
+    logo: "/assets/employers/jb-bevakning.png",
+  },
+  {
+    name: "Je Larm & Bevakning I Uppland AB",
+    address: "Gesällgatan 15, 745 39 Enköping",
+    phone: "0171-61 91 61",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Jesa Security AB",
+    address: "Klockarevägen 12B, 449 30 Nödinge",
+    phone: "031-12 86 95",
+    email: "info@jesasecurity.com",
+    website: "https://jesasecurity.com",
+    logo: "/assets/employers/jesa-security.png",
+    authorized: true,
+  },
+  {
+    name: "Jj Säkerhet & Event, AB",
+    address: "Åsvägen 96, 836 71 Ås",
+    phone: "070-666 89 90",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Jonsson & Sewerin AB",
+    address: "Hantverksvägen 16, 355 73 Gemla",
+    phone: "070-676 77 70",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Jv Bevakning",
+    address: "Lärkvägen 6, 903 54 Umeå",
+    phone: "070-679 26 54",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "K9-Security Dalarna",
+    address: "Granåsvägen 13, 775 50 Krylbo",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "KeyLink AB",
+    address: "Box 79, 592 22 Vadstena",
+    phone: "08-55667770",
+    email: "info@keylink.se",
+    website: "https://www.keylink.se",
+    logo: "/assets/employers/keylink.png",
+  },
+  {
+    name: "Kilsmotorp AB",
+    address: "Kaptensgatan 6, 114 57 Stockholm",
+    phone: "08-753 08 46",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Kinds Vakt AB",
+    address: "Boråsvägen 7, 512 53 Svenljunga",
+    phone: "070-592 77 06",
+    email: "",
+    website: "https://kindsvakt.se",
+    logo: "/assets/employers/kinds-vakt.png",
+    authorized: true,
+  },
+  {
+    name: "Klemo Bevakning AB",
+    address: "",
+    phone: "",
+    email: "",
+    website: "https://klemobevakning.se",
+    logo: "/assets/employers/klemo-bevakning.png",
+  },
+  {
+    name: "Kroon Security AB",
+    address: "Maskinvägen 1, 227 30 Lund",
+    phone: "046-12 70 95",
+    email: "info@kroonsecurity.se",
+    website: "https://kroonsecurity.se",
+    logo: "/assets/employers/kroon-security.png",
+  },
+  {
+    name: "La Jour och Säkerhet AB",
+    address: "Malmgatan 16, 602 23 Norrköping",
+    phone: "010-207 03 00",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Larm Assistans Sverige AB",
+    address: "",
+    phone: "090-19460",
+    email: "info@larmassistans.se",
+    website: "https://www.larmassistans.se",
+    logo: "",
+  },
+  {
+    name: "Larm O Bevakning Norr AB",
+    address: "Topasvägen 10, 282 32 Tyringe",
+    phone: "070-844 55 78",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Linnovation AB",
+    address: "Servicegatan 27, 931 76 Skellefteå",
+    phone: "070-611 61 95",
+    email: "info@linnovation.se",
+    website: "https://linnovation.se",
+    logo: "/assets/employers/linnovation.png",
+    authorized: true,
+  },
+  {
+    name: "Lokala Vakten AB",
+    address: "Storgatan 28, 334 32 Anderstorp",
+    phone: "0371-185 55",
+    email: "info@lokalavakten.se",
+    website: "https://lokalavakten.se",
+    logo: "/assets/employers/lokala-vakten.png",
+    authorized: true,
+  },
+  {
+    name: "Loomis Sverige AB",
+    address: "Staffans Väg 2, 192 78 Sollentuna",
+    phone: "010-163 63 00",
+    email: "",
+    website: "https://se.loomis.com",
+    logo: "/assets/employers/loomis.png",
+  },
+  {
+    name: "Lykil Säkerhet AB",
+    address: "Mått Johanssons Väg 7, 633 46 Eskilstuna",
+    phone: "016-170150",
+    email: "info@lykil.se",
+    website: "https://www.lykil.se",
+    logo: "/assets/employers/lykil-sakerhet.png",
+  },
+  {
+    name: "Lövestad Larmcentral AB",
+    address: "Södergatan 18, 275 75 Lövestad",
+    phone: "020-40 80 00",
+    email: "larmcentralen@lovestadlarmcentral.se",
+    website: "https://lovestadlarmcentral.se",
+    logo: "/assets/employers/lovestad-larmcentral.png",
+    authorized: true,
+  },
+  {
+    name: "Majosec Bevakning AB",
+    address: "Silkesvägen 19, 331 53 Värnamo",
+    phone: "010-252 91 39",
+    email: "info@majosecbevakning.se",
+    website: "https://www.majosecbevakning.se",
+    logo: "/assets/employers/majosec-bevakning.png",
+  },
+  {
+    name: "Malmö Industrivakter AB",
+    address: "Storgatan 24, 261 29 Landskrona",
+    phone: "020-82 30 00",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Malung Sälen Vakt & Service AB",
+    address: "Skolgatan 6, 782 30 Malung",
+    phone: "070-380 01 12",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Manison AB",
+    address: "Sjöflygvägen 35, 183 62 Täby",
+    phone: "08-544 705 40",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Maribo Security AB",
+    address: "Tråkärrsslättvägen 74, 427 50 Billdal",
+    phone: "070-686 10 18",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Mektex & Bevakning",
+    address: "Sisjöbäckens Väg 31, 436 38 Askim",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Mk Bevakningstjänst AB",
+    address: "Theres Svenssons gata 15, 417 55 Göteborg",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Monitor Larm & Bevakning I Göteborg AB",
+    address: "Gullbergs strandgata 36A, 411 04 Göteborg",
+    phone: "031-63 65 00",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Nokas Värdehantering AB",
+    address: "Västberga Allé 11, 126 30 Hägersten",
+    phone: "010-222 60 00",
+    email: "",
+    website: "https://www.nokas.se",
+    logo: "/assets/employers/nokas-vardehantering.png",
+  },
+  {
+    name: "Nord Security Bevakning",
+    address: "Stenvägen 10, 952 31 Kalix",
+    phone: "073-028 04 91",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Nordisk Elitbevakning AB",
+    address: "Grånestad 4, 605 93 Norrköping",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Nordisk Skydd AB",
+    address: "Måttbandsvägen 12, 187 66 Täby",
+    phone: "08-87 00 00",
+    email: "info@nordiskskydd.se",
+    website: "https://nordiskskydd.se",
+    logo: "/assets/employers/nordisk-skydd.png",
+  },
+  {
+    name: "Nordiska Säkerhetsnätet AB",
+    address: "Rådjursgatan 3, 722 42 Västerås",
+    phone: "021-14 47 70",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Northern Fire AB",
+    address: "Hökegatan 16, 416 66 Göteborg",
+    phone: "070-565 21 87",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Northern Protection Group AB",
+    address: "Sjösavägen 1A, 124 55 Bandhagen",
+    phone: "08-24 57 40",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Novasec AB",
+    address: "",
+    phone: "08-23 62 36",
+    email: "",
+    website: "https://www.novasec.se",
+    logo: "/assets/employers/novasec.png",
+  },
+  {
+    name: "Np-Bevakning",
+    address: "Lodjursstråket 1, 417 51 Göteborg",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Nvss Security AB",
+    address: "Sjöflygvägen 35C-D, 183 62 Täby",
+    phone: "08-122 040 20",
+    email: "",
+    website: "https://NVSS.se",
+    logo: "",
+  },
+  {
+    name: "Nya Gotlands Vaktbolag",
+    address: "",
+    phone: "0498-27 72 00",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Orca Security AB",
+    address: "Göteborgsvägen 23, 443 30 Lerum",
+    phone: "070-773 06 06",
+    email: "info@orcasecurity.se",
+    website: "https://www.orcasecurity.se",
+    logo: "/assets/employers/orca-security.png",
+    authorized: true,
+  },
+  {
+    name: "Orion säkerhet AB",
+    address: "Stagneliusvägen 43, 112 57 Stockholm",
+    phone: "08-88 10 10",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Oxaros AB",
+    address: "Krondammsvägen 67, 433 43 Partille",
+    phone: "072-317 22 39",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "P.H Säkerhet & Äventyr AB",
+    address: "Sandhamnsgatan 75A, 115 28 Stockholm",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Paratus Security AB",
+    address: "Artillerigatan 44, 114 45 Stockholm",
+    phone: "08-665 00 06",
+    email: "",
+    website: "https://paratussecurity.se",
+    logo: "/assets/employers/paratus-security.png",
+  },
+  {
+    name: "PD Bevakning AB",
+    address: "Hagvägen 18, 831 48 Östersund",
+    phone: "070-323 85 85",
+    email: "",
+    website: "https://pdbevakning.se",
+    logo: "/assets/employers/pd-bevakning.png",
+    authorized: true,
+  },
+  {
+    name: "Peak Security AB",
+    address: "Högbergsgatan 83, 118 54 Stockholm",
+    phone: "070-845 55 10",
+    email: "info@peaksecurity.se",
+    website: "https://peaksecurity.se",
+    logo: "",
+  },
+  {
+    name: "Plan B Bevakning, AB",
+    address: "Datavägen 12B, 436 32 Askim",
+    phone: "054-21 41 00",
+    email: "",
+    website: "https://www.planbbevakning.se",
+    logo: "",
+  },
+  {
+    name: "Premisec AB",
+    address: "Västergöksvägen 119, 162 71 Vällingby",
+    phone: "",
+    email: "info@premisec.se",
+    website: "https://premisec.se",
+    logo: "",
+  },
+  {
+    name: "PreSäkra AB",
+    address: "Höjdrodergatan 23, 212 39 Malmö",
+    phone: "020-51 25 00",
+    email: "info@presakra.se",
+    website: "https://www.presakra.se",
+    logo: "/assets/employers/presakra.png",
+  },
+  {
+    name: "Prevaka Security AB",
+    address: "Lagervägen 4, 200 39 Malmö",
+    phone: "040-611 69 00",
+    email: "info@prevaka.se",
+    website: "https://prevaka.se",
+    logo: "/assets/employers/prevaka-security.png",
+  },
+  {
+    name: "Prevent Bevakning AB",
+    address: "Munkerödsvägen 7, 444 32 Stenungsund",
+    phone: "0303-945 94",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "PRISMA Security AB",
+    address: "Herkulesgatan 17, 111 52 Stockholm",
+    phone: "010-211 58 00",
+    email: "info@prismasecurity.se",
+    website: "https://www.prismasecurity.se",
+    logo: "/assets/employers/prisma-security.png",
+    authorized: true,
+  },
+  {
+    name: "Proaktiv Säkerhet Götaland AB",
+    address: "Andréevägen 29, 554 66 Jönköping",
+    phone: "076-785 34 33",
+    email: "evert@proaktiv.nu",
+    website: "https://proaktiv.nu",
+    logo: "/assets/employers/proaktiv-sakerhet-gotaland.png",
+  },
+  {
+    name: "Proaktiv Säkerhet i Sverige AB",
+    address: "Vendevägen 89, 182 32 Danderyd",
+    phone: "010-5511941",
+    email: "",
+    website: "",
+    logo: "/assets/employers/proaktiv-sakerhet.png",
+  },
+  {
+    name: "Professionell Säkerhet i Skåne AB",
+    address: "Hävertgatan 29, 254 42 Helsingborg",
+    phone: "010-5500100",
+    email: "",
+    website: "https://professionellsakerhet.se",
+    logo: "/assets/employers/professionell-sakerhet-skane.png",
+  },
+  {
+    name: "Proguard Vaktservice AB",
+    address: "Ängesvägen 1B, 931 39 Skellefteå",
+    phone: "070-296 28 05",
+    email: "info@proguardvaktservice.se",
+    website: "https://www.proguardvaktservice.se",
+    logo: "/assets/employers/proguard-vaktservice.png",
+  },
+  {
+    name: "Promota Security AB",
+    address: "Björkholmsvägen 10, 141 46 Huddinge",
+    phone: "08-744 10 61",
+    email: "info@promota.se",
+    website: "https://promota.se",
+    logo: "/assets/employers/promota-security.png",
+    authorized: true,
+  },
+  {
+    name: "Promota Security Handelssäkerhet AB",
+    address: "Jakobsdalsvägen 13, 126 53 Hägersten",
+    phone: "08-744 42 20",
+    email: "",
+    website: "",
+    logo: "/assets/employers/promota-security-handelssakerhet.png",
+    authorized: true,
+  },
+  {
+    name: "ProSecurity Sweden AB",
+    address: "Stormbyvägen 2-4, 163 55 Spånga",
+    phone: "010-551 19 40",
+    email: "info@prosecurity.se",
+    website: "https://prosecurity.se",
+    logo: "/assets/employers/prosecurity.png",
+    authorized: true,
+  },
+  {
+    name: "Protection Company Europe AB",
+    address: "Sjöviksvägen 60, 117 58 Stockholm",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Protectus Bevakning AB",
+    address: "Dag Hammarskjölds väg 10B, 752 37 Uppsala",
+    phone: "018-60 27 70",
+    email: "",
+    website: "https://protectusbevakning.se",
+    logo: "/assets/employers/protectus-bevakning.png",
+  },
+  {
+    name: "Q Security Sverige AB",
+    address: "Brehogsvägen 5, 457 32 Tanumshede",
+    phone: "010-516 75 00",
+    email: "info@qsecurity.se",
+    website: "https://www.qsecurity.se",
+    logo: "/assets/employers/q-security.png",
+    authorized: true,
+  },
+  {
+    name: "Qsg Bevakning AB",
+    address: "Gamlestads Torg 7, 415 12 Göteborg",
+    phone: "077-440 30 30",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "RANTA AB",
+    address: "Utövägen 8B, 371 37 Karlskrona",
+    phone: "0455-30 70 24",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Rapid Säkerhet AB",
+    address: "Kronborgsgränd 15, 164 46 Kista",
+    phone: "08-564 202 00",
+    email: "",
+    website: "https://rapidsakerhet.se",
+    logo: "",
+  },
+  {
+    name: "Rempart AB",
+    address: "Mor Annas brygga 69, 181 29 Lidingö",
+    phone: "070-748 06 87",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Rixbevakning Sverige AB",
+    address: "Storgatan 23, 434 30 Kungsbacka",
+    phone: "010-333 33 64",
+    email: "info@rixbevakning.se",
+    website: "https://rixbevakning.se",
+    logo: "/assets/employers/rixbevakning.png",
+  },
+  {
+    name: "Robsecurity (Robsec)",
+    address: "Lansgatan 6, 943 35 Öjebyn",
+    phone: "0911-20 68 62",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Romaq Security AB",
+    address: "Linslingan 7, 241 35 Eslöv",
+    phone: "0413-698 75",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "RT Säkerhet AB",
+    address: "Box 7027, 187 11 Täby",
+    phone: "073-763 45 00",
+    email: "info@rtsakerhet.se",
+    website: "https://www.rtsakerhet.se",
+    logo: "/assets/employers/rt-sakerhet.png",
+  },
+  {
+    name: "SA Bevakning AB",
+    address: "Fabrikstorget 1, 412 50 Göteborg",
+    phone: "031-80 95 30",
+    email: "",
+    website: "https://sabevakning.se",
+    logo: "",
+  },
+  {
+    name: "Safe Security I Sverige AB",
+    address: "Verkstadsgatan 8, 753 23 Uppsala",
+    phone: "018-15 74 44",
+    email: "info@safesecurity.se",
+    website: "https://safesecurity.se",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Safekeeper AB",
+    address: "Oslovägen 48, 452 35 Strömstad",
+    phone: "010-510 10 00",
+    email: "info@safekeeper.se",
+    website: "https://www.safekeeper.se",
+    logo: "/assets/employers/safekeeper.png",
+  },
+  {
+    name: "SAM Security AB",
+    address: "Smedjegatan 22, 352 46 Växjö",
+    phone: "072-322 44 31",
+    email: "info@samsecurity.se",
+    website: "https://www.samsecurity.se",
+    logo: "/assets/employers/sam-security.png",
+    authorized: true,
+  },
+  {
+    name: "Sbg Bevakning KB",
+    address: "Safirgränd 18, 126 79 Hägersten",
+    phone: "08-38 50 00",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Scutus Protection AB",
+    address: "Magnus Ladulåsgatan 3, 118 65 Stockholm",
+    phone: "08-20 40 00",
+    email: "info@scutus.se",
+    website: "https://scutus.se",
+    logo: "/assets/employers/scutus-protection.png",
+  },
+  {
+    name: "Security & Facility Services 360 AB",
+    address: "Jörgen Kocksgatan 65, 211 20 Malmö",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Security Assistance Syd AB",
+    address: "Flygplansgatan 1-3, 212 39 Malmö",
+    phone: "040-6892450",
+    email: "kontakt@secass.se",
+    website: "https://www.secass.se",
+    logo: "/assets/employers/security-assistance-syd.png",
+  },
+  {
+    name: "Security Group Scandinavia AB",
+    address: "Ribevägen 20D, 217 46 Malmö",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Security House International KB",
+    address: "Ålgrytevägen 139, 127 31 Skärholmen",
+    phone: "",
+    email: "info@securityhouse.se",
+    website: "https://securityhouse.se",
+    logo: "/assets/employers/security-house-international.png",
+  },
+  {
+    name: "Security Store Sweden AB",
+    address: "",
+    phone: "010-303 78 95",
+    email: "kundservice@securitystore.se",
+    website: "https://securitystore.se",
+    logo: "/assets/employers/security-store.png",
+  },
+  {
+    name: "Secutor Security AB",
+    address: "Ekuddsvägen 21, 131 38 Nacka",
+    phone: "070-456 25 20",
+    email: "info@secutorsecurity.se",
+    website: "https://secutorsecurity.se",
+    logo: "/assets/employers/secutor-security.png",
+  },
+  {
+    name: "Selpro Investment, AB",
+    address: "Valinge by 55, 432 92 Varberg",
+    phone: "0340-50 00 05",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "SEQR SERVICES AB",
+    address: "Kommendörsgatan 37, 114 58 Stockholm",
+    phone: "08-611 61 00",
+    email: "info@seqrservices.com",
+    website: "https://seqrservices.com",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Servitium Bevakning AB",
+    address: "Vretavägen 4D, 719 93 Vintrosa",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Show Security Sweden",
+    address: "Renstiernas Gata 14, 116 28 Stockholm",
+    phone: "08-520 010 10",
+    email: "info@showsecurity.se",
+    website: "https://www.showsecurity.se",
+    logo: "/assets/employers/show-security.png",
+  },
+  {
+    name: "Smart Bevakning Sverige AB",
+    address: "Lindövägen 72, 602 28 Norrköping",
+    phone: "020-26 11 50",
+    email: "",
+    website: "https://www.smartsakerhet.com",
+    logo: "/assets/employers/smart-bevakning.png",
+    authorized: true,
+  },
+  {
+    name: "Sodergaard AB",
+    address: "Humlarpsvägen 70, 265 90 Åstorp",
+    phone: "076-014 15 46",
+    email: "info@sodergaard.se",
+    website: "https://www.sodergaard.se",
+    logo: "",
+  },
+  {
+    name: "SOOKAB Säkerhet AB",
+    address: "Hjalmar Strååts väg 3B, 184 60 Åkersberga",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Spartan Security AB",
+    address: "Bertrandsgatan 3A, 212 14 Malmö",
+    phone: "",
+    email: "info@spartansecurity.se",
+    website: "https://spartansecurity.se",
+    logo: "/assets/employers/spartan-security.png",
+  },
+  {
+    name: "Ssg Security Sweden Group AB",
+    address: "Elektravägen 53, 126 30 Hägersten",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "sst bevakning.se",
+    address: "Virebergsvägen 9, 169 30 Solna",
+    phone: "073-368 14 11",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Star Security AB",
+    address: "Fyrspannvägen 14A, 425 41 Hisings Kärra",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Stiernekens Säkerhetstjänst AB",
+    address: "Arabygatan 15, 352 46 Växjö",
+    phone: "0470-32 81 10",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Store Secure Bevakningstjänst AB",
+    address: "Växthusvägen 15, 197 36 Bro",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Svensk Bevakning och Säkerhetspartner AB",
+    address: "A Odhners gata 43, 421 30 Västra Frölunda",
+    phone: "070-593 90 99",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Svensk Evenemangssäkerhet Securities AB",
+    address: "Arenavägen 23, 121 77 Johanneshov",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Svensk Fjällbevakning AB",
+    address: "Sälenvägen 48, 780 67 Sälen",
+    phone: "0280-200 40",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Svensk Säkerhet & Störningsjour I Sverige AB",
+    address: "Företagshusvägen 2, 244 93 Kävlinge",
+    phone: "040-97 00 60",
+    email: "",
+    website: "https://svensksakerhet.com",
+    logo: "/assets/employers/svensk-sakerhet-storningsjour.png",
+    authorized: true,
+  },
+  {
+    name: "Svenska Hjältar AB",
+    address: "",
+    phone: "",
+    email: "",
+    website: "https://www.svenska-hjaltar.se",
+    logo: "/assets/employers/svenska-hjaltar.png",
+  },
+  {
+    name: "Svenska Störningsjouren AB",
+    address: "",
+    phone: "08-645 00 35",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Svenska Vakt",
+    address: "Kvarnvägen 3, 445 02 Surte",
+    phone: "",
+    email: "kontakt@svenskavakt.com",
+    website: "https://www.svenskavakt.com",
+    logo: "/assets/employers/svenska-vakt.png",
+  },
+  {
+    name: "Svesab Security AB",
+    address: "Vilundavägen 30, 194 34 Upplands Väsby",
+    phone: "08-6225561",
+    email: "info@svesabsecurity.se",
+    website: "https://www.svesabsecurity.se",
+    logo: "/assets/employers/svesab-security.png",
+  },
+  {
+    name: "Swedbevakningstjänster AB",
+    address: "Svärdvägen 27, 182 33 Danderyd",
+    phone: "073-697 38 23",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Sweguard AB",
+    address: "Storforsvägen 15, 944 72 Piteå",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Swepo Group AB",
+    address: "Neptunigränd 34, 194 43 Upplands Väsby",
+    phone: "070-4582370",
+    email: "kundtjanst@swepogroup.se",
+    website: "https://www.swepogroup.se",
+    logo: "/assets/employers/swepo.png",
+  },
+  {
+    name: "Sydsec Bevakning AB",
+    address: "Arlövsvägen 2, 211 24 Malmö",
+    phone: "040-611 33 11",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Säkerhetsmäklarna I Sverige AB",
+    address: "Strålgatan 11, 112 63 Stockholm",
+    phone: "072-577 98 00",
+    email: "info@sakerhetsmaklarna.se",
+    website: "https://www.sakerhetsmaklarna.se",
+    logo: "",
+  },
+  {
+    name: "Säkerhetstjänst i Värmland AB",
+    address: "Kvarnvägen 15, 663 40 Hammarö",
+    phone: "054-21 94 00",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Säkerhetstjänst I Väst AB",
+    address: "Traversgatan 10, 531 40 Lidköping",
+    phone: "072-534 53 19",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Säkerhetsvakterna i Malmö AB",
+    address: "Skallavångsvägen 26, 247 33 Södra Sandby",
+    phone: "040-680 64 69",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "T. P. Ordningsvakter AB",
+    address: "Ekens väg 10, 741 98 Knutby",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Tarantsec Bevakning AB",
+    address: "Vretensborgsvägen 28, 126 30 Hägersten",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Teletec Connect AB",
+    address: "Ostmästargränd 8, 120 40 Årsta",
+    phone: "08-6021600",
+    email: "",
+    website: "https://www.teletec.se",
+    logo: "/assets/employers/teletec-connect.png",
+  },
+  {
+    name: "Texstar AB",
+    address: "Gösvägen 7, 761 48 Norrtälje",
+    phone: "0176-29 65 50",
+    email: "info@texstar.se",
+    website: "https://texstar.se",
+    logo: "/assets/employers/texstar.png",
+  },
+  {
+    name: "Thora Bevakning AB",
+    address: "Storgatan 34, 269 77 Torekov",
+    phone: "073-325 25 20",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "TM-Security AB",
+    address: "Älgvägen 10, 352 45 Växjö",
+    phone: "070-810 16 21",
+    email: "info@tmsecurity.se",
+    website: "https://tmsecurity.se",
+    logo: "",
+  },
+  {
+    name: "To Trust Operations AB",
+    address: "",
+    phone: "",
+    email: "info@totrust.se",
+    website: "https://www.totrust.se",
+    logo: "/assets/employers/to-trust-operations.png",
+  },
+  {
+    name: "Top Security Scandinavia AB",
+    address: "Engelbrektsgatan 6B, 114 32 Stockholm",
+    phone: "073-718 02 75",
+    email: "info@topsecurity.se",
+    website: "https://topsecurity.se",
+    logo: "",
+  },
+  {
+    name: "Top Solution Security Sverige AB",
+    address: "Fatburs Brunnsgata 31, 118 28 Stockholm",
+    phone: "08-646 83 00",
+    email: "info@topsolution.se",
+    website: "https://www.topsolution.se/topsolution",
+    logo: "/assets/employers/top-solution-security.png",
+  },
+  {
+    name: "Total Säkerhet Skandinavien AB",
+    address: "Grännavägen 24, 561 34 Huskvarna",
+    phone: "036-13 23 20",
+    email: "info@totalsakerhet.se",
+    website: "https://totalsakerhet.se",
+    logo: "/assets/employers/total-sakerhet-skandinavien.png",
+    authorized: true,
+  },
+  {
+    name: "Trinity Security AB",
+    address: "Sandfjärdsgatan 29, 120 56 Årsta",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Trygghetsbevakning Stockholm HB",
+    address: "Hamngatan 10, 111 47 Stockholm",
+    phone: "070-777 81 17",
+    email: "",
+    website: "https://trygghetsbevakning.se",
+    logo: "/assets/employers/trygghetsbevakning-stockholm.png",
+    authorized: true,
+  },
+  {
+    name: "TS Säkerhet AB",
+    address: "Rolandsbacke 205, 861 95 Söråker",
+    phone: "073-817 09 85",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Ull Security AB",
+    address: "Nitvägen 12, 126 38 Hägersten",
+    phone: "08-18 89 85",
+    email: "",
+    website: "https://ullsecurity.se",
+    logo: "/assets/employers/ull-security.png",
+  },
+  {
+    name: "Unit Security Sweden",
+    address: "Stora torget 1C, 599 31 Ödeshög",
+    phone: "070-034 78 13",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "V B O Security AB",
+    address: "Järvstigen 27, 974 53 Luleå",
+    phone: "072-231 59 01",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Vakter/Ordningsvakter I Kalmar",
+    address: "Rotebrunnsvägen 10, 393 55 Kalmar",
+    phone: "0480-869 66",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "VBK Västsvensk Butikskontroll AB",
+    address: "",
+    phone: "033-10 60 25",
+    email: "",
+    website: "",
+    logo: "",
+    authorized: true,
+  },
+  {
+    name: "Vialarm i Sverige AB",
+    address: "Uddevallavägen 3, 452 31 Strömstad",
+    phone: "0771-747576",
+    email: "kundtjanst@vialarm.se",
+    website: "https://www.vialarm.shop",
+    logo: "/assets/employers/vialarm.png",
+  },
+  {
+    name: "ViPo Säkerhetstjänster AB",
+    address: "Järnvägsgatan 7, 252 24 Helsingborg",
+    phone: "076-0358007",
+    email: "kundservice@vipo.se",
+    website: "https://www.vipo.se",
+    logo: "/assets/employers/vipo-sakerhetstjanster.png",
+  },
+  {
+    name: "Vj Security AB",
+    address: "Tånåsvägen 4B, 417 49 Göteborg",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Vv Security AB",
+    address: "Grevgatan 4, 114 53 Stockholm",
+    phone: "076-003 43 00",
+    email: "info@vvsecurity.se",
+    website: "https://vvsecurity.se",
+    logo: "",
+  },
+  {
+    name: "Wallins Bevakningstjänst",
+    address: "Slånbärsvägen 40A, 453 38 Lysekil",
+    phone: "070-592 06 19",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Westra Security Group AB",
+    address: "Storgatan 21, 671 31 Arvika",
+    phone: "010-1415800",
+    email: "info@westrasecurity.se",
+    website: "https://westrasecurity.se",
+    logo: "/assets/employers/westra-security.png",
+  },
+  {
+    name: "Wik Säkerhet AB",
+    address: "Mastvägen 5, 746 32 Bålsta",
+    phone: "0171-590 80",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "X Security Xsec Global AB",
+    address: "",
+    phone: "010-167 70 00",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Z-Security",
+    address: "Älvdanshagen 27, 423 51 Torslanda",
+    phone: "",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Zenit Säkerhet AB",
+    address: "Omloppsvägen 8, 372 41 Ronneby",
+    phone: "0457-122 11",
+    email: "",
+    website: "",
+    logo: "",
+  },
+  {
+    name: "Zonsec Bevakning AB",
+    address: "Skalldalsvägen 18, 436 52 Hovås",
+    phone: "031-99 00 48",
+    email: "info@zonsec.se",
+    website: "https://zonsec.se",
+    logo: "/assets/employers/zonsec-bevakning.png",
+  },
+  {
+    name: "Örn Bevakning AB",
+    address: "Blomstergatan 2, 411 04 Göteborg",
+    phone: "031-19 03 92",
+    email: "info@ornbevakning.se",
+    website: "https://ornbevakning.se",
+    logo: "",
   },
 ];
+
+function employerRowMarkup(icon, label, valueMarkup) {
+  return `
+        <div class="employer-row">
+          <i data-lucide="${icon}" aria-hidden="true"></i>
+          <div>
+            <p class="employer-row-label">${label}</p>
+            ${valueMarkup}
+          </div>
+        </div>`;
+}
 
 function employerCardMarkup(company) {
   const searchKey = escapeHtml(`${company.name} ${company.address}`.toLowerCase());
@@ -3056,54 +4922,158 @@ function employerCardMarkup(company) {
   const logoMarkup = company.logo
     ? `<img class="employer-logo-img" src="${escapeHtml(company.logo)}" alt="${escapeHtml(company.name)} logotyp" loading="lazy" decoding="async" onerror="this.closest('.employer-logo').classList.add('is-fallback')" />`
     : "";
-  return `
-    <article class="employer-card" data-employer-card data-employer-search="${searchKey}">
-      <div class="employer-card-head">
-        <a class="employer-logo${company.logo ? "" : " is-fallback"}" href="${website}" target="_blank" rel="noopener noreferrer" aria-label="${openLabel}">
+  // Alla bolag har inte hemsida, e-post eller telefon. Saknas hemsidan blir logotyp och
+  // namn vanlig text i stället för tomma länkar, och raderna utan värde utelämnas helt.
+  const logoTile = company.website
+    ? `<a class="employer-logo${company.logo ? "" : " is-fallback"}" href="${website}" target="_blank" rel="noopener noreferrer" aria-label="${openLabel}">
           ${logoMarkup}
           <span class="employer-logo-fallback" aria-hidden="true"><i data-lucide="building-2"></i></span>
-        </a>
-        <div class="employer-card-heading">
-          <h2 class="employer-name"><a class="employer-name-link" href="${website}" target="_blank" rel="noopener noreferrer">${escapeHtml(company.name)}</a></h2>
-          <span class="employer-badge"><span class="employer-badge-dot"></span> Auktoriserat</span>
-        </div>
-      </div>
-      <div class="employer-rows">
-        <div class="employer-row">
-          <i data-lucide="map-pin" aria-hidden="true"></i>
-          <div>
-            <p class="employer-row-label">Besöksadress</p>
-            <p class="employer-row-value">${escapeHtml(company.address)}</p>
-          </div>
-        </div>
-        <div class="employer-row">
-          <i data-lucide="mail" aria-hidden="true"></i>
-          <div>
-            <p class="employer-row-label">E-post</p>
-            <a class="employer-link" href="mailto:${escapeHtml(company.email)}">${escapeHtml(company.email)}</a>
-          </div>
-        </div>
-        <div class="employer-row">
-          <i data-lucide="phone" aria-hidden="true"></i>
-          <div>
-            <p class="employer-row-label">Telefon</p>
-            <a class="employer-row-value employer-phone" href="tel:${escapeHtml(company.phone.replace(/\s+/g, ""))}">${escapeHtml(company.phone)}</a>
-          </div>
-        </div>
-      </div>
-      <a class="employer-cta" href="${escapeHtml(company.website)}" target="_blank" rel="noopener noreferrer">
+        </a>`
+    : `<span class="employer-logo${company.logo ? "" : " is-fallback"}">
+          ${logoMarkup}
+          <span class="employer-logo-fallback" aria-hidden="true"><i data-lucide="building-2"></i></span>
+        </span>`;
+  const nameMarkup = company.website
+    ? `<a class="employer-name-link" href="${website}" target="_blank" rel="noopener noreferrer">${escapeHtml(company.name)}</a>`
+    : escapeHtml(company.name);
+  const rows = [
+    company.address
+      && employerRowMarkup("map-pin", "Besöksadress", `<p class="employer-row-value">${escapeHtml(company.address)}</p>`),
+    company.email
+      && employerRowMarkup("mail", "E-post", `<a class="employer-link" href="mailto:${escapeHtml(company.email)}">${escapeHtml(company.email)}</a>`),
+    company.phone
+      && employerRowMarkup("phone", "Telefon", `<a class="employer-row-value employer-phone" href="tel:${escapeHtml(company.phone.replace(/\s+/g, ""))}">${escapeHtml(company.phone)}</a>`),
+  ].filter(Boolean);
+  if (!rows.length) {
+    rows.push(employerRowMarkup("globe", "Kontakt",
+      '<p class="employer-row-value">Kontaktuppgifter finns på företagets webbplats.</p>'));
+  }
+  const cta = company.website
+    ? `<a class="employer-cta" href="${website}" target="_blank" rel="noopener noreferrer">
         <span>Besök hemsida</span>
         <i data-lucide="arrow-up-right" aria-hidden="true"></i>
         <span class="sr-only"> (${websiteHost}, öppnas i ny flik)</span>
-      </a>
+      </a>`
+    : "";
+  return `
+    <article class="employer-card" data-employer-card data-employer-search="${searchKey}">
+      <div class="employer-card-head">
+        ${logoTile}
+        <div class="employer-card-heading">
+          <h2 class="employer-name">${nameMarkup}</h2>
+          ${company.authorized ? '<span class="employer-badge"><span class="employer-badge-dot"></span> Auktoriserat</span>' : ""}
+        </div>
+      </div>
+      <div class="employer-rows">${rows.join("")}
+      </div>
+      ${cta}
     </article>
   `;
 }
 
+function getFilteredEmployers() {
+  const query = state.employerQuery.trim().toLowerCase();
+  if (!query) return EMPLOYER_DIRECTORY;
+  return EMPLOYER_DIRECTORY.filter((company) =>
+    `${company.name} ${company.address}`.toLowerCase().includes(query));
+}
+
+function getEmployerPageCount(total) {
+  return Math.max(1, Math.ceil(total / EMPLOYER_PAGE_SIZE));
+}
+
+function clampEmployerPage(total) {
+  const pages = getEmployerPageCount(total);
+  state.employerPage = Math.min(Math.max(1, state.employerPage), pages);
+  return state.employerPage;
+}
+
+/** Sidnummer runt den aktiva sidan, med ellips mot första och sista sidan. */
+function employerPageWindow(current, pages) {
+  if (pages <= 7) return Array.from({ length: pages }, (_, index) => index + 1);
+  const items = [1];
+  const from = Math.max(2, Math.min(current - 2, pages - 4));
+  const to = Math.min(pages - 1, Math.max(current + 2, 5));
+  if (from > 2) items.push("…");
+  for (let page = from; page <= to; page += 1) items.push(page);
+  if (to < pages - 1) items.push("…");
+  items.push(pages);
+  return items;
+}
+
+function employerPaginationMarkup(total, page) {
+  const pages = getEmployerPageCount(total);
+  if (pages < 2) return "";
+  const numbers = employerPageWindow(page, pages).map((item) => {
+    if (item === "…") return '<span class="employer-page-gap" aria-hidden="true">…</span>';
+    const isActive = item === page;
+    return `<button class="employer-page-number${isActive ? " is-active" : ""}" type="button"
+        data-employer-page="${item}"${isActive ? ' aria-current="page"' : ""}
+        aria-label="Sida ${item} av ${pages}">${item}</button>`;
+  }).join("");
+  return `
+      <nav class="employers-pagination" aria-label="Sidnavigering för arbetsgivare">
+        <button class="employer-page-step" type="button" data-employer-page="${page - 1}"${page === 1 ? " disabled" : ""}>
+          <i data-lucide="chevron-left" aria-hidden="true"></i>
+          <span>Föregående</span>
+        </button>
+        <div class="employer-page-numbers">${numbers}</div>
+        <p class="employer-page-status" aria-hidden="true">Sida ${page} av ${pages}</p>
+        <button class="employer-page-step" type="button" data-employer-page="${page + 1}"${page === pages ? " disabled" : ""}>
+          <span>Nästa</span>
+          <i data-lucide="chevron-right" aria-hidden="true"></i>
+        </button>
+      </nav>`;
+}
+
+function employerResultsMarkup() {
+  const matches = getFilteredEmployers();
+  const page = clampEmployerPage(matches.length);
+  const start = (page - 1) * EMPLOYER_PAGE_SIZE;
+  const visible = matches.slice(start, start + EMPLOYER_PAGE_SIZE);
+  const query = state.employerQuery.trim();
+  const summary = matches.length === 0
+    ? "Inga företag matchar din sökning."
+    : query
+      ? `${matches.length} ${matches.length === 1 ? "träff" : "träffar"} för “${escapeHtml(query)}”`
+      : `${EMPLOYER_DIRECTORY.length} företag i listan`;
+  return `
+      <p class="employers-count" data-employer-count aria-live="polite">${summary}</p>
+      <div class="employers-grid" data-employer-grid>
+        ${visible.map(employerCardMarkup).join("")}
+      </div>
+      <p class="employers-empty" data-employer-empty${matches.length ? " hidden" : ""}>Inga företag matchar din sökning.</p>
+      ${employerPaginationMarkup(matches.length, page)}`;
+}
+
+function renderEmployerResults(options = {}) {
+  const results = els.knowledgeBasePanel?.querySelector("[data-employer-results]");
+  if (!results) return;
+  results.innerHTML = employerResultsMarkup();
+  refreshIcons();
+  if (options.scrollToTop) {
+    const hero = els.knowledgeBasePanel.querySelector(".employers-hero");
+    if (hero?.scrollIntoView) hero.scrollIntoView({ block: "start", behavior: "auto" });
+    else els.contentScroll?.scrollTo({ top: 0, behavior: "auto" });
+  }
+  if (options.focusPagination) {
+    const active = results.querySelector(".employer-page-number.is-active")
+      || results.querySelector(".employer-page-step:not([disabled])");
+    active?.focus({ preventScroll: true });
+  }
+}
+
+function goToEmployerPage(page) {
+  const matches = getFilteredEmployers();
+  const pages = getEmployerPageCount(matches.length);
+  const next = Math.min(Math.max(1, Number(page) || 1), pages);
+  if (next === state.employerPage) return;
+  state.employerPage = next;
+  renderEmployerResults({ scrollToTop: true, focusPagination: true });
+}
+
 function renderEmployerDirectory() {
   if (!els.knowledgeBasePanel) return;
-
-  const cards = EMPLOYER_DIRECTORY.map(employerCardMarkup).join("");
 
   els.knowledgeBasePanel.innerHTML = `
     <article class="employers" aria-labelledby="employersTitle">
@@ -3112,7 +5082,7 @@ function renderEmployerDirectory() {
           <p class="employers-eyebrow"><i data-lucide="briefcase" aria-hidden="true"></i> Nästa steg i karriären</p>
           <h1 id="employersTitle">Hitta din framtida arbetsgivare</h1>
           <p class="employers-lead">
-            Här listar vi auktoriserade bevakningsföretag runt om i landet. Hitta företaget som passar dig bäst,
+            Här listar vi bevakningsföretag runt om i landet. Hitta företaget som passar dig bäst,
             ta kontakt och ta nästa kliv i din karriär som väktare.
           </p>
         </div>
@@ -3120,31 +5090,27 @@ function renderEmployerDirectory() {
           <i data-lucide="search" aria-hidden="true"></i>
           <label class="sr-only" for="employerSearch">Sök företag eller ort</label>
           <input id="employerSearch" type="search" inputmode="search" autocomplete="off"
-            placeholder="Sök företag eller ort…" data-employer-search-input />
+            placeholder="Sök företag eller ort…" data-employer-search-input value="${escapeHtml(state.employerQuery)}" />
         </div>
       </header>
 
-      <div class="employers-grid" data-employer-grid>
-        ${cards}
-      </div>
-      <p class="employers-empty" data-employer-empty hidden>Inga företag matchar din sökning.</p>
+      <div data-employer-results>${employerResultsMarkup()}</div>
+      <p class="employers-note">
+        Auktorisation utfärdas av Länsstyrelsen. Kontrollera alltid att företaget har giltig
+        auktorisation innan du söker jobb, och att kontaktuppgifterna stämmer på deras webbplats.
+      </p>
     </article>
   `;
 }
 
 function filterEmployerDirectory(query) {
-  const panel = els.knowledgeBasePanel;
-  if (!panel) return;
-  const normalized = String(query || "").trim().toLowerCase();
-  const cards = panel.querySelectorAll("[data-employer-card]");
-  let visible = 0;
-  cards.forEach((card) => {
-    const match = !normalized || (card.dataset.employerSearch || "").includes(normalized);
-    card.hidden = !match;
-    if (match) visible += 1;
-  });
-  const empty = panel.querySelector("[data-employer-empty]");
-  if (empty) empty.hidden = visible !== 0;
+  if (!els.knowledgeBasePanel) return;
+  const next = String(query || "");
+  if (next === state.employerQuery) return;
+  state.employerQuery = next;
+  // Träffarna kan ligga på vilken sida som helst, så en ny sökning börjar alltid om på sida 1.
+  state.employerPage = 1;
+  renderEmployerResults();
 }
 
 function renderKnowledgeBasePanel() {
@@ -8011,6 +9977,12 @@ function bindEvents() {
     const employersTab = event.target.closest("[data-open-employers]");
     if (employersTab) {
       showKnowledgeBase("arbetsgivare");
+      return;
+    }
+
+    const employerPageButton = event.target.closest("[data-employer-page]");
+    if (employerPageButton) {
+      goToEmployerPage(employerPageButton.dataset.employerPage);
       return;
     }
 
