@@ -1,6 +1,6 @@
 # Väktarutbildningen – studiematerial (light-version)
 
-Detta material är en komprimerad förberedelse inför den föreskrivna väktargrundutbildningen (VU1, 88 lektionstimmar enligt PMFS 2017:10, FAP 573-1). Det ersätter inte utbildningen hos ett auktoriserat utbildningsföretag, utan ger en överblick av det viktigaste i varje ämne. Innehållet bör granskas av jurist eller utbildningsansvarig mot gällande rätt innan publicering.
+Detta material är en komprimerad förberedelse inför den föreskrivna väktargrundutbildningen (VU1, 88 föreskrivna lektionstimmar enligt bilaga 1 till PMFS 2017:10, FAP 573-1). En utbildningsanordnare kan lägga till tid; BYA:s nuvarande upplägg omfattar exempelvis 91 lektionstimmar, varav 88 är föreskrivna och tre är en utökning beslutad av branschens parter. Materialet ersätter inte utbildningen hos ett auktoriserat utbildningsföretag, utan ger en överblick av det viktigaste i varje ämne. Innehållet bör granskas av jurist eller utbildningsansvarig mot gällande rätt innan publicering.
 
 **Format** (konsekvent i hela materialet, lätt att konvertera till appens datastruktur):
 
@@ -46,9 +46,11 @@ Företaget ska ha en godkänd **föreståndare** som ansvarar för verksamheten.
 
 Som väktare representerar du både företaget och hela branschens förtroende. Du ska agera inom dina befogenheter, följa objektsinstruktionerna och dokumentera det du gör.
 
-Du har dessutom lagstadgad **tystnadsplikt**: du får inte obehörigen röja vad du fått veta om kundernas förhållanden – larm, rutiner, ronderingstider, personuppgifter eller händelser på objekten. Tystnadsplikten gäller dygnet runt, även privat, och fortsätter gälla **efter att anställningen har upphört**. Att bryta mot den är straffbart.
+Som vanlig väktare har du inte en generell tystnadsplikt i lagen om bevakningsföretag. Du är ändå skyldig att skydda uppgifter om kundernas förhållanden – till exempel larm, rutiner, ronderingstider, personuppgifter och händelser på objekten. Skyldigheten kan följa av **anställningsavtal, kollektivavtal, objektsinstruktioner, lojalitetsplikten och lagen om företagshemligheter**. En avtalad tystnadsplikt kan fortsätta gälla efter att anställningen har upphört.
 
-> **Kom ihåg:** Tystnadsplikten följer dig som person – inte anställningen.
+Vissa särskilda roller och uppdrag har dessutom lagreglerad tystnadsplikt eller omfattas av offentlighets- och sekretesslagen, till exempel en väktare som har förordnats som arrestantvakt. Följden av ett otillåtet röjande beror därför på vilken regel som gäller i det enskilda fallet; det kan handla om arbetsrättsliga åtgärder, skadestånd eller – när tystnadsplikten följer av lag eller annan författning – straffansvar.
+
+> **Kom ihåg:** Behandla alltid uppgifter från tjänsten som skyddsvärda, men blanda inte ihop avtalad tystnadsplikt med lagstadgad sekretess.
 
 ### 1.2 Auktorisation
 
@@ -90,7 +92,7 @@ Godkännandet är inte för evigt – det kan **återkallas**, till exempel om d
 
 Väktarutbildningen sker i tre steg hos auktoriserade utbildningsföretag och bevakningsföretag:
 
-1. **VU1** – grundutbildning del 1, 88 lektionstimmar (juridik, bevakningstjänst, brand, akutsjukvård, konflikthantering m.m.)
+1. **VU1** – grundutbildning del 1, 88 föreskrivna lektionstimmar enligt FAP 573-1 bilaga 1 (utbildningsanordnare kan lägga till tid)
 2. **PYT** – praktisk yrkesträning, minst 160 timmar under handledning hos ett auktoriserat bevakningsföretag
 3. **VU2** – grundutbildning del 2, 40 lektionstimmar (fördjupning och examination)
 
@@ -100,7 +102,7 @@ Först därefter är du behörig för självständigt väktararbete. Väktare sk
 
 En väktare är **inte polis** och har inga särskilda tvångsbefogenheter. Du arbetar med samma rättigheter som alla medborgare – envarsgripande, nödvärn och nöd – tillsammans med det som uppdraget och uppdragsgivarens egna rättigheter ger.
 
-Däremot har du i tjänst ett **förstärkt rättsskydd**: den som angriper, hotar eller våldsamt hindrar en väktare i tjänsteutövning döms enligt samma bestämmelser som vid våld eller hot **mot tjänsteman** (17 kap. brottsbalken). Det skyddet följer direkt av lagen om bevakningsföretag.
+Däremot har du ett **förstärkt rättsskydd** när du är godkänd för anställning i bevakningsföretag och utför bevakningstjänst. Enligt 7 § lagen (1974:191) om bevakningsföretag har du då det skydd som anges i 17 kap. 5 § första stycket brottsbalken. Skyddet följer alltså inte enbart av att någon bär uniform eller befinner sig på arbetet.
 
 > **Kom ihåg:** Inga extra befogenheter – men extra rättsskydd i tjänsten.
 
@@ -140,7 +142,7 @@ I tjänst ska du kunna styrka att du är godkänd väktare genom **tjänstelegit
 
 #### Sida 2: Hjälpmedel som kräver utbildning
 
-**Handfängsel** får bäras efter genomförd utbildning – momentet ingår i VU1 – och används i samband med gripanden när det är nödvändigt.
+**Handfängsel:** enligt 9 kap. 1 § FAP 573-1 ska en väktare som utför bevakning som normalt kan leda till frihetsberövande vara utrustad med handfängsel, om väktaren med godkänt resultat har genomgått ämnena **Konflikthantering och självskydd** samt **Handfängsel** enligt bilaga 1. Båda momenten ingår i VU1; handfängselmomentet omfattar fyra lektionstimmar. Handfängsel används bara när det finns rättsligt stöd och ett konkret säkerhetsbehov.
 
 **Batong** kräver särskild batongutbildning utöver VU1. Utan den får batong inte bäras i tjänst.
 
@@ -148,7 +150,7 @@ I tjänst ska du kunna styrka att du är godkänd väktare genom **tjänstelegit
 
 **Kommunikationsutrustning** – radio, telefon och överfallslarm – är din livlina, särskilt vid ensamarbete.
 
-> **Kom ihåg:** Handfängsel efter VU1-momentet, batong först efter särskild utbildning.
+> **Kom ihåg:** Handfängsel efter godkända VU1-moment i konflikthantering, självskydd och handfängsel – batong först efter särskild utbildning.
 
 #### Sida 3: Skjutvapen, hund – och det du aldrig får bära
 
@@ -166,11 +168,11 @@ Grundregeln för all utrustning: du bär bara det som uppdraget kräver, som arb
 
 - Yrkesmässig bevakning för annans räkning kräver **auktorisation** – Länsstyrelsen prövar, utövar tillsyn och kan återkalla.
 - **All personal** i bevakningsföretag godkänns av Länsstyrelsen: laglydnad, medborgerlig pålitlighet, lämplighet. Lägsta ålder 18 år.
-- Utbildningstrappan: **VU1 (88 tim) → PYT (minst 160 tim) → VU2 (40 tim)**, därefter fortbildning.
-- Väktaren har **inga extra tvångsbefogenheter**, men förstärkt rättsskydd i tjänst – angrepp bedöms som våld eller hot mot tjänsteman.
-- **Tystnadsplikten** gäller dygnet runt och även efter anställningen.
+- Utbildningstrappan: **VU1 (88 föreskrivna tim) → PYT (minst 160 tim) → VU2 (40 tim)**, därefter fortbildning. En utbildningsanordnare kan lägga till tid.
+- Väktaren har **inga extra tvångsbefogenheter**, men en godkänd väktare som utför bevakningstjänst har förstärkt rättsskydd enligt 7 § lagen om bevakningsföretag och 17 kap. 5 § första stycket brottsbalken.
+- Skyldigheten att skydda uppgifter kan följa av avtal, kollektivavtal, instruktioner och regler om företagshemligheter. Särskilda uppdrag kan omfattas av lagstadgad tystnadsplikt eller sekretess.
 - Bevakningsformer: stationär, ronderande, larmutryckning, butikskontroll (civil), värdetransport, larmcentral samt specialtjänster.
-- Utrustning: handfängsel efter VU1, batong och skjutvapen efter särskild utbildning – pepparspray aldrig.
+- Utrustning: handfängsel efter godkända VU1-moment enligt FAP 573-1, batong och skjutvapen efter särskild utbildning – pepparspray aldrig.
 - Väktare, **ordningsvakt** och **skyddsvakt** är tre olika roller med olika befogenheter.
 
 ### Quiz – Modul 1
@@ -200,16 +202,16 @@ B) VU2 → VU1 → praktisk yrkesträning (PYT)
 C) Praktisk yrkesträning (PYT) → VU1 → VU2
 D) VU1 → VU2 → praktisk yrkesträning (PYT)
 
-**Rätt svar: A.** Först 88 timmar VU1, sedan minst 160 timmars praktisk yrkesträning under handledning, och därefter VU2. Först då är man behörig för självständigt väktararbete.
+**Rätt svar: A.** Först VU1 med 88 föreskrivna lektionstimmar enligt FAP 573-1 bilaga 1, sedan minst 160 timmars praktisk yrkesträning under handledning och därefter VU2. En utbildningsanordnare kan lägga till tid i VU1, men utbildningsordningen är densamma. Först efter hela kedjan är man behörig för självständigt väktararbete.
 
 **Fråga 4.** En person knuffar och hotar en uniformerad väktare som utför sitt arbete. Vad gäller straffrättsligt?
 
 A) Det bedöms som vanligt ofredande eftersom väktare är civilanställda och saknar särskilt skydd
 B) Det är straffritt så länge väktaren inte får några fysiska skador
-C) Gärningen bedöms enligt reglerna om våld eller hot mot tjänsteman eftersom väktaren är i tjänst
+C) Skyddet mot våld eller hot mot tjänsteman gäller eftersom väktaren är godkänd och utför bevakningstjänst
 D) Det bedöms som brott endast om polis är på plats och ser händelsen
 
-**Rätt svar: C.** Väktare i tjänsteutövning har genom lagen om bevakningsföretag samma straffrättsliga skydd som tjänstemän. Angrepp mot en väktare i tjänst är därför ett allvarligare brott än motsvarande angrepp mot en privatperson.
+**Rätt svar: C.** Enligt 7 § lagen om bevakningsföretag har den som är godkänd för anställning och utför bevakningstjänst det skydd som anges i 17 kap. 5 § första stycket brottsbalken. Det är dessa två villkor – godkänd väktare och pågående bevakningstjänst – som utlöser skyddet.
 
 **Fråga 5.** Vilket påstående om väktarens utrustning stämmer?
 
@@ -218,7 +220,7 @@ B) Batong kräver särskild utbildning utöver VU1
 C) Handfängsel får bäras helt utan utbildning
 D) Skyddsväst kräver tillstånd från Länsstyrelsen
 
-**Rätt svar: B.** Batong förutsätter en särskild påbyggnadsutbildning. Handfängsel får bäras efter utbildningsmomentet i VU1, skyddsväst är fri skyddsutrustning – och pepparspray får väktare aldrig bära.
+**Rätt svar: B.** Batong förutsätter en särskild påbyggnadsutbildning. För handfängsel kräver 9 kap. 1 § FAP 573-1 godkänt resultat i ämnena Konflikthantering och självskydd samt Handfängsel enligt bilaga 1; båda ingår i VU1. Skyddsväst är personlig skyddsutrustning, och väktare får inte bära pepparspray.
 
 **Fråga 6.** I vilka fall kan väktare vara beväpnade med skjutvapen?
 
@@ -238,14 +240,14 @@ D) Ordningsvakten förordnas av Polismyndigheten och har ordningshållande befog
 
 **Rätt svar: D.** Ordningsvakten lyder under Polismyndigheten genom sitt förordnande och har lagstadgade ordningshållande befogenheter. Väktaren arbetar med envars rättigheter och uppdragsgivarens rättigheter – men har inga egna tvångsmedel. Ordningsvakten kan till exempel avvisa och omhänderta.
 
-**Fråga 8.** Hur länge gäller väktarens tystnadsplikt?
+**Fråga 8.** Vilket påstående om en väktares tystnadsplikt är mest korrekt?
 
-A) Under pågående arbetspass
-B) Under anställningstiden
-C) Även efter att anställningen har upphört
-D) I fem år efter det att anställningen har upphört
+A) Alla väktare har exakt samma lagstadgade tystnadsplikt enligt lagen om bevakningsföretag
+B) Tystnadsplikt kan bara gälla under själva arbetspasset
+C) Den kan följa av avtal och kollektivavtal och fortsätta efter anställningen; särskilda uppdrag kan regleras i lag
+D) All tystnadsplikt upphör automatiskt fem år efter anställningen
 
-**Rätt svar: C.** Tystnadsplikten enligt lagen om bevakningsföretag är inte tidsbegränsad – den gäller dygnet runt under anställningen och fortsätter gälla efter att den upphört.
+**Rätt svar: C.** Lagen om bevakningsföretag innehåller ingen generell tystnadspliktsbestämmelse för vanliga väktare. Skyldigheten att skydda uppgifter kan i stället följa av avtal, kollektivavtal, instruktioner och regler om företagshemligheter och kan fortsätta efter anställningen. Särskilda roller eller uppdrag kan ha lagstadgad tystnadsplikt eller omfattas av sekretess.
 
 ---
 
@@ -328,7 +330,7 @@ Du får aldrig förhöra, bestraffa eller "läxa upp" den gripne – gripandet �
 
 #### Sida 5: Efter gripandet – visitation, beslag, överlämning
 
-**Skyddsvisitation:** i samband med gripandet får du söka efter **vapen och andra farliga föremål** – av säkerhetsskäl (polislagen 19 §, via 29 §). Aldrig för att leta stöldgods, plånbok eller ID-handlingar.
+**Skyddsvisitation:** i samband med gripandet får du söka efter **vapen och andra farliga föremål** – av säkerhetsskäl (polislagen 19 § första stycket 1, via 29 §). Aldrig för att leta stöldgods, plånbok eller ID-handlingar.
 
 **Beslag:** föremål som påträffas i samband med gripandet – till exempel stöldgodset – får tas i beslag (rättegångsbalken 27 kap. 4 §) och ska överlämnas till polisen.
 
@@ -407,7 +409,7 @@ Trappan är alltid: **tala → greppa → hålla** – aldrig mer än situatione
 
 #### Sida 3: Skyddsvisitation och handfängsel
 
-Polislagen 29 § ger den som griper även rätt till **skyddsvisitation** enligt 19 § första stycket 1: att av **säkerhetsskäl** söka efter vapen och andra farliga föremål. Syftet är skyddet – aldrig att leta stöldgods, ID eller bevis.
+Polislagen 29 § ger den som griper även rätt till **skyddsvisitation** enligt polislagen 19 § första stycket 1: att av **säkerhetsskäl** söka efter vapen och andra farliga föremål. Syftet är skyddet – aldrig att leta stöldgods, ID eller bevis.
 
 **Handfängsel** kan användas i samband med gripande när det är **nödvändigt av säkerhetsskäl** och står i proportion till situationen – aldrig rutinmässigt, aldrig som bestraffning. Det kräver utbildning, och de medicinska riskerna gör att behovet ska omprövas löpande. Fördjupning kommer i modul 10.
 
@@ -419,7 +421,7 @@ Polislagen 29 § ger den som griper även rätt till **skyddsvisitation** enligt
 
 **Stöld** (8 kap. 1 §): att olovligen ta något som tillhör annan, med uppsåt att tillägna sig det, till skada för ägaren. Fängelse i skalan – gripbart.
 
-**Ringa stöld** ("snatteri", 8 kap. 2 §): stöld av lägre värde – gränsen ligger enligt rättspraxis kring 1 250 kr och kan ändras. Fängelse ingår även här – gripbart.
+**Ringa stöld** (8 kap. 2 §, tidigare kallat snatteri): stöld av lägre värde – gränsen ligger enligt rättspraxis kring 1 250 kr och kan ändras. Fängelse ingår även här – gripbart.
 
 **Grov stöld** (8 kap. 4 §): t.ex. intrång i bostad eller stöld av särskilt farligt slag.
 
@@ -459,7 +461,7 @@ Juridiken skyddar åt båda hållen – samma balk som ger dig rättigheter sät
 - Mer våld än försvarligt → **misshandel**
 - Tvinga någon att stanna kvar, öppna väskan eller visa ID → **olaga tvång** (4 kap. 4 §)
 - Otillåten kroppsvisitation → olaga tvång eller **ofredande**
-- Röja kunduppgifter → **brott mot tystnadsplikt** (20 kap. 3 §)
+- Röja kunduppgifter → avtalsbrott, arbetsrättsliga följder eller skadestånd; om tystnadsplikten följer av lag eller annan författning kan även **brott mot tystnadsplikt** enligt 20 kap. 3 § brottsbalken bli aktuellt
 - Ta någons ägodel "som pant" → **egenmäktigt förfarande**.
 
 > **Kom ihåg:** Lär dig de gripbara brotten utantill – och de brott ett felaktigt ingripande kan bli.
@@ -502,13 +504,13 @@ Privata företag behöver som huvudregel **inte tillstånd**, men måste ha en r
 
 **Upplysningsplikten** är central: den som bevakas ska genom tydlig **skyltning** upplysas om kamerabevakningen och om vem som ansvarar. Dold kamerabevakning är som huvudregel förbjuden, och ljudupptagning är särskilt känsligt.
 
-Inspelat material ska hanteras strikt: **lagras bara så länge det behövs**, vara åtkomligt endast för en begränsad krets och **aldrig spridas**. Att filma av en övervakningsskärm med mobilen och skicka vidare är ett allvarligt brott mot både reglerna och din tystnadsplikt.
+Inspelat material ska hanteras strikt: **lagras bara så länge det behövs**, vara åtkomligt endast för en begränsad krets och **aldrig spridas**. Att filma av en övervakningsskärm med mobilen och skicka vidare är ett allvarligt brott mot dataskyddsreglerna, objektets instruktioner och skyldigheten att skydda uppgifterna.
 
 #### Sida 3: Väktarens roll vid kamerorna
 
 För dig är kamerorna ett **hjälpmedel**: verifiera larm innan utryckning, följa ett förlopp i realtid, styra kollegor rätt och säkra dokumentation av händelser.
 
-Du tittar bara i tjänsten och för uppdragets syfte – aldrig av nyfikenhet. Vid brott säkras den aktuella sekvensen **enligt objektets rutin** och lämnas ut till **polisen** på begäran, inte till kunder, kollegor eller media. Allt du ser i kamerorna omfattas av tystnadsplikten.
+Du tittar bara i tjänsten och för uppdragets syfte – aldrig av nyfikenhet. Vid brott säkras den aktuella sekvensen **enligt objektets rutin** och lämnas ut till **polisen** på begäran, inte till kunder, kollegor eller media. Allt du ser i kamerorna får bara hanteras enligt behörighet, uppdragets instruktioner och de sekretess- eller tystnadspliktsregler som gäller.
 
 > **Kom ihåg:** Skylta, minimera, skydda – och materialet lämnar bara systemet enligt rutin, till polisen.
 
@@ -541,7 +543,7 @@ Som väktare kan du kallas att **vittna i domstol**. Då gäller vittnesplikten 
 #### Sida 1: Det viktigaste i korthet
 
 - **Envarsgripande** (RB 24:7): fängelse i straffskalan + bar gärning/flyende fot (eller efterlyst) + skyndsamt till polis. Rättighet – aldrig skyldighet.
-- Vid gripandet: **skyddsvisitation** endast efter vapen (PL 19 § via 29 §), **beslag** av t.ex. stöldgods (RB 27:4).
+- Vid gripandet: **skyddsvisitation** endast efter vapen (polislagen 19 § första stycket 1, via 29 §), **beslag** av t.ex. stöldgods (RB 27:4).
 - **Nödvärn** (BrB 24:1): mot brottsligt angrepp, även för annan – tillåtet om inte *uppenbart* oförsvarligt, och bara medan angreppet pågår. Excess kan fria den som svårligen kunde besinna sig.
 - **Nöd** (BrB 24:4): mot fara utan angripare – strängare krav: får inte vara oförsvarlig. **Samtycke** är grunden för all frivillig visitation.
 - **Laga befogenhet** (PL 29 § → 10 §): försvarligt våld vid motstånd mot gripande. Behov och proportionalitet styr – tala, greppa, hålla.
@@ -564,7 +566,7 @@ D) Att väktaren är i tjänst, bär uniform och har genomgått hela grundutbild
 **Fråga 2.** Vilket av följande brott ger INTE rätt till envarsgripande?
 
 A) Förargelseväckande beteende
-B) Ringa stöld (snatteri)
+B) Ringa stöld
 C) Misshandel av normalgraden
 D) Skadegörelse på annans egendom
 
@@ -595,7 +597,7 @@ B) Att fastställa personens identitet inför polisens ankomst
 C) Att säkra teknisk bevisning inför den kommande rättegången
 D) Att av säkerhetsskäl söka efter vapen och andra farliga föremål
 
-**Rätt svar: D.** Skyddsvisitationen (polislagen 19 § via 29 §) finns enbart för säkerheten. Gods, ID och bevis är polisens sak – däremot får stöldgods som påträffas öppet i samband med gripandet tas i beslag.
+**Rätt svar: D.** Skyddsvisitationen (polislagen 19 § första stycket 1, via 29 §) finns enbart för säkerheten. Gods, ID och bevis är polisens sak – däremot får stöldgods som påträffas öppet i samband med gripandet tas i beslag.
 
 **Fråga 6.** Du griper en person för stöld och stöldgodset ligger synligt i personens öppna kasse. Vad gäller?
 
@@ -1151,7 +1153,7 @@ Före varje pass görs **funktionskontroll**: batteri, täckning, radioprov, rä
 
 **Lyssna – tänk – sänd.** Lyssna av kanalen innan du sänder, tänk igenom vad som ska sägas, och håll meddelandet kort och sakligt. Anropa med mottagaren först och dig själv sedan: *"Ledningscentralen – Väktare 12."* Kvittera det du tar emot: *"Uppfattat."*
 
-Inga namn, koder eller känsliga uppgifter i klartext – **radiotrafik kan avlyssnas**, och tystnadsplikten gäller även i etern.
+Inga namn, koder eller känsliga uppgifter i klartext – **radiotrafik kan avlyssnas**, och uppgifter från tjänsten ska skyddas även i radiotrafiken.
 
 Vid nödläge bryter nödanrop all annan trafik – då tystnar kanalen för dig.
 
@@ -1594,7 +1596,7 @@ Samma logik gäller **jäv**: bevaka inte situationer där du har personliga int
 
 #### Sida 2: Diskretionen
 
-Det du ser i tjänsten stannar i tjänsten: kändisen på vårdavdelningen, den anställde som grät på kontoret, kundens affärshemligheter, händelserna bakom rubrikerna. Tystnadsplikten från modul 1 är lagen – **diskretionen är dess vardagsform**, och skvaller är dess vanligaste brott.
+Det du ser i tjänsten stannar i tjänsten: kändisen på vårdavdelningen, den anställde som grät på kontoret, kundens affärshemligheter, händelserna bakom rubrikerna. Skyldigheten att skydda uppgifterna kan följa av avtal, instruktioner och regler om företagshemligheter – **diskretionen är vardagsformen**, och skvaller är den vanligaste överträdelsen.
 
 Sociala medier är den moderna fällan: inga bilder, filmer eller berättelser från objekt och ingripanden – inte ens "avidentifierade". Det som är en rolig anekdot för dig kan vara en karta för en kriminell och en katastrof för den berörda.
 
@@ -2809,7 +2811,7 @@ B) Ja, så länge du inte nämner bevakningsföretaget eller kunden vid namn i i
 C) Ja, om alla ansikten är pixlade och platsen beskuren
 D) Ja, men först efter 24 timmar när ärendet svalnat
 
-**Rätt svar: A.** Detaljer som tid, plats och förlopp identifierar mer än man tror – och tystnadsplikt plus diskretion gäller även på fritiden.
+**Rätt svar: A.** Detaljer som tid, plats och förlopp identifierar mer än man tror – och skyldigheten att skydda tjänsteuppgifter samt kravet på diskretion gäller även på fritiden.
 
 **Fråga 5.** Vilket är beslutstrappans första steg?
 
@@ -2941,9 +2943,9 @@ D) En gör HLR medan den andra håller undan folksamlingen och inget mer än så
 A) Efter tio minuters hårt arbete utan något synligt resultat av kompressionerna och inblåsningarna
 B) När personens hud känns kall mot dina händer
 C) När ambulansens sirener hörs närma sig på avstånd från platsen
-D) När sjukvården tar över, när personen visar tydliga livstecken eller när du inte längre orkar
+D) När sjukvården eller någon annan tar över, när personen visar tydliga livstecken eller när du fysiskt inte längre orkar
 
-**Rätt svar: D.** HLR är en stafett som inte får tappa pinnen – bedömningen om att avsluta är sjukvårdens, inte din.
+**Rätt svar: D.** Fortsätt HLR tills sjukvården eller någon annan tar över, personen börjar andas normalt eller visar tydliga livstecken, eller du fysiskt inte längre orkar. Du ska däremot inte själv avbryta därför att du bedömer insatsen som utsiktslös; en sådan medicinsk bedömning hör till sjukvården.
 
 **Fråga 3.** Vad står bokstäverna i strokelarmets AKUT-test för?
 

@@ -9,7 +9,7 @@ Detta är det implementerade urvalet från de frågor som redan finns i slutprov
 - Frågornas ordning blandas vid varje nytt prov, men inga andra frågor kan väljas in.
 - Skrivtiden är 30 minuter för båda slutproven.
 - Godkäntgränsen är fortsatt 80 procent: minst 40 av 50 rätt i VU1 och minst 32 av 40 rätt i VU2.
-- Den fullständiga källbanken ligger kvar oförändrad i kursmaterialet (154 tillgängliga VU1-frågor och 74 tillgängliga VU2-frågor efter nuvarande parser/deduplicering). Filtreringen sker i `app.js` genom stabila fråge-ID:n.
+- Den fullständiga källbanken ligger kvar i kursmaterialet (154 tillgängliga VU1-frågor och 74 tillgängliga VU2-frågor efter nuvarande parser/deduplicering). Filtreringen sker i `app.js` genom stabila fråge-ID:n.
 - Gamla avslutade prov kan fortfarande läsas från den fullständiga källbanken så att tidigare resultat och kursupplåsningar bevaras. Ett äldre pågående prov som inte innehåller exakt hela det nya 50/40-urvalet återställs och måste startas om.
 - Slutprovets landningskort visar alltid resultat på den aktuella skalan: VU1 som `x/50` och VU2 som `x/40`. Resultat från det äldre 30-frågorsformatet räknas om till motsvarande nivå och märks som omräknade; det sparade originalresultatet ändras inte.
 
@@ -18,7 +18,7 @@ Detta är det implementerade urvalet från de frågor som redan finns i slutprov
 - Täcker samtliga kursmoduler med tyngd på kursens säkerhets- och juridikkritiska moment.
 - Prioriterar tillämpning, omdöme och realistiska arbetssituationer framför smal detaljkunskap.
 - Undviker tydliga innehållsdubbletter och frågor där rätt svar kan gissas enbart på formuleringen.
-- Behåller frågetext, svarsalternativ, facit och förklaring från den befintliga banken. Endast ett felaktigt avslutande Markdown-separatorfragment har städats bort ur vissa förklaringar.
+- Behåller frågetext, svarsalternativ, facit och förklaring från den befintliga banken, med de faktarättelser som dokumenteras i `docs/granskning-vu1-kursmaterial-2026-07-26.md`. Ett felaktigt avslutande Markdown-separatorfragment har också städats bort ur vissa förklaringar.
 - Numreringen följer kursens modulordning. Den anger inte att fråga 1 är viktigare än fråga 50.
 
 ## Fördelning per modul
@@ -45,8 +45,8 @@ Detta är det implementerade urvalet från de frågor som redan finns i slutprov
 
 ## Kvalitetsnotering om den befintliga banken
 
-- VU1-frågan `vu1-module-1-quiz-2` är avsiktligt bortvald. Frågan frågar efter de tre lagstadgade kriterierna för personalgodkännande, men det aktuella facit pekar på alternativ D (`Körkort, språkkunskaper och svenskt medborgarskap`) medan alternativ B innehåller de korrekta kriterierna (`Laglydnad, medborgerlig pålitlighet och lämplighet i övrigt`). [4 § lagen om bevakningsföretag](https://www.riksdagen.se/sv/dokument-och-lagar/dokument/svensk-forfattningssamling/lag-1974191-om-bevakningsforetag_sfs-1974-191/) bekräftar alternativ B. Källbanken bör rättas separat innan frågan används igen.
-- VU1-frågan `vu1-module-1-quiz-8` om tystnadsplikt är också bortvald. Förklaringen anger en generell, tidsobegränsad tystnadsplikt enligt lagen om bevakningsföretag, men den [gällande lagtexten](https://www.riksdagen.se/sv/dokument-och-lagar/dokument/svensk-forfattningssamling/lag-1974191-om-bevakningsforetag_sfs-1974-191/) innehåller ingen sådan allmän bestämmelse. Tystnadsplikten kan i stället bero på anställningsvillkor, uppdrag och speciallagstiftning. Frågan bör därför preciseras juridiskt innan den används igen.
+- VU1-frågan `vu1-module-1-quiz-2` är fortsatt bortvald ur slutprovet, men källbankens facit är rättat till alternativ B: `Laglydnad, medborgerlig pålitlighet och lämplighet i övrigt`, i enlighet med [4 § lagen om bevakningsföretag](https://www.riksdagen.se/sv/dokument-och-lagar/dokument/svensk-forfattningssamling/lag-1974191-om-bevakningsforetag_sfs-1974-191/).
+- VU1-frågan `vu1-module-1-quiz-8` är också fortsatt bortvald ur slutprovet. Den är nu juridiskt preciserad: lagen om bevakningsföretag innehåller ingen generell tystnadspliktsbestämmelse för vanliga väktare, medan skyldigheten att skydda uppgifter kan följa av bland annat avtal, kollektivavtal, instruktioner och regler om företagshemligheter. Särskilda roller eller uppdrag kan omfattas av lagstadgad tystnadsplikt eller sekretess.
 
 # VU1 – top 50
 
@@ -93,7 +93,7 @@ Detta är det implementerade urvalet från de frågor som redan finns i slutprov
 
 **Rätt svar:** A) VU1 → praktisk yrkesträning (PYT) → VU2
 
-**Förklaring:** Först 88 timmar VU1, sedan minst 160 timmars praktisk yrkesträning under handledning, och därefter VU2. Först då är man behörig för självständigt väktararbete.
+**Förklaring:** Först VU1 med 88 föreskrivna lektionstimmar enligt FAP 573-1 bilaga 1, sedan minst 160 timmars praktisk yrkesträning under handledning och därefter VU2. En utbildningsanordnare kan lägga till tid i VU1, men utbildningsordningen är densamma. Först efter hela kedjan är man behörig för självständigt väktararbete.
 
 ---
 
@@ -185,7 +185,7 @@ Detta är det implementerade urvalet från de frågor som redan finns i slutprov
 
 **Rätt svar:** D) Att av säkerhetsskäl söka efter vapen och andra farliga föremål
 
-**Förklaring:** Skyddsvisitationen (polislagen 19 § via 29 §) finns enbart för säkerheten. Gods, ID och bevis är polisens sak – däremot får stöldgods som påträffas öppet i samband med gripandet tas i beslag.
+**Förklaring:** Skyddsvisitationen (polislagen 19 § första stycket 1, via 29 §) finns enbart för säkerheten. Gods, ID och bevis är polisens sak – däremot får stöldgods som påträffas öppet i samband med gripandet tas i beslag.
 
 ---
 

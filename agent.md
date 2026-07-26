@@ -1376,6 +1376,21 @@ Det farliga är inte kraschen utan att den lämnar databasen **halvskriven**: `u
 
 Verifierat genom att medvetet återskapa driften (metadata=B, alternativ D markerat): `verify:quiz-portal` failade med exit 1 och pekade ut `vu1_quiz:vu1:2`, därefter reparerade `import:quiz-portal` tillståndet med `movedAnswers: 1` och passerade facitkontrollen. Slutläget är 154/74/300 publicerade frågor och 2 112 svarsalternativ (616 + 296 + 1 200), noll avvikelser, inga `student_*`-tabeller berörda.
 
-### Kvarstående från granskningen
+### Tidigare kvarstående från granskningen
 
-Åtta faktapunkter är dokumenterade men **inte** åtgärdade. Högst prioritet har frågan om väktarens tystnadsplikt: materialet beskriver den som lagstadgad enligt lagen om bevakningsföretag, men den lagen (1 §–16 §) innehåller ingen sådan bestämmelse, och inte heller PMFS 2017:10. Det påverkar `utbildning.md:49`, rubriceringen "brott mot tystnadsplikt (BrB 20:3)" på rad 462 och förklaringen till fråga 8. Bör passera jurist innan något ändras.
+Före rättelsen nedan var åtta faktapunkter dokumenterade men inte åtgärdade. Högst prioritet hade frågan om väktarens tystnadsplikt: materialet beskrev den som lagstadgad enligt lagen om bevakningsföretag, trots att den lagen (1 §–16 §) inte innehåller någon generell sådan bestämmelse.
+
+## VU1-faktagranskning F1–F8 åtgärdad (2026-07-26)
+
+De åtta orange faktapunkterna i `docs/granskning-vu1-kursmaterial-2026-07-26.md` är åtgärdade efter kontroll mot Polismyndighetens PMFS 2017:10/FAP 573-1, aktuell lagtext hos Riksdagen, 1177:s HLR-råd och BYA:s aktuella VU1-upplägg.
+
+- Vanliga väktares skyldighet att skydda tjänsteuppgifter beskrivs nu med rätt möjliga grunder: avtal, kollektivavtal, instruktioner, lojalitetsplikt och företagshemligheter. Lagstadgad tystnadsplikt och sekretess reserveras för de särskilda roller eller uppdrag där sådan grund finns. Fråga 8 är omskriven men behåller facit C.
+- VU1 omfattar 88 föreskrivna lektionstimmar. BYA:s 91 timmar förklaras som 88 föreskrivna plus tre branschtillägg.
+- Det förstärkta straffrättsliga skyddet anges med 7 § lagen om bevakningsföretag och 17 kap. 5 § första stycket brottsbalken samt villkoren godkänd väktare och pågående bevakningstjänst.
+- Skyddsvisitation hänvisar konsekvent till polislagen 19 § första stycket 1, via 29 §.
+- Handfängselmomentet anges som fyra timmar i VU1 och kopplas till utbildningsvillkoren i 9 kap. 1 § FAP 573-1.
+- HLR-fråga 150 har samstämmiga stoppkriterier i svar och förklaring. Den aktuella brottsrubriceringen ringa stöld används i quizet.
+
+Rättelserna är synkroniserade i `utbildning.md`, `vu1quiz.json`, `quiz-balans/data/vu1_fixed.json`, `content/guides/vu1.mdx` och `docs/slutprov-topplista-vu1-vu2.md`. Cacheversionerna för `styles.css`, `app.js` och hämtningen av `utbildning.md` är `20260726-vu1-faktagranskning`.
+
+Produktionsimport till Supabase ingår inte i denna ändring och har inte körts.

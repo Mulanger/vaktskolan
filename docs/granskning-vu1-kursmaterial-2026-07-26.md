@@ -2,7 +2,7 @@
 
 **Datum:** 2026-07-26
 **Granskat av:** Claude (Opus 5), på uppdrag av produktägaren
-**Status:** Endast granskning – **inga ändringar har gjorts i något innehåll.**
+**Status:** K1 och faktapunkterna **F1–F8 är åtgärdade 2026-07-26**. Språk- och pedagogikpunkterna S1–S11 och P1–P5 är fortfarande förslag.
 
 ---
 
@@ -210,7 +210,7 @@ Detta granskades aktivt och stämmer – noteras så att ingen behöver göra om
 
 - [Lag (1974:191) om bevakningsföretag](https://www.riksdagen.se/sv/dokument-och-lagar/dokument/svensk-forfattningssamling/lag-1974191-om-bevakningsforetag_sfs-1974-191/) – 4 §, 5 §, 7 §, samt paragrafförteckningen 1 §–16 §
 - [Polislag (1984:387)](https://www.riksdagen.se/sv/dokument-och-lagar/dokument/svensk-forfattningssamling/polislag-1984387_sfs-1984-387/) – 10 §, 10 a §, 19 §, 29 §
-- [PMFS 2017:10, FAP 573-1](https://lagen.nu/pmfs/2017:10) – utbildningskrav, 160 timmar PYT, handfängsel och batong enligt bilagorna
+- [PMFS 2017:10, FAP 573-1](https://polisen.se/51c6d188c6f3e356864df71f694502a6/siteassets/forfattningssamling/fap-nummer/fap573-01-pmfs2017-10/) – utbildningskrav, 160 timmar PYT, handfängsel och batong enligt bilagorna
 - [Prop. 2021/22:275 Arrestantvakter och transportuppdrag](https://www.riksdagen.se/sv/dokument-och-lagar/dokument/proposition/arrestantvakter-och-transportuppdrag_H903275/html/) – för frågan om vilka bevakningskategorier som har lagreglerad tystnadsplikt
 - [Betänkande 1985/86:NU11 om bevakningsverksamhet](https://www.riksdagen.se/sv/dokument-och-lagar/dokument/betankande/naringsutskottets-betankande-om_g901nu11/html/) – samma fråga
 - Projektets egna filer: `utbildning.md`, `vu1quiz.json`, `quiz-balans/vu1-banken-alla-154.md`, `content/guides/*.mdx`
@@ -229,3 +229,22 @@ Detta granskades aktivt och stämmer – noteras så att ingen behöver göra om
 6. **P1–P5** – pedagogiska tillägg när det finns utrymme.
 
 VU2-materialet är **inte** granskat i den här omgången.
+
+---
+
+## 9. Åtgärdsstatus för faktapunkterna F1–F8
+
+Rättelserna nedan gjordes 2026-07-26 efter en ny kontroll mot primärkällorna. De ursprungliga iakttagelserna ovan står kvar för spårbarhet.
+
+| Punkt | Åtgärd |
+|---|---|
+| **F1** | Den generella hänvisningen till lagstadgad tystnadsplikt för vanliga väktare är borttagen. Materialet skiljer nu mellan skyldigheter som följer av avtal, kollektivavtal, instruktioner, lojalitetsplikt och företagshemligheter samt lagstadgad tystnadsplikt eller sekretess för särskilda roller och uppdrag. BrB 20 kap. 3 § anges bara när tystnadsplikten följer av lag eller annan författning. Fråga 8 är omskriven med oförändrat facit C. |
+| **F2** | VU1 anges konsekvent som **88 föreskrivna lektionstimmar** enligt FAP 573-1 bilaga 1. Den publika guiden förklarar att BYA:s 91 timmar består av de 88 föreskrivna timmarna plus tre timmar som branschens parter lagt till. |
+| **F3** | Förklaringen till fråga 3 anger nu källan till de 88 föreskrivna timmarna och skiljer dem från eventuella tillägg hos utbildningsanordnaren. |
+| **F4** | Det förstärkta straffrättsliga skyddet knyts nu uttryckligen till 7 § lagen om bevakningsföretag och 17 kap. 5 § första stycket brottsbalken. Villkoren är att personen är godkänd för anställning och utför bevakningstjänst. |
+| **F5** | Hänvisningen är standardiserad till **polislagen 19 § första stycket 1, via 29 §** i brödtext, sammanfattning, quizbank och dokumenterat slutprovsurval. |
+| **F6** | Fråga 150 och förklaringen anger samma tre stoppkriterier för HLR: någon annan eller sjukvården tar över, personen börjar andas normalt eller visar tydliga livstecken, eller hjälparen är fysiskt oförmögen att fortsätta. Eleven ska inte själv avbryta för att insatsen bedöms utsiktslös. |
+| **F7** | Handfängselmomentet är verifierat i VU1 och anges som fyra lektionstimmar. Materialet anger även villkoren i 9 kap. 1 § FAP 573-1: godkänt resultat i Konflikthantering och självskydd samt Handfängsel enligt bilaga 1. |
+| **F8** | Den aktuella brottsrubriceringen **ringa stöld** används i frågan. I brödtexten nämns ”tidigare kallat snatteri” en gång som begreppsbrygga. |
+
+Ändringarna är synkroniserade i `utbildning.md`, `vu1quiz.json`, `quiz-balans/data/vu1_fixed.json`, den publika VU1-guiden och de berörda förklaringarna i `docs/slutprov-topplista-vu1-vu2.md`.

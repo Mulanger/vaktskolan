@@ -1,8 +1,8 @@
 {
   "schemaVersion": 2,
-  "releaseId": "2026-07-26-vu1-fraga2-facit.1",
-  "contentVersion": "654269f2e589102f937ffa0e63e1a63e5b6852b1d6216cafe2156bf46c8f8c73",
-  "generatedAt": "2026-07-26T09:54:39.336Z",
+  "releaseId": "2026-07-26-vu1-faktagranskning.1",
+  "contentVersion": "582287ddf82f80083c48cff4f3b905fbb835bd6072c1f663a270b4928ecc34c7",
+  "generatedAt": "2026-07-26T10:46:22.724Z",
   "sourceChecks": [
     {
       "id": "polisen-fap-573-01-pmfs-2017-10",
@@ -80,8 +80,8 @@
     },
     {
       "path": "content/guides/vu1.mdx",
-      "bytes": 2641,
-      "sha256": "f0fabbaa9aeb395b294609f041f021a9b6865011460227982e1188c27b309a84"
+      "bytes": 2708,
+      "sha256": "9090c452f4473ca09a1314f65b74f096191b3e9b8fc55f319d7164ec815e5c1b"
     },
     {
       "path": "content/guides/vu2-ovningsfragor.mdx",
@@ -100,8 +100,8 @@
     },
     {
       "path": "utbildning.md",
-      "bytes": 312613,
-      "sha256": "6d6889e95c563a18335f9b4ca4a821e2c67440bef248172dac0506666caf4aa9"
+      "bytes": 315675,
+      "sha256": "c53290e8adc61c4369de2fd86d64d850cbdd84c1fa199a256e24c3b9b7f54ed2"
     },
     {
       "path": "vaktarskolan_flashcards_200.json",
@@ -110,8 +110,8 @@
     },
     {
       "path": "vu1quiz.json",
-      "bytes": 134350,
-      "sha256": "45075b7debe63409db49968279a465f42196a6bbb0c4ff8468636879433feb04"
+      "bytes": 135355,
+      "sha256": "d0b11bb773a61e5beb09c23997c0f4c05dd759b75405e5f2ab1a9764cf0b4ba2"
     },
     {
       "path": "vu2quiz.json",

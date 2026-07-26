@@ -140,7 +140,7 @@
       ],
       "correct": "A",
       "correctIndex": 0,
-      "explanation": "Först 88 timmar VU1, sedan minst 160 timmars praktisk yrkesträning under handledning, och därefter VU2. Först då är man behörig för självständigt väktararbete."
+      "explanation": "Först VU1 med 88 föreskrivna lektionstimmar enligt FAP 573-1 bilaga 1, sedan minst 160 timmars praktisk yrkesträning under handledning och därefter VU2. En utbildningsanordnare kan lägga till tid i VU1, men utbildningsordningen är densamma. Först efter hela kedjan är man behörig för självständigt väktararbete."
     },
     {
       "id": 4,
@@ -153,12 +153,12 @@
       "options": [
         "Det bedöms som vanligt ofredande eftersom väktare är civilanställda och saknar särskilt skydd",
         "Det är straffritt så länge väktaren inte får några fysiska skador",
-        "Gärningen bedöms enligt reglerna om våld eller hot mot tjänsteman eftersom väktaren är i tjänst",
+        "Skyddet mot våld eller hot mot tjänsteman gäller eftersom väktaren är godkänd och utför bevakningstjänst",
         "Det bedöms som brott endast om polis är på plats och ser händelsen"
       ],
       "correct": "C",
       "correctIndex": 2,
-      "explanation": "Väktare i tjänsteutövning har genom lagen om bevakningsföretag samma straffrättsliga skydd som tjänstemän. Angrepp mot en väktare i tjänst är därför ett allvarligare brott än motsvarande angrepp mot en privatperson."
+      "explanation": "Enligt 7 § lagen om bevakningsföretag har den som är godkänd för anställning och utför bevakningstjänst det skydd som anges i 17 kap. 5 § första stycket brottsbalken. Det är dessa två villkor – godkänd väktare och pågående bevakningstjänst – som utlöser skyddet."
     },
     {
       "id": 5,
@@ -176,7 +176,7 @@
       ],
       "correct": "B",
       "correctIndex": 1,
-      "explanation": "Batong förutsätter en särskild påbyggnadsutbildning. Handfängsel får bäras efter utbildningsmomentet i VU1, skyddsväst är fri skyddsutrustning – och pepparspray får väktare aldrig bära."
+      "explanation": "Batong förutsätter en särskild påbyggnadsutbildning. För handfängsel kräver 9 kap. 1 § FAP 573-1 godkänt resultat i ämnena Konflikthantering och självskydd samt Handfängsel enligt bilaga 1; båda ingår i VU1. Skyddsväst är personlig skyddsutrustning, och väktare får inte bära pepparspray."
     },
     {
       "id": 6,
@@ -221,16 +221,16 @@
       "moduleLabel": "Regler för bevakningsverksamheten",
       "source": "modulquiz",
       "numberInSection": 8,
-      "question": "Hur länge gäller väktarens tystnadsplikt?",
+      "question": "Vilket påstående om en väktares tystnadsplikt är mest korrekt?",
       "options": [
-        "Under pågående arbetspass",
-        "Under anställningstiden",
-        "Även efter att anställningen har upphört",
-        "I fem år efter det att anställningen har upphört"
+        "Alla väktare har exakt samma lagstadgade tystnadsplikt enligt lagen om bevakningsföretag",
+        "Tystnadsplikt kan bara gälla under själva arbetspasset",
+        "Den kan följa av avtal och kollektivavtal och fortsätta efter anställningen; särskilda uppdrag kan regleras i lag",
+        "All tystnadsplikt upphör automatiskt fem år efter anställningen"
       ],
       "correct": "C",
       "correctIndex": 2,
-      "explanation": "Tystnadsplikten enligt lagen om bevakningsföretag är inte tidsbegränsad – den gäller dygnet runt under anställningen och fortsätter gälla efter att den upphört."
+      "explanation": "Lagen om bevakningsföretag innehåller ingen generell tystnadspliktsbestämmelse för vanliga väktare. Skyldigheten att skydda uppgifter kan i stället följa av avtal, kollektivavtal, instruktioner och regler om företagshemligheter och kan fortsätta efter anställningen. Särskilda roller eller uppdrag kan ha lagstadgad tystnadsplikt eller omfattas av sekretess."
     },
     {
       "id": 9,
@@ -260,7 +260,7 @@
       "question": "Vilket av följande brott ger INTE rätt till envarsgripande?",
       "options": [
         "Förargelseväckande beteende",
-        "Ringa stöld (snatteri)",
+        "Ringa stöld",
         "Misshandel av normalgraden",
         "Skadegörelse på annans egendom"
       ],
@@ -320,7 +320,7 @@
       ],
       "correct": "D",
       "correctIndex": 3,
-      "explanation": "Skyddsvisitationen (polislagen 19 § via 29 §) finns enbart för säkerheten. Gods, ID och bevis är polisens sak – däremot får stöldgods som påträffas öppet i samband med gripandet tas i beslag."
+      "explanation": "Skyddsvisitationen (polislagen 19 § första stycket 1, via 29 §) finns enbart för säkerheten. Gods, ID och bevis är polisens sak – däremot får stöldgods som påträffas öppet i samband med gripandet tas i beslag."
     },
     {
       "id": 14,
@@ -2534,7 +2534,7 @@
       ],
       "correct": "A",
       "correctIndex": 0,
-      "explanation": "Detaljer som tid, plats och förlopp identifierar mer än man tror – och tystnadsplikt plus diskretion gäller även på fritiden."
+      "explanation": "Detaljer som tid, plats och förlopp identifierar mer än man tror – och skyldigheten att skydda tjänsteuppgifter samt kravet på diskretion gäller även på fritiden."
     },
     {
       "id": 137,
@@ -2782,11 +2782,11 @@
         "Efter tio minuters hårt arbete utan något synligt resultat av kompressionerna och inblåsningarna",
         "När personens hud känns kall mot dina händer",
         "När ambulansens sirener hörs närma sig på avstånd från platsen",
-        "När sjukvården tar över, när personen visar tydliga livstecken eller när du inte längre orkar"
+        "När sjukvården eller någon annan tar över, när personen visar tydliga livstecken eller när du fysiskt inte längre orkar"
       ],
       "correct": "D",
       "correctIndex": 3,
-      "explanation": "HLR är en stafett som inte får tappa pinnen – bedömningen om att avsluta är sjukvårdens, inte din."
+      "explanation": "Fortsätt HLR tills sjukvården eller någon annan tar över, personen börjar andas normalt eller visar tydliga livstecken, eller du fysiskt inte längre orkar. Du ska däremot inte själv avbryta därför att du bedömer insatsen som utsiktslös; en sådan medicinsk bedömning hör till sjukvården."
     },
     {
       "id": 151,
