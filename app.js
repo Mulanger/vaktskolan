@@ -1136,30 +1136,68 @@ function clearBillingReturnParameters() {
   window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
 }
 
-// Google Ads – köp-konvertering. Fires bara i produktion (aldrig lokalt) och
-// bara en gång per sidladdning. transaction_id = Stripe session_id → Google
-// dedupar mot dubbelräkning vid omladdning.
+// Google Ads – köp-konvertering. Skickas bara i produktion (aldrig lokalt)
+// efter att servern har verifierat den inloggade användarens betalda Stripe
+// Checkout Session. transaction_id = Stripe session_id, så Google kan
+// deduplicera samma köp vid omladdning.
 let adsPurchaseConversionSent = false;
-function trackAdsPurchaseConversion(transactionId) {
-  if (adsPurchaseConversionSent || IS_LOCAL_DEVELOPMENT) return;
-  if (typeof window.gtag !== "function") return;
+function trackAdsPurchaseConversion(purchase) {
+  const transactionId = typeof purchase?.transactionId === "string" ? purchase.transactionId : "";
+  const value = Number(purchase?.value);
+  const currency = typeof purchase?.currency === "string" ? purchase.currency.toUpperCase() : "";
+  if (
+    adsPurchaseConversionSent ||
+    IS_LOCAL_DEVELOPMENT ||
+    !/^cs_(?:test|live)_[A-Za-z0-9]+$/.test(transactionId) ||
+    value !== 399 ||
+    currency !== "SEK"
+  ) {
+    return false;
+  }
+  if (typeof window.gtag !== "function") return false;
   adsPurchaseConversionSent = true;
   window.gtag("event", "conversion", {
     send_to: "AW-18345242280/Zis-CMuhv9UcEKjd2KtE",
-    value: 399,
-    currency: "SEK",
-    transaction_id: transactionId || "",
+    value,
+    currency,
+    transaction_id: transactionId,
   });
+  return true;
+}
+
+async function getVerifiedAdsPurchase(checkoutSessionId) {
+  const endpoint = `/api/stripe/status?session_id=${encodeURIComponent(checkoutSessionId)}`;
+  const { response, payload } = await requestAuthenticatedJson(endpoint);
+  if (response.status === 202 && payload?.ok) return null;
+  if (!response.ok || !payload?.paid || !payload.purchase) {
+    throw new Error(payload.error || "Köpet kunde inte verifieras för konverteringsmätning.");
+  }
+  return payload.purchase;
+}
+
+async function trackVerifiedAdsPurchaseAfterCheckout(checkoutSessionId) {
+  const retryDelays = [0, 1500, 3000, 6000, 12000, 24000];
+  for (const delay of retryDelays) {
+    if (adsPurchaseConversionSent) return true;
+    if (delay > 0) await new Promise((resolve) => window.setTimeout(resolve, delay));
+    try {
+      const purchase = await getVerifiedAdsPurchase(checkoutSessionId);
+      if (purchase && trackAdsPurchaseConversion(purchase)) return true;
+    } catch (error) {
+      console.warn("Google Ads-köpet kunde inte verifieras ännu.", error);
+    }
+  }
+  return false;
 }
 
 async function confirmPremiumAfterCheckout() {
   const url = new URL(window.location.href);
   if (url.searchParams.get("billing") !== "success") return;
   const checkoutSessionId = url.searchParams.get("session_id") || "";
+  if (checkoutSessionId) void trackVerifiedAdsPurchaseAfterCheckout(checkoutSessionId);
 
   for (let attempt = 0; attempt < 8; attempt += 1) {
     if (state.membership.tier === "premium") {
-      trackAdsPurchaseConversion(checkoutSessionId);
       clearBillingReturnParameters();
       closePremiumModal();
       rerenderAfterMembershipChange();

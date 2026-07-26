@@ -88,11 +88,18 @@ Lägg den tillfälliga `whsec_...` som CLI:n visar i lokal `.env`.
 ## API-flöden
 
 - `POST /api/stripe/checkout`: verifierar Clerk-JWT, blockerar redan Premium och skapar en Stripe Checkout Session i `payment`-läge.
+- `GET /api/stripe/status?session_id=...`: verifierar Clerk-JWT och kontrollerar direkt mot Stripe att den återvändande Checkout-sessionen tillhör samma användare, är betald och innehåller exakt Premium-köpet på 399 SEK. Svaret används enbart för Google Ads-köpsignalen; endpointen kan aldrig ge Premium-access.
 - `POST /api/stripe/webhook`: tar endast emot signerade Stripe-events och uppdaterar köp/entitlement.
 - `GET /api/membership/status`: returnerar endast det inloggade kontots nivå och tre kvoter.
 - `POST /api/membership/consume`: tar en usage-typ och idempotent eventnyckel; Clerk user hämtas alltid från den verifierade sessionen.
 
 Frontend skickar aldrig user-id, pris eller Premium-status som betrodd data. Premium-knappar går via Clerk-inloggningen till `/plattform?upgrade=premium`, varefter servern skapar Checkout.
+
+## Google Ads-köpspårning
+
+Efter Stripes success-redirect verifierar plattformen Checkout-sessionen server-side via `GET /api/stripe/status`. Först när Stripe bekräftar en slutförd betalning på exakt 399 SEK skickas Google Ads-konverteringen. Stripe-sessionens id används som `transaction_id`, vilket gör att Google kan deduplicera omladdningar. Frontend gör korta bakgrundsförsök om Stripe ännu visar betalningen som väntande eller om nätverket tillfälligt faller bort.
+
+Den här kontrollen är medvetet separerad från medlemskapet. Signerade Stripe-webhooks är fortfarande enda vägen som får skriva köp, ge Premium eller synka Clerk. Google-signalen kan alltså inte låsa upp innehåll och en manipulerad `session_id` accepteras inte.
 
 ## Acceptanstest i sandbox
 
