@@ -419,6 +419,8 @@ const els = {
   premiumModal: $("#premiumModal"),
   premiumModalDescription: $("#premiumModalDescription"),
   premiumCheckoutButton: $("#premiumCheckoutButton"),
+  examTimeoutModal: $("#examTimeoutModal"),
+  examTimeoutLock: $("[data-exam-timeout-lock]"),
   emblemModal: $("#emblemModal"),
   emblemModalMedallion: $("#emblemModalMedallion"),
   emblemModalIcon: $("#emblemModalIcon"),
@@ -4709,14 +4711,17 @@ function startFinalExamTimer() {
   stopFinalExamTimer();
   if (!state.finalExam || state.finalExam.completedAt || !state.finalExam.endsAt) return;
 
+  // Klockan får inte stanna bara för att eleven lämnar provvyn. Gör den det
+  // hinner tiden ta slut utan att provet lämnas in, och eleven kan komma
+  // tillbaka timmar senare till ett prov som fortfarande går att svara på.
   state.finalExamTimer = window.setInterval(() => {
-    if (state.mode !== "final-exam" || !state.finalExam || state.finalExam.completedAt) {
+    if (!state.finalExam || state.finalExam.completedAt) {
       stopFinalExamTimer();
       return;
     }
 
     const remaining = getFinalExamTimerRemaining();
-    const timerNode = document.querySelector("[data-final-exam-timer]");
+    const timerNode = state.mode === "final-exam" ? document.querySelector("[data-final-exam-timer]") : null;
     if (timerNode) {
       timerNode.textContent = formatClockTime(remaining);
       timerNode.classList.toggle("is-low", remaining > 0 && remaining < 2 * 60 * 1000);
@@ -4724,7 +4729,7 @@ function startFinalExamTimer() {
 
     if (remaining <= 0) {
       stopFinalExamTimer();
-      submitFinalExam({ reason: "timeout" });
+      submitFinalExam({ reason: "timeout", keepView: true });
     }
   }, 1000);
 }
@@ -7042,6 +7047,13 @@ function showFinalExam() {
     return;
   }
 
+  // Tiden kan ha gått ut medan sidan var stängd. Lämna in provet innan
+  // något renderas, annars blinkar en svarbar fråga förbi på 00:00.
+  if (!state.finalExam.completedAt && state.finalExam.endsAt && getFinalExamTimerRemaining() <= 0) {
+    submitFinalExam({ reason: "timeout" });
+    return;
+  }
+
   state.mode = "final-exam";
   saveLocation();
   closeDrawers();
@@ -7221,9 +7233,22 @@ function submitFinalExam(options = {}) {
   state.finalExam.completedAt = Date.now();
   saveFinalExam();
   stopFinalExamTimer();
-  showFinalExam();
+
+  // Rycker eleven inte ur den vy hen står i när klockan tar slut någon
+  // annanstans i appen. Modalen bär beskedet, och dess knapp tar eleven
+  // vidare till provportalen.
+  if (options.keepView === true && state.mode !== "final-exam") {
+    renderNavigationLocks();
+  } else {
+    showFinalExam();
+  }
   refreshIcons();
-  showToast(options.reason === "timeout" ? "Tiden är slut. Slutprovet är inlämnat." : "Slutprovet är inlämnat.");
+
+  if (options.reason === "timeout") {
+    openExamTimeoutModal();
+    return;
+  }
+  showToast("Slutprovet är inlämnat.");
 }
 
 function renderQuiz() {
@@ -7481,6 +7506,7 @@ function syncModalOpenState() {
     !els.quizResetModal.hidden ||
     !els.emblemModal.hidden ||
     !els.premiumModal.hidden ||
+    Boolean(els.examTimeoutModal && !els.examTimeoutModal.hidden) ||
     Boolean(els.cvDesktopModal && !els.cvDesktopModal.hidden) ||
     Boolean(els.careerMenu && !els.careerMenu.hidden);
   document.body.classList.toggle("modal-open", hasOpenModal);
@@ -7533,6 +7559,32 @@ function closePremiumModal() {
   syncModalOpenState();
   state.membership.dialogTrigger?.focus?.();
   state.membership.dialogTrigger = null;
+}
+
+function openExamTimeoutModal() {
+  if (!els.examTimeoutModal || !els.examTimeoutModal.hidden) return;
+
+  // Ett prov kan hinna bli godkänt innan klockan går ut. Då är det ingen
+  // spärr att varna för, och en röd misslyckandedialog vore fel besked.
+  const lock = getFinalExamLockInfo();
+  if (!lock.locked) {
+    showToast("Tiden är slut. Slutprovet är inlämnat.");
+    return;
+  }
+
+  if (els.examTimeoutLock) {
+    els.examTimeoutLock.textContent = `Du kan göra ett nytt försök om ${formatRemainingTime(lock.remaining)}.`;
+  }
+  els.examTimeoutModal.hidden = false;
+  syncModalOpenState();
+  refreshIcons();
+  els.examTimeoutModal.querySelector("[data-exam-timeout-portal]")?.focus();
+}
+
+function closeExamTimeoutModal() {
+  if (!els.examTimeoutModal || els.examTimeoutModal.hidden) return;
+  els.examTimeoutModal.hidden = true;
+  syncModalOpenState();
 }
 
 async function handlePremiumCheckout() {
@@ -7719,6 +7771,17 @@ function bindEvents() {
 
     if (event.target === els.premiumModal || event.target.closest("[data-close-premium]")) {
       closePremiumModal();
+      return;
+    }
+
+    if (event.target.closest("[data-exam-timeout-portal]")) {
+      closeExamTimeoutModal();
+      showFinalExamPortal();
+      return;
+    }
+
+    if (event.target === els.examTimeoutModal || event.target.closest("[data-close-exam-timeout]")) {
+      closeExamTimeoutModal();
       return;
     }
 
@@ -8278,6 +8341,7 @@ function bindEvents() {
     }
     if (event.key === "Escape") {
       closePremiumModal();
+      closeExamTimeoutModal();
       closeEmblemModal();
       closeQuizResetModal();
       closeCvDesktopModal();

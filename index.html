@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Schibsted+Grotesk:wght@500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="styles.css?v=20260724-career-mobile">
+  <link rel="stylesheet" href="styles.css?v=20260726-slutprov-timeout">
 </head>
 <body class="app-booting">
   <div class="shell">
@@ -440,6 +440,28 @@
     </div>
   </div>
 
+  <div class="premium-modal exam-timeout-modal" id="examTimeoutModal" role="alertdialog" aria-modal="true" aria-labelledby="examTimeoutTitle" aria-describedby="examTimeoutDescription" hidden>
+    <div class="premium-dialog exam-timeout-dialog">
+      <button class="premium-dialog-close" type="button" data-close-exam-timeout aria-label="Stäng meddelandet om att tiden är slut">
+        <i data-lucide="x"></i>
+      </button>
+
+      <div class="exam-timeout-icon" aria-hidden="true"><i data-lucide="x"></i></div>
+
+      <div class="exam-timeout-heading">
+        <h2 id="examTimeoutTitle">Tiden är slut</h2>
+        <p id="examTimeoutDescription">Tyvärr, tiden för slutprovet har löpt ut. Provet lämnades in automatiskt med de svar du hann fylla i.</p>
+      </div>
+
+      <p class="exam-timeout-lock">
+        <i data-lucide="clock"></i>
+        <span data-exam-timeout-lock>Du kan göra ett nytt försök om 24 tim.</span>
+      </p>
+
+      <button class="premium-dialog-primary exam-timeout-primary" type="button" data-exam-timeout-portal>Till provportalen</button>
+    </div>
+  </div>
+
   <div class="premium-modal cv-desktop-modal" id="cvDesktopModal" role="dialog" aria-modal="true" aria-labelledby="cvDesktopModalTitle" aria-describedby="cvDesktopModalDescription" hidden>
     <div class="premium-dialog cv-desktop-dialog">
       <button class="premium-dialog-close" type="button" data-close-cv-desktop aria-label="Stäng informationen om CV-mallen">
@@ -554,6 +576,6 @@
   <script src="authProvider.js?v=20260716-fail-closed"></script>
   <script src="supabaseApi.js?v=20260714-public-quiz-auth"></script>
   <script src="emblemSystem.js?v=20260716-emblems"></script>
-  <script src="app.js?v=20260724-career-mobile"></script>
+  <script src="app.js?v=20260726-slutprov-timeout"></script>
 </body>
 </html>
