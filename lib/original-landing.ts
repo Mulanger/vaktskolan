@@ -33,7 +33,7 @@ export function getOriginalLanding(): OriginalLanding {
     (_match, attributes: string, contents: string) => {
       headingCount += 1;
       const semanticHeading = headingCount === 1
-        ? '<h1 class="sr-only">Träna inför väktarprovet</h1>'
+        ? '<h1 class="sr-only">Väktarutbildning – provträning för VU1 och VU2</h1>'
         : "";
       return `${semanticHeading}<div aria-hidden="true"${attributes}>${contents}</div>`;
     },

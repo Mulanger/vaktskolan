@@ -1395,4 +1395,10 @@ De åtta orange faktapunkterna i `docs/granskning-vu1-kursmaterial-2026-07-26.md
 
 Rättelserna är synkroniserade i `utbildning.md`, `vu1quiz.json`, `quiz-balans/data/vu1_fixed.json`, `content/guides/vu1.mdx` och `docs/slutprov-topplista-vu1-vu2.md`. Cacheversionerna för `styles.css`, `app.js` och hämtningen av `utbildning.md` är `20260726-vu1-faktagranskning`.
 
+## Startsidan riktad mot söktermen väktarutbildning (2026-07-30)
+
+Startsidan använder SEO-titeln `Väktarutbildning | Vaktskolan: väktare utbildning online | Vu1 & Vu2`. Målsökfrasen ligger först och titeln följer det uttryckliga produktbeslutet från 2026-07-30.
+
+Titeln och budskapet hålls synkroniserade i `app/page.tsx`, den semantiska startsiderubriken i `lib/original-landing.ts`, den fristående källsidans `<title>` i `landing/index.html` och texten i `app/opengraph-image.tsx`. Google kan skriva om titelänken och en titeländring garanterar ingen placering; efter produktiondeploy ska startsidan begäras för ny indexering i Search Console och utfallet följas per sökfråga.
+
 Produktionsimport till Supabase ingår inte i denna ändring och har inte körts.

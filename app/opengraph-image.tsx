@@ -10,7 +10,7 @@ export default function OpenGraphImage() {
       <div style={{ position: "absolute", width: 440, height: 440, borderRadius: 440, right: -80, bottom: -120, background: "#cde2ff" }} />
       <div style={{ display: "flex", fontSize: 44, fontWeight: 800, letterSpacing: -2 }}>vaktskolan<span style={{ color: "#075fea" }}>.</span></div>
       <div style={{ display: "flex", flexDirection: "column", gap: 18, maxWidth: 880 }}>
-        <div style={{ fontSize: 72, fontWeight: 800, lineHeight: 1.02, letterSpacing: -3 }}>Träna inför väktarprovet med koll på varför.</div>
+        <div style={{ fontSize: 72, fontWeight: 800, lineHeight: 1.02, letterSpacing: -3 }}>Väktarutbildning: träna inför VU1 och VU2.</div>
         <div style={{ fontSize: 26, color: "#4b5563" }}>Övningsfrågor och källstödda guider för VU1 och VU2.</div>
       </div>
     </div>,

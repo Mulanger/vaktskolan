@@ -5,8 +5,8 @@ import { getOriginalLanding } from "@/lib/original-landing";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: { absolute: "Träna inför väktarprovet – VU1 & VU2 | Vaktskolan" },
-  description: "Träna inför väktarprovet med gratis övningsfrågor, tydliga förklaringar och källstödda guider för VU1, VU2 och väktaryrket.",
+  title: { absolute: "Väktarutbildning | Vaktskolan: väktare utbildning online | Vu1 & Vu2" },
+  description: "Förbered dig inför väktarutbildningen och proven i VU1 och VU2 med gratis övningsfrågor, tydliga förklaringar och källstödda guider.",
   alternates: { canonical: "/" },
   robots: {
     index: true,
@@ -18,14 +18,14 @@ export const metadata: Metadata = {
     locale: "sv_SE",
     url: "/",
     siteName: "Vaktskolan",
-    title: "Träna inför väktarprovet – VU1 & VU2",
-    description: "Gratis provträning och källstödda guider inför väktarutbildningen.",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Vaktskolan – träna inför väktarprovet" }],
+    title: "Väktarutbildning | Vaktskolan: väktare utbildning online | Vu1 & Vu2",
+    description: "Gratis provträning, förklaringar och källstödda guider inför väktarutbildningen.",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Vaktskolan – provträning inför väktarutbildningen" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Träna inför väktarprovet – VU1 & VU2",
-    description: "Gratis provträning och källstödda guider inför väktarutbildningen.",
+    title: "Väktarutbildning | Vaktskolan: väktare utbildning online | Vu1 & Vu2",
+    description: "Gratis provträning, förklaringar och källstödda guider inför väktarutbildningen.",
     images: ["/opengraph-image"],
   },
 };
